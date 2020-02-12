@@ -6,6 +6,12 @@
 import UIKit
 
 struct Repo: Equatable, Hashable {
+    enum State {
+        case unknown
+        case failing
+        case passing
+    }
+
     let name: String
     let owner: String
     let workflow: String
@@ -24,11 +30,17 @@ struct Repo: Equatable, Hashable {
             svg = ""
         }
     }
-    
-    enum State {
-        case unknown
-        case failing
-        case passing
+
+    init(_ name: String, owner: String = "elegantchaos", workflow: String = "Tests", testState: State) {
+        self.name = name
+        self.owner = owner
+        self.workflow = workflow
+        
+        switch testState {
+            case .unknown: svg = ""
+            case .passing: svg = "passing"
+            case .failing: svg = "failing"
+        }
     }
     
     var state: State {
