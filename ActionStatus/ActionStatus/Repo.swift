@@ -61,17 +61,24 @@ class Repo: Equatable, Hashable {
         }
     }
     
-    func badge() -> UIImage {
+    var badgeName: String {
         let name: String
         switch state {
             case .unknown: name = "questionmark.circle"
             case .failing: name = "xmark.circle"
             case .passing: name = "checkmark.circle"
         }
-        
-        return UIImage(systemName: name) ?? UIImage()
+        return name
     }
 
+    var statusColor: Color {
+        switch state {
+            case .unknown: return .black
+            case .failing: return .red
+            case .passing: return .green
+        }
+    }
+    
     func reload() {
         if let url = URL(string: "https://github.com/\(owner)/\(name)/workflows/\(workflow)/badge.svg"),
             let data = try? Data(contentsOf: url),

@@ -6,16 +6,13 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var showSettings = false
     @Binding var repos: RepoSet
     
     var body: some View {
         VStack(alignment: .center) {
             HStack {
-                Button(action: { self.showSettings = true} ) {
-                    Image(systemName: "gear").font(.title)
-                }.popover(isPresented: $showSettings) {
-                    SettingsView(repos: self.$repos)
+                Button(action: { self.repos.addRepo() } ) {
+                    Image(systemName: "plus.circle").font(.title)
                 }
 
                 Spacer()
@@ -32,17 +29,24 @@ struct ContentView: View {
 
             Spacer()
             
+            NavigationView {
             VStack {
+                Text("\(repos.repos.count)")
                 ForEach(repos.repos, id: \.id) { repo in
                     HStack {
-                        Text(repo.name)
-                        Image(uiImage: repo.badge())
+                        NavigationLink(destination: RepoEditView(repo: repo)) {
+                            Text(repo.name)
+                        }
+                        Image(systemName: repo.badgeName)
+                            .foregroundColor(repo.statusColor)
                     }
-                        .accentColor(Color.green)
+                        .font(.title)
                         .padding([.leading, .trailing], 10)
 
                 }
             }
+            }
+            .navigationViewStyle(StackNavigationViewStyle())
             
             Spacer()
         }

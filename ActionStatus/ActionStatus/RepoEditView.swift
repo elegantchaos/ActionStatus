@@ -6,15 +6,32 @@
 import SwiftUI
 
 struct RepoEditView: View {
+    let style = RoundedBorderTextFieldStyle()
     @State var repo: Repo
     
     var body: some View {
-        HStack {
+        VStack {
+            Text("Repo")
+                .font(.callout)
+                .bold()
             TextField("name", text: $repo.name)
+                .textFieldStyle(style)
+            
+            Text("Owner")
+                .font(.callout)
+                .bold()
+            
             TextField("owner", text: $repo.owner)
+                .textFieldStyle(style)
+
+            Text("Workflow")
+                .font(.callout)
+                .bold()
+            
             TextField("workflow", text: $repo.workflow)
-        }
-     }
+                .textFieldStyle(style)
+        }.padding(.horizontal)
+    }
     
 }
 
