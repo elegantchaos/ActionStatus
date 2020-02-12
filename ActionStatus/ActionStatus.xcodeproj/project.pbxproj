@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -153,6 +153,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				8B451DFF23F42C6D0056EF3E /* PBXTargetDependency */,
 			);
 			name = ActionStatus;
 			productName = GithubStatus;
@@ -227,6 +228,9 @@
 				Base,
 			);
 			mainGroup = 8B3E649A23EAE62D00B28168;
+			packageReferences = (
+				8B451DFD23F42C1A0056EF3E /* XCRemoteSwiftPackageReference "ReleaseTools" */,
+			);
 			productRefGroup = 8B3E64A423EAE62D00B28168 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -305,6 +309,10 @@
 			isa = PBXTargetDependency;
 			target = 8B3E64A223EAE62D00B28168 /* ActionStatus */;
 			targetProxy = 8B3E64C523EAE62F00B28168 /* PBXContainerItemProxy */;
+		};
+		8B451DFF23F42C6D0056EF3E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 8B451DFE23F42C6D0056EF3E /* rt */;
 		};
 /* End PBXTargetDependency section */
 
@@ -598,6 +606,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8B451DFD23F42C1A0056EF3E /* XCRemoteSwiftPackageReference "ReleaseTools" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elegantchaos/ReleaseTools.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8B451DFE23F42C6D0056EF3E /* rt */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B451DFD23F42C1A0056EF3E /* XCRemoteSwiftPackageReference "ReleaseTools" */;
+			productName = rt;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8B3E649B23EAE62D00B28168 /* Project object */;
 }
