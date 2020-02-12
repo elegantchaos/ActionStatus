@@ -17,9 +17,13 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(ACTION_STATUS_VERSION)</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(ACTION_STATUS_BUILD)</string>
+	<key>Commit</key>
+	<string>$(ACTION_STATUS_COMMIT)</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>$(ACTION_STATUS_COPYRIGHT)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>

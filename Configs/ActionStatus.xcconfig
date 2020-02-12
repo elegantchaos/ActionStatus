@@ -1,0 +1,6 @@
+#include "BuildNumber.xcconfig"
+
+ACTION_STATUS_VERSION = 1.0
+ACTION_STATUS_BUILD = ${BUILD_NUMBER}
+ACTION_STATUS_COMMIT = ${BUILD_COMMIT}
+ACTION_STATUS_COPYRIGHT = Copyright © 2019 Elegant Chaos Limited. All rights reserved.

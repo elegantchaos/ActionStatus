@@ -51,6 +51,8 @@
 		8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionStatusUITests.swift; sourceTree = "<group>"; };
 		8B3E64CA23EAE62F00B28168 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B451DFB23F415E10056EF3E /* Repo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repo.swift; sourceTree = "<group>"; };
+		8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BuildNumber.xcconfig; sourceTree = "<group>"; };
+		8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ActionStatus.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 		8B3E649A23EAE62D00B28168 = {
 			isa = PBXGroup;
 			children = (
+				8B451E0023F42F3C0056EF3E /* Configs */,
 				8B3E64A523EAE62D00B28168 /* ActionStatus */,
 				8B3E64BC23EAE62E00B28168 /* ActionStatusTests */,
 				8B3E64C723EAE62F00B28168 /* ActionStatusUITests */,
@@ -137,6 +140,16 @@
 				8B3E64CA23EAE62F00B28168 /* Info.plist */,
 			);
 			path = ActionStatusUITests;
+			sourceTree = "<group>";
+		};
+		8B451E0023F42F3C0056EF3E /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */,
+				8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */,
+			);
+			name = Configs;
+			path = ../Configs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -330,6 +343,7 @@
 /* Begin XCBuildConfiguration section */
 		8B3E64CB23EAE62F00B28168 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -390,6 +404,7 @@
 		};
 		8B3E64CC23EAE62F00B28168 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
