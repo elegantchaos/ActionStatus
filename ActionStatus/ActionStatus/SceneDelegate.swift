@@ -10,13 +10,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-    let repos = [
+    let repos = RepoSet([
         Repo("ApplicationExtensions"),
         Repo("Datastore", workflow: "Swift"),
         Repo("DatastoreViewer", workflow: "Build"),
         Repo("Logger", workflow: "tests"),
         Repo("ViewExtensions"),
-    ]
+    ])
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.

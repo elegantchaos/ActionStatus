@@ -5,7 +5,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct SettingsView: View {
     var repos: RepoSet
     
     var body: some View {
@@ -41,16 +41,8 @@ struct ContentView: View {
     
 }
 
-let testRepos = RepoSet([
-    Repo("ApplicationExtensions", testState: .failing),
-    Repo("Datastore", workflow: "Swift", testState: .passing),
-    Repo("DatastoreViewer", workflow: "Build", testState: .failing),
-    Repo("Logger", workflow: "tests", testState: .unknown),
-    Repo("ViewExtensions", testState: .passing),
-])
-
-struct ContentView_Previews: PreviewProvider {
+struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(repos: testRepos)
+        SettingsView(repos: testRepos)
     }
 }

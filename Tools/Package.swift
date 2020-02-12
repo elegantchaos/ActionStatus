@@ -4,6 +4,9 @@ import PackageDescription
 
 let package = Package(
     name: "Tools",
+    platforms: [
+        .macOS(.v10_15)
+    ],
     dependencies: [
          .package(url: "https://github.com/elegantchaos/ReleaseTools", from: "1.0.3"),
     ],

@@ -7,9 +7,9 @@
 //
 
 import XCTest
-@testable import GithubStatus
+@testable import ActionStatus
 
-class GithubStatusTests: XCTestCase {
+class ActionStatusTests: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.

@@ -15,20 +15,15 @@ struct Repo: Equatable, Hashable {
     let name: String
     let owner: String
     let workflow: String
-    let svg: String
+    var svg: String
     
     init(_ name: String, owner: String = "elegantchaos", workflow: String = "Tests") {
         self.name = name
         self.owner = owner
         self.workflow = workflow
         
-        if let url = URL(string: "https://github.com/\(owner)/\(name)/workflows/\(workflow)/badge.svg"),
-            let data = try? Data(contentsOf: url),
-            let string = String(data: data, encoding: .utf8) {
-            svg = string
-        } else {
-            svg = ""
-        }
+        svg = ""
+        reload()
     }
 
     init(_ name: String, owner: String = "elegantchaos", workflow: String = "Tests", testState: State) {
@@ -64,4 +59,11 @@ struct Repo: Equatable, Hashable {
         return UIImage(systemName: name) ?? UIImage()
     }
 
+    mutating func reload() {
+        if let url = URL(string: "https://github.com/\(owner)/\(name)/workflows/\(workflow)/badge.svg"),
+            let data = try? Data(contentsOf: url),
+            let string = String(data: data, encoding: .utf8) {
+            svg = string
+        }
+    }
 }
