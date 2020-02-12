@@ -13,7 +13,6 @@ struct RepoEditView: View {
             TextField("name", text: $repo.name)
             TextField("owner", text: $repo.owner)
             TextField("workflow", text: $repo.workflow)
-            Image(uiImage: repo.badge())
         }
      }
     

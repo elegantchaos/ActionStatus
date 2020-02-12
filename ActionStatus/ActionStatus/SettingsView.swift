@@ -10,13 +10,16 @@ struct SettingsView: View {
     
     var body: some View {
         VStack {
-            ForEach(repos.repos, id: \.self) { repo in
+            Text("Repos to monitor:")
+            ForEach(repos.repos, id: \.id) { repo in
                 HStack {
                     Image(systemName: "minus.circle")
                     RepoEditView(repo: repo)
                 }
             }
-            Image(systemName: "plus.circle")
+            Button(action: { self.repos.addRepo() }) {
+                Image(systemName: "plus.circle")
+            }
         }.padding(.horizontal)
 
     }

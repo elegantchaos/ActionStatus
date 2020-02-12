@@ -12,17 +12,20 @@ struct ContentView: View {
     var body: some View {
         VStack(alignment: .center) {
             HStack {
-                Button(action: { self.repos.reload() }) {
-                    Image(systemName: "arrow.clockwise").font(.title)
-                }
-                Spacer()
-                Text("Action Status").font(.title)
-                Spacer()
-                    
                 Button(action: { self.showSettings = true} ) {
                     Image(systemName: "gear").font(.title)
                 }.popover(isPresented: $showSettings) {
                     SettingsView(repos: self.$repos)
+                }
+
+                Spacer()
+
+                Text("Action Status").font(.title)
+
+                Spacer()
+                    
+                Button(action: { self.repos.reload() }) {
+                    Image(systemName: "arrow.clockwise").font(.title)
                 }
             }
             .padding(.horizontal)
@@ -30,7 +33,7 @@ struct ContentView: View {
             Spacer()
             
             VStack {
-                ForEach(repos.repos, id: \.self) { repo in
+                ForEach(repos.repos, id: \.id) { repo in
                     HStack {
                         Text(repo.name)
                         Image(uiImage: repo.badge())

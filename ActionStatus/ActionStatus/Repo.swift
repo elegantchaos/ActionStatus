@@ -28,6 +28,8 @@ class Repo: Equatable, Hashable {
     var workflow: String
     var svg: String
     
+    var id: String { return "\(name)/\(owner):/(workflow)" }
+    
     init(_ nameIn: String, owner: String = "elegantchaos", workflow: String = "Tests") {
         name = nameIn
         self.owner = owner
