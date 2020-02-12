@@ -148,8 +148,7 @@
 				8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */,
 				8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */,
 			);
-			name = Configs;
-			path = ../Configs;
+			path = Configs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -628,7 +627,7 @@
 			repositoryURL = "https://github.com/elegantchaos/ReleaseTools.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.2;
+				minimumVersion = 1.0.3;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

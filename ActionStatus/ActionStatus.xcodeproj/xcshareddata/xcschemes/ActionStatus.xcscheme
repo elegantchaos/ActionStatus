@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "1140"
-   version = "1.3">
+   version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
@@ -10,7 +10,16 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "# update main build number&#10;&quot;$BUILT_PRODUCTS_DIR/rt&quot; update-build&#10;">
+               scriptText = "# update main build number&#10;&quot;$BUILD_DIR/Debug/rt&quot; update-build &gt; /tmp/preaction.log &#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "8B3E64A223EAE62D00B28168"
+                     BuildableName = "ActionStatus.app"
+                     BlueprintName = "ActionStatus"
+                     ReferencedContainer = "container:ActionStatus.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
             </ActionContent>
          </ExecutionAction>
       </PreActions>
