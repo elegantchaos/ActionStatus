@@ -5,11 +5,30 @@
 
 
 import UIKit
+import SwiftUI
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    class var shared: AppDelegate {
+        UIApplication.shared.delegate as! AppDelegate
+    }
+    
+    @State var repos = RepoSet([
+        Repo("ApplicationExtensions"),
+        Repo("Datastore", workflow: "Swift"),
+        Repo("DatastoreViewer", workflow: "Build"),
+        Repo("Logger", workflow: "tests"),
+        Repo("ViewExtensions"),
+    ])
 
 
+    @State var testRepos = RepoSet([
+        Repo("ApplicationExtensions", testState: .failing),
+        Repo("Datastore", workflow: "Swift", testState: .passing),
+        Repo("DatastoreViewer", workflow: "Build", testState: .failing),
+        Repo("Logger", workflow: "tests", testState: .unknown),
+        Repo("ViewExtensions", testState: .passing),
+    ])
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.

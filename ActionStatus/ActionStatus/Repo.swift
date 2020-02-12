@@ -4,21 +4,32 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import UIKit
+import SwiftUI
 
-struct Repo: Equatable, Hashable {
+class Repo: Equatable, Hashable {
+    static func == (lhs: Repo, rhs: Repo) -> Bool {
+        return (lhs.name == rhs.name) && (lhs.owner == rhs.owner) && (lhs.workflow == rhs.workflow)
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        name.hash(into: &hasher)
+        owner.hash(into: &hasher)
+        workflow.hash(into: &hasher)
+    }
+    
     enum State {
         case unknown
         case failing
         case passing
     }
 
-    let name: String
-    let owner: String
-    let workflow: String
+    var name: String
+    var owner: String
+    var workflow: String
     var svg: String
     
-    init(_ name: String, owner: String = "elegantchaos", workflow: String = "Tests") {
-        self.name = name
+    init(_ nameIn: String, owner: String = "elegantchaos", workflow: String = "Tests") {
+        name = nameIn
         self.owner = owner
         self.workflow = workflow
         
@@ -59,7 +70,7 @@ struct Repo: Equatable, Hashable {
         return UIImage(systemName: name) ?? UIImage()
     }
 
-    mutating func reload() {
+    func reload() {
         if let url = URL(string: "https://github.com/\(owner)/\(name)/workflows/\(workflow)/badge.svg"),
             let data = try? Data(contentsOf: url),
             let string = String(data: data, encoding: .utf8) {

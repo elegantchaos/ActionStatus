@@ -13,13 +13,9 @@ class RepoSet {
     }
     
     func reload() {
-        var updatedRepos: [Repo] = []
         for repo in repos {
-            var updated = repo
-            updated.reload()
-            updatedRepos.append(updated)
+            repo.reload()
         }
-        repos = updatedRepos
     }
 
 }

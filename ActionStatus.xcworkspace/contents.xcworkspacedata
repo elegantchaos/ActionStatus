@@ -4,7 +4,4 @@
    <FileRef
       location = "group:ActionStatus/ActionStatus.xcodeproj">
    </FileRef>
-   <FileRef
-      location = "group:ActionStatus/../Tools">
-   </FileRef>
 </Workspace>

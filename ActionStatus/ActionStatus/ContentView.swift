@@ -6,7 +6,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    var repos: RepoSet
+    @State private var showSettings = false
+    @Binding var repos: RepoSet
     
     var body: some View {
         VStack(alignment: .center) {
@@ -17,7 +18,12 @@ struct ContentView: View {
                 Spacer()
                 Text("Action Status").font(.title)
                 Spacer()
-                Image(systemName: "gear").font(.title)
+                    
+                Button(action: { self.showSettings = true} ) {
+                    Image(systemName: "gear").font(.title)
+                }.popover(isPresented: $showSettings) {
+                    SettingsView(repos: self.$repos)
+                }
             }
             .padding(.horizontal)
 
@@ -34,23 +40,15 @@ struct ContentView: View {
 
                 }
             }
-
+            
             Spacer()
         }
     }
     
 }
 
-let testRepos = RepoSet([
-    Repo("ApplicationExtensions", testState: .failing),
-    Repo("Datastore", workflow: "Swift", testState: .passing),
-    Repo("DatastoreViewer", workflow: "Build", testState: .failing),
-    Repo("Logger", workflow: "tests", testState: .unknown),
-    Repo("ViewExtensions", testState: .passing),
-])
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(repos: testRepos)
+        ContentView(repos: AppDelegate.shared.$testRepos)
     }
 }
