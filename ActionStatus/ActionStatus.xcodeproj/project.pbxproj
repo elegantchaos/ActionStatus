@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -53,6 +53,8 @@
 		8B451DFB23F415E10056EF3E /* Repo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repo.swift; sourceTree = "<group>"; };
 		8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BuildNumber.xcconfig; sourceTree = "<group>"; };
 		8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ActionStatus.xcconfig; sourceTree = "<group>"; };
+		8B451E1623F446BA0056EF3E /* ActionStatus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ActionStatus.entitlements; sourceTree = "<group>"; };
+		8B451E1723F4474E0056EF3E /* Tools */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Tools; path = ../Tools; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +87,7 @@
 			children = (
 				8B451E0023F42F3C0056EF3E /* Configs */,
 				8B3E64A523EAE62D00B28168 /* ActionStatus */,
+				8B451E1723F4474E0056EF3E /* Tools */,
 				8B3E64BC23EAE62E00B28168 /* ActionStatusTests */,
 				8B3E64C723EAE62F00B28168 /* ActionStatusUITests */,
 				8B3E64A423EAE62D00B28168 /* Products */,
@@ -104,6 +107,7 @@
 		8B3E64A523EAE62D00B28168 /* ActionStatus */ = {
 			isa = PBXGroup;
 			children = (
+				8B451E1623F446BA0056EF3E /* ActionStatus.entitlements */,
 				8B3E64A623EAE62D00B28168 /* AppDelegate.swift */,
 				8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */,
 				8B3E64AA23EAE62D00B28168 /* ContentView.swift */,
@@ -165,7 +169,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				8B451DFF23F42C6D0056EF3E /* PBXTargetDependency */,
 			);
 			name = ActionStatus;
 			productName = GithubStatus;
@@ -241,7 +244,6 @@
 			);
 			mainGroup = 8B3E649A23EAE62D00B28168;
 			packageReferences = (
-				8B451DFD23F42C1A0056EF3E /* XCRemoteSwiftPackageReference "ReleaseTools" */,
 			);
 			productRefGroup = 8B3E64A423EAE62D00B28168 /* Products */;
 			projectDirPath = "";
@@ -321,10 +323,6 @@
 			isa = PBXTargetDependency;
 			target = 8B3E64A223EAE62D00B28168 /* ActionStatus */;
 			targetProxy = 8B3E64C523EAE62F00B28168 /* PBXContainerItemProxy */;
-		};
-		8B451DFF23F42C6D0056EF3E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 8B451DFE23F42C6D0056EF3E /* rt */;
 		};
 /* End PBXTargetDependency section */
 
@@ -460,6 +458,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ActionStatus/ActionStatus.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"$(TARGET_NAME)/Preview Content\"";
 				DEVELOPMENT_TEAM = 2H48644JM2;
@@ -471,6 +470,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.elegantchaos.actionstatus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -480,6 +480,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ActionStatus/ActionStatus.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"$(TARGET_NAME)/Preview Content\"";
 				DEVELOPMENT_TEAM = 2H48644JM2;
@@ -491,6 +492,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.elegantchaos.actionstatus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -620,25 +622,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		8B451DFD23F42C1A0056EF3E /* XCRemoteSwiftPackageReference "ReleaseTools" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/elegantchaos/ReleaseTools.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.3;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		8B451DFE23F42C6D0056EF3E /* rt */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8B451DFD23F42C1A0056EF3E /* XCRemoteSwiftPackageReference "ReleaseTools" */;
-			productName = rt;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8B3E649B23EAE62D00B28168 /* Project object */;
 }
