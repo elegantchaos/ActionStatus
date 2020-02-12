@@ -13,14 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.delegate as! AppDelegate
     }
     
-    @State var repos = RepoSet([
-        Repo("ApplicationExtensions"),
-        Repo("Datastore", workflow: "Swift"),
-        Repo("DatastoreViewer", workflow: "Build"),
-        Repo("Logger", workflow: "tests"),
-        Repo("ViewExtensions"),
-    ])
-
+    @State var repos = loadRepos()
 
     @State var testRepos = RepoSet([
         Repo("ApplicationExtensions", testState: .failing),
@@ -34,7 +27,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         return true
     }
+    
+    class func loadRepos() -> RepoSet {
+        if let array = UserDefaults.standard.array(forKey: "Repos") {
+            var loadedRepos: [Repo] = []
+            for item in array {
+                if let string = item as? String {
+                    let values = string.split(separator: ",").map({String($0)})
+                    if values.count == 3 {
+                        let repo = Repo(values[0], owner: values[1], workflow: values[2])
+                        loadedRepos.append(repo)
+                    }
+                }
+            }
+            return RepoSet(loadedRepos)
+        } else {
+            return RepoSet([
+                Repo("ApplicationExtensions"),
+                Repo("Datastore", workflow: "Swift"),
+                Repo("DatastoreViewer", workflow: "Build"),
+                Repo("Logger", workflow: "tests"),
+                Repo("ViewExtensions"),
+            ])
+        }
+    }
 
+    func saveRepos() {
+        var strings: [String] = []
+        for repo in repos.repos {
+            let string = "\(repo.name),\(repo.owner),\(repo.workflow)"
+            strings.append(string)
+        }
+        UserDefaults.standard.set(strings, forKey: "Repos")
+    }
+    
     // MARK: UISceneSession Lifecycle
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
