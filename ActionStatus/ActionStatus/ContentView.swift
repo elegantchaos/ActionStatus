@@ -33,7 +33,7 @@ struct ContentView: View {
             VStack {
                 ForEach(repos.items) { repo in
                     HStack {
-                        NavigationLink(destination: RepoEditView(repo: self.binding(for: repo))) {
+                        NavigationLink(destination: RepoEditView(repo: binding(for: repo, in: self.$repos, path: \.items))) {
                             Text(repo.name)
                         }
                         Image(systemName: repo.badgeName)
@@ -54,28 +54,30 @@ struct ContentView: View {
             self.repos.reload()
         }
     }
- 
-    func binding(for repo: Repo) -> Binding<Repo> {
-        return bindingy(for: repo, in: $repos, path: \.items)
-//        let index = repos.items.firstIndex(of: repo)!
-//        let binding = $repos.items[index]
-//        print(type(of: $repos.items))
-//        return binding
+}
+
+func binding<Container, Item>(for item: Item, in container: ObservedObject<Container>.Wrapper, path: KeyPath<ObservedObject<Container>.Wrapper, Binding<Array<Item>>>) -> Binding<Item> where Item: Equatable {
+    let boundlist = container[keyPath: path]
+    let index = boundlist.wrappedValue.firstIndex(of: item)!
+    let binding = (container[keyPath:path])[index]
+    return binding
+}
+
+func binding<Container, Item>(for item: Item, in container: Binding<Container>, path: KeyPath<Binding<Container>, Binding<Array<Item>>>) -> Binding<Item> where Item: Equatable {
+    let boundlist = container[keyPath: path]
+    let index = boundlist.wrappedValue.firstIndex(of: item)!
+    let binding = (container[keyPath:path])[index]
+    return binding
+}
+
+extension ObservedObject.Wrapper {
+    func binding<Item>(for item: Item, path: KeyPath<Self, Binding<Array<Item>>>) -> Binding<Item> where Item: Equatable {
+        let boundlist = self[keyPath: path]
+        let index = boundlist.wrappedValue.firstIndex(of: item)!
+        let binding = (self[keyPath:path])[index]
+        return binding
     }
-}
-
-func bindingy<Container, Item>(for item: Item, in container: ObservedObject<Container>.Wrapper, path: KeyPath<ObservedObject<Container>.Wrapper, Binding<Array<Item>>>) -> Binding<Item> where Item: Equatable {
-    let boundlist = container[keyPath: path]
-    let index = boundlist.wrappedValue.firstIndex(of: item)!
-    let item = (container[keyPath:path])[index]
-    return item
-}
-
-func bindingx<Container, Item>(for item: Item, in container: Binding<Container>, path: KeyPath<Binding<Container>, Binding<Array<Item>>>) -> Binding<Item> where Item: Equatable {
-    let boundlist = container[keyPath: path]
-    let index = boundlist.wrappedValue.firstIndex(of: item)!
-    let item = (container[keyPath:path])[index]
-    return item
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
