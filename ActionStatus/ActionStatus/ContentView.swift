@@ -25,8 +25,6 @@ struct ContentView: View {
                             .font(.title)
                             .padding([.leading, .trailing], 10)
                         }.onDelete(perform: delete)
-
-                        EditButtons(repos: repos)
                     }
                     Spacer()
                     
@@ -37,7 +35,7 @@ struct ContentView: View {
                     
                 .navigationBarHidden(false)
                 .navigationBarTitle("Action Status", displayMode: .inline)
-                .navigationBarItems(trailing: EditButton())
+                .navigationBarItems(leading: EditButtons(repos: repos), trailing: EditButton())
         }
             .navigationViewStyle(StackNavigationViewStyle())
             .onAppear() {
@@ -88,12 +86,14 @@ struct AddButton: View {
 struct EditButtons: View {
     @ObservedObject var repos: RepoSet
     @Environment(\.editMode) var editMode
-
+    
     var body: some View {
-        HStack {
-            if editMode?.wrappedValue.isEditing ?? true {
-                AddButton(repos: repos)
-            }
-        }
+        AddButton(repos: repos)
+        .disabled(showAdd)
+        .opacity((editMode?.wrappedValue.isEditing ?? true) ? 1.0 : 0.0)
+    }
+    
+    var showAdd: Bool {
+        return !(editMode?.wrappedValue.isEditing ?? true)
     }
 }
