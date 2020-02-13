@@ -138,7 +138,6 @@
 		8B3E64A523EAE62D00B28168 /* ActionStatus */ = {
 			isa = PBXGroup;
 			children = (
-				8B451E1623F446BA0056EF3E /* ActionStatus.entitlements */,
 				8B3E64A623EAE62D00B28168 /* AppDelegate.swift */,
 				8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */,
 				8B430E8623F587E30050BF2A /* AppCommon.swift */,
@@ -203,6 +202,7 @@
 			isa = PBXGroup;
 			children = (
 				8B3E64B423EAE62E00B28168 /* Info.plist */,
+				8B451E1623F446BA0056EF3E /* ActionStatus.entitlements */,
 				8B3E64B123EAE62E00B28168 /* LaunchScreen.storyboard */,
 			);
 			path = Mobile;
@@ -594,17 +594,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = ActionStatus/ActionStatus.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2H48644JM2;
-				ENABLE_PREVIEWS = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(ACTION_STATUS_RESOURCE_PATH)/ActionStatus.entitlements";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				SUPPORTS_MACCATALYST = YES;
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -613,17 +609,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = ActionStatus/ActionStatus.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2H48644JM2;
-				ENABLE_PREVIEWS = YES;
+				CODE_SIGN_ENTITLEMENTS = "$(ACTION_STATUS_RESOURCE_PATH)/ActionStatus.entitlements";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				SUPPORTS_MACCATALYST = YES;
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -716,15 +708,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2H48644JM2;
-				ENABLE_PREVIEWS = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				SDKROOT = appletvos;
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 13.0;
 			};
@@ -734,15 +722,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2H48644JM2;
-				ENABLE_PREVIEWS = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				SDKROOT = appletvos;
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 13.0;
 			};
