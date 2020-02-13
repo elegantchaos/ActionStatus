@@ -7,7 +7,7 @@ import SwiftUI
 
 struct RepoEditView: View {
     let style = RoundedBorderTextFieldStyle()
-    @State var repo: Repo
+    @Binding var repo: Repo
     
     var body: some View {
         VStack {
@@ -37,6 +37,6 @@ struct RepoEditView: View {
 
 struct RepoEditView_Previews: PreviewProvider {
     static var previews: some View {
-        RepoEditView(repo: Repo("Test", owner: "Owner", workflow: "Workflow", testState: .passing))
+        RepoEditView(repo: AppDelegate.shared.$testRepos.items[0])
     }
 }

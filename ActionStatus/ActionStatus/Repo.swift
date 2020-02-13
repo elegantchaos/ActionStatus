@@ -6,16 +6,16 @@
 import UIKit
 import SwiftUI
 
-class Repo: Equatable, Hashable {
-    static func == (lhs: Repo, rhs: Repo) -> Bool {
-        return (lhs.name == rhs.name) && (lhs.owner == rhs.owner) && (lhs.workflow == rhs.workflow)
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        name.hash(into: &hasher)
-        owner.hash(into: &hasher)
-        workflow.hash(into: &hasher)
-    }
+struct Repo: Identifiable, Equatable {
+//    static func == (lhs: Repo, rhs: Repo) -> Bool {
+//        return (lhs.name == rhs.name) && (lhs.owner == rhs.owner) && (lhs.workflow == rhs.workflow)
+//    }
+//
+//    func hash(into hasher: inout Hasher) {
+//        name.hash(into: &hasher)
+//        owner.hash(into: &hasher)
+//        workflow.hash(into: &hasher)
+//    }
     
     enum State {
         case unknown
@@ -36,7 +36,6 @@ class Repo: Equatable, Hashable {
         self.workflow = workflow
         
         svg = ""
-        reload()
     }
 
     init(_ name: String, owner: String = "elegantchaos", workflow: String = "Tests", testState: State) {
@@ -79,7 +78,7 @@ class Repo: Equatable, Hashable {
         }
     }
     
-    func reload() {
+    mutating func reload() {
         if let url = URL(string: "https://github.com/\(owner)/\(name)/workflows/\(workflow)/badge.svg"),
             let data = try? Data(contentsOf: url),
             let string = String(data: data, encoding: .utf8) {

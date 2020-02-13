@@ -6,6 +6,8 @@
 import SwiftUI
 
 class RepoSet: ObservableObject {
+    typealias RepoList = [Repo]
+    
     @Published var items: [Repo]
     
     init(_ repos: [Repo]) {
@@ -13,9 +15,13 @@ class RepoSet: ObservableObject {
     }
     
     func reload() {
+        var reloaded: [Repo] = []
         for repo in items {
-            repo.reload()
+            var updaated = repo
+            updaated.reload()
+            reloaded.append(updaated)
         }
+        items = reloaded
     }
 
     func addRepo() {

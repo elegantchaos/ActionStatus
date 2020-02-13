@@ -6,7 +6,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @Binding var repos: RepoSet
+    @ObservedObject var repos: RepoSet
     
     var body: some View {
         VStack(alignment: .center) {
@@ -31,10 +31,9 @@ struct ContentView: View {
             
             NavigationView {
             VStack {
-                Text("\(repos.items.count)")
-                ForEach(repos.items, id: \.id) { repo in
+                ForEach(repos.items) { repo in
                     HStack {
-                        NavigationLink(destination: RepoEditView(repo: repo)) {
+                        NavigationLink(destination: RepoEditView(repo: self.binding(for: repo))) {
                             Text(repo.name)
                         }
                         Image(systemName: repo.badgeName)
@@ -49,13 +48,37 @@ struct ContentView: View {
             .navigationViewStyle(StackNavigationViewStyle())
             
             Spacer()
+
+            Text("Monitoring \(repos.items.count) repos.").font(.footnote)
+        }.onAppear() {
+            self.repos.reload()
         }
     }
-    
+ 
+    func binding(for repo: Repo) -> Binding<Repo> {
+        let index = repos.items.firstIndex(of: repo)!
+        let binding = $repos.items[index]
+        print(type(of: $repos.items))
+        return binding
+    }
 }
 
+func binding<Container, Item>(for item: Item, in container: Binding<Container>, path: KeyPath<Binding<Container>, Binding<Array<Item>>>) -> Binding<Item> where Item: Equatable {
+    let boundlist = container[keyPath: path]
+    let index = boundlist.wrappedValue.firstIndex(of: item)!
+    let item = (container[keyPath:path])[index]
+    return item
+}
+
+//func binding<Container, List, Item>(for item: Item, in container: Binding<Container>, path: KeyPath<Binding<Container>, Binding<List>>) -> Binding<Item> where List: Array, List.Element == Item, Item: Equatable {
+////    let index = container.wrappedValue[keyPath: path].firstIndex(of: item)!
+//    let boundlist = container[keyPath: path]
+//    let index = boundlist.wrappedValue.firstIndex(of: item)!
+//    let item = (container[keyPath:path])[index]
+//    return item
+//}
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(repos: AppDelegate.shared.$testRepos)
+        ContentView(repos: AppDelegate.shared.testRepos)
     }
 }

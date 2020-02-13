@@ -11,12 +11,12 @@ struct SettingsView: View {
     var body: some View {
         VStack {
             Text("Repos to monitor:")
-            ForEach(repos.items, id: \.id) { repo in
-                HStack {
-                    Image(systemName: "minus.circle")
-                    RepoEditView(repo: repo)
-                }
-            }
+//            ForEach(repos.items, id: \.id) { repo in
+//                HStack {
+//                    Image(systemName: "minus.circle")
+//                    RepoEditView(repo: repo)
+//                }
+//            }
             Button(action: { self.repos.addRepo() }) {
                 Image(systemName: "plus.circle")
             }
