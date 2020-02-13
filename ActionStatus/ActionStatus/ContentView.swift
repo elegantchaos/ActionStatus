@@ -31,8 +31,8 @@ struct ContentView: View {
             
             NavigationView {
             VStack {
-                Text("\(repos.repos.count)")
-                ForEach(repos.repos, id: \.id) { repo in
+                Text("\(repos.items.count)")
+                ForEach(repos.items, id: \.id) { repo in
                     HStack {
                         NavigationLink(destination: RepoEditView(repo: repo)) {
                             Text(repo.name)

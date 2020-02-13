@@ -11,7 +11,7 @@ struct SettingsView: View {
     var body: some View {
         VStack {
             Text("Repos to monitor:")
-            ForEach(repos.repos, id: \.id) { repo in
+            ForEach(repos.items, id: \.id) { repo in
                 HStack {
                     Image(systemName: "minus.circle")
                     RepoEditView(repo: repo)

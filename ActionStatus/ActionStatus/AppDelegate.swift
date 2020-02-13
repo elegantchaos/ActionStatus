@@ -54,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func saveRepos() {
         var strings: [String] = []
-        for repo in repos.repos {
+        for repo in repos.items {
             let string = "\(repo.name),\(repo.owner),\(repo.workflow)"
             strings.append(string)
         }

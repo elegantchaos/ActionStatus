@@ -5,21 +5,21 @@
 
 import SwiftUI
 
-class RepoSet {
-    @Published var repos: [Repo]
+class RepoSet: ObservableObject {
+    @Published var items: [Repo]
     
     init(_ repos: [Repo]) {
-        self.repos = repos
+        self.items = repos
     }
     
     func reload() {
-        for repo in repos {
+        for repo in items {
             repo.reload()
         }
     }
 
     func addRepo() {
         let repo = Repo("Untitled", owner: "Untitled", workflow: "Untitled", testState: .unknown)
-        repos.append(repo)
+        items.append(repo)
     }
 }
