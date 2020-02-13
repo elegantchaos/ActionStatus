@@ -36,10 +36,11 @@ struct ContentView: View {
                 .navigationBarItems(leading: AddButton(repos: self.repos), trailing: ReloadButton(repos: self.repos)
                 )
 
-        }.onAppear() {
-            self.repos.reload()
         }
             .navigationViewStyle(StackNavigationViewStyle())
+            .onAppear() {
+                self.repos.refresh()
+            }
     }
 }
 
@@ -61,7 +62,7 @@ struct ContentView_Previews: PreviewProvider {
 struct ReloadButton: View {
     @ObservedObject var repos: RepoSet
     var body: some View {
-        Button(action: { self.repos.reload() }) {
+        Button(action: { self.repos.refresh() }) {
             Image(systemName: "arrow.clockwise").font(.title)
         }
     }
@@ -70,6 +71,10 @@ struct ReloadButton: View {
 struct AddButton: View {
     @ObservedObject var repos: RepoSet
     var body: some View {
-        Button(action: { self.repos.addRepo() } ) { Image(systemName: "plus.circle").font(.title) }
+        Button(
+            action: {
+            self.repos.addRepo()
+            AppDelegate.shared.saveState()
+        }) { Image(systemName: "plus.circle").font(.title) }
     }
 }

@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
-        AppDelegate.shared.repos.load(fromDefaultsKey: "Repos")
+        AppDelegate.shared.restoreState()
         
         // Create the SwiftUI view that provides the window contents.
         let contentView = ContentView(repos: AppDelegate.shared.repos)
@@ -45,7 +45,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillResignActive(_ scene: UIScene) {
         // Called when the scene will move from an active state to an inactive state.
         // This may occur due to temporary interruptions (ex. an incoming phone call).
-        AppDelegate.shared.repos.save(toDefaultsKey: "Repos")
+        AppDelegate.shared.saveState()
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
@@ -57,7 +57,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
-        AppDelegate.shared.repos.save(toDefaultsKey: "Repos")
+        AppDelegate.shared.saveState()
     }
 
 

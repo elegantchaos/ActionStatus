@@ -7,6 +7,8 @@ import UIKit
 import SwiftUI
 
 class AppCommon: UIResponder, UIApplicationDelegate {
+    let stateKey = "State"
+
     class var shared: AppDelegate {
         UIApplication.shared.delegate as! AppDelegate
     }
@@ -14,20 +16,28 @@ class AppCommon: UIResponder, UIApplicationDelegate {
     @State var repos = defaultRepoSet()
 
     @State var testRepos = RepoSet([
-        Repo("ApplicationExtensions", testState: .failing),
-        Repo("Datastore", workflow: "Swift", testState: .passing),
-        Repo("DatastoreViewer", workflow: "Build", testState: .failing),
-        Repo("Logger", workflow: "tests", testState: .unknown),
-        Repo("ViewExtensions", testState: .passing),
+        Repo("ApplicationExtensions", owner: "elegantchaos", workflow: "Tests", state: .failing),
+        Repo("Datastore", owner: "elegantchaos", workflow: "Swift", state: .passing),
+        Repo("DatastoreViewer", owner: "elegantchaos", workflow: "Build", state: .failing),
+        Repo("Logger", owner: "elegantchaos", workflow: "tests", state: .unknown),
+        Repo("ViewExtensions", owner: "elegantchaos", workflow: "Tests", state: .passing),
     ])
     
     class func defaultRepoSet() -> RepoSet {
         return RepoSet([
-            Repo("ApplicationExtensions"),
-            Repo("Datastore", workflow: "Swift"),
-            Repo("DatastoreViewer", workflow: "Build"),
-            Repo("Logger", workflow: "tests"),
-            Repo("ViewExtensions"),
+            Repo("ApplicationExtensions", owner: "elegantchaos", workflow: "Tests"),
+            Repo("Datastore", owner: "elegantchaos", workflow: "Swift"),
+            Repo("DatastoreViewer", owner: "elegantchaos", workflow: "Build"),
+            Repo("Logger", owner: "elegantchaos", workflow: "tests"),
+            Repo("ViewExtensions", owner: "elegantchaos", workflow: "Tests"),
         ])
+    }
+    
+    func saveState() {
+        repos.save(toDefaultsKey: stateKey)
+    }
+    
+    func restoreState() {
+        repos.load(fromDefaultsKey: stateKey)
     }
 }

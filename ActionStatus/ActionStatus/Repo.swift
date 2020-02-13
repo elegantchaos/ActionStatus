@@ -23,34 +23,32 @@ struct Repo: Identifiable, Equatable {
         case passing
     }
 
-    var name: String = "Unknown"
-    var owner: String = "Unknown"
-    var workflow: String = "Unknown"
+    let id: UUID
+    var name: String
+    var owner: String
+    var workflow: String
     var svg: String = ""
     
-    var id: String { return "\(name)/\(owner):/(workflow)" }
-    
     init() {
+        id = UUID()
+        name = "Unknown Repo"
+        owner = "Unknow Owner"
+        workflow = "Tests"
     }
     
-    init(_ nameIn: String, owner: String = "elegantchaos", workflow: String = "Tests") {
-        name = nameIn
-        self.owner = owner
-        self.workflow = workflow
-        
-        svg = ""
-    }
-
-    init(_ name: String, owner: String = "elegantchaos", workflow: String = "Tests", testState: State) {
+    init(_ name: String, owner: String, workflow: String, id: UUID? = nil, state: State? = nil) {
+        self.id = id ?? UUID()
         self.name = name
         self.owner = owner
         self.workflow = workflow
         
-        switch testState {
-            case .unknown: svg = ""
+        switch state {
             case .passing: svg = "passing"
             case .failing: svg = "failing"
+            default: svg = ""
         }
+
+        svg = ""
     }
     
     var state: State {

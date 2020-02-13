@@ -20,8 +20,8 @@ class RepoSet: ObservableObject {
             for item in array {
                 if let string = item as? String {
                     let values = string.split(separator: ",").map({String($0)})
-                    if values.count == 3 {
-                        let repo = Repo(values[0], owner: values[1], workflow: values[2])
+                    if values.count == 4 {
+                        let repo = Repo(values[0], owner: values[1], workflow: values[2], id: UUID(uuidString: values[3]))
                         loadedRepos.append(repo)
                     }
                 }
@@ -33,20 +33,24 @@ class RepoSet: ObservableObject {
     func save(toDefaultsKey key: String) {
         var strings: [String] = []
         for repo in items {
-            let string = "\(repo.name),\(repo.owner),\(repo.workflow)"
+            let string = "\(repo.name),\(repo.owner),\(repo.workflow),\(repo.id.uuidString)"
             strings.append(string)
         }
         UserDefaults.standard.set(strings, forKey: key)
     }
 
-    func reload() {
-        var reloaded: [Repo] = []
-        for repo in items {
-            var updaated = repo
-            updaated.reload()
-            reloaded.append(updaated)
+    func refresh() {
+        DispatchQueue.global(qos: .background).async {
+            var reloaded: [Repo] = []
+            for repo in self.items {
+                var updated = repo
+                updated.reload()
+                reloaded.append(updated)
+            }
+            DispatchQueue.main.async {
+                self.items = reloaded
+            }
         }
-        items = reloaded
     }
 
     func addRepo() {
