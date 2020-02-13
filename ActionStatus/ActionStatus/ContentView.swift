@@ -7,7 +7,7 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var repos: RepoSet
-    
+
     var body: some View {
             NavigationView {
                 VStack {
@@ -24,23 +24,29 @@ struct ContentView: View {
                             }
                             .font(.title)
                             .padding([.leading, .trailing], 10)
-                            
-                        }
+                        }.onDelete(perform: delete)
+
+                        EditButtons(repos: repos)
                     }
+                    Spacer()
+                    
+                    
                     Spacer()
                     Text("Monitoring \(repos.items.count) repos.").font(.footnote)
                 }
                     
                 .navigationBarHidden(false)
                 .navigationBarTitle("Action Status", displayMode: .inline)
-                .navigationBarItems(leading: AddButton(repos: self.repos), trailing: ReloadButton(repos: self.repos)
-                )
-
+                .navigationBarItems(trailing: EditButton())
         }
             .navigationViewStyle(StackNavigationViewStyle())
             .onAppear() {
                 self.repos.refresh()
             }
+    }
+    
+    func delete(at offsets: IndexSet) {
+        repos.items.remove(atOffsets: offsets)
     }
 }
 
@@ -76,5 +82,18 @@ struct AddButton: View {
             self.repos.addRepo()
             AppDelegate.shared.saveState()
         }) { Image(systemName: "plus.circle").font(.title) }
+    }
+}
+
+struct EditButtons: View {
+    @ObservedObject var repos: RepoSet
+    @Environment(\.editMode) var editMode
+
+    var body: some View {
+        HStack {
+            if editMode?.wrappedValue.isEditing ?? true {
+                AddButton(repos: repos)
+            }
+        }
     }
 }

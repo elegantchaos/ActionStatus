@@ -57,4 +57,12 @@ class RepoSet: ObservableObject {
         let repo = Repo()
         items.append(repo)
     }
+    
+    func remove(repo: Repo) {
+        if let index = items.firstIndex(of: repo) {
+            var updated = items
+            updated.remove(at: index)
+            items = updated
+        }
+    }
 }
