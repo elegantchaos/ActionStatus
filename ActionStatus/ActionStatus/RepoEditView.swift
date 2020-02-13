@@ -57,6 +57,9 @@ struct RepoEditView: View {
         .onAppear() {
             self.editableRepo = self.repo
         }
+        .navigationBarTitle(repo.name)
+        .navigationBarHidden(false)
+
     }
     
     var hasChanged: Bool {

@@ -9,26 +9,6 @@ struct ContentView: View {
     @ObservedObject var repos: RepoSet
     
     var body: some View {
-        VStack(alignment: .center) {
-            HStack {
-                Button(action: { self.repos.addRepo() } ) {
-                    Image(systemName: "plus.circle").font(.title)
-                }
-                
-                Spacer()
-                
-                Text("Action Status").font(.title)
-                
-                Spacer()
-                
-                Button(action: { self.repos.reload() }) {
-                    Image(systemName: "arrow.clockwise").font(.title)
-                }
-            }
-            .padding(.horizontal)
-            
-            Spacer()
-            
             NavigationView {
                 VStack {
                     List {
@@ -45,16 +25,27 @@ struct ContentView: View {
                             
                         }
                     }
+                    
+                    Spacer()
+                    
+                    Text("Monitoring \(repos.items.count) repos.").font(.footnote)
                 }
-            }
-            .navigationViewStyle(StackNavigationViewStyle())
+                    
+                .navigationBarTitle("Action Status")
+                .navigationBarHidden(false)
+                .navigationBarItems(leading: Button(action: { self.repos.addRepo() } ) {
+                    Image(systemName: "plus.circle").font(.title)
+                }
+                .navigationBarItems(trailing: Button(action: { self.repos.reload() }) {
+                    Image(systemName: "arrow.clockwise").font(.title)
+                })
+)
+
             
-            Spacer()
-            
-            Text("Monitoring \(repos.items.count) repos.").font(.footnote)
         }.onAppear() {
             self.repos.reload()
         }
+            .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
