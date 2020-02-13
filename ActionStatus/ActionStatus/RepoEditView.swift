@@ -11,55 +11,53 @@ struct RepoEditView: View {
     @State var editableRepo: Repo = Repo()
     
     var body: some View {
-        VStack {
-            Form {
+        Form {
+            Section {
+                HStack {
+                    Text("Repo Name")
+                        .font(.callout)
+                        .bold()
+                    TextField("name", text: $editableRepo.name)
+                        .textFieldStyle(style)
+                }
                 
-            HStack {
-                Text("Repo Name")
-                    .font(.callout)
-                    .bold()
-                TextField("name", text: $editableRepo.name)
-                    .textFieldStyle(style)
-            }
-            
-            HStack {
-                Text("Repo Owner")
-                    .font(.callout)
-                    .bold()
+                HStack {
+                    Text("Repo Owner")
+                        .font(.callout)
+                        .bold()
+                    
+                    TextField("owner", text: $editableRepo.owner)
+                        .textFieldStyle(style)
+                }
                 
-                TextField("owner", text: $editableRepo.owner)
-                    .textFieldStyle(style)
-            }
-
-            HStack {
-                Text("Workflow File Name")
-                    .font(.callout)
-                    .bold()
-
-                TextField("workflow", text: $editableRepo.workflow)
-                    .textFieldStyle(style)
-            }
-            }
-            Spacer().frame(height: 20)
-            
-            HStack {
-                Text("Github Repo")
-                Text("https://github.com/\(editableRepo.owner)/\(editableRepo.name)")
+                HStack {
+                    Text("Workflow File Name")
+                        .font(.callout)
+                        .bold()
+                    
+                    TextField("workflow", text: $editableRepo.workflow)
+                        .textFieldStyle(style)
+                }
             }
             
-            Spacer()
-            
-            Button(action: { self.repo = self.editableRepo }) {
-                Text("Save")
-            }.disabled(!hasChanged)
+            Section {
+                HStack {
+                    Text("Github Repo")
+                    Text("https://github.com/\(editableRepo.owner)/\(editableRepo.name)")
+                }
+            }
         }
-        .padding(.horizontal)
         .onAppear() {
             self.editableRepo = self.repo
         }
         .navigationBarTitle(repo.name)
         .navigationBarHidden(false)
-
+        .navigationBarItems(trailing:
+            Button(action: { self.repo = self.editableRepo }) {
+                Text("Save")
+            }.disabled(!hasChanged)
+        )
+        
     }
     
     var hasChanged: Bool {
