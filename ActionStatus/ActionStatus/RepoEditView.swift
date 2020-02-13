@@ -8,29 +8,38 @@ import SwiftUI
 struct RepoEditView: View {
     let style = RoundedBorderTextFieldStyle()
     @Binding var repo: Repo
+    @State var editableRepo: Repo = Repo()
     
     var body: some View {
         VStack {
             Text("Repo")
                 .font(.callout)
                 .bold()
-            TextField("name", text: $repo.name)
+            TextField("name", text: $editableRepo.name)
                 .textFieldStyle(style)
             
             Text("Owner")
                 .font(.callout)
                 .bold()
             
-            TextField("owner", text: $repo.owner)
+            TextField("owner", text: $editableRepo.owner)
                 .textFieldStyle(style)
 
             Text("Workflow")
                 .font(.callout)
                 .bold()
             
-            TextField("workflow", text: $repo.workflow)
+            TextField("workflow", text: $editableRepo.workflow)
                 .textFieldStyle(style)
-        }.padding(.horizontal)
+            
+            Button(action: { self.repo = self.editableRepo }) {
+                Text("Save")
+            }
+        }
+        .padding(.horizontal)
+        .onAppear() {
+            self.editableRepo = self.repo
+        }
     }
     
 }

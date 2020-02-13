@@ -23,12 +23,15 @@ struct Repo: Identifiable, Equatable {
         case passing
     }
 
-    var name: String
-    var owner: String
-    var workflow: String
-    var svg: String
+    var name: String = "Unknown"
+    var owner: String = "Unknown"
+    var workflow: String = "Unknown"
+    var svg: String = ""
     
     var id: String { return "\(name)/\(owner):/(workflow)" }
+    
+    init() {
+    }
     
     init(_ nameIn: String, owner: String = "elegantchaos", workflow: String = "Tests") {
         name = nameIn

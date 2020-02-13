@@ -25,7 +25,7 @@ class RepoSet: ObservableObject {
     }
 
     func addRepo() {
-        let repo = Repo("Untitled", owner: "Untitled", workflow: "Untitled", testState: .unknown)
+        let repo = Repo()
         items.append(repo)
     }
 }
