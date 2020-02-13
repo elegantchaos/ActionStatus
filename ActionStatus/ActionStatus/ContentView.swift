@@ -32,10 +32,7 @@ struct ContentView: View {
                     Spacer()
                     Text("Monitoring \(repos.items.count) repos.").font(.footnote)
                 }
-                    
-                .navigationBarHidden(false)
-                .navigationBarTitle("Action Status", displayMode: .inline)
-                .navigationBarItems(leading: EditButtons(repos: repos), trailing: EditButton())
+            .navigationItems(repos: repos)
         }
             .navigationViewStyle(StackNavigationViewStyle())
             .onAppear() {
@@ -45,7 +42,22 @@ struct ContentView: View {
     
     func delete(at offsets: IndexSet) {
         repos.items.remove(atOffsets: offsets)
+        AppDelegate.shared.saveState()
     }
+}
+
+extension View {
+    #if os(tvOS)
+    func navigationItems(repos: RepoSet) -> some View {
+        return navigationBarHidden(false)
+    }
+    #else
+    func navigationItems(repos: RepoSet) -> some View {
+        return navigationBarHidden(false)
+        .navigationBarTitle("Action Status", displayMode: .inline)
+        .navigationBarItems(leading: EditButtons(repos: repos), trailing: EditButton())
+    }
+    #endif
 }
 
 extension ObservedObject.Wrapper {

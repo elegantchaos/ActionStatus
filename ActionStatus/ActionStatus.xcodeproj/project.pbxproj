@@ -72,6 +72,7 @@
 		8B430E7623F586110050BF2A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B430E7823F586110050BF2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B430E8623F587E30050BF2A /* AppCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommon.swift; sourceTree = "<group>"; };
+		8B430E9223F5C55E0050BF2A /* Action Status.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Action Status.entitlements"; sourceTree = "<group>"; };
 		8B451DFB23F415E10056EF3E /* Repo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repo.swift; sourceTree = "<group>"; };
 		8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BuildNumber.xcconfig; sourceTree = "<group>"; };
 		8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ActionStatus.xcconfig; sourceTree = "<group>"; };
@@ -116,6 +117,7 @@
 		8B3E649A23EAE62D00B28168 = {
 			isa = PBXGroup;
 			children = (
+				8B430E9223F5C55E0050BF2A /* Action Status.entitlements */,
 				8B451E0023F42F3C0056EF3E /* Configs */,
 				8B3E64A523EAE62D00B28168 /* ActionStatus */,
 				8B3E64BC23EAE62E00B28168 /* ActionStatusTests */,
@@ -712,6 +714,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				CODE_SIGN_ENTITLEMENTS = "Action Status.entitlements";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -726,6 +729,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				CODE_SIGN_ENTITLEMENTS = "Action Status.entitlements";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

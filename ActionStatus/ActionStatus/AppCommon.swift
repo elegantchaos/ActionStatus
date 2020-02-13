@@ -8,7 +8,7 @@ import SwiftUI
 
 class AppCommon: UIResponder, UIApplicationDelegate {
     let stateKey = "State"
-
+    
     class var shared: AppDelegate {
         UIApplication.shared.delegate as! AppDelegate
     }
@@ -31,6 +31,14 @@ class AppCommon: UIResponder, UIApplicationDelegate {
             Repo("Logger", owner: "elegantchaos", workflow: "tests"),
             Repo("ViewExtensions", owner: "elegantchaos", workflow: "Tests"),
         ])
+    }
+    
+    func setup() {
+        NotificationCenter.default.addObserver(self, selector: #selector(changed), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: NSUbiquitousKeyValueStore.default)
+    }
+    
+    @objc func changed() {
+        restoreState()
     }
     
     func saveState() {

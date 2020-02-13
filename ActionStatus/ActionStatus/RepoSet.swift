@@ -8,14 +8,23 @@ import SwiftUI
 class RepoSet: ObservableObject {
     typealias RepoList = [Repo]
     
+    let store: NSUbiquitousKeyValueStore
+    let key: String = "State"
+    
     @Published var items: [Repo]
     
-    init(_ repos: [Repo]) {
+    init(_ repos: [Repo], store: NSUbiquitousKeyValueStore = NSUbiquitousKeyValueStore.default) {
+        self.store = store
         self.items = repos
+        NotificationCenter.default.addObserver(self, selector: #selector(changed), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: NSUbiquitousKeyValueStore.default)
     }
     
+    @objc func changed() {
+        load(fromDefaultsKey: key)
+    }
+
     func load(fromDefaultsKey key: String) {
-        if let array = UserDefaults.standard.array(forKey: key) {
+        if let array = store.array(forKey: key) {
             var loadedRepos: [Repo] = []
             for item in array {
                 if let string = item as? String {
@@ -36,7 +45,7 @@ class RepoSet: ObservableObject {
             let string = "\(repo.name),\(repo.owner),\(repo.workflow),\(repo.id.uuidString)"
             strings.append(string)
         }
-        UserDefaults.standard.set(strings, forKey: key)
+        store.set(strings, forKey: key)
     }
 
     func refresh() {
