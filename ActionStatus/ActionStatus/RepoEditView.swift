@@ -12,29 +12,46 @@ struct RepoEditView: View {
     
     var body: some View {
         VStack {
-            Text("Repo")
-                .font(.callout)
-                .bold()
-            TextField("name", text: $editableRepo.name)
-                .textFieldStyle(style)
+            Form {
+                
+            HStack {
+                Text("Repo Name")
+                    .font(.callout)
+                    .bold()
+                TextField("name", text: $editableRepo.name)
+                    .textFieldStyle(style)
+            }
             
-            Text("Owner")
-                .font(.callout)
-                .bold()
-            
-            TextField("owner", text: $editableRepo.owner)
-                .textFieldStyle(style)
+            HStack {
+                Text("Repo Owner")
+                    .font(.callout)
+                    .bold()
+                
+                TextField("owner", text: $editableRepo.owner)
+                    .textFieldStyle(style)
+            }
 
-            Text("Workflow")
-                .font(.callout)
-                .bold()
+            HStack {
+                Text("Workflow File Name")
+                    .font(.callout)
+                    .bold()
+
+                TextField("workflow", text: $editableRepo.workflow)
+                    .textFieldStyle(style)
+            }
+            }
+            Spacer().frame(height: 20)
             
-            TextField("workflow", text: $editableRepo.workflow)
-                .textFieldStyle(style)
+            HStack {
+                Text("Github Repo")
+                Text("https://github.com/\(editableRepo.owner)/\(editableRepo.name)")
+            }
+            
+            Spacer()
             
             Button(action: { self.repo = self.editableRepo }) {
                 Text("Save")
-            }
+            }.disabled(!hasChanged)
         }
         .padding(.horizontal)
         .onAppear() {
@@ -42,6 +59,9 @@ struct RepoEditView: View {
         }
     }
     
+    var hasChanged: Bool {
+        return repo != editableRepo
+    }
 }
 
 struct RepoEditView_Previews: PreviewProvider {

@@ -14,41 +14,43 @@ struct ContentView: View {
                 Button(action: { self.repos.addRepo() } ) {
                     Image(systemName: "plus.circle").font(.title)
                 }
-
+                
                 Spacer()
-
+                
                 Text("Action Status").font(.title)
-
+                
                 Spacer()
-                    
+                
                 Button(action: { self.repos.reload() }) {
                     Image(systemName: "arrow.clockwise").font(.title)
                 }
             }
             .padding(.horizontal)
-
+            
             Spacer()
             
             NavigationView {
-            VStack {
-                ForEach(repos.items) { repo in
-                    HStack {
-                        NavigationLink(destination: RepoEditView(repo: self.$repos.binding(for: repo, in: \.items))) {
-                            Text(repo.name)
+                VStack {
+                    List {
+                        ForEach(repos.items) { repo in
+                            NavigationLink(destination: RepoEditView(repo: self.$repos.binding(for: repo, in: \.items))) {
+                                HStack {
+                                    Text(repo.name)
+                                    Image(systemName: repo.badgeName)
+                                        .foregroundColor(repo.statusColor)
+                                }
+                            }
+                            .font(.title)
+                            .padding([.leading, .trailing], 10)
+                            
                         }
-                        Image(systemName: repo.badgeName)
-                            .foregroundColor(repo.statusColor)
                     }
-                        .font(.title)
-                        .padding([.leading, .trailing], 10)
-
                 }
-            }
             }
             .navigationViewStyle(StackNavigationViewStyle())
             
             Spacer()
-
+            
             Text("Monitoring \(repos.items.count) repos.").font(.footnote)
         }.onAppear() {
             self.repos.reload()
