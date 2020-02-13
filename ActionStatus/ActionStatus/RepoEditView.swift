@@ -6,7 +6,7 @@
 import SwiftUI
 
 struct RepoEditView: View {
-    let style = RoundedBorderTextFieldStyle()
+    let style = DefaultTextFieldStyle()
     @Binding var repo: Repo
     @State var editableRepo: Repo = Repo()
     
