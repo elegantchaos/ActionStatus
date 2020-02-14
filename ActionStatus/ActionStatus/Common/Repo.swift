@@ -3,7 +3,6 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import UIKit
 import SwiftUI
 
 struct Repo: Identifiable, Equatable {

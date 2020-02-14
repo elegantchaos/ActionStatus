@@ -18,7 +18,7 @@ struct SettingsView: View {
 //                }
 //            }
             Button(action: { self.repos.addRepo() }) {
-                Image(systemName: "plus.circle")
+                XImage(name: "plus.circle")
             }
         }.padding(.horizontal)
 

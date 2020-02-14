@@ -3,15 +3,18 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import UIKit
 import SwiftUI
 
-class AppCommon: UIResponder, UIApplicationDelegate {
+#if os(macOS)
+import AppKit
+typealias AppBase = NSObject
+#else
+import IOKit
+typealias AppBase = UIResponder
+#endif
+
+class AppCommon: AppBase {
     let stateKey = "State"
-    
-    class var shared: AppDelegate {
-        UIApplication.shared.delegate as! AppDelegate
-    }
     
     @State var repos = defaultRepoSet()
 
@@ -49,3 +52,21 @@ class AppCommon: UIResponder, UIApplicationDelegate {
         repos.load(fromDefaultsKey: stateKey)
     }
 }
+
+#if os(macOS)
+
+extension AppCommon: NSApplicationDelegate {
+    class var shared: AppDelegate {
+        NSApp.delegate as! AppDelegate
+    }
+}
+
+#else
+
+extension AppCommon: UIApplicationDelegate {
+    class var shared: AppDelegate {
+        UIApplication.shared.delegate as! AppDelegate
+    }
+}
+
+#endif

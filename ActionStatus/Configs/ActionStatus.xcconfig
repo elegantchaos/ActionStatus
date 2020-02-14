@@ -1,3 +1,8 @@
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+//  Created by Sam Deane on 14/02/20.
+//  All code (c) 2020 - present day, Elegant Chaos Limited.
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 #include "BuildNumber.xcconfig"
 
 CONFIG_ROOT = $(SOURCE_ROOT)/Configs
@@ -21,3 +26,4 @@ DEVELOPMENT_TEAM = 2H48644JM2
 SWIFT_VERSION = 5.0
 ENABLE_PREVIEWS = YES
 PRODUCT_MODULE_NAME = ActionStatus$(TARGET_NAME)
+CODE_SIGN_ENTITLEMENTS = $(ACTION_STATUS_RESOURCE_PATH)/ActionStatus.entitlements

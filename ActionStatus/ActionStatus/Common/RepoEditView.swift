@@ -53,16 +53,16 @@ struct RepoEditView: View {
         .onDisappear() {
             AppDelegate.shared.repos.refresh()
         }
-        .navigationBarTitle(repo.name)
-        .navigationBarHidden(false)
-        .navigationBarItems(trailing:
-            Button(action: {
-                self.repo = self.editableRepo
-                AppDelegate.shared.saveState()
-            }) {
-                Text("Save")
-            }.disabled(!hasChanged)
-        )
+//        .navigationBarTitle(repo.name)
+//        .navigationBarHidden(false)
+//        .navigationBarItems(trailing:
+//            Button(action: {
+//                self.repo = self.editableRepo
+//                AppDelegate.shared.saveState()
+//            }) {
+//                Text("Save")
+//            }.disabled(!hasChanged)
+//        )
         
     }
     

@@ -5,6 +5,18 @@
 
 import SwiftUI
 
+struct XImage: View {
+    let name: String
+    
+    var body: some View {
+        #if os(macOS)
+        return Image(name)
+        #else
+        return Image(systemName: name)
+        #endif
+    }
+}
+
 struct ContentView: View {
     @ObservedObject var repos: RepoSet
 
@@ -16,7 +28,7 @@ struct ContentView: View {
                         ForEach(repos.items) { repo in
                             NavigationLink(destination: RepoEditView(repo: self.$repos.binding(for: repo, in: \.items))) {
                                 HStack(alignment: .center, spacing: 20.0) {
-                                    Image(systemName: repo.badgeName)
+                                    XImage(name: repo.badgeName)
                                         .foregroundColor(repo.statusColor)
                                     Text(repo.name)
                                 }
@@ -34,7 +46,6 @@ struct ContentView: View {
                 }
             .navigationItems(repos: repos)
         }
-            .navigationViewStyle(StackNavigationViewStyle())
             .onAppear() {
                 self.repos.refresh()
             }
@@ -47,15 +58,21 @@ struct ContentView: View {
 }
 
 extension View {
-    #if os(tvOS)
-    func navigationItems(repos: RepoSet) -> some View {
-        return navigationBarHidden(false)
-    }
-    #else
+    #if os(iOS)
     func navigationItems(repos: RepoSet) -> some View {
         return navigationBarHidden(false)
         .navigationBarTitle("Action Status", displayMode: .inline)
         .navigationBarItems(leading: EditButtons(repos: repos), trailing: EditButton())
+        .navigationViewStyle(StackNavigationViewStyle())
+    }
+    #elseif os(macOS)
+    func navigationItems(repos: RepoSet) -> some View {
+        return navigationViewStyle(DefaultNavigationViewStyle())
+    }
+    #else
+    func navigationItems(repos: RepoSet) -> some View {
+        return navigationBarHidden(false)
+        .navigationViewStyle(StackNavigationViewStyle())
     }
     #endif
 }
@@ -79,7 +96,7 @@ struct ReloadButton: View {
     @ObservedObject var repos: RepoSet
     var body: some View {
         Button(action: { self.repos.refresh() }) {
-            Image(systemName: "arrow.clockwise").font(.title)
+            XImage(name: "arrow.clockwise").font(.title)
         }
     }
 }
@@ -91,10 +108,26 @@ struct AddButton: View {
             action: {
             self.repos.addRepo()
             AppDelegate.shared.saveState()
-        }) { Image(systemName: "plus.circle").font(.title) }
+        }) { XImage(name: "plus.circle").font(.title) }
     }
 }
 
+#if os(macOS)
+struct EditButtons: View {
+    @ObservedObject var repos: RepoSet
+    
+    var body: some View {
+        AddButton(repos: repos)
+        .disabled(showAdd)
+//        .opacity((editMode?.wrappedValue.isEditing ?? true) ? 1.0 : 0.0)
+    }
+    
+    var showAdd: Bool {
+        return true
+//        return !(editMode?.wrappedValue.isEditing ?? true)
+    }
+}
+#else
 struct EditButtons: View {
     @ObservedObject var repos: RepoSet
     @Environment(\.editMode) var editMode
@@ -109,3 +142,4 @@ struct EditButtons: View {
         return !(editMode?.wrappedValue.isEditing ?? true)
     }
 }
+#endif
