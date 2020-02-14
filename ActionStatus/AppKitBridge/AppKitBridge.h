@@ -10,5 +10,5 @@
 #import <Foundation/Foundation.h>
 
 @protocol AppKitBridge <NSObject>
-- (NSString *) test;
+- (void) setup;
 @end

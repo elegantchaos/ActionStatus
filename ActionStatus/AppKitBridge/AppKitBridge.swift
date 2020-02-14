@@ -4,9 +4,14 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Foundation
+import AppKit
 
 @objc class AppKitBridgeImp: NSObject, AppKitBridge {
-    @objc func test() -> String {
-        return "Hello"
+    var item: NSStatusItem!
+    
+    @objc func setup() {
+        let status = NSStatusBar.system
+        item = status.statusItem(withLength: 40)
+        item.button?.title = "Test"
     }
 }
