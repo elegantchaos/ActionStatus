@@ -9,7 +9,7 @@ import SwiftUI
 import AppKit
 typealias AppBase = NSObject
 #else
-import IOKit
+import UIKit
 typealias AppBase = UIResponder
 #endif
 

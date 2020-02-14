@@ -5,4 +5,8 @@
 
 #include "ActionStatus.xcconfig"
 
+SDKROOT = appletvos
+TVOS_DEPLOYMENT_TARGET = 13.0
+LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks
+TARGETED_DEVICE_FAMILY = 3
 CODE_SIGN_ENTITLEMENTS =
