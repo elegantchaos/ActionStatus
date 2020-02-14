@@ -3,7 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-#include "Source/ActionStatusCommon/ActionStatus.xcconfig"
+#include "Sources/ActionStatusCommon/ActionStatus.xcconfig"
 
 ACTION_STATUS_TYPE = Bridge
 
@@ -15,6 +15,7 @@ COMBINE_HIDPI_IMAGES = YES
 INSTALL_PATH = $(LOCAL_LIBRARY_DIR)/Bundles
 SKIP_INSTALL = YES
 
+BUNDLE_IDENTIFIER = $(ACTION_STATUS_BUNDLE_IDENTIFIER).appkitbridge
 PRODUCT_NAME = $(TARGET_NAME)
 WRAPPER_EXTENSION = bundle
 CLANG_ENABLE_MODULES = YES

@@ -3,7 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-#include "ActionStatus.xcconfig"
+#include "Sources/ActionStatusCommon/ActionStatus.xcconfig"
 
 ACTION_STATUS_TYPE = Tests
 CODE_SIGN_ENTITLEMENTS =

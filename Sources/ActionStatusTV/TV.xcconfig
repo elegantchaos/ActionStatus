@@ -3,13 +3,12 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-#include "Source/ActionStatusCommon/ActionStatus.xcconfig"
+#include "Sources/ActionStatusCommon/ActionStatus.xcconfig"
 
-ACTION_STATUS_TYPE = Mobile
+ACTION_STATUS_TYPE = TV
 
-SDKROOT = iphoneos
-TARGETED_DEVICE_FAMILY = 1,2
-IPHONEOS_DEPLOYMENT_TARGET = 13.2
+SDKROOT = appletvos
+TVOS_DEPLOYMENT_TARGET = 13.0
 LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks
-SUPPORTS_MACCATALYST = YES
-SWIFT_OBJC_BRIDGING_HEADER = $(ACTION_STATUS_SOURCE_PATH)/BridgingHeader.h
+TARGETED_DEVICE_FAMILY = 3
+CODE_SIGN_ENTITLEMENTS =
