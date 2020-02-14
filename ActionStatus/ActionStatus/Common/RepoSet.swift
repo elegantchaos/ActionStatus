@@ -7,13 +7,17 @@ import SwiftUI
 
 class RepoSet: ObservableObject {
     typealias RepoList = [Repo]
+    typealias RefreshBlock = () -> Void
     
     let store: NSUbiquitousKeyValueStore
     let key: String = "State"
+    var block: RefreshBlock?
+    var timer: Timer?
     
     @Published var items: [Repo]
     
-    init(_ repos: [Repo], store: NSUbiquitousKeyValueStore = NSUbiquitousKeyValueStore.default) {
+    init(_ repos: [Repo], store: NSUbiquitousKeyValueStore = NSUbiquitousKeyValueStore.default, block: RefreshBlock? = nil) {
+        self.block = block
         self.store = store
         self.items = repos
         NotificationCenter.default.addObserver(self, selector: #selector(changed), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: NSUbiquitousKeyValueStore.default)
@@ -23,6 +27,16 @@ class RepoSet: ObservableObject {
         load(fromDefaultsKey: key)
     }
 
+    var failingCount: Int {
+        var count = 0
+        for repo in items {
+            if repo.state == .failing {
+                count += 1
+            }
+        }
+        return count
+    }
+    
     func load(fromDefaultsKey key: String) {
         if let array = store.array(forKey: key) {
             var loadedRepos: [Repo] = []
@@ -49,7 +63,20 @@ class RepoSet: ObservableObject {
     }
 
     func refresh() {
+        scheduleRefresh(after: 0)
+    }
+        
+    func scheduleRefresh(after interval: TimeInterval) {
+        timer?.invalidate()
+        print("Will refresh in \(interval) seconds.")
+        timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { _ in
+            self.doRefresh()
+        }
+    }
+    
+    func doRefresh() {
         DispatchQueue.global(qos: .background).async {
+            print("refreshing")
             var reloaded: [Repo] = []
             for repo in self.items {
                 var updated = repo
@@ -58,6 +85,8 @@ class RepoSet: ObservableObject {
             }
             DispatchQueue.main.async {
                 self.items = reloaded
+                self.block?()
+                self.scheduleRefresh(after: 10.0)
             }
         }
     }

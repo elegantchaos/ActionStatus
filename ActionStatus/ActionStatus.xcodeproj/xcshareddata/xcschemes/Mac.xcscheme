@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8B5E7E4323F6A74E00087E15"
-               BuildableName = "Mac.app"
+               BuildableName = "Action Status.app"
                BlueprintName = "Mac"
                ReferencedContainer = "container:ActionStatus.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8B5E7E4323F6A74E00087E15"
-            BuildableName = "Mac.app"
+            BuildableName = "Action Status.app"
             BlueprintName = "Mac"
             ReferencedContainer = "container:ActionStatus.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8B5E7E4323F6A74E00087E15"
-            BuildableName = "Mac.app"
+            BuildableName = "Action Status.app"
             BlueprintName = "Mac"
             ReferencedContainer = "container:ActionStatus.xcodeproj">
          </BuildableReference>

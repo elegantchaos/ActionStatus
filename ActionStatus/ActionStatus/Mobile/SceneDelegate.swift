@@ -18,6 +18,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let app = AppDelegate.shared
         app.loadBridge()
+        app.repos.block = {
+            app.appKitBridge?.passing = app.repos.failingCount == 0
+        }
         app.restoreState()
         
         // Create the SwiftUI view that provides the window contents.

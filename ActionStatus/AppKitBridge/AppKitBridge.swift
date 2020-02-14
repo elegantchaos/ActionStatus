@@ -11,12 +11,18 @@ import AppKit
     let passingImage = setupPassingImage()
     let failingImage = setupFailingImage()
     var item: NSStatusItem!
-    
+    var passing: Bool {
+        get { return item.button?.image == passingImage }
+        set { item.button?.image = newValue ? passingImage : failingImage }
+    }
+
     @objc func setup() {
         let status = NSStatusBar.system
         item = status.statusItem(withLength: 22)
+        item.button?.title = "ActionStatus"
         item.button?.image = passingImage
     }
+
     
     class func setupPassingImage() -> NSImage {
         let image = NSImage(named: "StatusPassing")!

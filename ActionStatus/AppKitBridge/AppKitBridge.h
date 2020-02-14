@@ -10,5 +10,6 @@
 #import <Foundation/Foundation.h>
 
 @protocol AppKitBridge <NSObject>
+@property BOOL passing;
 - (void) setup;
 @end
