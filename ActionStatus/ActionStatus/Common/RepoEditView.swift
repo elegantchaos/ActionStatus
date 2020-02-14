@@ -51,23 +51,20 @@ struct RepoEditView: View {
             self.editableRepo = self.repo
         }
         .onDisappear() {
-            AppDelegate.shared.repos.refresh()
+            self.save()
         }
-//        .navigationBarTitle(repo.name)
-//        .navigationBarHidden(false)
-//        .navigationBarItems(trailing:
-//            Button(action: {
-//                self.repo = self.editableRepo
-//                AppDelegate.shared.saveState()
-//            }) {
-//                Text("Save")
-//            }.disabled(!hasChanged)
-//        )
-        
+        .navigationBarTitle(repo.name)
+        .navigationBarHidden(false)
     }
     
     var hasChanged: Bool {
         return repo != editableRepo
+    }
+    
+    func save() {
+        self.repo = self.editableRepo
+        AppDelegate.shared.saveState()
+        AppDelegate.shared.repos.refresh()
     }
 }
 
