@@ -14,7 +14,6 @@
 		8B3E64B323EAE62E00B28168 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64B123EAE62E00B28168 /* LaunchScreen.storyboard */; };
 		8B3E64BE23EAE62E00B28168 /* ActionStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64BD23EAE62E00B28168 /* ActionStatusTests.swift */; };
 		8B3E64C923EAE62F00B28168 /* ActionStatusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */; };
-		8B430E7D23F586830050BF2A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */; };
 		8B430E7E23F586830050BF2A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64AA23EAE62D00B28168 /* ContentView.swift */; };
 		8B430E7F23F586830050BF2A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9B2DB323F454330087283B /* SettingsView.swift */; };
 		8B430E8023F586830050BF2A /* RepoEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F181723F459570029F9CC /* RepoEditView.swift */; };
@@ -606,7 +605,6 @@
 				8B430E7F23F586830050BF2A /* SettingsView.swift in Sources */,
 				8B430E8823F587E60050BF2A /* AppCommon.swift in Sources */,
 				8B430E8023F586830050BF2A /* RepoEditView.swift in Sources */,
-				8B430E7D23F586830050BF2A /* SceneDelegate.swift in Sources */,
 				8B430E8223F586830050BF2A /* RepoSet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -20,6 +20,29 @@
 	<string>$(ACTION_STATUS_BUILD)</string>
 	<key>Commit</key>
 	<string>$(ACTION_STATUS_COMMIT)</string>
+	<key>CFBundleIcons</key>
+	<dict>
+		<key>CFBundlePrimaryIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string>AppIconTV/App Icon</string>
+			</array>
+			<key>UIPrerenderedIcon</key>
+			<false/>
+		</dict>
+		<key>UINewsstandIcon</key>
+		<dict>
+			<key>CFBundleIconFiles</key>
+			<array>
+				<string></string>
+			</array>
+			<key>UINewsstandBindingType</key>
+			<string>UINewsstandBindingTypeMagazine</string>
+			<key>UINewsstandBindingEdge</key>
+			<string>UINewsstandBindingEdgeLeft</string>
+		</dict>
+	</dict>
 	<key>NSHumanReadableCopyright</key>
 	<string>$(ACTION_STATUS_COPYRIGHT)</string>
 	<key>LSRequiresIPhoneOS</key>
