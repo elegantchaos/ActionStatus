@@ -10,7 +10,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "# update main build number&#10;swift run --package-path &quot;$PROJECT_DIR/../Tools&quot; rt update-build &gt; /tmp/prebuild.log  &#10;">
+               scriptText = "# update main build number&#10;cd &quot;$PROJECT_DIR/..&quot;&#10;swift run --package-path &quot;Tools&quot; rt update-build --config ActionStatus/Configs/BuildNumber.xcconfig&gt; /tmp/prebuild.log&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
@@ -117,7 +117,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "# update main build number&#10;swift run --package-path &quot;$PROJECT_DIR/../Tools&quot; rt update-build &gt; /tmp/prearchive.log  &#10;">
+               scriptText = "# update main build number&#10;cd &quot;$PROJECT_DIR/..&quot;&#10;swift run --package-path &quot;Tools&quot; rt update-build --config ActionStatus/Configs/BuildNumber.xcconfig&gt; /tmp/prearchive.log   &#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
