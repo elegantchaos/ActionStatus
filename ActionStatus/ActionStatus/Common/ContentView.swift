@@ -46,6 +46,7 @@ struct ContentView: View {
                 }
             .navigationItems(repos: repos)
         }
+            .navigationStyle()
             .onAppear() {
                 self.repos.refresh()
             }
@@ -58,21 +59,28 @@ struct ContentView: View {
 }
 
 extension View {
-    #if os(iOS)
+    #if os(tvOS)
+    func navigationItems(repos: RepoSet) -> some View {
+        return navigationBarHidden(false)
+    }
+    func navigationStyle() -> some View {
+        return navigationViewStyle(StackNavigationViewStyle())
+    }
+    #elseif canImport(UIKit)
     func navigationItems(repos: RepoSet) -> some View {
         return navigationBarHidden(false)
         .navigationBarTitle("Action Status", displayMode: .inline)
         .navigationBarItems(leading: EditButtons(repos: repos), trailing: EditButton())
-        .navigationViewStyle(StackNavigationViewStyle())
     }
-    #elseif os(macOS)
+    func navigationStyle() -> some View {
+        return navigationViewStyle(StackNavigationViewStyle())
+    }
+    #else // macOS / AppKit
     func navigationItems(repos: RepoSet) -> some View {
         return navigationViewStyle(DefaultNavigationViewStyle())
     }
-    #else
-    func navigationItems(repos: RepoSet) -> some View {
-        return navigationBarHidden(false)
-        .navigationViewStyle(StackNavigationViewStyle())
+    func navigationStyle() -> some View {
+        return navigationViewStyle(DefaultNavigationViewStyle())
     }
     #endif
 }

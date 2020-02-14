@@ -131,6 +131,7 @@
 		8B5E7E9123F6C0A100087E15 /* ActionStatus-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ActionStatus-Bridging-Header.h"; sourceTree = "<group>"; };
 		8B5E7E9223F6C0B600087E15 /* AppKitBridge-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppKitBridge-Bridging-Header.h"; sourceTree = "<group>"; };
 		8B5E7E9323F6C0C200087E15 /* AppKitBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppKitBridge.h; sourceTree = "<group>"; };
+		8B5E7E9423F6CC5B00087E15 /* Assets.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; path = Assets.sketch; sourceTree = "<group>"; };
 		8B6F181723F459570029F9CC /* RepoEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoEditView.swift; sourceTree = "<group>"; };
 		8B9B2DB123F452B00087283B /* RepoSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoSet.swift; sourceTree = "<group>"; };
 		8B9B2DB323F454330087283B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -185,6 +186,7 @@
 		8B3E649A23EAE62D00B28168 = {
 			isa = PBXGroup;
 			children = (
+				8B5E7E9423F6CC5B00087E15 /* Assets.sketch */,
 				8B451E0023F42F3C0056EF3E /* Configs */,
 				8B3E64A523EAE62D00B28168 /* ActionStatus */,
 				8B3E64BC23EAE62E00B28168 /* ActionStatusTests */,
