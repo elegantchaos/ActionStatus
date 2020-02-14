@@ -116,6 +116,9 @@
 		8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BuildNumber.xcconfig; sourceTree = "<group>"; };
 		8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ActionStatus.xcconfig; sourceTree = "<group>"; };
 		8B451E1623F446BA0056EF3E /* ActionStatus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ActionStatus.entitlements; sourceTree = "<group>"; };
+		8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppKitBridge.xcconfig; sourceTree = "<group>"; };
+		8B522FA623F6ED390020AD36 /* pre-archive.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "pre-archive.sh"; sourceTree = "<group>"; };
+		8B522FA723F6ED390020AD36 /* pre-build.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "pre-build.sh"; sourceTree = "<group>"; };
 		8B5E7E4423F6A74E00087E15 /* Action Status.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Action Status.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B5E7E4623F6A74E00087E15 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B5E7E5023F6A74F00087E15 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -128,8 +131,8 @@
 		8B5E7E8323F6BB3500087E15 /* AppKitBridge.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppKitBridge.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B5E7E8523F6BB3500087E15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B5E7E8C23F6BB8900087E15 /* AppKitBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppKitBridge.swift; sourceTree = "<group>"; };
-		8B5E7E9123F6C0A100087E15 /* ActionStatus-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ActionStatus-Bridging-Header.h"; sourceTree = "<group>"; };
-		8B5E7E9223F6C0B600087E15 /* AppKitBridge-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppKitBridge-Bridging-Header.h"; sourceTree = "<group>"; };
+		8B5E7E9123F6C0A100087E15 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
+		8B5E7E9223F6C0B600087E15 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		8B5E7E9323F6C0C200087E15 /* AppKitBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppKitBridge.h; sourceTree = "<group>"; };
 		8B5E7E9423F6CC5B00087E15 /* Assets.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; path = Assets.sketch; sourceTree = "<group>"; };
 		8B6F181723F459570029F9CC /* RepoEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoEditView.swift; sourceTree = "<group>"; };
@@ -186,12 +189,9 @@
 		8B3E649A23EAE62D00B28168 = {
 			isa = PBXGroup;
 			children = (
-				8B5E7E9423F6CC5B00087E15 /* Assets.sketch */,
-				8B451E0023F42F3C0056EF3E /* Configs */,
-				8B3E64A523EAE62D00B28168 /* ActionStatus */,
-				8B3E64BC23EAE62E00B28168 /* ActionStatusTests */,
-				8B3E64C723EAE62F00B28168 /* ActionStatusUITests */,
-				8B5E7E8423F6BB3500087E15 /* AppKitBridge */,
+				8B522FA323F6E8320020AD36 /* Extras */,
+				8B3E64A523EAE62D00B28168 /* Source */,
+				8B522FA223F6E7B40020AD36 /* Tests */,
 				8B3E64A423EAE62D00B28168 /* Products */,
 				8B5E7E7823F6BA8400087E15 /* Frameworks */,
 			);
@@ -210,16 +210,16 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		8B3E64A523EAE62D00B28168 /* ActionStatus */ = {
+		8B3E64A523EAE62D00B28168 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				8B5E7E4523F6A74E00087E15 /* Mac */,
-				8B430E6B23F586100050BF2A /* TV */,
-				8B5E7E5723F6A79100087E15 /* Mobile */,
-				8B5E7E5823F6A79900087E15 /* Common */,
-				8B430E8923F58A6F0050BF2A /* Resources */,
+				8B5E7E5723F6A79100087E15 /* ActionStatusMobile */,
+				8B5E7E4523F6A74E00087E15 /* ActionStatusMac */,
+				8B430E6B23F586100050BF2A /* ActionStatusTV */,
+				8B5E7E5823F6A79900087E15 /* ActionStatusCommon */,
+				8B5E7E8423F6BB3500087E15 /* AppKitBridge */,
 			);
-			path = ActionStatus;
+			path = Source;
 			sourceTree = "<group>";
 		};
 		8B3E64BC23EAE62E00B28168 /* ActionStatusTests */ = {
@@ -240,51 +240,15 @@
 			path = ActionStatusUITests;
 			sourceTree = "<group>";
 		};
-		8B430E6B23F586100050BF2A /* TV */ = {
+		8B430E6B23F586100050BF2A /* ActionStatusTV */ = {
 			isa = PBXGroup;
 			children = (
 				8B430E6C23F586100050BF2A /* AppDelegate.swift */,
-			);
-			path = TV;
-			sourceTree = "<group>";
-		};
-		8B430E8923F58A6F0050BF2A /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				8B5E7E5923F6A7C100087E15 /* Mac */,
-				8B430E8C23F58A820050BF2A /* TV */,
-				8B430E8B23F58A7D0050BF2A /* Mobile */,
-				8B430E8A23F58A770050BF2A /* Common */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		8B430E8A23F58A770050BF2A /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				8B3E64AC23EAE62E00B28168 /* Assets.xcassets */,
-				8B430E9023F58E060050BF2A /* PreviewContent */,
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
-		8B430E8B23F58A7D0050BF2A /* Mobile */ = {
-			isa = PBXGroup;
-			children = (
-				8B3E64B423EAE62E00B28168 /* Info.plist */,
-				8B451E1623F446BA0056EF3E /* ActionStatus.entitlements */,
-				8B3E64B123EAE62E00B28168 /* LaunchScreen.storyboard */,
-			);
-			path = Mobile;
-			sourceTree = "<group>";
-		};
-		8B430E8C23F58A820050BF2A /* TV */ = {
-			isa = PBXGroup;
-			children = (
 				8B430E7823F586110050BF2A /* Info.plist */,
 				8B430E7523F586110050BF2A /* LaunchScreen.storyboard */,
+				8B5E7E6423F6A9C600087E15 /* TV.xcconfig */,
 			);
-			path = TV;
+			path = ActionStatusTV;
 			sourceTree = "<group>";
 		};
 		8B430E9023F58E060050BF2A /* PreviewContent */ = {
@@ -295,58 +259,67 @@
 			path = PreviewContent;
 			sourceTree = "<group>";
 		};
-		8B451E0023F42F3C0056EF3E /* Configs */ = {
+		8B522FA223F6E7B40020AD36 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				8B5E7E6223F6A97D00087E15 /* Tests.xcconfig */,
+				8B3E64BC23EAE62E00B28168 /* ActionStatusTests */,
+				8B3E64C723EAE62F00B28168 /* ActionStatusUITests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		8B522FA323F6E8320020AD36 /* Extras */ = {
+			isa = PBXGroup;
+			children = (
+				8B5E7E9423F6CC5B00087E15 /* Assets.sketch */,
+			);
+			path = Extras;
+			sourceTree = "<group>";
+		};
+		8B5E7E4523F6A74E00087E15 /* ActionStatusMac */ = {
+			isa = PBXGroup;
+			children = (
+				8B5E7E5323F6A74F00087E15 /* ActionStatus.entitlements */,
+				8B5E7E4623F6A74E00087E15 /* AppDelegate.swift */,
+				8B5E7E5223F6A74F00087E15 /* Info.plist */,
+				8B5E7E6523F6A9C600087E15 /* Mac.xcconfig */,
+				8B5E7E4F23F6A74F00087E15 /* Main.storyboard */,
+			);
+			path = ActionStatusMac;
+			sourceTree = "<group>";
+		};
+		8B5E7E5723F6A79100087E15 /* ActionStatusMobile */ = {
+			isa = PBXGroup;
+			children = (
+				8B451E1623F446BA0056EF3E /* ActionStatus.entitlements */,
+				8B3E64A623EAE62D00B28168 /* AppDelegate.swift */,
+				8B5E7E9123F6C0A100087E15 /* BridgingHeader.h */,
+				8B3E64B423EAE62E00B28168 /* Info.plist */,
+				8B3E64B123EAE62E00B28168 /* LaunchScreen.storyboard */,
+				8B5E7E6323F6A9C600087E15 /* Mobile.xcconfig */,
+				8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */,
+			);
+			path = ActionStatusMobile;
+			sourceTree = "<group>";
+		};
+		8B5E7E5823F6A79900087E15 /* ActionStatusCommon */ = {
 			isa = PBXGroup;
 			children = (
 				8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */,
-				8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */,
-				8B5E7E6223F6A97D00087E15 /* Tests.xcconfig */,
-				8B5E7E6523F6A9C600087E15 /* Mac.xcconfig */,
-				8B5E7E6323F6A9C600087E15 /* Mobile.xcconfig */,
-				8B5E7E6423F6A9C600087E15 /* TV.xcconfig */,
-			);
-			path = Configs;
-			sourceTree = "<group>";
-		};
-		8B5E7E4523F6A74E00087E15 /* Mac */ = {
-			isa = PBXGroup;
-			children = (
-				8B5E7E4623F6A74E00087E15 /* AppDelegate.swift */,
-			);
-			path = Mac;
-			sourceTree = "<group>";
-		};
-		8B5E7E5723F6A79100087E15 /* Mobile */ = {
-			isa = PBXGroup;
-			children = (
-				8B3E64A623EAE62D00B28168 /* AppDelegate.swift */,
-				8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */,
-				8B5E7E9123F6C0A100087E15 /* ActionStatus-Bridging-Header.h */,
-			);
-			path = Mobile;
-			sourceTree = "<group>";
-		};
-		8B5E7E5823F6A79900087E15 /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				8B3E64AA23EAE62D00B28168 /* ContentView.swift */,
 				8B430E8623F587E30050BF2A /* AppCommon.swift */,
-				8B9B2DB323F454330087283B /* SettingsView.swift */,
-				8B6F181723F459570029F9CC /* RepoEditView.swift */,
+				8B3E64AC23EAE62E00B28168 /* Assets.xcassets */,
+				8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */,
+				8B3E64AA23EAE62D00B28168 /* ContentView.swift */,
+				8B522FA623F6ED390020AD36 /* pre-archive.sh */,
+				8B522FA723F6ED390020AD36 /* pre-build.sh */,
+				8B430E9023F58E060050BF2A /* PreviewContent */,
 				8B451DFB23F415E10056EF3E /* Repo.swift */,
+				8B6F181723F459570029F9CC /* RepoEditView.swift */,
 				8B9B2DB123F452B00087283B /* RepoSet.swift */,
+				8B9B2DB323F454330087283B /* SettingsView.swift */,
 			);
-			path = Common;
-			sourceTree = "<group>";
-		};
-		8B5E7E5923F6A7C100087E15 /* Mac */ = {
-			isa = PBXGroup;
-			children = (
-				8B5E7E4F23F6A74F00087E15 /* Main.storyboard */,
-				8B5E7E5223F6A74F00087E15 /* Info.plist */,
-				8B5E7E5323F6A74F00087E15 /* ActionStatus.entitlements */,
-			);
-			path = Mac;
+			path = ActionStatusCommon;
 			sourceTree = "<group>";
 		};
 		8B5E7E7823F6BA8400087E15 /* Frameworks */ = {
@@ -359,9 +332,10 @@
 		8B5E7E8423F6BB3500087E15 /* AppKitBridge */ = {
 			isa = PBXGroup;
 			children = (
+				8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */,
 				8B5E7E8523F6BB3500087E15 /* Info.plist */,
 				8B5E7E8C23F6BB8900087E15 /* AppKitBridge.swift */,
-				8B5E7E9223F6C0B600087E15 /* AppKitBridge-Bridging-Header.h */,
+				8B5E7E9223F6C0B600087E15 /* BridgingHeader.h */,
 				8B5E7E9323F6C0C200087E15 /* AppKitBridge.h */,
 			);
 			path = AppKitBridge;
@@ -370,9 +344,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8B3E64A223EAE62D00B28168 /* Mobile */ = {
+		8B3E64A223EAE62D00B28168 /* ActionStatusMobile */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8B3E64CD23EAE62F00B28168 /* Build configuration list for PBXNativeTarget "Mobile" */;
+			buildConfigurationList = 8B3E64CD23EAE62F00B28168 /* Build configuration list for PBXNativeTarget "ActionStatusMobile" */;
 			buildPhases = (
 				8B3E649F23EAE62D00B28168 /* Sources */,
 				8B3E64A023EAE62D00B28168 /* Frameworks */,
@@ -384,7 +358,7 @@
 			dependencies = (
 				8B5E7E8B23F6BB6100087E15 /* PBXTargetDependency */,
 			);
-			name = Mobile;
+			name = ActionStatusMobile;
 			productName = GithubStatus;
 			productReference = 8B3E64A323EAE62D00B28168 /* Action Status.app */;
 			productType = "com.apple.product-type.application";
@@ -425,9 +399,9 @@
 			productReference = 8B3E64C423EAE62F00B28168 /* ActionStatusUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		8B430E6923F586100050BF2A /* TV */ = {
+		8B430E6923F586100050BF2A /* ActionStatusTV */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8B430E7923F586110050BF2A /* Build configuration list for PBXNativeTarget "TV" */;
+			buildConfigurationList = 8B430E7923F586110050BF2A /* Build configuration list for PBXNativeTarget "ActionStatusTV" */;
 			buildPhases = (
 				8B430E6623F586100050BF2A /* Sources */,
 				8B430E6723F586100050BF2A /* Frameworks */,
@@ -437,14 +411,14 @@
 			);
 			dependencies = (
 			);
-			name = TV;
+			name = ActionStatusTV;
 			productName = ActionStatusTV;
 			productReference = 8B430E6A23F586100050BF2A /* Action Status.app */;
 			productType = "com.apple.product-type.application";
 		};
-		8B5E7E4323F6A74E00087E15 /* Mac */ = {
+		8B5E7E4323F6A74E00087E15 /* ActionStatusMac */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8B5E7E5623F6A74F00087E15 /* Build configuration list for PBXNativeTarget "Mac" */;
+			buildConfigurationList = 8B5E7E5623F6A74F00087E15 /* Build configuration list for PBXNativeTarget "ActionStatusMac" */;
 			buildPhases = (
 				8B5E7E4023F6A74E00087E15 /* Sources */,
 				8B5E7E4123F6A74E00087E15 /* Frameworks */,
@@ -455,7 +429,7 @@
 			);
 			dependencies = (
 			);
-			name = Mac;
+			name = ActionStatusMac;
 			productName = ActionStatusMac;
 			productReference = 8B5E7E4423F6A74E00087E15 /* Action Status.app */;
 			productType = "com.apple.product-type.application";
@@ -525,9 +499,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8B3E64A223EAE62D00B28168 /* Mobile */,
-				8B5E7E4323F6A74E00087E15 /* Mac */,
-				8B430E6923F586100050BF2A /* TV */,
+				8B3E64A223EAE62D00B28168 /* ActionStatusMobile */,
+				8B5E7E4323F6A74E00087E15 /* ActionStatusMac */,
+				8B430E6923F586100050BF2A /* ActionStatusTV */,
 				8B5E7E8223F6BB3500087E15 /* AppKitBridge */,
 				8B3E64B823EAE62E00B28168 /* ActionStatusTests */,
 				8B3E64C323EAE62F00B28168 /* ActionStatusUITests */,
@@ -664,12 +638,12 @@
 /* Begin PBXTargetDependency section */
 		8B3E64BB23EAE62E00B28168 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8B3E64A223EAE62D00B28168 /* Mobile */;
+			target = 8B3E64A223EAE62D00B28168 /* ActionStatusMobile */;
 			targetProxy = 8B3E64BA23EAE62E00B28168 /* PBXContainerItemProxy */;
 		};
 		8B3E64C623EAE62F00B28168 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8B3E64A223EAE62D00B28168 /* Mobile */;
+			target = 8B3E64A223EAE62D00B28168 /* ActionStatusMobile */;
 			targetProxy = 8B3E64C523EAE62F00B28168 /* PBXContainerItemProxy */;
 		};
 		8B5E7E8B23F6BB6100087E15 /* PBXTargetDependency */ = {
@@ -826,11 +800,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8B5E7E6323F6A9C600087E15 /* Mobile.xcconfig */;
 			buildSettings = {
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SOURCE_ROOT)/ActionStatus/Mobile/ActionStatus-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -838,11 +807,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8B5E7E6323F6A9C600087E15 /* Mobile.xcconfig */;
 			buildSettings = {
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SOURCE_ROOT)/ActionStatus/Mobile/ActionStatus-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -972,52 +936,16 @@
 		};
 		8B5E7E8723F6BB3500087E15 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 2H48644JM2;
-				INFOPLIST_FILE = AppKitBridge/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				PRODUCT_BUNDLE_IDENTIFIER = com.elegantchaos.AppKitBridge;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SOURCE_ROOT)/AppKitBridge/AppKitBridge-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
 		};
 		8B5E7E8823F6BB3500087E15 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 2H48644JM2;
-				INFOPLIST_FILE = AppKitBridge/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				PRODUCT_BUNDLE_IDENTIFIER = com.elegantchaos.AppKitBridge;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SOURCE_ROOT)/AppKitBridge/AppKitBridge-Bridging-Header.h";
-				SWIFT_VERSION = 5.0;
-				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
 		};
@@ -1033,7 +961,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8B3E64CD23EAE62F00B28168 /* Build configuration list for PBXNativeTarget "Mobile" */ = {
+		8B3E64CD23EAE62F00B28168 /* Build configuration list for PBXNativeTarget "ActionStatusMobile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8B3E64CE23EAE62F00B28168 /* Debug */,
@@ -1060,7 +988,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8B430E7923F586110050BF2A /* Build configuration list for PBXNativeTarget "TV" */ = {
+		8B430E7923F586110050BF2A /* Build configuration list for PBXNativeTarget "ActionStatusTV" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8B430E7A23F586110050BF2A /* Debug */,
@@ -1069,7 +997,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8B5E7E5623F6A74F00087E15 /* Build configuration list for PBXNativeTarget "Mac" */ = {
+		8B5E7E5623F6A74F00087E15 /* Build configuration list for PBXNativeTarget "ActionStatusMac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8B5E7E5423F6A74F00087E15 /* Debug */,

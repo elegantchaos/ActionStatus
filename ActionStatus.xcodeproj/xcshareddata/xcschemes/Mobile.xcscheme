@@ -10,13 +10,13 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "# update main build number&#10;cd &quot;$PROJECT_DIR/..&quot;&#10;swift run --package-path &quot;Tools&quot; rt update-build --config ActionStatus/Configs/BuildNumber.xcconfig&gt; /tmp/prebuild.log&#10;">
+               scriptText = "Source/ActionStatusCommon/pre-build.sh&#10;&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
                      BlueprintIdentifier = "8B3E64A223EAE62D00B28168"
                      BuildableName = "Action Status.app"
-                     BlueprintName = "Mobile"
+                     BlueprintName = "ActionStatusMobile"
                      ReferencedContainer = "container:ActionStatus.xcodeproj">
                   </BuildableReference>
                </EnvironmentBuildable>
@@ -34,7 +34,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8B3E64A223EAE62D00B28168"
                BuildableName = "Action Status.app"
-               BlueprintName = "Mobile"
+               BlueprintName = "ActionStatusMobile"
                ReferencedContainer = "container:ActionStatus.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -84,7 +84,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8B3E64A223EAE62D00B28168"
             BuildableName = "Action Status.app"
-            BlueprintName = "Mobile"
+            BlueprintName = "ActionStatusMobile"
             ReferencedContainer = "container:ActionStatus.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -101,7 +101,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8B3E64A223EAE62D00B28168"
             BuildableName = "Action Status.app"
-            BlueprintName = "Mobile"
+            BlueprintName = "ActionStatusMobile"
             ReferencedContainer = "container:ActionStatus.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -117,13 +117,13 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "# update main build number&#10;cd &quot;$PROJECT_DIR/..&quot;&#10;swift run --package-path &quot;Tools&quot; rt update-build --config ActionStatus/Configs/BuildNumber.xcconfig&gt; /tmp/prearchive.log   &#10;">
+               scriptText = "Source/ActionStatusCommon/pre-archive.sh&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
                      BlueprintIdentifier = "8B3E64A223EAE62D00B28168"
                      BuildableName = "Action Status.app"
-                     BlueprintName = "Mobile"
+                     BlueprintName = "ActionStatusMobile"
                      ReferencedContainer = "container:ActionStatus.xcodeproj">
                   </BuildableReference>
                </EnvironmentBuildable>

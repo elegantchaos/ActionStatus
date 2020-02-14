@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8B5E7E4323F6A74E00087E15"
                BuildableName = "Action Status.app"
-               BlueprintName = "Mac"
+               BlueprintName = "ActionStatusMac"
                ReferencedContainer = "container:ActionStatus.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,7 +46,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8B5E7E4323F6A74E00087E15"
             BuildableName = "Action Status.app"
-            BlueprintName = "Mac"
+            BlueprintName = "ActionStatusMac"
             ReferencedContainer = "container:ActionStatus.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -63,7 +63,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8B5E7E4323F6A74E00087E15"
             BuildableName = "Action Status.app"
-            BlueprintName = "Mac"
+            BlueprintName = "ActionStatusMac"
             ReferencedContainer = "container:ActionStatus.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

@@ -3,7 +3,9 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-#include "ActionStatus.xcconfig"
+#include "Source/ActionStatusCommon/ActionStatus.xcconfig"
+
+ACTION_STATUS_TYPE = TV
 
 SDKROOT = appletvos
 TVOS_DEPLOYMENT_TARGET = 13.0
