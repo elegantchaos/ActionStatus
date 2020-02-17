@@ -47,10 +47,10 @@ struct ContentView: View {
                     Spacer()
                     Text("Monitoring \(repos.items.count) repos.").font(.footnote)
                 }
-                .navigationItems(repos: repos, isEditing: self.$isEditing, selection: self.$selectedID)
+                .setupNavigation(repos: repos, isEditing: self.$isEditing, selection: self.$selectedID)
                 .bindEditing(to: $isEditing)
         }
-            .navigationStyle()
+            .setupNavigationStyle()
             .onAppear() {
                 self.repos.refresh()
             }
@@ -69,45 +69,63 @@ struct ContentView: View {
         }
         .padding(.horizontal)
         .font(.title)
-        .onTapGesture {
-            if selectable {
-                self.selectedID = repo.id
-            }
+        .setupTapHandler() {
+                if selectable {
+                    self.selectedID = repo.id
+                }
         }
     }
 }
 
-extension View {
+fileprivate extension View {
+    
     #if os(tvOS)
-    func navigationItems(repos: RepoSet, isEditing: Binding<Bool>, selection: Binding<UUID?>) -> some View {
+    
+    // MARK: tvOS Overrides
+    
+    func setupNavigation(repos: RepoSet, isEditing: Binding<Bool>, selection: Binding<UUID?>) -> some View {
         return navigationBarHidden(false)
     }
-    func navigationStyle() -> some View {
+    func setupNavigationStyle() -> some View {
         return navigationViewStyle(StackNavigationViewStyle())
     }
     func bindEditing(to binding: Binding<Bool>) -> some View {
         return self
     }
+    func setupTapHandler(perform action: @escaping () -> Void) -> some View {
+        return self
+    }
+    
     #elseif canImport(UIKit)
-    func navigationItems(repos: RepoSet, isEditing: Binding<Bool>, selection: Binding<UUID?>) -> some View {
+    
+    // MARK: iOS/tvOS
+    
+    func setupNavigation(repos: RepoSet, isEditing: Binding<Bool>, selection: Binding<UUID?>) -> some View {
         return navigationBarHidden(false)
         .navigationBarTitle("Action Status", displayMode: .inline)
         .navigationBarItems(leading: LeadingButtons(repos: repos, addedID: selection), trailing: TrailingButtons(repos: repos, isEditing: isEditing))
     }
-    func navigationStyle() -> some View {
+    func setupNavigationStyle() -> some View {
         return navigationViewStyle(StackNavigationViewStyle())
     }
     func bindEditing(to binding: Binding<Bool>) -> some View {
         environment(\.editMode, .constant(binding.wrappedValue ? .active : .inactive))
     }
-    #else // macOS / AppKit
-    func navigationItems(repos: RepoSet, isEditing: Binding<Bool>, selection: Binding<UUID?>) -> some View {
+    func setupTapHandler(perform action: @escaping () -> Void) -> some View {
+        return onTapGesture(perform: action)
+    }
+    
+    #else // MARK: AppKit Overrides
+    func setupNavigation(repos: RepoSet, isEditing: Binding<Bool>, selection: Binding<UUID?>) -> some View {
         return navigationViewStyle(DefaultNavigationViewStyle())
     }
-    func navigationStyle() -> some View {
+    func setupNavigationStyle() -> some View {
         return navigationViewStyle(DefaultNavigationViewStyle())
     }
     func bindEditing(to binding: Binding<Bool>) -> some View {
+        return self
+    }
+    func setupTapHandler(perform action: @escaping () -> Void) -> some View {
         return self
     }
     #endif
@@ -125,15 +143,6 @@ extension ObservedObject.Wrapper {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView(repos: AppDelegate.shared.testRepos)
-    }
-}
-
-struct ReloadButton: View {
-    @ObservedObject var repos: RepoSet
-    var body: some View {
-        Button(action: { self.repos.refresh() }) {
-            XImage(name: "arrow.clockwise").font(.title)
-        }
     }
 }
 
@@ -161,7 +170,7 @@ struct LeadingButtons: View {
     @Binding var addedID: UUID?
 
     var body: some View {
-        AddButton(repos: repos, addedID: self.$addedID)
+        makeAddButton(selection: self.$addedID)
         .disabled(showAdd)
         .opacity((editMode?.wrappedValue.isEditing ?? true) ? 1.0 : 0.0)
     }
@@ -169,6 +178,19 @@ struct LeadingButtons: View {
     var showAdd: Bool {
         return !(editMode?.wrappedValue.isEditing ?? true)
     }
+    
+    func makeAddButton(selection: Binding<UUID?>) -> some View {
+        return Button(
+            action: {
+                let newRepo = self.repos.addRepo()
+                AppDelegate.shared.saveState()
+                selection.wrappedValue = newRepo.id
+        }) {
+            XImage(name: "plus.circle").font(.title)
+        }
+    }
+
+
 }
 struct TrailingButtons: View {
     @ObservedObject var repos: RepoSet

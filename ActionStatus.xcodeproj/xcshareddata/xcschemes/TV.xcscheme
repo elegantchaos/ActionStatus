@@ -10,7 +10,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "&quot;$SOURCE_ROOT/$ACTION_STATUS_COMMON_SOURCE_PATH/pre-build.sh&quot;&#10;">
+               scriptText = "&quot;$ACTION_STATUS_SCRIPTS_PATH/pre-build.sh&quot;&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
@@ -97,7 +97,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "&quot;$SOURCE_ROOT/$ACTION_STATUS_COMMON_SOURCE_PATH/pre-archive.sh&quot;&#10;&#10;">
+               scriptText = "&quot;$ACTION_STATUS_SCRIPTS_PATH/pre-archive.sh&quot;&#10;&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"

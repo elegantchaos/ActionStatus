@@ -3,7 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-#include "Sources/ActionStatusCommon/ActionStatus.xcconfig"
+#include "Sources/ActionStatusCommon/Resources/ActionStatus.xcconfig"
 
 ACTION_STATUS_TYPE = Bridge
 
@@ -19,5 +19,5 @@ BUNDLE_IDENTIFIER = $(ACTION_STATUS_BUNDLE_IDENTIFIER).appkitbridge
 PRODUCT_NAME = $(TARGET_NAME)
 WRAPPER_EXTENSION = bundle
 CLANG_ENABLE_MODULES = YES
-SWIFT_OBJC_BRIDGING_HEADER = $(ACTION_STATUS_SOURCE_PATH)/BridgingHeader.h
+SWIFT_OBJC_BRIDGING_HEADER = $(ACTION_STATUS_RESOURCE_PATH)/BridgingHeader.h
 CODE_SIGN_ENTITLEMENTS =

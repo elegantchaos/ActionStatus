@@ -3,7 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-#include "Sources/ActionStatusCommon/ActionStatus.xcconfig"
+#include "Sources/ActionStatusCommon/Resources/ActionStatus.xcconfig"
 
 ACTION_STATUS_TYPE = Mobile
 
@@ -12,4 +12,3 @@ TARGETED_DEVICE_FAMILY = 1,2
 IPHONEOS_DEPLOYMENT_TARGET = 13.2
 LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks
 SUPPORTS_MACCATALYST = YES
-SWIFT_OBJC_BRIDGING_HEADER = $(ACTION_STATUS_SOURCE_PATH)/BridgingHeader.h

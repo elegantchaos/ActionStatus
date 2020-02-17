@@ -54,8 +54,7 @@ struct RepoEditView: View {
         .onDisappear() {
             self.save()
         }
-        .navigationBarTitle(repo.name)
-        .navigationBarHidden(false)
+        .configureNavigation(title: repo.name)
     }
     
     var hasChanged: Bool {
@@ -73,4 +72,17 @@ struct RepoEditView_Previews: PreviewProvider {
     static var previews: some View {
         RepoEditView(repo: AppDelegate.shared.$testRepos.items[0])
     }
+}
+
+fileprivate extension View {
+    #if canImport(UIKit)
+    func configureNavigation(title: String) -> some View {
+        return navigationBarTitle(title)
+            .navigationBarHidden(false)
+    }
+    #else
+    func configureNavigation(title: String) -> some View {
+        return self
+    }
+    #endif
 }
