@@ -83,6 +83,18 @@ class RepoSet: ObservableObject {
                 updated.reload()
                 reloaded.append(updated)
             }
+            reloaded.sort { (r1, r2) -> Bool in
+                if (r1.state == r2.state) {
+                    return r1.name < r2.name
+                }
+                
+                if (r1.state == .failing) {
+                    return true
+                }
+                
+                return r1.name < r2.name
+            }
+            
             DispatchQueue.main.async {
                 self.items = reloaded
                 self.block?()
