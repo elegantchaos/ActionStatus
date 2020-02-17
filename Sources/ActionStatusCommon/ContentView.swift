@@ -37,7 +37,7 @@ struct ContentView: View {
                         Text("Monitoring \(repos.items.count) repos.").font(.footnote)
                     }
                 }
-                .setupNavigation(isEditing: self.$isEditing, addAction: { self.addRepo() })
+                .setupNavigation(editAction: { self.isEditing.toggle() }, addAction: { self.addRepo() })
                 .bindEditing(to: $isEditing)
         }
             .setupNavigationStyle()
@@ -79,7 +79,7 @@ fileprivate extension View {
     
     // MARK: tvOS Overrides
     
-    func setupNavigation(isEditing: Binding<Bool>, addAction: () -> (Void)) -> some View {
+    func setupNavigation(editAction: @escaping () -> (Void), addAction: @escaping () -> (Void)) -> some View {
         return navigationBarHidden(false)
     }
     func setupNavigationStyle() -> some View {
@@ -96,12 +96,12 @@ fileprivate extension View {
     
     // MARK: iOS/tvOS
     
-    func setupNavigation(isEditing: Binding<Bool>, addAction: @escaping () -> (Void)) -> some View {
+    func setupNavigation(editAction: @escaping () -> (Void), addAction: @escaping () -> (Void)) -> some View {
         return navigationBarHidden(false)
         .navigationBarTitle("Action Status", displayMode: .inline)
         .navigationBarItems(
             leading: AddButton(action: addAction),
-            trailing: EditButton(isEditing: isEditing))
+            trailing: EditButton(action: editAction))
     }
     func setupNavigationStyle() -> some View {
         return navigationViewStyle(StackNavigationViewStyle())
@@ -114,7 +114,7 @@ fileprivate extension View {
     }
     
     #else // MARK: AppKit Overrides
-    func setupNavigation(isEditing: Binding<Bool>, addAction: () -> (Void)) -> some View {
+    func setupNavigation(editAction: @escaping () -> (Void), addAction: @escaping () -> (Void)) -> some View {
         return navigationViewStyle(DefaultNavigationViewStyle())
     }
     func setupNavigationStyle() -> some View {
@@ -136,6 +136,30 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 #if canImport(UIKit)
+protocol Invertable {
+    var inverted: Self { get }
+}
+
+protocol Toggleable {
+    func toggle()
+}
+
+extension Binding: Toggleable where Value: Invertable {
+    func toggle() {
+        wrappedValue = wrappedValue.inverted
+    }
+}
+
+extension EditMode: Invertable {
+    var inverted: EditMode {
+        switch (self) {
+            case .active: return .inactive
+            case .inactive: return .active
+            default: return self
+        }
+    }
+}
+
 struct AddButton: View {
     @Environment(\.editMode) var editMode
     var action: () -> (Void)
@@ -154,13 +178,12 @@ struct AddButton: View {
 }
 
 struct EditButton: View {
-    @Binding var isEditing: Bool
+    @Environment(\.editMode) var editMode
+    var action: () -> (Void)
 
     var body: some View {
-        Button(action: {
-            self.isEditing = !self.isEditing
-        }) {
-            SystemImage(isEditing ? "pencil.circle.fill" : "pencil.circle").font(.title)
+        Button(action: self.action) {
+            SystemImage(editMode?.wrappedValue.isEditing ?? true ? "pencil.circle.fill" : "pencil.circle").font(.title)
         }
     }
 }

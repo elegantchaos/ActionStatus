@@ -221,8 +221,8 @@
 			isa = PBXGroup;
 			children = (
 				8B5E7E5723F6A79100087E15 /* ActionStatusMobile */,
-				8B5E7E4523F6A74E00087E15 /* ActionStatusMac */,
 				8B430E6B23F586100050BF2A /* ActionStatusTV */,
+				8B5E7E4523F6A74E00087E15 /* ActionStatusMac */,
 				8B5E7E5823F6A79900087E15 /* ActionStatusCommon */,
 				8B5E7E8423F6BB3500087E15 /* AppKitBridge */,
 			);
