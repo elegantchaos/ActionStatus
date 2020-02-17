@@ -103,9 +103,10 @@ class RepoSet: ObservableObject {
         }
     }
 
-    func addRepo() {
+    func addRepo() -> Repo {
         let repo = Repo()
         items.append(repo)
+        return repo
     }
     
     func remove(repo: Repo) {
