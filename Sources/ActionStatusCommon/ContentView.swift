@@ -23,11 +23,11 @@ struct ContentView: View {
     @State var isEditing: Bool = false
     var body: some View {
             NavigationView {
-                VStack {
+                VStack(alignment: .leading) {
                     Spacer()
                     List {
                         ForEach(repos.items) { repo in
-                            ZStack {
+                            ZStack(alignment: .leading) {
                                 NavigationLink(
                                     destination: RepoEditView(repo: self.$repos.binding(for: repo, in: \.items)),
                                     tag: repo.id,
