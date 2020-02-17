@@ -28,15 +28,21 @@ struct ContentView: View {
                     List {
                         ForEach(repos.items) { repo in
                             ZStack {
-                                self.rowView(for: repo)
                                 NavigationLink(
                                     destination: RepoEditView(repo: self.$repos.binding(for: repo, in: \.items)),
                                     tag: repo.id,
                                     selection: self.$selectedID) {
-                                        EmptyView()
+                                        if self.isEditing {
+                                            self.rowView(for: repo)
+                                        } else {
+                                            EmptyView()
+                                        }
                                 }
-                                .padding([.leading, .trailing], 10)
-                                
+                                    .padding([.leading, .trailing], 10)
+
+                                if !self.isEditing {
+                                    self.rowView(for: repo)
+                                }
                             }
                         }
                         .onDelete(perform: delete)
@@ -142,7 +148,9 @@ struct AddButton: View {
             action: {
             self.repos.addRepo()
             AppDelegate.shared.saveState()
-        }) { XImage(name: "plus.circle").font(.title) }
+        }) {
+            XImage(name: "plus.circle").font(.title)
+        }
     }
 }
 
@@ -185,7 +193,7 @@ struct TrailingButtons: View {
         Button(action: {
             self.isEditing = !self.isEditing
         }) {
-            XImage(name: isEditing ? "pencil.circle.fill" : "pencil.circle")
+            XImage(name: isEditing ? "pencil.circle.fill" : "pencil.circle").font(.title)
         }
     }
 }
