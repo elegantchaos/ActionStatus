@@ -20,7 +20,7 @@ struct XImage: View {
 struct ContentView: View {
     @ObservedObject var repos: RepoSet
     @State var selectedID: UUID? = nil
-    
+    @State var isEditing: Bool = false
     var body: some View {
             NavigationView {
                 VStack {
@@ -47,8 +47,8 @@ struct ContentView: View {
                     Spacer()
                     Text("Monitoring \(repos.items.count) repos.").font(.footnote)
                 }
-            .navigationItems(repos: repos)
-//                .environment(\.editMode, .constant(self.isEditMode))
+                .navigationItems(repos: repos, isEditing: self.$isEditing)
+                .bindEditing(to: $isEditing)
         }
             .navigationStyle()
             .onAppear() {
@@ -77,27 +77,36 @@ struct ContentView: View {
 
 extension View {
     #if os(tvOS)
-    func navigationItems(repos: RepoSet) -> some View {
+    func navigationItems(repos: RepoSet, isEditing: Binding<Bool>) -> some View {
         return navigationBarHidden(false)
     }
     func navigationStyle() -> some View {
         return navigationViewStyle(StackNavigationViewStyle())
+    }
+    func bindEditing(to binding: Binding<Bool>) -> some View {
+        return self
     }
     #elseif canImport(UIKit)
-    func navigationItems(repos: RepoSet) -> some View {
+    func navigationItems(repos: RepoSet, isEditing: Binding<Bool>) -> some View {
         return navigationBarHidden(false)
         .navigationBarTitle("Action Status", displayMode: .inline)
-        .navigationBarItems(leading: LeadingButtons(repos: repos), trailing: TrailingButtons(repos: repos))
+            .navigationBarItems(leading: LeadingButtons(repos: repos), trailing: TrailingButtons(repos: repos, isEditing: isEditing))
     }
     func navigationStyle() -> some View {
         return navigationViewStyle(StackNavigationViewStyle())
     }
+    func bindEditing(to binding: Binding<Bool>) -> some View {
+        environment(\.editMode, .constant(binding.wrappedValue ? .active : .inactive))
+    }
     #else // macOS / AppKit
-    func navigationItems(repos: RepoSet) -> some View {
+    func navigationItems(repos: RepoSet, isEditing: Binding<Bool>) -> some View {
         return navigationViewStyle(DefaultNavigationViewStyle())
     }
     func navigationStyle() -> some View {
         return navigationViewStyle(DefaultNavigationViewStyle())
+    }
+    func bindEditing(to binding: Binding<Bool>) -> some View {
+        return self
     }
     #endif
 }
@@ -170,9 +179,14 @@ struct LeadingButtons: View {
 }
 struct TrailingButtons: View {
     @ObservedObject var repos: RepoSet
+    @Binding var isEditing: Bool
 
     var body: some View {
-        return EditButton()
+        Button(action: {
+            self.isEditing = !self.isEditing
+        }) {
+            XImage(name: isEditing ? "pencil.circle.fill" : "pencil.circle")
+        }
     }
 }
 #endif
