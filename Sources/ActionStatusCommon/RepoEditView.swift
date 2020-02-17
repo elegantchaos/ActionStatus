@@ -6,10 +6,10 @@
 import SwiftUI
 
 struct RepoEditView: View {
-    #if canImport(UIKit)
-    let style = RoundedBorderTextFieldStyle()
-    #else
+    #if os(tvOS)
     let style = DefaultTextFieldStyle()
+    #else
+    let style = RoundedBorderTextFieldStyle()
     #endif
     
     @Binding var repo: Repo
