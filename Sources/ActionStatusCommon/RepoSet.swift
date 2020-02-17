@@ -38,13 +38,17 @@ class RepoSet: ObservableObject {
     }
     
     func load(fromDefaultsKey key: String) {
-        if let array = store.array(forKey: key) {
+        if let repoIDs = store.array(forKey: key) as? Array<String> {
             var loadedRepos: [Repo] = []
-            for item in array {
-                if let string = item as? String {
-                    let values = string.split(separator: ",").map({String($0)})
-                    if values.count == 4 {
-                        let repo = Repo(values[0], owner: values[1], workflow: values[2], id: UUID(uuidString: values[3]))
+            for repoID in repoIDs {
+                if let dict = store.dictionary(forKey: repoID) {
+                    if let id = dict["id"] as? String,
+                        let name = dict["name"] as? String,
+                        let owner = dict["owner"] as? String,
+                        let workflow = dict["workflow"] as? String,
+                        let stateRaw = dict["state"] as? Int,
+                        let state = Repo.State(rawValue: stateRaw) {
+                        let repo = Repo(name, owner: owner, workflow: workflow, id: UUID(uuidString: id), state: state)
                         loadedRepos.append(repo)
                     }
                 }
@@ -54,12 +58,20 @@ class RepoSet: ObservableObject {
     }
     
     func save(toDefaultsKey key: String) {
-        var strings: [String] = []
+        var repoIDs: [String] = []
         for repo in items {
-            let string = "\(repo.name),\(repo.owner),\(repo.workflow),\(repo.id.uuidString)"
-            strings.append(string)
+            let repoID = repo.id.uuidString
+            let dict: [String:Any] = [
+                "id" : repoID,
+                "name": repo.name,
+                "owner": repo.owner,
+                "workflow": repo.workflow,
+                "state": repo.state.rawValue
+            ]
+            store.set(dict, forKey: repoID)
+            repoIDs.append(repoID)
         }
-        store.set(strings, forKey: key)
+        store.set(repoIDs, forKey: key)
     }
 
     func refresh() {

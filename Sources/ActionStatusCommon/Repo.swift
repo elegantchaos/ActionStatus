@@ -16,10 +16,10 @@ struct Repo: Identifiable, Equatable {
 //        workflow.hash(into: &hasher)
 //    }
     
-    enum State {
-        case unknown
-        case failing
-        case passing
+    enum State: Int {
+        case unknown = 0
+        case failing = 1
+        case passing = 2
     }
 
     let id: UUID

@@ -13,29 +13,41 @@ struct ContentView: View {
     
     var body: some View {
             NavigationView {
-                VStack(alignment: .leading) {
-                    List {
-                        ForEach(repos.items) { repo in
-                            if self.isEditing {
-                                NavigationLink(
-                                    destination: RepoEditView(repo: self.$repos.binding(for: repo, in: \.items)),
-                                    tag: repo.id,
-                                    selection: self.$selectedID) {
-                                        self.rowView(for: repo, selectable: true)
-                                }
-                                .padding([.leading, .trailing], 10)
-                            } else {
-                                self.rowView(for: repo, selectable: false)
-                            }
+                VStack(alignment: .center) {
+                    if repos.items.count == 0 {
+                        Spacer()
+                        Text("No Repos Configured").font(.title)
+                        Spacer()
+                        Button(action: {
+                            self.isEditing = true
+                            self.addRepo()
+                        }) {
+                            Text("Configure a repo to begin monitoring it.")
                         }
-                        .onDelete(perform: delete)
+                    }
+                    
+                    VStack(alignment: .leading) {
+                        List {
+                            ForEach(repos.items) { repo in
+                                if self.isEditing {
+                                    NavigationLink(
+                                        destination: RepoEditView(repo: self.$repos.binding(for: repo, in: \.items)),
+                                        tag: repo.id,
+                                        selection: self.$selectedID) {
+                                            self.rowView(for: repo, selectable: true)
+                                    }
+                                    .padding([.leading, .trailing], 10)
+                                } else {
+                                    self.rowView(for: repo, selectable: false)
+                                }
+                            }
+                            .onDelete(perform: delete)
+                        }
                     }
                     
                     Spacer()
                     
-                    VStack(alignment: .center) {
-                        Text("Monitoring \(repos.items.count) repos.").font(.footnote)
-                    }
+                    Text("Monitoring \(repos.items.count) repos.").font(.footnote)
                 }
                 .setupNavigation(editAction: { self.isEditing.toggle() }, addAction: { self.addRepo() })
                 .bindEditing(to: $isEditing)
@@ -65,7 +77,7 @@ struct ContentView: View {
         }
         .padding(.horizontal)
         .font(.title)
-        .setupTapHandler() {
+        .onTapGestureShim() {
                 if selectable {
                     self.selectedID = repo.id
                 }
@@ -88,9 +100,6 @@ fileprivate extension View {
     func bindEditing(to binding: Binding<Bool>) -> some View {
         return self
     }
-    func setupTapHandler(perform action: @escaping () -> Void) -> some View {
-        return self
-    }
     
     #elseif canImport(UIKit)
     
@@ -109,9 +118,6 @@ fileprivate extension View {
     func bindEditing(to binding: Binding<Bool>) -> some View {
         environment(\.editMode, .constant(binding.wrappedValue ? .active : .inactive))
     }
-    func setupTapHandler(perform action: @escaping () -> Void) -> some View {
-        return onTapGesture(perform: action)
-    }
     
     #else // MARK: AppKit Overrides
     func setupNavigation(editAction: @escaping () -> (Void), addAction: @escaping () -> (Void)) -> some View {
@@ -121,9 +127,6 @@ fileprivate extension View {
         return navigationViewStyle(DefaultNavigationViewStyle())
     }
     func bindEditing(to binding: Binding<Bool>) -> some View {
-        return self
-    }
-    func setupTapHandler(perform action: @escaping () -> Void) -> some View {
         return self
     }
     #endif
@@ -136,30 +139,6 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 #if canImport(UIKit)
-protocol Invertable {
-    var inverted: Self { get }
-}
-
-protocol Toggleable {
-    func toggle()
-}
-
-extension Binding: Toggleable where Value: Invertable {
-    func toggle() {
-        wrappedValue = wrappedValue.inverted
-    }
-}
-
-extension EditMode: Invertable {
-    var inverted: EditMode {
-        switch (self) {
-            case .active: return .inactive
-            case .inactive: return .active
-            default: return self
-        }
-    }
-}
-
 struct AddButton: View {
     @Environment(\.editMode) var editMode
     var action: () -> (Void)
