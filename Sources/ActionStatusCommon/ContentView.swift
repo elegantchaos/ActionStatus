@@ -19,24 +19,27 @@ struct XImage: View {
 
 struct ContentView: View {
     @ObservedObject var repos: RepoSet
-
+    @State var selectedID: UUID? = nil
+    
     var body: some View {
             NavigationView {
                 VStack {
                     Spacer()
                     List {
                         ForEach(repos.items) { repo in
-                            NavigationLink(destination: RepoEditView(repo: self.$repos.binding(for: repo, in: \.items))) {
-                                HStack(alignment: .center, spacing: 20.0) {
-                                    XImage(name: repo.badgeName)
-                                        .foregroundColor(repo.statusColor)
-                                    Text(repo.name)
+                            ZStack {
+                                self.rowView(for: repo)
+                                NavigationLink(
+                                    destination: RepoEditView(repo: self.$repos.binding(for: repo, in: \.items)),
+                                    tag: repo.id,
+                                    selection: self.$selectedID) {
+                                        EmptyView()
                                 }
-                                .padding(.horizontal)
+                                .padding([.leading, .trailing], 10)
+                                
                             }
-                            .font(.title)
-                            .padding([.leading, .trailing], 10)
-                        }.onDelete(perform: delete)
+                        }
+                        .onDelete(perform: delete)
                     }
                     Spacer()
                     
@@ -45,6 +48,7 @@ struct ContentView: View {
                     Text("Monitoring \(repos.items.count) repos.").font(.footnote)
                 }
             .navigationItems(repos: repos)
+//                .environment(\.editMode, .constant(self.isEditMode))
         }
             .navigationStyle()
             .onAppear() {
@@ -55,6 +59,19 @@ struct ContentView: View {
     func delete(at offsets: IndexSet) {
         repos.items.remove(atOffsets: offsets)
         AppDelegate.shared.saveState()
+    }
+    
+    func rowView(for repo: Repo) -> some View {
+        return HStack(alignment: .center, spacing: 20.0) {
+            XImage(name: repo.badgeName)
+                .foregroundColor(repo.statusColor)
+            Text(repo.name)
+        }
+        .padding(.horizontal)
+        .font(.title)
+        .onTapGesture {
+            self.selectedID = repo.id
+        }
     }
 }
 
@@ -70,7 +87,7 @@ extension View {
     func navigationItems(repos: RepoSet) -> some View {
         return navigationBarHidden(false)
         .navigationBarTitle("Action Status", displayMode: .inline)
-        .navigationBarItems(leading: EditButtons(repos: repos), trailing: EditButton())
+        .navigationBarItems(leading: LeadingButtons(repos: repos), trailing: TrailingButtons(repos: repos))
     }
     func navigationStyle() -> some View {
         return navigationViewStyle(StackNavigationViewStyle())
@@ -120,8 +137,9 @@ struct AddButton: View {
     }
 }
 
+
 #if os(macOS)
-struct EditButtons: View {
+struct LeadingButtons: View {
     @ObservedObject var repos: RepoSet
     
     var body: some View {
@@ -136,7 +154,7 @@ struct EditButtons: View {
     }
 }
 #else
-struct EditButtons: View {
+struct LeadingButtons: View {
     @ObservedObject var repos: RepoSet
     @Environment(\.editMode) var editMode
     
@@ -148,6 +166,13 @@ struct EditButtons: View {
     
     var showAdd: Bool {
         return !(editMode?.wrappedValue.isEditing ?? true)
+    }
+}
+struct TrailingButtons: View {
+    @ObservedObject var repos: RepoSet
+
+    var body: some View {
+        return EditButton()
     }
 }
 #endif
