@@ -66,9 +66,17 @@ class RepoSet: ObservableObject {
         scheduleRefresh(after: 0)
     }
         
+    func cancelRefresh() {
+        if let timer = timer {
+            print("Cancelled refresh.")
+            timer.invalidate()
+            self.timer = nil
+        }
+    }
+    
     func scheduleRefresh(after interval: TimeInterval) {
-        timer?.invalidate()
-        print("Will refresh in \(interval) seconds.")
+        cancelRefresh()
+        print("Scheduled refresh for \(interval) seconds.")
         timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { _ in
             self.doRefresh()
         }
@@ -76,7 +84,7 @@ class RepoSet: ObservableObject {
     
     func doRefresh() {
         DispatchQueue.global(qos: .background).async {
-            print("refreshing")
+            print("Refreshing...")
             var reloaded: [Repo] = []
             for repo in self.items {
                 var updated = repo
@@ -96,6 +104,7 @@ class RepoSet: ObservableObject {
             }
             
             DispatchQueue.main.async {
+                print("Completed Refresh")
                 self.items = reloaded
                 self.block?()
                 self.scheduleRefresh(after: 10.0)

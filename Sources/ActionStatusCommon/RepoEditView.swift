@@ -48,6 +48,7 @@ struct RepoEditView: View {
             }
         }
         .onAppear() {
+            AppDelegate.shared.repos.cancelRefresh()
             self.editableRepo = self.repo
         }
         .onDisappear() {
