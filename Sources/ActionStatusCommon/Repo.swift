@@ -30,8 +30,8 @@ struct Repo: Identifiable, Equatable {
     
     init() {
         id = UUID()
-        name = "Unknown Repo"
-        owner = "Unknow Owner"
+        name = "repo"
+        owner = "org"
         workflow = "Tests"
     }
     

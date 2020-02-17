@@ -6,7 +6,12 @@
 import SwiftUI
 
 struct RepoEditView: View {
+    #if canImport(UIKit)
+    let style = RoundedBorderTextFieldStyle()
+    #else
     let style = DefaultTextFieldStyle()
+    #endif
+    
     @Binding var repo: Repo
     @State var editableRepo: Repo = Repo()
     
@@ -14,7 +19,7 @@ struct RepoEditView: View {
         Form {
             Section {
                 HStack {
-                    Text("Repo Name")
+                    Text("Name")
                         .font(.callout)
                         .bold()
                     TextField("name", text: $editableRepo.name)
@@ -22,7 +27,7 @@ struct RepoEditView: View {
                 }
                 
                 HStack {
-                    Text("Repo Owner")
+                    Text("Owner")
                         .font(.callout)
                         .bold()
                     
@@ -31,7 +36,7 @@ struct RepoEditView: View {
                 }
                 
                 HStack {
-                    Text("Workflow File Name")
+                    Text("Workflow")
                         .font(.callout)
                         .bold()
                     
@@ -42,8 +47,27 @@ struct RepoEditView: View {
             
             Section {
                 HStack {
-                    Text("Github Repo")
+                    Text("Repo")
+                        .font(.callout)
+                        .bold()
+                    
                     Text("https://github.com/\(editableRepo.owner)/\(editableRepo.name)")
+                }
+                
+                HStack {
+                    Text("File")
+                        .font(.callout)
+                        .bold()
+                    
+                    Text("\(editableRepo.workflow).yml")
+                }
+                
+                HStack{
+                    Text("Status")
+                        .font(.callout)
+                        .bold()
+                    
+                    Text("https://github.com/elegantchaos/Logger/actions?query=workflow%3A\(editableRepo.workflow)")
                 }
             }
         }

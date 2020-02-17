@@ -14,9 +14,9 @@ typealias AppBase = UIResponder
 #endif
 
 class AppCommon: AppBase {
-    let stateKey = "State"
+    let stateKey = "State2"
     
-    @State var repos = defaultRepoSet()
+    @State var repos = RepoSet([])
 
     @State var testRepos = RepoSet([
         Repo("ApplicationExtensions", owner: "elegantchaos", workflow: "Tests", state: .failing),
