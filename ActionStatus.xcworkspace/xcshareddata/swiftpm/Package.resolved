@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "SwiftUIExtensions",
+        "repositoryURL": "https://github.com/elegantchaos/SwiftUIExtensions.git",
+        "state": {
+          "branch": null,
+          "revision": "7ae94ba8867c7dad76ec7be269f4b659008560b5",
+          "version": "1.0.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

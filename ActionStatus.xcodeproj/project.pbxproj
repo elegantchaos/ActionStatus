@@ -32,6 +32,9 @@
 		8B5B175723FAE7E800DD2AF5 /* pre-build.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8B522FA723F6ED390020AD36 /* pre-build.sh */; };
 		8B5B175823FAE7E800DD2AF5 /* pre-build.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8B522FA723F6ED390020AD36 /* pre-build.sh */; };
 		8B5B175923FAE7E800DD2AF5 /* pre-build.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8B522FA723F6ED390020AD36 /* pre-build.sh */; };
+		8B5B175C23FAEB8200DD2AF5 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5B175B23FAEB8200DD2AF5 /* SwiftUIExtensions */; };
+		8B5B175E23FAEBD300DD2AF5 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5B175D23FAEBD300DD2AF5 /* SwiftUIExtensions */; };
+		8B5B176023FAEC3C00DD2AF5 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5B175F23FAEC3C00DD2AF5 /* SwiftUIExtensions */; };
 		8B5E7E4723F6A74E00087E15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E7E4623F6A74E00087E15 /* AppDelegate.swift */; };
 		8B5E7E5123F6A74F00087E15 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B5E7E4F23F6A74F00087E15 /* Main.storyboard */; };
 		8B5E7E5A23F6A7DA00087E15 /* AppCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B430E8623F587E30050BF2A /* AppCommon.swift */; };
@@ -146,6 +149,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B5B175C23FAEB8200DD2AF5 /* SwiftUIExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,6 +171,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B5B175E23FAEBD300DD2AF5 /* SwiftUIExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,6 +179,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B5B176023FAEC3C00DD2AF5 /* SwiftUIExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,6 +405,9 @@
 				8B5E7E8B23F6BB6100087E15 /* PBXTargetDependency */,
 			);
 			name = ActionStatusMobile;
+			packageProductDependencies = (
+				8B5B175B23FAEB8200DD2AF5 /* SwiftUIExtensions */,
+			);
 			productName = GithubStatus;
 			productReference = 8B3E64A323EAE62D00B28168 /* Action Status.app */;
 			productType = "com.apple.product-type.application";
@@ -452,6 +461,9 @@
 			dependencies = (
 			);
 			name = ActionStatusTV;
+			packageProductDependencies = (
+				8B5B175D23FAEBD300DD2AF5 /* SwiftUIExtensions */,
+			);
 			productName = ActionStatusTV;
 			productReference = 8B430E6A23F586100050BF2A /* Action Status.app */;
 			productType = "com.apple.product-type.application";
@@ -470,6 +482,9 @@
 			dependencies = (
 			);
 			name = ActionStatusMac;
+			packageProductDependencies = (
+				8B5B175F23FAEC3C00DD2AF5 /* SwiftUIExtensions */,
+			);
 			productName = ActionStatusMac;
 			productReference = 8B5E7E4423F6A74E00087E15 /* Action Status.app */;
 			productType = "com.apple.product-type.application";
@@ -534,6 +549,7 @@
 			);
 			mainGroup = 8B3E649A23EAE62D00B28168;
 			packageReferences = (
+				8B5B175A23FAEB8200DD2AF5 /* XCRemoteSwiftPackageReference "SwiftUIExtensions" */,
 			);
 			productRefGroup = 8B3E64A423EAE62D00B28168 /* Products */;
 			projectDirPath = "";
@@ -1058,6 +1074,33 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8B5B175A23FAEB8200DD2AF5 /* XCRemoteSwiftPackageReference "SwiftUIExtensions" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elegantchaos/SwiftUIExtensions.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8B5B175B23FAEB8200DD2AF5 /* SwiftUIExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B5B175A23FAEB8200DD2AF5 /* XCRemoteSwiftPackageReference "SwiftUIExtensions" */;
+			productName = SwiftUIExtensions;
+		};
+		8B5B175D23FAEBD300DD2AF5 /* SwiftUIExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftUIExtensions;
+		};
+		8B5B175F23FAEC3C00DD2AF5 /* SwiftUIExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftUIExtensions;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8B3E649B23EAE62D00B28168 /* Project object */;
 }

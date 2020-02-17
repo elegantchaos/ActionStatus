@@ -4,23 +4,13 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import SwiftUI
-
-struct XImage: View {
-    let name: String
-    
-    var body: some View {
-        #if os(macOS)
-        return Image(name)
-        #else
-        return Image(systemName: name)
-        #endif
-    }
-}
+import SwiftUIExtensions
 
 struct ContentView: View {
     @ObservedObject var repos: RepoSet
     @State var selectedID: UUID? = nil
     @State var isEditing: Bool = false
+    
     var body: some View {
             NavigationView {
                 VStack(alignment: .leading) {
@@ -47,7 +37,7 @@ struct ContentView: View {
                     Spacer()
                     Text("Monitoring \(repos.items.count) repos.").font(.footnote)
                 }
-                .setupNavigation(repos: repos, isEditing: self.$isEditing, selection: self.$selectedID)
+                .setupNavigation(repos: repos, isEditing: self.$isEditing, selectedID: self.$selectedID)
                 .bindEditing(to: $isEditing)
         }
             .setupNavigationStyle()
@@ -63,7 +53,7 @@ struct ContentView: View {
     
     func rowView(for repo: Repo, selectable: Bool) -> some View {
         return HStack(alignment: .center, spacing: 20.0) {
-            XImage(name: repo.badgeName)
+            SystemImage(repo.badgeName)
                 .foregroundColor(repo.statusColor)
             Text(repo.name)
         }
@@ -83,7 +73,7 @@ fileprivate extension View {
     
     // MARK: tvOS Overrides
     
-    func setupNavigation(repos: RepoSet, isEditing: Binding<Bool>, selection: Binding<UUID?>) -> some View {
+    func setupNavigation(repos: RepoSet, isEditing: Binding<Bool>, selectedID: Binding<UUID?>) -> some View {
         return navigationBarHidden(false)
     }
     func setupNavigationStyle() -> some View {
@@ -100,10 +90,10 @@ fileprivate extension View {
     
     // MARK: iOS/tvOS
     
-    func setupNavigation(repos: RepoSet, isEditing: Binding<Bool>, selection: Binding<UUID?>) -> some View {
+    func setupNavigation(repos: RepoSet, isEditing: Binding<Bool>, selectedID: Binding<UUID?>) -> some View {
         return navigationBarHidden(false)
         .navigationBarTitle("Action Status", displayMode: .inline)
-        .navigationBarItems(leading: LeadingButtons(repos: repos, addedID: selection), trailing: TrailingButtons(repos: repos, isEditing: isEditing))
+        .navigationBarItems(leading: LeadingButtons(repos: repos, selectedID: selectedID), trailing: TrailingButtons(repos: repos, isEditing: isEditing))
     }
     func setupNavigationStyle() -> some View {
         return navigationViewStyle(StackNavigationViewStyle())
@@ -116,7 +106,7 @@ fileprivate extension View {
     }
     
     #else // MARK: AppKit Overrides
-    func setupNavigation(repos: RepoSet, isEditing: Binding<Bool>, selection: Binding<UUID?>) -> some View {
+    func setupNavigation(repos: RepoSet, isEditing: Binding<Bool>, selectedID: Binding<UUID?>) -> some View {
         return navigationViewStyle(DefaultNavigationViewStyle())
     }
     func setupNavigationStyle() -> some View {
@@ -131,15 +121,6 @@ fileprivate extension View {
     #endif
 }
 
-extension ObservedObject.Wrapper {
-    func binding<Item>(for item: Item, in path: KeyPath<Self, Binding<Array<Item>>>) -> Binding<Item> where Item: Equatable {
-        let boundlist = self[keyPath: path]
-        let index = boundlist.wrappedValue.firstIndex(of: item)!
-        let binding = (self[keyPath: path])[index]
-        return binding
-    }
-}
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView(repos: AppDelegate.shared.testRepos)
@@ -148,15 +129,15 @@ struct ContentView_Previews: PreviewProvider {
 
 struct AddButton: View {
     @ObservedObject var repos: RepoSet
-    @Binding var addedID: UUID?
+    @Binding var selectedID: UUID?
     var body: some View {
         Button(
             action: {
             let newRepo = self.repos.addRepo()
             AppDelegate.shared.saveState()
-                self.addedID = newRepo.id
+            self.selectedID = newRepo.id
         }) {
-            XImage(name: "plus.circle").font(.title)
+            SystemImage("plus.circle").font(.title)
         }
     }
 }
@@ -167,10 +148,10 @@ struct AddButton: View {
 struct LeadingButtons: View {
     @ObservedObject var repos: RepoSet
     @Environment(\.editMode) var editMode
-    @Binding var addedID: UUID?
+    @Binding var selectedID: UUID?
 
     var body: some View {
-        makeAddButton(selection: self.$addedID)
+        AddButton(repos: repos, selectedID: self.$selectedID)
         .disabled(showAdd)
         .opacity((editMode?.wrappedValue.isEditing ?? true) ? 1.0 : 0.0)
     }
@@ -178,20 +159,8 @@ struct LeadingButtons: View {
     var showAdd: Bool {
         return !(editMode?.wrappedValue.isEditing ?? true)
     }
-    
-    func makeAddButton(selection: Binding<UUID?>) -> some View {
-        return Button(
-            action: {
-                let newRepo = self.repos.addRepo()
-                AppDelegate.shared.saveState()
-                selection.wrappedValue = newRepo.id
-        }) {
-            XImage(name: "plus.circle").font(.title)
-        }
-    }
-
-
 }
+
 struct TrailingButtons: View {
     @ObservedObject var repos: RepoSet
     @Binding var isEditing: Bool
@@ -200,7 +169,7 @@ struct TrailingButtons: View {
         Button(action: {
             self.isEditing = !self.isEditing
         }) {
-            XImage(name: isEditing ? "pencil.circle.fill" : "pencil.circle").font(.title)
+            SystemImage(isEditing ? "pencil.circle.fill" : "pencil.circle").font(.title)
         }
     }
 }
@@ -210,14 +179,7 @@ struct LeadingButtons: View {
     @Binding var addedID: UUID?
 
     var body: some View {
-        AddButton(repos: repos, addedID: self.$addedID)
-        .disabled(showAdd)
-//        .opacity((editMode?.wrappedValue.isEditing ?? true) ? 1.0 : 0.0)
-    }
-    
-    var showAdd: Bool {
-        return true
-//        return !(editMode?.wrappedValue.isEditing ?? true)
+        AddButton(repos: repos, selectedID: self.$addedID)
     }
 }
 #endif
