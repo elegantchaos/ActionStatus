@@ -14,7 +14,11 @@ typealias AppBase = UIResponder
 #endif
 
 class AppCommon: AppBase {
-    let stateKey = "State"
+    #if DEBUG
+        let stateKey = "StateDebug"
+    #else
+        let stateKey = "State"
+    #endif
     
     @State var repos = RepoSet([])
 
