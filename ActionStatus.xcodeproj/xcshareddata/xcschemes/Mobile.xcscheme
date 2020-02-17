@@ -117,7 +117,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "Source/ActionStatusCommon/pre-archive.sh&#10;">
+               scriptText = "&quot;$SOURCE_ROOT/$ACTION_STATUS_COMMON_SOURCE_PATH/pre-archive.sh&quot;&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
