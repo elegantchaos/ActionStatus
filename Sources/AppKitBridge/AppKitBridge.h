@@ -9,7 +9,26 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSUInteger, ItemStatus) {
+    ItemStatusUnknown,
+    ItemStatusFailed,
+    ItemStatusSucceeded,
+};
+
+@protocol MenuDataSource <NSObject>
+- (NSInteger) itemCount;
+- (nonnull NSString*) nameForItem: (NSInteger) item;
+- (ItemStatus) statusForItem: (NSInteger) item;
+- (void) selectItem: (NSInteger) item;
+- (void) handlePreferences;
+@end
+
 @protocol AppKitBridge <NSObject>
 @property BOOL passing;
 - (void) setup;
+- (void) didSetup: (nonnull id) window;
+- (void) setDataSource: (nonnull id<MenuDataSource>) source;
+@end
+
+@interface AppKitBridgeImp <AppKitBridge>
 @end

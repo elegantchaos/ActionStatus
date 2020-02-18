@@ -10,5 +10,6 @@
 #define AppKitBridge_Bridging_Header_h
 
 #import "AppKitBridge.h"
+#import "InterceptingDelegate.h"
 
 #endif /* AppKitBridge_Bridging_Header_h */

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8B2F0ABB23FC195800B2E62A /* InterceptingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */; };
 		8B3E64A723EAE62D00B28168 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64A623EAE62D00B28168 /* AppDelegate.swift */; };
 		8B3E64A923EAE62D00B28168 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */; };
 		8B3E64AB23EAE62D00B28168 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64AA23EAE62D00B28168 /* ContentView.swift */; };
@@ -98,6 +99,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8B2F0AB923FC195700B2E62A /* InterceptingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterceptingDelegate.h; sourceTree = "<group>"; };
+		8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterceptingDelegate.m; sourceTree = "<group>"; };
 		8B3E64A323EAE62D00B28168 /* Action Status.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Action Status.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B3E64A623EAE62D00B28168 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -381,6 +384,8 @@
 			isa = PBXGroup;
 			children = (
 				8B5E7E8C23F6BB8900087E15 /* AppKitBridge.swift */,
+				8B2F0AB923FC195700B2E62A /* InterceptingDelegate.h */,
+				8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */,
 				8B5E7E9323F6C0C200087E15 /* AppKitBridge.h */,
 				8B5B175323FAE05600DD2AF5 /* Resources */,
 			);
@@ -688,6 +693,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B5E7E8D23F6BB8900087E15 /* AppKitBridge.swift in Sources */,
+				8B2F0ABB23FC195800B2E62A /* InterceptingDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -996,7 +1002,14 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1004,6 +1017,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

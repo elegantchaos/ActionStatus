@@ -23,14 +23,63 @@ class AppDelegate: AppCommon {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
     
-    func loadBridge() {
+    override func oneTimeSetup() {
+        loadBridge()
+        repos.block = { self.refreshBridge() }
+
+        super.oneTimeSetup()
+    }
+    
+    fileprivate func refreshBridge() {
+        appKitBridge?.passing = repos.failingCount == 0
+    }
+    
+    fileprivate func loadBridge() {
         if let bridgeURL = Bundle.main.url(forResource: "AppKitBridge", withExtension: "bundle"), let bundle = Bundle(url: bridgeURL) {
             if let cls = bundle.principalClass as? NSObject.Type {
                 if let instance = cls.init() as? AppKitBridge {
                     appKitBridge = instance
                     instance.setup()
+                    instance.setDataSource(self)
                 }
             }
         }
     }
+}
+
+extension AppDelegate: MenuDataSource {
+    func itemCount() -> Int {
+        return repos.items.count
+    }
+    
+    func name(forItem item: Int) -> String {
+        return repos.items[item].name
+    }
+    
+    func status(forItem item: Int) -> ItemStatus {
+        switch repos.items[item].state {
+            case .unknown: return .unknown
+            case .failing: return .failed
+            case .passing: return .succeeded
+        }
+    }
+    
+    func selectItem(_ item: Int) {
+        print("selected item \(item)")
+    }
+    
+    func handleShow() {
+    }
+    
+    func handlePreferences() {
+        
+    }
+    
+//    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+//        if let item = sender as? NSObject {
+//            print(item.value(forKey: "selector"))
+//            print(item.value(forKey: "target"))
+//        }
+//        return super.canPerformAction(action, withSender: sender)
+//    }
 }

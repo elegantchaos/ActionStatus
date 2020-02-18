@@ -15,7 +15,8 @@ class AppDelegate: AppCommon {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
+        setup()
+        
         // Create the SwiftUI view that provides the window contents.
         let contentView = ContentView(repos: AppDelegate.shared.repos)
 

@@ -20,6 +20,8 @@ class AppCommon: AppBase {
         let stateKey = "State"
     #endif
     
+    var isSetup = false
+    
     @State var repos = RepoSet([])
 
     @State var testRepos = RepoSet([
@@ -41,7 +43,16 @@ class AppCommon: AppBase {
     }
     
     func setup() {
+        if !isSetup {
+            oneTimeSetup()
+            isSetup = true
+        }
+    }
+    
+    func oneTimeSetup() {
         NotificationCenter.default.addObserver(self, selector: #selector(changed), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: NSUbiquitousKeyValueStore.default)
+        
+        restoreState()
     }
     
     @objc func changed() {

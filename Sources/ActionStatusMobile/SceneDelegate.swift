@@ -6,9 +6,12 @@
 import UIKit
 import SwiftUI
 
+class Window: UIWindow {
+}
+
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
-    var window: UIWindow?
+    var window: Window?
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -17,21 +20,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
         let app = AppDelegate.shared
-        app.loadBridge()
-        app.repos.block = {
-            app.appKitBridge?.passing = app.repos.failingCount == 0
-        }
-        app.restoreState()
+        app.setup()
         
         // Create the SwiftUI view that provides the window contents.
         let contentView = ContentView(repos: app.repos)
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
-            let window = UIWindow(windowScene: windowScene)
+            let window = Window(windowScene: windowScene)
             window.rootViewController = UIHostingController(rootView: contentView)
             self.window = window
             window.makeKeyAndVisible()
+            DispatchQueue.main.async {
+                app.appKitBridge?.didSetup(window)
+            }
         }
     }
 
