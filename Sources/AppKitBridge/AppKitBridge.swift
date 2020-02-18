@@ -6,8 +6,7 @@
 import Foundation
 import AppKit
 
-@objc class AppKitBridgeImp: NSResponder, AppKitBridge {
-    
+@objc class AppKitBridgeImp: NSResponder {
     static let imageSize = NSSize(width: 16.0, height: 16.0)
     let passingImage = setupPassingImage()
     let failingImage = setupFailingImage()
@@ -20,7 +19,22 @@ import AppKit
         get { return item.button?.image == passingImage }
         set { item.button?.image = newValue ? passingImage : failingImage }
     }
+    
+    class func setupPassingImage() -> NSImage {
+        let image = NSImage(named: "StatusPassing")!
+        image.size = imageSize
+        return image
+    }
 
+    class func setupFailingImage() -> NSImage {
+        let image = NSImage(named: "StatusFailing")!
+        image.size = imageSize
+        return image
+    }
+
+}
+
+extension AppKitBridgeImp: AppKitBridge {
     @objc func setup() {
         let status = NSStatusBar.system
         item = status.statusItem(withLength: 22)
@@ -49,19 +63,6 @@ import AppKit
     @objc func setDataSource(_ source: MenuDataSource) {
         menuSource = source
     }
-    
-    class func setupPassingImage() -> NSImage {
-        let image = NSImage(named: "StatusPassing")!
-        image.size = imageSize
-        return image
-    }
-
-    class func setupFailingImage() -> NSImage {
-        let image = NSImage(named: "StatusFailing")!
-        image.size = imageSize
-        return image
-    }
-
 }
 
 extension AppKitBridgeImp: NSMenuDelegate {
@@ -84,7 +85,7 @@ extension AppKitBridgeImp: NSMenuDelegate {
             
             menu.addItem(NSMenuItem.separator())
             menu.addItem(withTitle: "About \(appName)", action: #selector(handleAbout(_:)), keyEquivalent: "")
-            menu.addItem(withTitle: "Show Repo List", action: #selector(handleShow(_:)), keyEquivalent: "")
+            menu.addItem(withTitle: "Open \(appName)", action: #selector(handleShow(_:)), keyEquivalent: "")
             menu.addItem(withTitle: "Preferences…", action: #selector(handlePreferences(_:)), keyEquivalent: "")
             menu.addItem(withTitle: "Quit \(appName)", action: #selector(handleQuit(_:)), keyEquivalent: "")
         }
@@ -101,7 +102,8 @@ extension AppKitBridgeImp: NSMenuDelegate {
     }
 
     @IBAction func handlePreferences(_ sender: Any) {
-        menuSource?.handlePreferences()
+        let command = NSSelectorFromString("orderFrontPreferencesPanel:")
+        NSApp.perform(command)
     }
 
     @IBAction func handleShow(_ sender: Any) {
@@ -113,6 +115,9 @@ extension AppKitBridgeImp: NSMenuDelegate {
         NSApp.terminate(self)
     }
 
+    func showHandler() -> Selector! {
+        return #selector(handleShow(_:))
+    }
 }
 
 extension AppKitBridgeImp: NSWindowDelegate {

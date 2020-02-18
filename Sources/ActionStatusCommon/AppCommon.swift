@@ -52,6 +52,7 @@ class AppCommon: AppBase {
     func oneTimeSetup() {
         NotificationCenter.default.addObserver(self, selector: #selector(changed), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: NSUbiquitousKeyValueStore.default)
         
+        registerDefaultsFromSettingsBundle()
         restoreState()
     }
     
@@ -66,6 +67,25 @@ class AppCommon: AppBase {
     func restoreState() {
         repos.load(fromDefaultsKey: stateKey)
     }
+    
+    // Locates the file representing the root page of the settings for this app and registers the loaded values as the app's defaults.
+    func registerDefaultsFromSettingsBundle() {
+        let settingsUrl =
+            Bundle.main.url(forResource: "Settings", withExtension: "bundle")!.appendingPathComponent("Root.plist")
+        let settingsPlist = NSDictionary(contentsOf: settingsUrl)!
+        if let preferences = settingsPlist["PreferenceSpecifiers"] as? [NSDictionary] {
+            var defaultsToRegister = [String: Any]()
+    
+            for prefItem in preferences {
+                guard let key = prefItem["Key"] as? String else {
+                    continue
+                }
+                defaultsToRegister[key] = prefItem["DefaultValue"]
+            }
+            UserDefaults.standard.register(defaults: defaultsToRegister)
+        }
+    }
+
 }
 
 #if os(macOS)
@@ -81,6 +101,12 @@ extension AppCommon: NSApplicationDelegate {
 extension AppCommon: UIApplicationDelegate {
     class var shared: AppDelegate {
         UIApplication.shared.delegate as! AppDelegate
+    }
+
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        setup()
+
+        return true
     }
 }
 

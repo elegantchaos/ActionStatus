@@ -16,13 +16,7 @@ class AppDelegate: AppCommon {
         // Use this method to select a configuration to create the new scene with.
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
-
-    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        // Called when the user discards a scene session.
-        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
-    }
-    
+ 
     override func oneTimeSetup() {
         loadBridge()
         repos.block = { self.refreshBridge() }
@@ -43,6 +37,16 @@ class AppDelegate: AppCommon {
                     instance.setDataSource(self)
                 }
             }
+        }
+    }
+    
+    override func buildMenu(with builder: UIMenuBuilder) {
+        if let bridge = appKitBridge, builder.system == .main {
+            let prefs = builder.menu(for: .preferences)
+            let bundleID = Bundle.main.bundleIdentifier!
+            let command = UIKeyCommand(title: "Show Status Window", image: nil, action: bridge.showHandler(), input: "0", modifierFlags: .command, propertyList: nil)
+            let menu = UIMenu(title: "", image: nil, identifier: UIMenu.Identifier("\(bundleID).window.additions"), options: .displayInline, children: [command])
+            builder.insertChild(menu, atEndOfMenu: .window)
         }
     }
 }
@@ -68,18 +72,9 @@ extension AppDelegate: MenuDataSource {
         print("selected item \(item)")
     }
     
-    func handleShow() {
-    }
-    
     func handlePreferences() {
         
     }
-    
-//    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-//        if let item = sender as? NSObject {
-//            print(item.value(forKey: "selector"))
-//            print(item.value(forKey: "target"))
-//        }
-//        return super.canPerformAction(action, withSender: sender)
-//    }
 }
+
+

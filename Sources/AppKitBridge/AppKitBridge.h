@@ -20,7 +20,6 @@ typedef NS_ENUM(NSUInteger, ItemStatus) {
 - (nonnull NSString*) nameForItem: (NSInteger) item;
 - (ItemStatus) statusForItem: (NSInteger) item;
 - (void) selectItem: (NSInteger) item;
-- (void) handlePreferences;
 @end
 
 @protocol AppKitBridge <NSObject>
@@ -28,6 +27,7 @@ typedef NS_ENUM(NSUInteger, ItemStatus) {
 - (void) setup;
 - (void) didSetup: (nonnull id) window;
 - (void) setDataSource: (nonnull id<MenuDataSource>) source;
+- (SEL) showHandler;
 @end
 
 @interface AppKitBridgeImp <AppKitBridge>
