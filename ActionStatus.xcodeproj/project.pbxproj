@@ -28,23 +28,11 @@
 		8B430E9123F5947E0050BF2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64AC23EAE62E00B28168 /* Assets.xcassets */; };
 		8B451DFC23F415E10056EF3E /* Repo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B451DFB23F415E10056EF3E /* Repo.swift */; };
 		8B5B175423FAE7E800DD2AF5 /* pre-archive.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8B522FA623F6ED390020AD36 /* pre-archive.sh */; };
-		8B5B175523FAE7E800DD2AF5 /* pre-archive.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8B522FA623F6ED390020AD36 /* pre-archive.sh */; };
 		8B5B175623FAE7E800DD2AF5 /* pre-archive.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8B522FA623F6ED390020AD36 /* pre-archive.sh */; };
 		8B5B175723FAE7E800DD2AF5 /* pre-build.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8B522FA723F6ED390020AD36 /* pre-build.sh */; };
-		8B5B175823FAE7E800DD2AF5 /* pre-build.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8B522FA723F6ED390020AD36 /* pre-build.sh */; };
 		8B5B175923FAE7E800DD2AF5 /* pre-build.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8B522FA723F6ED390020AD36 /* pre-build.sh */; };
 		8B5B175C23FAEB8200DD2AF5 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5B175B23FAEB8200DD2AF5 /* SwiftUIExtensions */; };
 		8B5B175E23FAEBD300DD2AF5 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5B175D23FAEBD300DD2AF5 /* SwiftUIExtensions */; };
-		8B5B176023FAEC3C00DD2AF5 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5B175F23FAEC3C00DD2AF5 /* SwiftUIExtensions */; };
-		8B5E7E4723F6A74E00087E15 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E7E4623F6A74E00087E15 /* AppDelegate.swift */; };
-		8B5E7E5123F6A74F00087E15 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B5E7E4F23F6A74F00087E15 /* Main.storyboard */; };
-		8B5E7E5A23F6A7DA00087E15 /* AppCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B430E8623F587E30050BF2A /* AppCommon.swift */; };
-		8B5E7E5B23F6A7DA00087E15 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64AA23EAE62D00B28168 /* ContentView.swift */; };
-		8B5E7E5D23F6A7DA00087E15 /* RepoEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F181723F459570029F9CC /* RepoEditView.swift */; };
-		8B5E7E5E23F6A7DA00087E15 /* Repo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B451DFB23F415E10056EF3E /* Repo.swift */; };
-		8B5E7E5F23F6A7DA00087E15 /* RepoSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9B2DB123F452B00087283B /* RepoSet.swift */; };
-		8B5E7E6023F6A7E500087E15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64AC23EAE62E00B28168 /* Assets.xcassets */; };
-		8B5E7E6123F6A7E500087E15 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64AF23EAE62E00B28168 /* Preview Assets.xcassets */; };
 		8B5E7E8923F6BB5100087E15 /* AppKitBridge.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8323F6BB3500087E15 /* AppKitBridge.bundle */; platformFilter = maccatalyst; };
 		8B5E7E8D23F6BB8900087E15 /* AppKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8C23F6BB8900087E15 /* AppKitBridge.swift */; };
 		8B6F181823F459570029F9CC /* RepoEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F181723F459570029F9CC /* RepoEditView.swift */; };
@@ -76,16 +64,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		8B5E7E7723F6BA6700087E15 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8B5E7E7E23F6BAC800087E15 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -127,15 +105,9 @@
 		8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppKitBridge.xcconfig; sourceTree = "<group>"; };
 		8B522FA623F6ED390020AD36 /* pre-archive.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "pre-archive.sh"; sourceTree = "<group>"; };
 		8B522FA723F6ED390020AD36 /* pre-build.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "pre-build.sh"; sourceTree = "<group>"; };
-		8B5E7E4423F6A74E00087E15 /* Action Status.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Action Status.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8B5E7E4623F6A74E00087E15 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		8B5E7E5023F6A74F00087E15 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		8B5E7E5223F6A74F00087E15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8B5E7E5323F6A74F00087E15 /* ActionStatus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ActionStatus.entitlements; sourceTree = "<group>"; };
 		8B5E7E6223F6A97D00087E15 /* Tests.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Tests.xcconfig; sourceTree = "<group>"; };
 		8B5E7E6323F6A9C600087E15 /* Mobile.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Mobile.xcconfig; sourceTree = "<group>"; };
 		8B5E7E6423F6A9C600087E15 /* TV.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TV.xcconfig; sourceTree = "<group>"; };
-		8B5E7E6523F6A9C600087E15 /* Mac.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Mac.xcconfig; sourceTree = "<group>"; };
 		8B5E7E8323F6BB3500087E15 /* AppKitBridge.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppKitBridge.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B5E7E8523F6BB3500087E15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B5E7E8C23F6BB8900087E15 /* AppKitBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppKitBridge.swift; sourceTree = "<group>"; };
@@ -178,14 +150,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8B5E7E4123F6A74E00087E15 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8B5B176023FAEC3C00DD2AF5 /* SwiftUIExtensions in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8B5E7E8023F6BB3500087E15 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -214,7 +178,6 @@
 				8B3E64B923EAE62E00B28168 /* ActionStatusTests.xctest */,
 				8B3E64C423EAE62F00B28168 /* ActionStatusUITests.xctest */,
 				8B430E6A23F586100050BF2A /* Action Status.app */,
-				8B5E7E4423F6A74E00087E15 /* Action Status.app */,
 				8B5E7E8323F6BB3500087E15 /* AppKitBridge.bundle */,
 			);
 			name = Products;
@@ -225,7 +188,6 @@
 			children = (
 				8B5E7E5723F6A79100087E15 /* ActionStatusMobile */,
 				8B430E6B23F586100050BF2A /* ActionStatusTV */,
-				8B5E7E4523F6A74E00087E15 /* ActionStatusMac */,
 				8B5E7E5823F6A79900087E15 /* ActionStatusCommon */,
 				8B5E7E8423F6BB3500087E15 /* AppKitBridge */,
 			);
@@ -296,17 +258,6 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		8B5B175023FADA9000DD2AF5 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				8B5E7E6523F6A9C600087E15 /* Mac.xcconfig */,
-				8B5E7E5323F6A74F00087E15 /* ActionStatus.entitlements */,
-				8B5E7E5223F6A74F00087E15 /* Info.plist */,
-				8B5E7E4F23F6A74F00087E15 /* Main.storyboard */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		8B5B175123FADA9D00DD2AF5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -339,15 +290,6 @@
 				8B5E7E8523F6BB3500087E15 /* Info.plist */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		8B5E7E4523F6A74E00087E15 /* ActionStatusMac */ = {
-			isa = PBXGroup;
-			children = (
-				8B5E7E4623F6A74E00087E15 /* AppDelegate.swift */,
-				8B5B175023FADA9000DD2AF5 /* Resources */,
-			);
-			path = ActionStatusMac;
 			sourceTree = "<group>";
 		};
 		8B5E7E5723F6A79100087E15 /* ActionStatusMobile */ = {
@@ -473,27 +415,6 @@
 			productReference = 8B430E6A23F586100050BF2A /* Action Status.app */;
 			productType = "com.apple.product-type.application";
 		};
-		8B5E7E4323F6A74E00087E15 /* ActionStatusMac */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 8B5E7E5623F6A74F00087E15 /* Build configuration list for PBXNativeTarget "ActionStatusMac" */;
-			buildPhases = (
-				8B5E7E4023F6A74E00087E15 /* Sources */,
-				8B5E7E4123F6A74E00087E15 /* Frameworks */,
-				8B5E7E4223F6A74E00087E15 /* Resources */,
-				8B5E7E7723F6BA6700087E15 /* Embed Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = ActionStatusMac;
-			packageProductDependencies = (
-				8B5B175F23FAEC3C00DD2AF5 /* SwiftUIExtensions */,
-			);
-			productName = ActionStatusMac;
-			productReference = 8B5E7E4423F6A74E00087E15 /* Action Status.app */;
-			productType = "com.apple.product-type.application";
-		};
 		8B5E7E8223F6BB3500087E15 /* AppKitBridge */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8B5E7E8623F6BB3500087E15 /* Build configuration list for PBXNativeTarget "AppKitBridge" */;
@@ -535,9 +456,6 @@
 					8B430E6923F586100050BF2A = {
 						CreatedOnToolsVersion = 11.4;
 					};
-					8B5E7E4323F6A74E00087E15 = {
-						CreatedOnToolsVersion = 11.4;
-					};
 					8B5E7E8223F6BB3500087E15 = {
 						CreatedOnToolsVersion = 11.4;
 						LastSwiftMigration = 1140;
@@ -561,7 +479,6 @@
 			projectRoot = "";
 			targets = (
 				8B3E64A223EAE62D00B28168 /* ActionStatusMobile */,
-				8B5E7E4323F6A74E00087E15 /* ActionStatusMac */,
 				8B430E6923F586100050BF2A /* ActionStatusTV */,
 				8B5E7E8223F6BB3500087E15 /* AppKitBridge */,
 				8B3E64B823EAE62E00B28168 /* ActionStatusTests */,
@@ -607,18 +524,6 @@
 				8B5B175423FAE7E800DD2AF5 /* pre-archive.sh in Resources */,
 				8B430E8F23F58CEE0050BF2A /* Preview Assets.xcassets in Resources */,
 				8B430E8423F5877D0050BF2A /* LaunchScreen.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8B5E7E4223F6A74E00087E15 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8B5E7E6123F6A7E500087E15 /* Preview Assets.xcassets in Resources */,
-				8B5B175823FAE7E800DD2AF5 /* pre-build.sh in Resources */,
-				8B5B175523FAE7E800DD2AF5 /* pre-archive.sh in Resources */,
-				8B5E7E5123F6A74F00087E15 /* Main.storyboard in Resources */,
-				8B5E7E6023F6A7E500087E15 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -675,19 +580,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8B5E7E4023F6A74E00087E15 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8B5E7E5E23F6A7DA00087E15 /* Repo.swift in Sources */,
-				8B5E7E5F23F6A7DA00087E15 /* RepoSet.swift in Sources */,
-				8B5E7E5A23F6A7DA00087E15 /* AppCommon.swift in Sources */,
-				8B5E7E5D23F6A7DA00087E15 /* RepoEditView.swift in Sources */,
-				8B5E7E5B23F6A7DA00087E15 /* ContentView.swift in Sources */,
-				8B5E7E4723F6A74E00087E15 /* AppDelegate.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8B5E7E7F23F6BB3500087E15 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -733,14 +625,6 @@
 				8B430E7623F586110050BF2A /* Base */,
 			);
 			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		8B5E7E4F23F6A74F00087E15 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8B5E7E5023F6A74F00087E15 /* Base */,
-			);
-			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -976,28 +860,6 @@
 			};
 			name = Release;
 		};
-		8B5E7E5423F6A74F00087E15 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8B5E7E6523F6A9C600087E15 /* Mac.xcconfig */;
-			buildSettings = {
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-			};
-			name = Debug;
-		};
-		8B5E7E5523F6A74F00087E15 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8B5E7E6523F6A9C600087E15 /* Mac.xcconfig */;
-			buildSettings = {
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-			};
-			name = Release;
-		};
 		8B5E7E8723F6BB3500087E15 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */;
@@ -1075,15 +937,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8B5E7E5623F6A74F00087E15 /* Build configuration list for PBXNativeTarget "ActionStatusMac" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				8B5E7E5423F6A74F00087E15 /* Debug */,
-				8B5E7E5523F6A74F00087E15 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		8B5E7E8623F6BB3500087E15 /* Build configuration list for PBXNativeTarget "AppKitBridge" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1113,10 +966,6 @@
 			productName = SwiftUIExtensions;
 		};
 		8B5B175D23FAEBD300DD2AF5 /* SwiftUIExtensions */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = SwiftUIExtensions;
-		};
-		8B5B175F23FAEC3C00DD2AF5 /* SwiftUIExtensions */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftUIExtensions;
 		};
