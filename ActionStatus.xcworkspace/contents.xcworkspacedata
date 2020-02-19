@@ -4,4 +4,10 @@
    <FileRef
       location = "group:ActionStatus.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:../Logger">
+   </FileRef>
+   <FileRef
+      location = "group:../ApplicationExtensions">
+   </FileRef>
 </Workspace>

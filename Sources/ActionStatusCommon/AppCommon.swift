@@ -4,13 +4,14 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import SwiftUI
+import ApplicationExtensions
 
 #if os(macOS)
 import AppKit
 typealias AppBase = NSObject
 #else
 import UIKit
-typealias AppBase = UIResponder
+typealias AppBase = BasicApplication
 #endif
 
 class AppCommon: AppBase {
@@ -19,8 +20,6 @@ class AppCommon: AppBase {
     #else
         let stateKey = "State"
     #endif
-    
-    var isSetup = false
     
     @State var repos = RepoSet([])
 
@@ -42,21 +41,12 @@ class AppCommon: AppBase {
         ])
     }
     
-    func setup() {
-        if !isSetup {
-            oneTimeSetup()
-            isSetup = true
-        }
-    }
-    
-    func oneTimeSetup() {
-        NotificationCenter.default.addObserver(self, selector: #selector(changed), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: NSUbiquitousKeyValueStore.default)
-        
-        registerDefaultsFromSettingsBundle()
+    @objc func changed() {
         restoreState()
     }
     
-    @objc func changed() {
+    override func setup(withOptions options: BasicApplication.LaunchOptions) {
+        super.setup(withOptions: options)
         restoreState()
     }
     
@@ -68,23 +58,7 @@ class AppCommon: AppBase {
         repos.load(fromDefaultsKey: stateKey)
     }
     
-    // Locates the file representing the root page of the settings for this app and registers the loaded values as the app's defaults.
-    func registerDefaultsFromSettingsBundle() {
-        let settingsUrl =
-            Bundle.main.url(forResource: "Settings", withExtension: "bundle")!.appendingPathComponent("Root.plist")
-        let settingsPlist = NSDictionary(contentsOf: settingsUrl)!
-        if let preferences = settingsPlist["PreferenceSpecifiers"] as? [NSDictionary] {
-            var defaultsToRegister = [String: Any]()
-    
-            for prefItem in preferences {
-                guard let key = prefItem["Key"] as? String else {
-                    continue
-                }
-                defaultsToRegister[key] = prefItem["DefaultValue"]
-            }
-            UserDefaults.standard.register(defaults: defaultsToRegister)
-        }
-    }
+
 
 }
 
@@ -98,15 +72,9 @@ extension AppCommon: NSApplicationDelegate {
 
 #else
 
-extension AppCommon: UIApplicationDelegate {
+extension AppCommon {
     class var shared: AppDelegate {
         UIApplication.shared.delegate as! AppDelegate
-    }
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        setup()
-
-        return true
     }
 }
 

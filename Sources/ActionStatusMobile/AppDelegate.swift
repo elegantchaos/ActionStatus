@@ -10,18 +10,12 @@ import SwiftUI
 @UIApplicationMain
 class AppDelegate: AppCommon {
     var appKitBridge: AppKitBridge? = nil
-    
-    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        // Called when a new scene session is being created.
-        // Use this method to select a configuration to create the new scene with.
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
-    }
- 
-    override func oneTimeSetup() {
+     
+    override func setup(withOptions options: LaunchOptions) {
         loadBridge()
         repos.block = { self.refreshBridge() }
 
-        super.oneTimeSetup()
+        super.setup(withOptions: options)
     }
     
     fileprivate func refreshBridge() {
@@ -42,12 +36,21 @@ class AppDelegate: AppCommon {
     
     override func buildMenu(with builder: UIMenuBuilder) {
         if let bridge = appKitBridge, builder.system == .main {
-            let prefs = builder.menu(for: .preferences)
             let bundleID = Bundle.main.bundleIdentifier!
             let command = UIKeyCommand(title: "Show Status Window", image: nil, action: bridge.showHandler(), input: "0", modifierFlags: .command, propertyList: nil)
-            let menu = UIMenu(title: "", image: nil, identifier: UIMenu.Identifier("\(bundleID).window.additions"), options: .displayInline, children: [command])
+            let menu = UIMenu(title: "", image: nil, identifier: UIMenu.Identifier("\(bundleID).show"), options: .displayInline, children: [command])
             builder.insertChild(menu, atEndOfMenu: .window)
+
+            let workflowCommand = UIKeyCommand(title: "Make Workflow", image: nil, action: #selector(makeWorkflow(_:)), input: "N", modifierFlags: .command, propertyList: nil)
+            let workflowMenu = UIMenu(title: "", image: nil, identifier: UIMenu.Identifier("\(bundleID).make"), options: .displayInline, children: [workflowCommand])
+            builder.insertSibling(workflowMenu, beforeMenu: .close)
         }
+        
+        next?.buildMenu(with: builder)
+    }
+    
+    @IBAction func makeWorkflow(_ sender: Any) {
+        repos.showComposeWindow()
     }
 }
 

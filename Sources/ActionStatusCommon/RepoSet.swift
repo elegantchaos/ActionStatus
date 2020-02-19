@@ -15,7 +15,8 @@ class RepoSet: ObservableObject {
     var timer: Timer?
     
     @Published var items: [Repo]
-    
+    @Published var isComposing = false
+
     init(_ repos: [Repo], store: NSUbiquitousKeyValueStore = NSUbiquitousKeyValueStore.default, block: RefreshBlock? = nil) {
         self.block = block
         self.store = store
@@ -35,6 +36,14 @@ class RepoSet: ObservableObject {
             }
         }
         return count
+    }
+    
+    func showComposeWindow() {
+        isComposing = true
+    }
+    
+    func hideComposeWindow() {
+        isComposing = false
     }
     
     func load(fromDefaultsKey key: String) {

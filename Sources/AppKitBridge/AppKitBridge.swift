@@ -115,7 +115,7 @@ extension AppKitBridgeImp: NSMenuDelegate {
         NSApp.terminate(self)
     }
 
-    func showHandler() -> Selector! {
+    func showHandler() -> Selector {
         return #selector(handleShow(_:))
     }
 }

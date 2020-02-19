@@ -34,6 +34,9 @@
 		8B5B175923FAE7E800DD2AF5 /* pre-build.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8B522FA723F6ED390020AD36 /* pre-build.sh */; };
 		8B5B175C23FAEB8200DD2AF5 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5B175B23FAEB8200DD2AF5 /* SwiftUIExtensions */; };
 		8B5B175E23FAEBD300DD2AF5 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5B175D23FAEBD300DD2AF5 /* SwiftUIExtensions */; };
+		8B5D864623FD3F720085A570 /* ApplicationExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5D864523FD3F720085A570 /* ApplicationExtensions */; };
+		8B5D864823FD52550085A570 /* ComposeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5D864723FD52550085A570 /* ComposeView.swift */; };
+		8B5D864923FD54160085A570 /* ComposeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5D864723FD52550085A570 /* ComposeView.swift */; };
 		8B5E7E8923F6BB5100087E15 /* AppKitBridge.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8323F6BB3500087E15 /* AppKitBridge.bundle */; platformFilter = maccatalyst; };
 		8B5E7E8D23F6BB8900087E15 /* AppKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8C23F6BB8900087E15 /* AppKitBridge.swift */; };
 		8B6F181823F459570029F9CC /* RepoEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F181723F459570029F9CC /* RepoEditView.swift */; };
@@ -107,6 +110,7 @@
 		8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppKitBridge.xcconfig; sourceTree = "<group>"; };
 		8B522FA623F6ED390020AD36 /* pre-archive.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "pre-archive.sh"; sourceTree = "<group>"; };
 		8B522FA723F6ED390020AD36 /* pre-build.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "pre-build.sh"; sourceTree = "<group>"; };
+		8B5D864723FD52550085A570 /* ComposeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeView.swift; sourceTree = "<group>"; };
 		8B5E7E6223F6A97D00087E15 /* Tests.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Tests.xcconfig; sourceTree = "<group>"; };
 		8B5E7E6323F6A9C600087E15 /* Mobile.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Mobile.xcconfig; sourceTree = "<group>"; };
 		8B5E7E6423F6A9C600087E15 /* TV.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TV.xcconfig; sourceTree = "<group>"; };
@@ -127,6 +131,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B5B175C23FAEB8200DD2AF5 /* SwiftUIExtensions in Frameworks */,
+				8B5D864623FD3F720085A570 /* ApplicationExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +315,7 @@
 			children = (
 				8B430E8623F587E30050BF2A /* AppCommon.swift */,
 				8B3E64AA23EAE62D00B28168 /* ContentView.swift */,
+				8B5D864723FD52550085A570 /* ComposeView.swift */,
 				8B451DFB23F415E10056EF3E /* Repo.swift */,
 				8B6F181723F459570029F9CC /* RepoEditView.swift */,
 				8B9B2DB123F452B00087283B /* RepoSet.swift */,
@@ -357,6 +363,7 @@
 			name = ActionStatusMobile;
 			packageProductDependencies = (
 				8B5B175B23FAEB8200DD2AF5 /* SwiftUIExtensions */,
+				8B5D864523FD3F720085A570 /* ApplicationExtensions */,
 			);
 			productName = GithubStatus;
 			productReference = 8B3E64A323EAE62D00B28168 /* Action Status.app */;
@@ -476,6 +483,7 @@
 			mainGroup = 8B3E649A23EAE62D00B28168;
 			packageReferences = (
 				8B5B175A23FAEB8200DD2AF5 /* XCRemoteSwiftPackageReference "SwiftUIExtensions" */,
+				8B5D864423FD3F720085A570 /* XCRemoteSwiftPackageReference "ApplicationExtensions" */,
 			);
 			productRefGroup = 8B3E64A423EAE62D00B28168 /* Products */;
 			projectDirPath = "";
@@ -550,6 +558,7 @@
 				8B3E64A923EAE62D00B28168 /* SceneDelegate.swift in Sources */,
 				8B430E8723F587E30050BF2A /* AppCommon.swift in Sources */,
 				8B6F181823F459570029F9CC /* RepoEditView.swift in Sources */,
+				8B5D864823FD52550085A570 /* ComposeView.swift in Sources */,
 				8B451DFC23F415E10056EF3E /* Repo.swift in Sources */,
 				8B3E64AB23EAE62D00B28168 /* ContentView.swift in Sources */,
 			);
@@ -580,6 +589,7 @@
 				8B430E8123F586830050BF2A /* Repo.swift in Sources */,
 				8B430E8823F587E60050BF2A /* AppCommon.swift in Sources */,
 				8B430E8023F586830050BF2A /* RepoEditView.swift in Sources */,
+				8B5D864923FD54160085A570 /* ComposeView.swift in Sources */,
 				8B430E8223F586830050BF2A /* RepoSet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -961,6 +971,14 @@
 				minimumVersion = 1.0.2;
 			};
 		};
+		8B5D864423FD3F720085A570 /* XCRemoteSwiftPackageReference "ApplicationExtensions" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elegantchaos/ApplicationExtensions.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -972,6 +990,11 @@
 		8B5B175D23FAEBD300DD2AF5 /* SwiftUIExtensions */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftUIExtensions;
+		};
+		8B5D864523FD3F720085A570 /* ApplicationExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B5D864423FD3F720085A570 /* XCRemoteSwiftPackageReference "ApplicationExtensions" */;
+			productName = ApplicationExtensions;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

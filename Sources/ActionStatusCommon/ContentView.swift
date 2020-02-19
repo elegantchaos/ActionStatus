@@ -10,7 +10,8 @@ struct ContentView: View {
     @ObservedObject var repos: RepoSet
     @State var selectedID: UUID? = nil
     @State var isEditing: Bool = false
-    
+    @State var isComposing: Bool = false
+
     var body: some View {
             NavigationView {
                 VStack(alignment: .center) {
@@ -51,6 +52,9 @@ struct ContentView: View {
                 }
                 .setupNavigation(editAction: { self.isEditing.toggle() }, addAction: { self.addRepo() })
                 .bindEditing(to: $isEditing)
+                .sheet(isPresented: $repos.isComposing) {
+                    ComposeView(isPresented: self.$repos.isComposing)
+                }
         }
             .setupNavigationStyle()
             .onAppear() {
