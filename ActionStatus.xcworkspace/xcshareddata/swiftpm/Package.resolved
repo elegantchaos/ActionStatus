@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "BindingsExtensions",
+        "repositoryURL": "https://github.com/elegantchaos/BindingsExtensions.git",
+        "state": {
+          "branch": null,
+          "revision": "acdce0012a254b321e301afe264454d568ffbee7",
+          "version": "1.0.0"
+        }
+      },
+      {
         "package": "Logger",
         "repositoryURL": "https://github.com/elegantchaos/Logger.git",
         "state": {
@@ -15,8 +24,8 @@
         "repositoryURL": "https://github.com/elegantchaos/SwiftUIExtensions.git",
         "state": {
           "branch": null,
-          "revision": "5a4ad46e0ca1c0d93d44f57f094e286e28f615f6",
-          "version": "1.0.2"
+          "revision": "0d315b8f19d5279037f59b212ab07938110bb987",
+          "version": "1.0.3"
         }
       }
     ]

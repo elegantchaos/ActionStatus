@@ -5,6 +5,7 @@
 
 import SwiftUI
 import SwiftUIExtensions
+import BindingsExtensions
 
 struct ContentView: View {
     @ObservedObject var repos: RepoSet

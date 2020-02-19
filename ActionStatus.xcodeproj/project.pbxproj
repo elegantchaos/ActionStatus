@@ -40,6 +40,7 @@
 		8B5E7E8923F6BB5100087E15 /* AppKitBridge.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8323F6BB3500087E15 /* AppKitBridge.bundle */; platformFilter = maccatalyst; };
 		8B5E7E8D23F6BB8900087E15 /* AppKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8C23F6BB8900087E15 /* AppKitBridge.swift */; };
 		8B6F181823F459570029F9CC /* RepoEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F181723F459570029F9CC /* RepoEditView.swift */; };
+		8B880FE423FD7E000068C3FF /* BindingsExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B880FE323FD7E000068C3FF /* BindingsExtensions */; };
 		8B9B2DB223F452B00087283B /* RepoSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9B2DB123F452B00087283B /* RepoSet.swift */; };
 /* End PBXBuildFile section */
 
@@ -131,6 +132,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B5B175C23FAEB8200DD2AF5 /* SwiftUIExtensions in Frameworks */,
+				8B880FE423FD7E000068C3FF /* BindingsExtensions in Frameworks */,
 				8B5D864623FD3F720085A570 /* ApplicationExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -364,6 +366,7 @@
 			packageProductDependencies = (
 				8B5B175B23FAEB8200DD2AF5 /* SwiftUIExtensions */,
 				8B5D864523FD3F720085A570 /* ApplicationExtensions */,
+				8B880FE323FD7E000068C3FF /* BindingsExtensions */,
 			);
 			productName = GithubStatus;
 			productReference = 8B3E64A323EAE62D00B28168 /* Action Status.app */;
@@ -484,6 +487,7 @@
 			packageReferences = (
 				8B5B175A23FAEB8200DD2AF5 /* XCRemoteSwiftPackageReference "SwiftUIExtensions" */,
 				8B5D864423FD3F720085A570 /* XCRemoteSwiftPackageReference "ApplicationExtensions" */,
+				8B880FE223FD7E000068C3FF /* XCRemoteSwiftPackageReference "BindingsExtensions" */,
 			);
 			productRefGroup = 8B3E64A423EAE62D00B28168 /* Products */;
 			projectDirPath = "";
@@ -942,7 +946,7 @@
 			repositoryURL = "https://github.com/elegantchaos/SwiftUIExtensions.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.2;
+				minimumVersion = 1.0.3;
 			};
 		};
 		8B5D864423FD3F720085A570 /* XCRemoteSwiftPackageReference "ApplicationExtensions" */ = {
@@ -951,6 +955,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.2;
+			};
+		};
+		8B880FE223FD7E000068C3FF /* XCRemoteSwiftPackageReference "BindingsExtensions" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elegantchaos/BindingsExtensions.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -969,6 +981,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8B5D864423FD3F720085A570 /* XCRemoteSwiftPackageReference "ApplicationExtensions" */;
 			productName = ApplicationExtensions;
+		};
+		8B880FE323FD7E000068C3FF /* BindingsExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B880FE223FD7E000068C3FF /* XCRemoteSwiftPackageReference "BindingsExtensions" */;
+			productName = BindingsExtensions;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
