@@ -21,6 +21,8 @@ class AppCommon: AppBase {
         let stateKey = "State"
     #endif
     
+    var rootController: UIViewController?
+    
     @State var repos = RepoSet([])
 
     @State var testRepos = RepoSet([

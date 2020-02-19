@@ -3,6 +3,8 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import UIKit
+
 struct WorkflowGenerator {
     let view: ComposeView
     
@@ -46,9 +48,29 @@ struct WorkflowGenerator {
         """
         
         for job in enabledJobs() {
-            source.append(job.yaml(build: view.build, test: view.test, notify: view.notify, package: view.repo.name, configurations: enabledConfigs()))
+            source.append(job.yaml(build: view.build, test: view.test, notify: view.notify, upload: view.upload, package: view.repo.name, configurations: enabledConfigs()))
         }
         
+        let url = UIApplication.newDocumentURL(withPathExtension: "yml")
+        if let data = source.data(using: .utf8) {
+            do {
+                try data.write(to: url)
+                AppDelegate.shared.repos.hideComposeWindow()
+                view.exportURL = url
+                view.isSaving = true
+            } catch {
+                print(error)
+            }
+        }
+        
+//
+//           let controller = UIDocumentPickerViewController(url: url, in: UIDocumentPickerMode.exportToService)
+//            AppDelegate.shared.rootController?.present(controller, animated: true) {
+//               try? FileManager.default.removeItem(at: url)
+//           }
+//        }
+        
         print(source)
+        
     }
 }

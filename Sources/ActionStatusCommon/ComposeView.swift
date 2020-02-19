@@ -9,7 +9,6 @@ import BindingsExtensions
 struct ComposeView: View {
     var repo: Repo
     @Binding var isPresented: Bool
-    @State var generateMac = true
     
     @State var platforms = [
         Job("macOS", name: "macOS", platform: .mac),
@@ -26,7 +25,11 @@ struct ComposeView: View {
     @State var build = true
     @State var test = true
     @State var notify = true
-
+    @State var upload = true
+    
+    @State var isSaving = false
+    @State var exportURL: URL?
+    
     var body: some View {
         
         VStack {
@@ -53,14 +56,15 @@ struct ComposeView: View {
 
                 Section(header: Text("Other Options")) {
                     VStack {
-                        Toggle(isOn: $build) {
-                            Text("Perform Build")
-                        }
+                        Toggle("Perform Build", isOn: $build)
                         Toggle(isOn: $test) {
                             Text("Run Tests")
                         }
                         Toggle(isOn: $notify) {
                             Text("Post Notification")
+                        }
+                        Toggle(isOn: $upload) {
+                            Text("Upload Logs")
                         }
                     }
                 }
@@ -76,8 +80,13 @@ struct ComposeView: View {
                     Text("Generate \(repo.workflow).yml")
                 }
             }
-        }.padding()
-        
+        }
+            .padding()
+            .sheet(isPresented: $isSaving) {
+                DocumentPickerViewController(url: self.exportURL!, onDismiss: {
+                    
+                })
+            }
     }
     
     func section(for options: Binding<[Option]>, label: String) -> some View {
@@ -113,5 +122,60 @@ struct OptionsSection: View {
 struct ComposeView_Previews: PreviewProvider {
     static var previews: some View {
         ComposeView(repo: AppDelegate.shared.testRepos.items[0], isPresented: .constant(false))
+    }
+}
+
+/// Wrapper around the `UIDocumentPickerViewController`.
+struct DocumentPickerViewController {
+    private let url: URL
+    
+    private let supportedTypes: [String] = ["public.item"]
+
+    // Callback to be executed when users close the document picker.
+    private let onDismiss: () -> Void
+
+    init(url: URL, onDismiss: @escaping () -> Void) {
+        self.url = url
+        self.onDismiss = onDismiss
+    }
+}
+
+// MARK: - UIViewControllerRepresentable
+
+extension DocumentPickerViewController: UIViewControllerRepresentable {
+
+    typealias UIViewControllerType = UIDocumentPickerViewController
+
+    func makeUIViewController(context: Context) -> DocumentPickerViewController.UIViewControllerType {
+        let documentPickerController = UIDocumentPickerViewController(url: url, in: .exportToService)
+        documentPickerController.allowsMultipleSelection = false
+        documentPickerController.delegate = context.coordinator
+        return documentPickerController
+    }
+
+    func updateUIViewController(_ uiViewController: DocumentPickerViewController.UIViewControllerType, context: Context) {
+        
+    }
+
+    // MARK: Coordinator
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, UIDocumentPickerDelegate, ObservableObject {
+        var parent: DocumentPickerViewController
+
+        init(_ documentPickerController: DocumentPickerViewController) {
+            parent = documentPickerController
+        }
+
+        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
+        }
+
+        func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+            parent.onDismiss()
+
+        }
     }
 }

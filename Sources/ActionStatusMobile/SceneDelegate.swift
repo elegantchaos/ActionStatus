@@ -17,6 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let window = UIWindow(windowScene: windowScene)
             window.rootViewController = UIHostingController(rootView: content)
             self.window = window
+            app.rootController = window.rootViewController
             window.makeKeyAndVisible()
             DispatchQueue.main.async {
                 app.appKitBridge?.didSetup(window)

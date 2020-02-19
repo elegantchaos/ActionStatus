@@ -13,7 +13,7 @@ class Job: Option {
     let platform: Platform
     let includeXcode: Bool
     
-    func yaml(build: Bool, test: Bool, notify: Bool, package: String, configurations: [String]) -> String {
+    func yaml(build: Bool, test: Bool, notify: Bool, upload: Bool, package: String, configurations: [String]) -> String {
         var yaml =
             """
             \(id):
@@ -48,18 +48,23 @@ class Job: Option {
                   uses: actions/checkout@v1
                 - name: Swift Version
                   run: swift --version
-
+                - name: Xcode Version
+                  run: xcodebuild -version
+                - name: XC Pretty
+                  run: sudo gem install xcpretty-travis-formatter
+                - name: Make Logs Directory
+                  run: mkdir logs
             """
         )
 
         if build {
             for config in configurations {
                 yaml.append(
-                """
-                    - name: Build (\(config))
-                      run: swift build -v -c \(config.lowercased())
+                    """
+                        - name: Build (\(config))
+                          run: swift build -v -c \(config.lowercased())
 
-                """
+                    """
                 )
             }
         }
@@ -68,11 +73,11 @@ class Job: Option {
             for config in configurations {
                 let extraArgs = config == "Release" ? "-Xswiftc -enable-testing" : ""
                 yaml.append(
-                """
-                    - name: Test (\(config))
-                      run: swift test -v -c \(config.lowercased()) \(extraArgs)
+                    """
+                        - name: Test (\(config))
+                          run: swift test -v -c \(config.lowercased()) \(extraArgs)
 
-                """
+                    """
                 )
             }
         }
@@ -81,11 +86,11 @@ class Job: Option {
             if build {
                 for config in configurations {
                     yaml.append(
-                    """
-                        - name: Build (iOS/\(config))
-                          run: xcodebuild clean build -workspace . -scheme \(package) -destination "name=iPad Pro (11-inch) -configuration \(config)"
+                        """
+                            - name: Build (iOS/\(config))
+                              run: xcodebuild clean build -workspace . -scheme \(package) -destination "name=iPad Pro (11-inch) -configuration \(config)" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-ios-build-\(config.lowercased()).log | xcpretty
 
-                    """
+                        """
                     )
                 }
             }
@@ -93,29 +98,43 @@ class Job: Option {
             if test {
                 for config in configurations {
                     yaml.append(
-                    """
-                        - name: Test (iOS/\(config))
-                          run: xcodebuild test -workspace . -scheme \(package) -destination "name=iPad Pro (11-inch)" -configuration \(config)
+                        """
+                            - name: Test (iOS/\(config))
+                              run: xcodebuild test -workspace . -scheme \(package) -destination "name=iPad Pro (11-inch)" -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-ios-test-\(config.lowercased()).log | xcpretty
 
-                    """
+                        """
                     )
                 }
             }
         }
-        
+
+        if upload {
+            yaml.append(
+                """
+                    - name: Upload Logs
+                      uses: actions/upload-artifact@v1
+                      with:
+                        name: logs
+                        path: logs
+
+                """
+            )
+        }
+
+
         if notify {
             yaml.append(
-            """
-                - name: Slack Notification
-                  uses: elegantchaos/slatify@master
-                  if: always()
-                  with:
-                    type: ${{ job.status }}
-                    job_name: '\(name)'
-                    mention_if: 'failure'
-                    url: ${{ secrets.SLACK_WEBHOOK }}
+                """
+                    - name: Slack Notification
+                      uses: elegantchaos/slatify@master
+                      if: always()
+                      with:
+                        type: ${{ job.status }}
+                        job_name: '\(name)'
+                        mention_if: 'failure'
+                        url: ${{ secrets.SLACK_WEBHOOK }}
 
-            """
+                """
             )
         }
 
