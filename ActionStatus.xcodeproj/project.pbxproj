@@ -92,10 +92,10 @@
 		8B3E64AF23EAE62E00B28168 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		8B3E64B223EAE62E00B28168 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B3E64B423EAE62E00B28168 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8B3E64B923EAE62E00B28168 /* ActionStatusTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ActionStatusTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B3E64B923EAE62E00B28168 /* Action Status.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Action Status.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B3E64BD23EAE62E00B28168 /* ActionStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionStatusTests.swift; sourceTree = "<group>"; };
 		8B3E64BF23EAE62E00B28168 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8B3E64C423EAE62F00B28168 /* ActionStatusUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ActionStatusUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B3E64C423EAE62F00B28168 /* Action Status.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Action Status.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionStatusUITests.swift; sourceTree = "<group>"; };
 		8B3E64CA23EAE62F00B28168 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B430E6A23F586100050BF2A /* Action Status.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Action Status.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -182,8 +182,8 @@
 			isa = PBXGroup;
 			children = (
 				8B3E64A323EAE62D00B28168 /* Action Status.app */,
-				8B3E64B923EAE62E00B28168 /* ActionStatusTests.xctest */,
-				8B3E64C423EAE62F00B28168 /* ActionStatusUITests.xctest */,
+				8B3E64B923EAE62E00B28168 /* Action Status.xctest */,
+				8B3E64C423EAE62F00B28168 /* Action Status.xctest */,
 				8B430E6A23F586100050BF2A /* Action Status.app */,
 				8B5E7E8323F6BB3500087E15 /* AppKitBridge.bundle */,
 			);
@@ -384,7 +384,7 @@
 			);
 			name = ActionStatusTests;
 			productName = GithubStatusTests;
-			productReference = 8B3E64B923EAE62E00B28168 /* ActionStatusTests.xctest */;
+			productReference = 8B3E64B923EAE62E00B28168 /* Action Status.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		8B3E64C323EAE62F00B28168 /* ActionStatusUITests */ = {
@@ -402,7 +402,7 @@
 			);
 			name = ActionStatusUITests;
 			productName = GithubStatusUITests;
-			productReference = 8B3E64C423EAE62F00B28168 /* ActionStatusUITests.xctest */;
+			productReference = 8B3E64C423EAE62F00B28168 /* Action Status.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		8B430E6923F586100050BF2A /* ActionStatusTV */ = {
@@ -778,20 +778,13 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2H48644JM2;
-				INFOPLIST_FILE = "$(TARGET_NAME)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.elegantchaos.actionstatus.tests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/$(ACTION_STATUS_PRODUCT_NAME).app/$(ACTION_STATUS_PRODUCT_NAME)";
 			};
 			name = Debug;
 		};
@@ -801,20 +794,13 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2H48644JM2;
-				INFOPLIST_FILE = "$(TARGET_NAME)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.elegantchaos.actionstatus.tests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/$(ACTION_STATUS_PRODUCT_NAME).app/$(ACTION_STATUS_PRODUCT_NAME)";
 			};
 			name = Release;
 		};
@@ -823,17 +809,11 @@
 			baseConfigurationReference = 8B5E7E6223F6A97D00087E15 /* Tests.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2H48644JM2;
-				INFOPLIST_FILE = "$(TARGET_NAME)/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.elegantchaos.actionstatus.uitests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Mobile;
 			};
@@ -844,17 +824,11 @@
 			baseConfigurationReference = 8B5E7E6223F6A97D00087E15 /* Tests.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 2H48644JM2;
-				INFOPLIST_FILE = "$(TARGET_NAME)/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.elegantchaos.actionstatus.uitests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Mobile;
 			};
