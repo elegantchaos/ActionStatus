@@ -22,6 +22,7 @@ class AppCommon: AppBase {
     #endif
     
     var rootController: UIViewController?
+    var filePicker: UIDocumentPickerViewController?
     
     @State var repos = RepoSet([])
 
@@ -60,8 +61,13 @@ class AppCommon: AppBase {
         repos.load(fromDefaultsKey: stateKey)
     }
     
-
-
+    func pickFile(url: URL) {
+        let controller = UIDocumentPickerViewController(url: url, in: UIDocumentPickerMode.moveToService)
+        controller.modalPresentationStyle = .overCurrentContext
+        rootController?.present(controller, animated: true) {
+        }
+        filePicker = controller
+    }
 }
 
 #if os(macOS)

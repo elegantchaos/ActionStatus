@@ -12,7 +12,7 @@ struct ContentView: View {
     @State var selectedID: UUID? = nil
     @State var isEditing: Bool = false
     @State var isComposing: Bool = false
-
+    
     var body: some View {
             NavigationView {
                 VStack(alignment: .center) {
@@ -54,7 +54,12 @@ struct ContentView: View {
                 .setupNavigation(editAction: { self.isEditing.toggle() }, addAction: { self.addRepo() })
                 .bindEditing(to: $isEditing)
                 .sheet(isPresented: $repos.isComposing) {
-                    ComposeView(repo: self.repos.repoToCompose(), isPresented: self.$repos.isComposing)
+                    if self.repos.isSaving {
+//                        ShareSheet(activityItems: [self.repos.exportYML])
+                        DocumentPickerViewController(url: self.repos.exportURL!, onDismiss: { })
+                    } else {
+                        ComposeView(repo: self.repos.repoToCompose(), isPresented: self.$repos.isComposing)
+                    }
                 }
         }
             .setupNavigationStyle()
@@ -186,3 +191,25 @@ struct EditButton: View {
     }
 }
 #endif
+
+struct ShareSheet: UIViewControllerRepresentable {
+    typealias Callback = (_ activityType: UIActivity.ActivityType?, _ completed: Bool, _ returnedItems: [Any]?, _ error: Error?) -> Void
+      
+    let activityItems: [Any]
+    let applicationActivities: [UIActivity]? = nil
+    let excludedActivityTypes: [UIActivity.ActivityType]? = nil
+    let callback: Callback? = nil
+      
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let controller = UIActivityViewController(
+            activityItems: activityItems,
+            applicationActivities: applicationActivities)
+        controller.excludedActivityTypes = excludedActivityTypes
+        controller.completionWithItemsHandler = callback
+        return controller
+    }
+      
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {
+        // nothing to do here
+    }
+} 

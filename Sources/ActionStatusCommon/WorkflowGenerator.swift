@@ -51,13 +51,18 @@ struct WorkflowGenerator {
             source.append(job.yaml(build: view.build, test: view.test, notify: view.notify, upload: view.upload, package: view.repo.name, configurations: enabledConfigs()))
         }
         
-        let url = UIApplication.newDocumentURL(withPathExtension: "yml")
         if let data = source.data(using: .utf8) {
             do {
+                let url = UIApplication.newDocumentURL(name: view.repo.workflow, withPathExtension: "yml")
                 try data.write(to: url)
-                AppDelegate.shared.repos.hideComposeWindow()
-                view.exportURL = url
-                view.isSaving = true
+                let model = AppDelegate.shared.repos
+                model.hideComposeWindow()
+                DispatchQueue.main.async {
+                    AppDelegate.shared.pickFile(url: url)
+                }
+//                model.exportURL = url
+//                model.exportYML = source
+//                model.isSaving = true
             } catch {
                 print(error)
             }

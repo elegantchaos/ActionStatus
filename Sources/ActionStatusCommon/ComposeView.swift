@@ -27,9 +27,6 @@ struct ComposeView: View {
     @State var notify = true
     @State var upload = true
     
-    @State var isSaving = false
-    @State var exportURL: URL?
-    
     var body: some View {
         
         VStack {
@@ -82,11 +79,6 @@ struct ComposeView: View {
             }
         }
             .padding()
-            .sheet(isPresented: $isSaving) {
-                DocumentPickerViewController(url: self.exportURL!, onDismiss: {
-                    
-                })
-            }
     }
     
     func section(for options: Binding<[Option]>, label: String) -> some View {
@@ -146,7 +138,7 @@ extension DocumentPickerViewController: UIViewControllerRepresentable {
 
     typealias UIViewControllerType = UIDocumentPickerViewController
 
-    func makeUIViewController(context: Context) -> DocumentPickerViewController.UIViewControllerType {
+    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
         let documentPickerController = UIDocumentPickerViewController(url: url, in: .exportToService)
         documentPickerController.allowsMultipleSelection = false
         documentPickerController.delegate = context.coordinator

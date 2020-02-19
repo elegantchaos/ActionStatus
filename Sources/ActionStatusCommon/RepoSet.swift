@@ -14,9 +14,12 @@ class RepoSet: ObservableObject {
     var block: RefreshBlock?
     var timer: Timer?
     var composingIndex: Int?
-    
+    var exportURL: URL?
+    var exportYML: String?
+
     @Published var items: [Repo]
     @Published var isComposing = false
+    @Published var isSaving = false
 
     init(_ repos: [Repo], store: NSUbiquitousKeyValueStore = NSUbiquitousKeyValueStore.default, block: RefreshBlock? = nil) {
         self.block = block
