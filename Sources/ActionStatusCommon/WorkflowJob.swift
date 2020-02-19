@@ -13,7 +13,7 @@ class Job: Option {
     let platform: Platform
     let includeXcode: Bool
     
-    func yaml(build: Bool, test: Bool, notify: Bool, package: String) -> String {
+    func yaml(build: Bool, test: Bool, notify: Bool, package: String, configurations: [String]) -> String {
         var yaml =
             """
             \(id):
@@ -53,44 +53,53 @@ class Job: Option {
         )
 
         if build {
-            yaml.append(
-            """
-                - name: Build
-                  run: swift build -v
-
-            """
-            )
-        }
-
-        if test {
-            yaml.append(
-            """
-                - name: Test
-                  run: swift test -v
-
-            """
-            )
-        }
-
-        if includeXcode {
-            if build {
+            for config in configurations {
                 yaml.append(
                 """
-                    - name: Build (iOS)
-                      run: xcodebuild clean build -workspace . -scheme \(package) -destination "name=iPad Pro (11-inch)"
+                    - name: Build (\(config))
+                      run: swift build -v -c \(config.lowercased())
 
                 """
                 )
             }
+        }
 
-            if test {
+        if test {
+            for config in configurations {
+                let extraArgs = config == "Release" ? "-Xswiftc -enable-testing" : ""
                 yaml.append(
                 """
-                    - name: Test (iOS)
-                      run: xcodebuild test -workspace . -scheme \(package) -destination "name=iPad Pro (11-inch)"
+                    - name: Test (\(config))
+                      run: swift test -v -c \(config.lowercased()) \(extraArgs)
 
                 """
                 )
+            }
+        }
+
+        if includeXcode {
+            if build {
+                for config in configurations {
+                    yaml.append(
+                    """
+                        - name: Build (iOS/\(config))
+                          run: xcodebuild clean build -workspace . -scheme \(package) -destination "name=iPad Pro (11-inch) -configuration \(config)"
+
+                    """
+                    )
+                }
+            }
+
+            if test {
+                for config in configurations {
+                    yaml.append(
+                    """
+                        - name: Test (iOS/\(config))
+                          run: xcodebuild test -workspace . -scheme \(package) -destination "name=iPad Pro (11-inch)" -configuration \(config)
+
+                    """
+                    )
+                }
             }
         }
         

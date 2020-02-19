@@ -46,7 +46,7 @@ struct WorkflowGenerator {
         """
         
         for job in enabledJobs() {
-            source.append(job.yaml(build: view.build, test: view.test, notify: view.notify, package: view.repo.name))
+            source.append(job.yaml(build: view.build, test: view.test, notify: view.notify, package: view.repo.name, configurations: enabledConfigs()))
         }
         
         print(source)
