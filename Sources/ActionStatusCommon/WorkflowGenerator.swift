@@ -38,7 +38,7 @@ struct WorkflowGenerator {
     func generateWorkflow() {
         var source =
         """
-        name: \(view.workflow)
+        name: \(view.repo.workflow)
         
         on: [push, pull_request]
         
@@ -46,7 +46,7 @@ struct WorkflowGenerator {
         """
         
         for job in enabledJobs() {
-            source.append(job.yaml(build: view.build, test: view.test, notify: view.notify, package: "Test"))
+            source.append(job.yaml(build: view.build, test: view.test, notify: view.notify, package: view.repo.name))
         }
         
         print(source)

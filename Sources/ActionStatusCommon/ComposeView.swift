@@ -10,8 +10,6 @@ struct ComposeView: View {
     var repo: Repo
     @Binding var isPresented: Bool
     @State var generateMac = true
-
-    @State var workflow: String = "Tests"
     
     @State var platforms = [
         Job("macOS", name: "macOS", platform: .mac),
@@ -33,10 +31,6 @@ struct ComposeView: View {
         
         VStack {
             Form {
-                Section(header: Text("Workflow Name")) {
-                    TextField("Name", text: $workflow)
-                }
-                
                 Section(header: Text("Platforms")) {
                     VStack {
                         ForEach(platforms, id: \.name) { platform in
@@ -79,7 +73,7 @@ struct ComposeView: View {
                 }
                 
                 Button(action: { WorkflowGenerator(view: self).generateWorkflow() }) {
-                    Text("Generate \(workflow).yml")
+                    Text("Generate \(repo.workflow).yml")
                 }
             }
         }.padding()

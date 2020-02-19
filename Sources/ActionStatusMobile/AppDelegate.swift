@@ -40,17 +40,9 @@ class AppDelegate: AppCommon {
             let command = UIKeyCommand(title: "Show Status Window", image: nil, action: bridge.showHandler(), input: "0", modifierFlags: .command, propertyList: nil)
             let menu = UIMenu(title: "", image: nil, identifier: UIMenu.Identifier("\(bundleID).show"), options: .displayInline, children: [command])
             builder.insertChild(menu, atEndOfMenu: .window)
-
-            let workflowCommand = UIKeyCommand(title: "Make Workflow", image: nil, action: #selector(makeWorkflow(_:)), input: "N", modifierFlags: .command, propertyList: nil)
-            let workflowMenu = UIMenu(title: "", image: nil, identifier: UIMenu.Identifier("\(bundleID).make"), options: .displayInline, children: [workflowCommand])
-            builder.insertSibling(workflowMenu, beforeMenu: .close)
         }
         
         next?.buildMenu(with: builder)
-    }
-    
-    @IBAction func makeWorkflow(_ sender: Any) {
-//        repos.showComposeWindow()
     }
 }
 
