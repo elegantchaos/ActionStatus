@@ -54,7 +54,7 @@ struct ContentView: View {
                 .setupNavigation(editAction: { self.isEditing.toggle() }, addAction: { self.addRepo() })
                 .bindEditing(to: $isEditing)
                 .sheet(isPresented: $repos.isComposing) {
-                    ComposeView(isPresented: self.$repos.isComposing)
+                    ComposeView(repo: self.repos.repoToCompose(), isPresented: self.$repos.isComposing)
                 }
         }
             .setupNavigationStyle()
@@ -86,6 +86,20 @@ struct ContentView: View {
                 if selectable {
                     self.selectedID = repo.id
                 }
+        }
+        .contextMenu() {
+            VStack {
+                NavigationLink(
+                    destination: RepoEditView(repo: self.$repos.binding(for: repo, in: \.items)),
+                    tag: repo.id,
+                    selection: self.$selectedID) {
+                        Text("Edit")
+                }
+                
+                Button(action: { self.repos.showComposeWindow(for: repo) }) {
+                    Text("Generate Workflow")
+                }
+            }
         }
     }
 }

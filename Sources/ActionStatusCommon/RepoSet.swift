@@ -13,6 +13,7 @@ class RepoSet: ObservableObject {
     let key: String = "State"
     var block: RefreshBlock?
     var timer: Timer?
+    var composingIndex: Int?
     
     @Published var items: [Repo]
     @Published var isComposing = false
@@ -38,12 +39,19 @@ class RepoSet: ObservableObject {
         return count
     }
     
-    func showComposeWindow() {
-        isComposing = true
+    func showComposeWindow(for repo: Repo) {
+        if let index = items.firstIndex(of: repo) {
+            composingIndex = index
+            isComposing = true
+        }
     }
     
     func hideComposeWindow() {
         isComposing = false
+    }
+    
+    func repoToCompose() -> Repo {
+        return items[composingIndex!]
     }
     
     func load(fromDefaultsKey key: String) {
