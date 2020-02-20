@@ -14,6 +14,7 @@ struct RepoEditView: View {
     
     @Binding var repo: Repo
     @State var editableRepo: Repo = Repo()
+    @State var branches: String = ""
     
     var body: some View {
         Form {
@@ -43,6 +44,17 @@ struct RepoEditView: View {
                     TextField("workflow", text: $editableRepo.workflow)
                         .textFieldStyle(style)
                 }
+
+                HStack {
+                    Text("Branches")
+                        .font(.callout)
+                        .bold()
+                    
+                    TextField("branches", text: $branches)
+                        .textFieldStyle(style)
+                    
+                }
+
             }
             
             Section {
@@ -73,7 +85,7 @@ struct RepoEditView: View {
         }
         .onAppear() {
             AppDelegate.shared.repos.cancelRefresh()
-            self.editableRepo = self.repo
+            self.load()
         }
         .onDisappear() {
             self.save()
@@ -85,7 +97,13 @@ struct RepoEditView: View {
         return repo != editableRepo
     }
     
+    func load() {
+        self.branches = self.repo.branches.joined(separator: ", ")
+        self.editableRepo = self.repo
+    }
+    
     func save() {
+        self.editableRepo.branches = self.branches.split(separator: ",").map({ String($0.trimmingCharacters(in: .whitespaces)) })
         self.repo = self.editableRepo
         AppDelegate.shared.saveState()
         AppDelegate.shared.repos.refresh()

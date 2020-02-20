@@ -24,7 +24,7 @@ struct Repo: Identifiable, Equatable {
         name = "repo"
         owner = "org"
         workflow = "Tests"
-        branches = ["master"]
+        branches = []
         state = .unknown
     }
     
