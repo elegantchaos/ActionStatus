@@ -50,6 +50,7 @@ struct WorkflowGenerator {
         on: [push, pull_request]
         
         jobs:
+
         """
         
         for job in enabledJobs() {
@@ -61,26 +62,20 @@ struct WorkflowGenerator {
                 let url = UIApplication.newDocumentURL(name: view.repo.workflow, withPathExtension: "yml")
                 try data.write(to: url)
                 let model = AppDelegate.shared.repos
+                
+                #if targetEnvironment(macCatalyst)
                 model.hideComposeWindow()
                 DispatchQueue.main.async {
                     AppDelegate.shared.pickFile(url: url)
                 }
-//                model.exportURL = url
-//                model.exportYML = source
-//                model.isSaving = true
+                #else
+                model.exportURL = url
+                model.exportYML = source
+                model.isSaving = true
+                #endif
             } catch {
                 print(error)
             }
         }
-        
-//
-//           let controller = UIDocumentPickerViewController(url: url, in: UIDocumentPickerMode.exportToService)
-//            AppDelegate.shared.rootController?.present(controller, animated: true) {
-//               try? FileManager.default.removeItem(at: url)
-//           }
-//        }
-        
-        print(source)
-        
     }
 }

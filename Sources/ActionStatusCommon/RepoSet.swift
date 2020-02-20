@@ -45,7 +45,10 @@ class RepoSet: ObservableObject {
     func showComposeWindow(for repo: Repo) {
         if let index = items.firstIndex(of: repo) {
             composingIndex = index
+            isSaving = false
             isComposing = true
+            exportURL = nil
+            exportYML = ""
         }
     }
     
