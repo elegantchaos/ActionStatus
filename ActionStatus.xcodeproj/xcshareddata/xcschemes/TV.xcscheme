@@ -38,6 +38,34 @@
                ReferencedContainer = "container:ActionStatus.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ApplicationExtensions"
+               BuildableName = "ApplicationExtensions"
+               BlueprintName = "ApplicationExtensions"
+               ReferencedContainer = "container:../ApplicationExtensions">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BindingsExtensions"
+               BuildableName = "BindingsExtensions"
+               BlueprintName = "BindingsExtensions"
+               ReferencedContainer = "container:../BindingsExtensions">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

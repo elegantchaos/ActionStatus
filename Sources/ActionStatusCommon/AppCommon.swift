@@ -61,9 +61,41 @@ class AppCommon: AppBase {
         repos.load(fromDefaultsKey: stateKey)
     }
     
+    
+    func makeContentView() -> some View {
+        let app = AppDelegate.shared
+        return ContentView(repos: app.repos)
+    }
+
     func pickFile(url: URL) {
-        let controller = UIDocumentPickerViewController(url: url, in: UIDocumentPickerMode.moveToService)
-        controller.modalPresentationStyle = .overCurrentContext
+        class CustomPicker: UIDocumentPickerViewController, UIDocumentPickerDelegate {
+            let sourceURL: URL
+            override init(url: URL, in mode: UIDocumentPickerMode) {
+                self.sourceURL = url
+                super.init(url: url, in: mode)
+                delegate = self
+                modalPresentationStyle = .overFullScreen
+            }
+            
+            required init?(coder: NSCoder) {
+                fatalError()
+            }
+            
+            func cleanupSource() {
+                try? FileManager.default.removeItem(at: sourceURL)
+                AppDelegate.shared.filePicker = nil
+            }
+            
+            func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+                cleanupSource()
+            }
+            
+            func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+                cleanupSource()
+            }
+        }
+        
+        let controller = CustomPicker(url: url, in: UIDocumentPickerMode.moveToService)
         rootController?.present(controller, animated: true) {
         }
         filePicker = controller

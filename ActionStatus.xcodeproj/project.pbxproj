@@ -45,6 +45,8 @@
 		8B880FE823FD97670068C3FF /* WorkflowJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE723FD97670068C3FF /* WorkflowJob.swift */; };
 		8B880FEA23FD97EE0068C3FF /* WorkflowGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE923FD97EE0068C3FF /* WorkflowGenerator.swift */; };
 		8B9B2DB223F452B00087283B /* RepoSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9B2DB123F452B00087283B /* RepoSet.swift */; };
+		8BDAC2C223FE8A64004154A1 /* BindingsExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C123FE8A64004154A1 /* BindingsExtensions */; };
+		8BDAC2C423FE8A6E004154A1 /* ApplicationExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C323FE8A6E004154A1 /* ApplicationExtensions */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -161,6 +163,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BDAC2C223FE8A64004154A1 /* BindingsExtensions in Frameworks */,
+				8BDAC2C423FE8A6E004154A1 /* ApplicationExtensions in Frameworks */,
 				8B5B175E23FAEBD300DD2AF5 /* SwiftUIExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -432,6 +436,8 @@
 			name = ActionStatusTV;
 			packageProductDependencies = (
 				8B5B175D23FAEBD300DD2AF5 /* SwiftUIExtensions */,
+				8BDAC2C123FE8A64004154A1 /* BindingsExtensions */,
+				8BDAC2C323FE8A6E004154A1 /* ApplicationExtensions */,
 			);
 			productName = ActionStatusTV;
 			productReference = 8B430E6A23F586100050BF2A /* Action Status.app */;
@@ -998,6 +1004,14 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8B880FE223FD7E000068C3FF /* XCRemoteSwiftPackageReference "BindingsExtensions" */;
 			productName = BindingsExtensions;
+		};
+		8BDAC2C123FE8A64004154A1 /* BindingsExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BindingsExtensions;
+		};
+		8BDAC2C323FE8A6E004154A1 /* ApplicationExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ApplicationExtensions;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

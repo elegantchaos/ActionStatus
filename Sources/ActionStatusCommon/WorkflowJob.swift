@@ -11,8 +11,15 @@ class Job: Option {
     
     let swift: String?
     let platform: Platform
-    let includeXcode: Bool
+    let xcodePlatforms: [String]
     
+    init(_ id: String, name: String, platform: Platform = .linux, swift: String? = nil, xcodePlatforms: [String] = []) {
+        self.platform = platform
+        self.swift = swift
+        self.xcodePlatforms = xcodePlatforms
+        super.init(id, name: name)
+    }
+
     func yaml(build: Bool, test: Bool, notify: Bool, upload: Bool, package: String, configurations: [String]) -> String {
         var yaml =
             """
@@ -54,6 +61,7 @@ class Job: Option {
                   run: sudo gem install xcpretty-travis-formatter
                 - name: Make Logs Directory
                   run: mkdir logs
+
             """
         )
 
@@ -82,13 +90,26 @@ class Job: Option {
             }
         }
 
-        if includeXcode {
+        for platform in xcodePlatforms {
+            let destination: String
+            switch platform {
+                case "iOS":
+                    destination = "-destination \"name=iPhone 11\""
+                case "tvOS":
+                    destination = "-destination \"name=Apple TV\""
+                case "watchOS":
+                    destination = "-destination \"name=Apple Watch Series 5 - 44mm\""
+                default:
+                    destination = ""
+            }
+
             if build {
+                
                 for config in configurations {
                     yaml.append(
                         """
-                            - name: Build (iOS/\(config))
-                              run: xcodebuild clean build -workspace . -scheme \(package) -destination "name=iPad Pro (11-inch) -configuration \(config)" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-ios-build-\(config.lowercased()).log | xcpretty
+                            - name: Build (\(platform)/\(config))
+                              run: xcodebuild clean build -workspace . -scheme \(package) \(destination) -configuration \(config)" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-\(platform)-build-\(config.lowercased()).log | xcpretty
 
                         """
                     )
@@ -100,7 +121,7 @@ class Job: Option {
                     yaml.append(
                         """
                             - name: Test (iOS/\(config))
-                              run: xcodebuild test -workspace . -scheme \(package) -destination "name=iPad Pro (11-inch)" -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-ios-test-\(config.lowercased()).log | xcpretty
+                              run: xcodebuild test -workspace . -scheme \(package) \(destination) -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-\(platform)-test-\(config.lowercased()).log | xcpretty
 
                         """
                     )
@@ -142,12 +163,5 @@ class Job: Option {
         
         return yaml
     }
-    
-    init(_ id: String, name: String, platform: Platform = .linux, swift: String? = nil, includeXcode: Bool = false) {
-        self.platform = platform
-        self.swift = swift
-        self.includeXcode = includeXcode
-        super.init(id, name: name)
-    }
-}
+ }
 

@@ -10,23 +10,28 @@ struct WorkflowGenerator {
     
     func enabledJobs() -> [Job] {
         var jobs: [Job] = []
-        var macOS = false
-        var iOS = false
+        var macPlatforms: [String] = []
         for platform in view.platforms {
-            switch platform.id {
-                case "macOS":
-                    macOS = true
-                case "iOS":
-                    iOS = true
-                
+            switch platform.platform {
+                case .mac:
+                    macPlatforms.append(platform.id)
                 default:
                     jobs.append(platform)
             }
         }
         
-        if macOS || iOS {
+        if macPlatforms.count > 0 {
+            let macID = macPlatforms.joined(separator: "-")
+            let macName = macPlatforms.joined(separator: "/")
+            
+            // unless xCodeOnMac is set, remove macOS from the platforms built with xCode
+            if !view.xCodeOnMac, let index = macPlatforms.firstIndex(of: "macOS") {
+                macPlatforms.remove(at: index)
+            }
+            
+            // make a catch-all job
             jobs.append(
-                Job("macOS-iOS", name: "macOS/iOS", platform: .mac, includeXcode: iOS)
+                Job(macID, name: macName, platform: .mac, xcodePlatforms: macPlatforms)
             )
         }
         

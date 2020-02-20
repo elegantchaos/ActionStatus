@@ -18,7 +18,7 @@ class AppDelegate: AppCommon {
         setup()
         
         // Create the SwiftUI view that provides the window contents.
-        let contentView = ContentView(repos: AppDelegate.shared.repos)
+        let contentView = app.makeContentView()
 
         // Use a UIHostingController as window root view controller.
         let window = UIWindow(frame: UIScreen.main.bounds)

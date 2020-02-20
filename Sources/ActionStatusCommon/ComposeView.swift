@@ -13,6 +13,8 @@ struct ComposeView: View {
     @State var platforms = [
         Job("macOS", name: "macOS", platform: .mac),
         Job("iOS", name: "iOS", platform: .mac),
+        Job("tvOS", name: "tvOS", platform: .mac),
+        Job("watchOS", name: "watchOS", platform: .mac),
         Job("linux-50", name: "Linux (Swift 5.0)", swift: "5.0"),
         Job("linux-51", name: "Linux (Swift 5.1)", swift: "5.1")
     ]
@@ -26,6 +28,7 @@ struct ComposeView: View {
     @State var test = true
     @State var notify = true
     @State var upload = true
+    @State var xCodeOnMac = true
     
     var body: some View {
         
@@ -54,15 +57,10 @@ struct ComposeView: View {
                 Section(header: Text("Other Options")) {
                     VStack {
                         Toggle("Perform Build", isOn: $build)
-                        Toggle(isOn: $test) {
-                            Text("Run Tests")
-                        }
-                        Toggle(isOn: $notify) {
-                            Text("Post Notification")
-                        }
-                        Toggle(isOn: $upload) {
-                            Text("Upload Logs")
-                        }
+                        Toggle("Run Tests", isOn: $test)
+                        Toggle("Post Notification", isOn: $notify)
+                        Toggle("Upload Logs", isOn: $upload)
+                        Toggle("Prefer Xcode Build For macOS", isOn: $xCodeOnMac)
                     }
                 }
 
