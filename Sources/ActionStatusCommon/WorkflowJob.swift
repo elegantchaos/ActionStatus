@@ -119,7 +119,7 @@ class Job: Option {
                         """
                         
                                 - name: Build (\(platform)/\(config))
-                                  run: xcodebuild clean build -workspace . -scheme \(package) \(destination) -configuration \(config)" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-\(platform)-build-\(config.lowercased()).log | xcpretty
+                                  run: set -o pipefail; xcodebuild clean build -workspace . -scheme \(package) -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-\(platform)-build-\(config.lowercased()).log | xcpretty
                         """
                     )
                 }
@@ -127,11 +127,22 @@ class Job: Option {
 
             if test {
                 for config in configurations {
+                    let extraArgs = config == "Release" ? "ENABLE_TESTABILITY=YES" : ""
                     yaml.append(
                         """
                         
-                                - name: Test (iOS/\(config))
-                                  run: xcodebuild test -workspace . -scheme \(package) \(destination) -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-\(platform)-test-\(config.lowercased()).log | xcpretty
+                                - name: Test (\(platform)/\(config))
+                                  run: |
+                                    GOTPACKAGE=$(xcodebuild -workspace . -list | grep \(package)-Package)
+                                    echo "*$GOTPACKAGE*"
+                                    if [[ $GOTPACKAGE != "" ]]
+                                    then
+                                        SCHEME="\(package)-Package"
+                                    else
+                                        SCHEME="\(package)"
+                                    fi
+                                    set -o pipefail
+                                    xcodebuild test -workspace . -scheme $SCHEME \(destination) -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \(extraArgs) | tee logs/xcodebuild-\(platform)-test-\(config.lowercased()).log | xcpretty
                         """
                     )
                 }
