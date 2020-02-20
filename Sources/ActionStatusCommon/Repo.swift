@@ -5,6 +5,16 @@
 
 import SwiftUI
 
+struct WorkflowSettings: Codable, Equatable {
+    var build = true
+    var test = true
+    var notify = true
+    var upload = true
+    var xCodeOnMac = true
+    var platforms: [String] = []
+    var configurations: [String] = []
+}
+
 struct Repo: Identifiable, Equatable {
     enum State: Int, Codable {
         case unknown = 0
@@ -18,6 +28,7 @@ struct Repo: Identifiable, Equatable {
     var workflow: String
     var branches: [String]
     var state: State
+    var settings: WorkflowSettings
     
     init() {
         id = UUID()
@@ -26,15 +37,17 @@ struct Repo: Identifiable, Equatable {
         workflow = "Tests"
         branches = []
         state = .unknown
+        settings = WorkflowSettings()
     }
     
-    init(_ name: String, owner: String, workflow: String, id: UUID? = nil, state: State = .unknown, branches: [String] = []) {
+    init(_ name: String, owner: String, workflow: String, id: UUID? = nil, state: State = .unknown, branches: [String] = [], settings: WorkflowSettings = WorkflowSettings()) {
         self.id = id ?? UUID()
         self.name = name
         self.owner = owner
         self.workflow = workflow
         self.branches = branches
         self.state = state
+        self.settings = settings
     }
     
     func state(fromSVG svg: String) -> State {

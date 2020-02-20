@@ -5,18 +5,32 @@
 
 import UIKit
 
-struct WorkflowGenerator {
-    let view: ComposeView
-    
-    func enabledJobs() -> [Job] {
+class WorkflowGenerator {
+    var platforms = [
+        Job("macOS", name: "macOS", platform: .mac),
+        Job("iOS", name: "iOS", platform: .mac),
+        Job("tvOS", name: "tvOS", platform: .mac),
+        Job("watchOS", name: "watchOS", platform: .mac),
+        Job("linux-50", name: "Linux (Swift 5.0)", swift: "5.0"),
+        Job("linux-51", name: "Linux (Swift 5.1)", swift: "5.1")
+    ]
+
+    var configurations = [
+        Option("debug", name: "Debug"),
+        Option("release", name: "Release")
+    ]
+
+    func enabledJobs(settings: WorkflowSettings) -> [Job] {
         var jobs: [Job] = []
         var macPlatforms: [String] = []
-        for platform in view.platforms {
-            switch platform.platform {
-                case .mac:
-                    macPlatforms.append(platform.id)
-                default:
-                    jobs.append(platform)
+        for platform in platforms {
+            if settings.platforms.contains(platform.id) {
+                switch platform.platform {
+                    case .mac:
+                        macPlatforms.append(platform.id)
+                    default:
+                        jobs.append(platform)
+                }
             }
         }
         
@@ -25,7 +39,7 @@ struct WorkflowGenerator {
             let macName = macPlatforms.joined(separator: "/")
             
             // unless xCodeOnMac is set, remove macOS from the platforms built with xCode
-            if !view.xCodeOnMac, let index = macPlatforms.firstIndex(of: "macOS") {
+            if !settings.xCodeOnMac, let index = macPlatforms.firstIndex(of: "macOS") {
                 macPlatforms.remove(at: index)
             }
             
@@ -39,13 +53,13 @@ struct WorkflowGenerator {
     }
     
     func enabledConfigs() -> [String] {
-        return view.configurations.filter({ $0.included }).map({ $0.name })
+        return configurations.filter({ $0.included }).map({ $0.name })
     }
     
-    func generateWorkflow() {
+    func generateWorkflow(for repo: Repo, settings: WorkflowSettings) {
         var source =
         """
-        name: \(view.repo.workflow)
+        name: \(repo.workflow)
         
         on: [push, pull_request]
         
@@ -53,13 +67,13 @@ struct WorkflowGenerator {
 
         """
         
-        for job in enabledJobs() {
-            source.append(job.yaml(build: view.build, test: view.test, notify: view.notify, upload: view.upload, package: view.repo.name, configurations: enabledConfigs()))
+        for job in enabledJobs(settings: settings) {
+            source.append(job.yaml(build: settings.build, test: settings.test, notify: settings.notify, upload: settings.upload, package: repo.name, configurations: enabledConfigs()))
         }
         
         if let data = source.data(using: .utf8) {
             do {
-                let url = UIApplication.newDocumentURL(name: view.repo.workflow, withPathExtension: "yml", makeUnique: false)
+                let url = UIApplication.newDocumentURL(name: repo.workflow, withPathExtension: "yml", makeUnique: false)
                 try data.write(to: url)
                 let model = AppDelegate.shared.repos
                 

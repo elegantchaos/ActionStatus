@@ -5,7 +5,7 @@
 
 class Option: ObservableObject {
     let id: String
-    @Published var name: String
+    let name: String
     @Published var included: Bool
     
     init(_ id: String, name: String) {
