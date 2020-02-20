@@ -25,15 +25,14 @@ class Job: Option {
             """
                 \(id):
                     name: \(name)
-                
             """
         
         switch (platform) {
             case .mac:
             yaml.append(
             """
-                    runs-on: macOS-latest
 
+                    runs-on: macOS-latest
             """
             )
             
@@ -41,55 +40,65 @@ class Job: Option {
                 let swift = self.swift ?? "5.1"
                 yaml.append(
             """
-                    runs-on: ubunu-latest
-                    container: swift:\(swift)
 
+                    runs-on: ubuntu-latest
+                    container: swift:\(swift)
             """
                 )
         }
         
         yaml.append(
             """
+
                     steps:
                     - name: Checkout
                       uses: actions/checkout@v1
                     - name: Swift Version
                       run: swift --version
-                    - name: Xcode Version
-                      run: xcodebuild -version
-                    - name: XC Pretty
-                      run: sudo gem install xcpretty-travis-formatter
                     - name: Make Logs Directory
                       run: mkdir logs
-
             """
         )
 
-        if build {
-            for config in configurations {
-                yaml.append(
-                    """
-                            - name: Build (\(config))
-                              run: swift build -v -c \(config.lowercased())
+        if xcodePlatforms.count > 0 {
+            yaml.append(
+                """
 
-                    """
-                )
+                        - name: Xcode Version
+                          run: xcodebuild -version
+                        - name: XC Pretty
+                          run: sudo gem install xcpretty-travis-formatter
+                """
+            )
+        }
+        
+        if !xcodePlatforms.contains("macOS") {
+            if build {
+                for config in configurations {
+                    yaml.append(
+                        """
+                        
+                                - name: Build (\(config))
+                                  run: swift build -v -c \(config.lowercased())
+                        """
+                    )
+                }
+            }
+
+            if test {
+                for config in configurations {
+                    let extraArgs = config == "Release" ? "-Xswiftc -enable-testing" : ""
+                    yaml.append(
+                        """
+                        
+                                - name: Test (\(config))
+                                  run: swift test -v -c \(config.lowercased()) \(extraArgs)
+                        """
+                    )
+                }
             }
         }
-
-        if test {
-            for config in configurations {
-                let extraArgs = config == "Release" ? "-Xswiftc -enable-testing" : ""
-                yaml.append(
-                    """
-                            - name: Test (\(config))
-                              run: swift test -v -c \(config.lowercased()) \(extraArgs)
-
-                    """
-                )
-            }
-        }
-
+        
         for platform in xcodePlatforms {
             let destination: String
             switch platform {
@@ -108,9 +117,9 @@ class Job: Option {
                 for config in configurations {
                     yaml.append(
                         """
+                        
                                 - name: Build (\(platform)/\(config))
                                   run: xcodebuild clean build -workspace . -scheme \(package) \(destination) -configuration \(config)" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-\(platform)-build-\(config.lowercased()).log | xcpretty
-
                         """
                     )
                 }
@@ -120,9 +129,9 @@ class Job: Option {
                 for config in configurations {
                     yaml.append(
                         """
+                        
                                 - name: Test (iOS/\(config))
                                   run: xcodebuild test -workspace . -scheme \(package) \(destination) -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-\(platform)-test-\(config.lowercased()).log | xcpretty
-
                         """
                     )
                 }
@@ -132,12 +141,12 @@ class Job: Option {
         if upload {
             yaml.append(
                 """
+
                         - name: Upload Logs
                           uses: actions/upload-artifact@v1
                           with:
                             name: logs
                             path: logs
-
                 """
             )
         }
@@ -146,6 +155,7 @@ class Job: Option {
         if notify {
             yaml.append(
                 """
+                
                         - name: Slack Notification
                           uses: elegantchaos/slatify@master
                           if: always()
@@ -154,7 +164,6 @@ class Job: Option {
                             job_name: '\(name)'
                             mention_if: 'failure'
                             url: ${{ secrets.SLACK_WEBHOOK }}
-
                 """
             )
         }
