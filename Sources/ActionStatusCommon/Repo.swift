@@ -6,17 +6,7 @@
 import SwiftUI
 
 struct Repo: Identifiable, Equatable {
-//    static func == (lhs: Repo, rhs: Repo) -> Bool {
-//        return (lhs.name == rhs.name) && (lhs.owner == rhs.owner) && (lhs.workflow == rhs.workflow)
-//    }
-//
-//    func hash(into hasher: inout Hasher) {
-//        name.hash(into: &hasher)
-//        owner.hash(into: &hasher)
-//        workflow.hash(into: &hasher)
-//    }
-    
-    enum State: Int {
+    enum State: Int, Codable {
         case unknown = 0
         case failing = 1
         case passing = 2
@@ -26,31 +16,28 @@ struct Repo: Identifiable, Equatable {
     var name: String
     var owner: String
     var workflow: String
-    var svg: String = ""
+    var branches: [String]
+    var state: State
     
     init() {
         id = UUID()
         name = "repo"
         owner = "org"
         workflow = "Tests"
+        branches = ["master"]
+        state = .unknown
     }
     
-    init(_ name: String, owner: String, workflow: String, id: UUID? = nil, state: State? = nil) {
+    init(_ name: String, owner: String, workflow: String, id: UUID? = nil, state: State = .unknown, branches: [String] = []) {
         self.id = id ?? UUID()
         self.name = name
         self.owner = owner
         self.workflow = workflow
-        
-        switch state {
-            case .passing: svg = "passing"
-            case .failing: svg = "failing"
-            default: svg = ""
-        }
-
-        svg = ""
+        self.branches = branches
+        self.state = state
     }
     
-    var state: State {
+    func state(fromSVG svg: String) -> State {
         if svg.contains("failing") {
             return .failing
         } else if svg.contains("passing") {
@@ -79,10 +66,24 @@ struct Repo: Identifiable, Equatable {
     }
     
     mutating func reload() {
-        if let url = URL(string: "https://github.com/\(owner)/\(name)/workflows/\(workflow)/badge.svg"),
-            let data = try? Data(contentsOf: url),
-            let string = String(data: data, encoding: .utf8) {
-            svg = string
+        // TODO: this should probably be more asynchronous
+        var newState = State.unknown
+        let queries = branches.count > 0 ? branches.map({ "?branch=\($0)" }) : [""]
+        for query in queries {
+            if let url = URL(string: "https://github.com/\(owner)/\(name)/workflows/\(workflow)/badge.svg\(query)"),
+                let data = try? Data(contentsOf: url),
+                let svg = String(data: data, encoding: .utf8) {
+                    let svgState = state(fromSVG: svg)
+                    if newState == .unknown {
+                        newState = svgState
+                    } else if state == .failing {
+                        newState = .failing
+                    }
+            }
         }
+        state = newState
     }
+}
+
+extension Repo: Codable {
 }

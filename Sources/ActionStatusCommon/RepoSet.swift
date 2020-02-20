@@ -4,6 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import SwiftUI
+import DictionaryCoding
 
 class RepoSet: ObservableObject {
     typealias RepoList = [Repo]
@@ -61,17 +62,12 @@ class RepoSet: ObservableObject {
     }
     
     func load(fromDefaultsKey key: String) {
+        let decoder = DictionaryDecoder()
         if let repoIDs = store.array(forKey: key) as? Array<String> {
             var loadedRepos: [Repo] = []
             for repoID in repoIDs {
                 if let dict = store.dictionary(forKey: repoID) {
-                    if let id = dict["id"] as? String,
-                        let name = dict["name"] as? String,
-                        let owner = dict["owner"] as? String,
-                        let workflow = dict["workflow"] as? String,
-                        let stateRaw = dict["state"] as? Int,
-                        let state = Repo.State(rawValue: stateRaw) {
-                        let repo = Repo(name, owner: owner, workflow: workflow, id: UUID(uuidString: id), state: state)
+                    if let repo = try? decoder.decode(Repo.self, from: dict) {
                         loadedRepos.append(repo)
                     }
                 }
@@ -81,18 +77,14 @@ class RepoSet: ObservableObject {
     }
     
     func save(toDefaultsKey key: String) {
+        let encoder = DictionaryEncoder()
         var repoIDs: [String] = []
         for repo in items {
             let repoID = repo.id.uuidString
-            let dict: [String:Any] = [
-                "id" : repoID,
-                "name": repo.name,
-                "owner": repo.owner,
-                "workflow": repo.workflow,
-                "state": repo.state.rawValue
-            ]
-            store.set(dict, forKey: repoID)
-            repoIDs.append(repoID)
+            if let dict = try? encoder.encode(repo) as [String:Any] {
+                store.set(dict, forKey: repoID)
+                repoIDs.append(repoID)
+            }
         }
         store.set(repoIDs, forKey: key)
     }

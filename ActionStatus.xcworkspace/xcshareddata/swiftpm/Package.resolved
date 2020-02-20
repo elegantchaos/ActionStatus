@@ -2,21 +2,12 @@
   "object": {
     "pins": [
       {
-        "package": "BindingsExtensions",
-        "repositoryURL": "https://github.com/elegantchaos/BindingsExtensions.git",
+        "package": "DictionaryCoding",
+        "repositoryURL": "https://github.com/elegantchaos/DictionaryCoding.git",
         "state": {
           "branch": null,
-          "revision": "acdce0012a254b321e301afe264454d568ffbee7",
-          "version": "1.0.0"
-        }
-      },
-      {
-        "package": "Logger",
-        "repositoryURL": "https://github.com/elegantchaos/Logger.git",
-        "state": {
-          "branch": null,
-          "revision": "e1455e5edaeb894781a54746995a2f06b9077d19",
-          "version": "1.4.2"
+          "revision": "2e577ab7498c18c0e2cc2df67829f1465e0dafca",
+          "version": "1.0.7"
         }
       },
       {

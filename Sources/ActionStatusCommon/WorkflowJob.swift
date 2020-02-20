@@ -113,7 +113,6 @@ class Job: Option {
             }
 
             if build {
-                
                 for config in configurations {
                     yaml.append(
                         """
@@ -125,7 +124,7 @@ class Job: Option {
                 }
             }
 
-            if test {
+            if test && (platform != "watchOS") {
                 for config in configurations {
                     let extraArgs = config == "Release" ? "ENABLE_TESTABILITY=YES" : ""
                     yaml.append(
