@@ -64,7 +64,10 @@ extension AppDelegate: MenuDataSource {
     }
     
     func selectItem(_ item: Int) {
-        print("selected item \(item)")
+        let repo = repos.items[item]
+        if let url = URL(string: "https://github.com/\(repo.owner)/\(repo.name)/actions?query=workflow%3A\(repo.workflow)") {
+            UIApplication.shared.open(url)
+        }
     }
     
     func handlePreferences() {
