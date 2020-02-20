@@ -13,7 +13,9 @@ struct RepoEditView: View {
     #endif
     
     @Binding var repo: Repo
-    @State var editableRepo: Repo = Repo()
+    @State var name = ""
+    @State var owner = ""
+    @State var workflow = ""
     @State var branches: String = ""
     
     var body: some View {
@@ -23,7 +25,7 @@ struct RepoEditView: View {
                     Text("Name")
                         .font(.callout)
                         .bold()
-                    TextField("name", text: $editableRepo.name)
+                    TextField("github repo name", text: $name)
                         .textFieldStyle(style)
                 }
                 
@@ -32,7 +34,7 @@ struct RepoEditView: View {
                         .font(.callout)
                         .bold()
                     
-                    TextField("owner", text: $editableRepo.owner)
+                    TextField("github user or organisation", text: $owner)
                         .textFieldStyle(style)
                 }
                 
@@ -41,7 +43,7 @@ struct RepoEditView: View {
                         .font(.callout)
                         .bold()
                     
-                    TextField("workflow", text: $editableRepo.workflow)
+                    TextField("Tests.yml", text: $workflow)
                         .textFieldStyle(style)
                 }
 
@@ -50,7 +52,7 @@ struct RepoEditView: View {
                         .font(.callout)
                         .bold()
                     
-                    TextField("branches", text: $branches)
+                    TextField("branches to check (uses default branch if empty)", text: $branches)
                         .textFieldStyle(style)
                     
                 }
@@ -63,7 +65,7 @@ struct RepoEditView: View {
                         .font(.callout)
                         .bold()
                     
-                    Text("https://github.com/\(editableRepo.owner)/\(editableRepo.name)")
+                    Text("https://github.com/\(trimmedOwner)/\(trimmedName)")
                 }
                 
                 HStack {
@@ -71,7 +73,7 @@ struct RepoEditView: View {
                         .font(.callout)
                         .bold()
                     
-                    Text("\(editableRepo.workflow).yml")
+                    Text("\(trimmedWorkflow).yml")
                 }
                 
                 HStack{
@@ -79,7 +81,7 @@ struct RepoEditView: View {
                         .font(.callout)
                         .bold()
                     
-                    Text("https://github.com/elegantchaos/Logger/actions?query=workflow%3A\(editableRepo.workflow)")
+                    Text("https://github.com/elegantchaos/Logger/actions?query=workflow%3A\(trimmedWorkflow)")
                 }
             }
         }
@@ -90,23 +92,42 @@ struct RepoEditView: View {
         .onDisappear() {
             self.save()
         }
-        .configureNavigation(title: repo.name)
+        .configureNavigation(title: "\(trimmedOwner)/\(trimmedName)")
     }
     
-    var hasChanged: Bool {
-        return repo != editableRepo
+    var trimmedWorkflow: String {
+        var stripped = workflow.trimmingCharacters(in: .whitespaces)
+        if let range = stripped.range(of: ".yml") {
+            stripped.removeSubrange(range)
+        }
+        return stripped
+    }
+    
+    var trimmedName: String {
+        return name.trimmingCharacters(in: .whitespaces)
+    }
+    
+    var trimmedOwner: String {
+        return owner.trimmingCharacters(in: .whitespaces)
+    }
+    
+    var trimmedBranches: [String] {
+        return branches.split(separator: ",").map({ String($0.trimmingCharacters(in: .whitespaces)) })
     }
     
     func load() {
-        self.branches = self.repo.branches.joined(separator: ", ")
-        self.editableRepo = self.repo
+        name = repo.name
+        owner = repo.owner
+        workflow = repo.workflow
+        branches = repo.branches.joined(separator: ", ")
     }
     
     func save() {
-        self.editableRepo.branches = self.branches.split(separator: ",").map({ String($0.trimmingCharacters(in: .whitespaces)) })
-        self.repo = self.editableRepo
-        AppDelegate.shared.saveState()
-        AppDelegate.shared.repos.refresh()
+        repo.name = trimmedName
+        repo.owner = trimmedOwner
+        repo.workflow = trimmedWorkflow
+        repo.branches = trimmedBranches
+        AppDelegate.shared.stateWasEdited()
     }
 }
 

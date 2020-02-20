@@ -26,10 +26,10 @@ class RepoSet: ObservableObject {
         self.block = block
         self.store = store
         self.items = repos
-        NotificationCenter.default.addObserver(self, selector: #selector(changed), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: NSUbiquitousKeyValueStore.default)
+        NotificationCenter.default.addObserver(self, selector: #selector(modelChangedExternally), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: NSUbiquitousKeyValueStore.default)
     }
     
-    @objc func changed() {
+    @objc func modelChangedExternally() {
         load(fromDefaultsKey: key)
     }
 

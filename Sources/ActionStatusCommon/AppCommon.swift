@@ -53,6 +53,11 @@ class AppCommon: AppBase {
         restoreState()
     }
     
+    func stateWasEdited() {
+        saveState()
+        repos.refresh()
+    }
+    
     func saveState() {
         repos.save(toDefaultsKey: stateKey)
     }
