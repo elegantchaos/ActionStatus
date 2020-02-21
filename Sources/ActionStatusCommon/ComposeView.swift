@@ -38,25 +38,30 @@ struct ComposeView: View {
     }
     
     func onAppear() {
-        let settings = repo.settings
-        platforms = generator.toggleSet(for: generator.platforms, in: settings)
-        configurations = generator.toggleSet(for: generator.configurations, in: settings)
-        general = generator.toggleSet(for: generator.general, in: settings)
+        fetchSettings()
     }
     
     func onDisappear() {
-        save()
+        storeSettings()
     }
     
     func onCancel() {
         isPresented = false
     }
     func onGenerate() {
-        save()
+        storeSettings()
+        AppDelegate.shared.saveState()
         generator.generateWorkflow(for: repo)
     }
     
-    func save() {
+    func fetchSettings() {
+        let settings = repo.settings
+        platforms = generator.toggleSet(for: generator.platforms, in: settings)
+        configurations = generator.toggleSet(for: generator.configurations, in: settings)
+        general = generator.toggleSet(for: generator.general, in: settings)
+    }
+    
+    func storeSettings() {
         var options: [String] = []
         options.append(contentsOf: generator.enabledIdentifiers(for: generator.platforms, toggleSet: platforms))
         options.append(contentsOf: generator.enabledIdentifiers(for: generator.configurations, toggleSet: configurations))

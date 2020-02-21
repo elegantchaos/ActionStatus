@@ -123,7 +123,7 @@ class Job: Option {
                         """
                         
                                 - name: Build (\(platform)/\(config))
-                        run: set -o pipefail; xcodebuild clean build -workspace . -scheme \(package) -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-\(platform)-build-\(config.lowercased()).log | xcpretty
+                                  run: set -o pipefail; xcodebuild clean build -workspace . -scheme \(package) -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-\(platform)-build-\(config.lowercased()).log | xcpretty
                         """
                     )
                 }
@@ -137,7 +137,7 @@ class Job: Option {
                         
                                 - name: Test (\(platform)/\(config))
                                   run: |
-                                    GOTPACKAGE=$(xcodebuild -workspace . -list | grep \(package)-Package)
+                                    GOTPACKAGE=$(xcodebuild -workspace . -list | (grep \(package)-Package || true))
                                     echo "*$GOTPACKAGE*"
                                     if [[ $GOTPACKAGE != "" ]]
                                     then
