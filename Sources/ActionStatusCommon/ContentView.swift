@@ -65,7 +65,11 @@ struct ContentView: View {
     
     func sheetView() -> some View {
         if self.repos.isSaving {
+            #if os(tvOS)
+            return AnyView(EmptyView())
+            #else
             return AnyView(DocumentPickerViewController(url: self.repos.exportURL!, onDismiss: { }))
+            #endif
         } else {
             let repo = self.$repos.items[self.repos.composingIndex!]
             return AnyView(ComposeView(repo: repo, isPresented: self.$repos.isComposing))
@@ -96,7 +100,7 @@ struct ContentView: View {
                     self.selectedID = repo.id
                 }
         }
-        .contextMenu() {
+        .contextMenuShim() {
             VStack {
                 NavigationLink(
                     destination: EditView(repo: self.$repos.binding(for: repo, in: \.items)),
@@ -195,25 +199,3 @@ struct EditButton: View {
     }
 }
 #endif
-
-struct ShareSheet: UIViewControllerRepresentable {
-    typealias Callback = (_ activityType: UIActivity.ActivityType?, _ completed: Bool, _ returnedItems: [Any]?, _ error: Error?) -> Void
-      
-    let activityItems: [Any]
-    let applicationActivities: [UIActivity]? = nil
-    let excludedActivityTypes: [UIActivity.ActivityType]? = nil
-    let callback: Callback? = nil
-      
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        let controller = UIActivityViewController(
-            activityItems: activityItems,
-            applicationActivities: applicationActivities)
-        controller.excludedActivityTypes = excludedActivityTypes
-        controller.completionWithItemsHandler = callback
-        return controller
-    }
-      
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {
-        // nothing to do here
-    }
-} 

@@ -10,7 +10,8 @@ import SwiftUI
 @UIApplicationMain
 class AppDelegate: AppCommon {
     var appKitBridge: AppKitBridge? = nil
-     
+    var filePicker: UIDocumentPickerViewController?
+
     override func setup(withOptions options: LaunchOptions) {
         loadBridge()
         repos.block = { self.refreshBridge() }
@@ -43,6 +44,40 @@ class AppDelegate: AppCommon {
         }
         
         next?.buildMenu(with: builder)
+    }
+    
+    func pickFile(url: URL) {
+        class CustomPicker: UIDocumentPickerViewController, UIDocumentPickerDelegate {
+            let sourceURL: URL
+            override init(url: URL, in mode: UIDocumentPickerMode) {
+                self.sourceURL = url
+                super.init(url: url, in: mode)
+                delegate = self
+                modalPresentationStyle = .overFullScreen
+            }
+            
+            required init?(coder: NSCoder) {
+                fatalError()
+            }
+            
+            func cleanupSource() {
+                try? FileManager.default.removeItem(at: sourceURL)
+                AppDelegate.shared.filePicker = nil
+            }
+            
+            func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+                cleanupSource()
+            }
+            
+            func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+                cleanupSource()
+            }
+        }
+        
+        let controller = CustomPicker(url: url, in: UIDocumentPickerMode.moveToService)
+        rootController?.present(controller, animated: true) {
+        }
+        filePicker = controller
     }
 }
 

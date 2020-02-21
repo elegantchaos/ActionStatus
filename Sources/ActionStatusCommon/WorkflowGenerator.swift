@@ -28,11 +28,12 @@ class WorkflowGenerator {
         Option("useXcodeForMac", name: "Use Xcode For macOS Target")
     ]
     
-    func enabledJobs(settings: WorkflowSettings) -> [Job] {
+    func enabledJobs(for repo: Repo) -> [Job] {
+        let options = repo.settings.options
         var jobs: [Job] = []
         var macPlatforms: [String] = []
         for platform in platforms {
-            if settings.options.contains(platform.id) {
+            if options.contains(platform.id) {
                 switch platform.platform {
                     case .mac:
                         macPlatforms.append(platform.id)
@@ -47,7 +48,7 @@ class WorkflowGenerator {
             let macName = macPlatforms.joined(separator: "/")
             
             // unless useXcodeForMac is set, remove macOS from the platforms built with xCode
-            if !settings.useXcodeForMac, let index = macPlatforms.firstIndex(of: "macOS") {
+            if !repo.settings.useXcodeForMac, let index = macPlatforms.firstIndex(of: "macOS") {
                 macPlatforms.remove(at: index)
             }
             
@@ -59,7 +60,12 @@ class WorkflowGenerator {
         
         return jobs
     }
-    
+
+    func enabledConfigs(for repo: Repo) -> [String] {
+        let options = repo.settings.options
+        return configurations.filter({ options.contains($0.id) }).map({ $0.name })
+    }
+
     func toggleSet(for options: [Option], in settings: WorkflowSettings) -> [Bool] {
         var toggles: [Bool] = []
         for option in options {
@@ -68,7 +74,7 @@ class WorkflowGenerator {
         return toggles
     }
     
-    func identifiers(for options: [Option], toggleSet toggles: [Bool]) -> [String] {
+    func enabledIdentifiers(for options: [Option], toggleSet toggles: [Bool]) -> [String] {
         var identifiers: [String] = []
         for n in 0 ..< options.count {
             if toggles[n] {
@@ -76,10 +82,6 @@ class WorkflowGenerator {
             }
         }
         return identifiers
-    }
-    
-    func enabledConfigs() -> [String] {
-        return configurations.filter({ $0.included }).map({ $0.name })
     }
     
     func generateWorkflow(for repo: Repo) {
@@ -93,9 +95,8 @@ class WorkflowGenerator {
         
         """
         
-        let settings = repo.settings
-        for job in enabledJobs(settings: settings) {
-            source.append(job.yaml(build: settings.build, test: settings.test, notify: settings.notify, upload: settings.upload, package: repo.name, configurations: enabledConfigs()))
+        for job in enabledJobs(for: repo) {
+            source.append(job.yaml(repo: repo, configurations: enabledConfigs(for: repo)))
         }
         
         if let data = source.data(using: .utf8) {

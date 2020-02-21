@@ -5,7 +5,13 @@
       location = "group:ActionStatus.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:../DictionaryCoding">
+   </FileRef>
+   <FileRef
       location = "group:../Logger">
+   </FileRef>
+   <FileRef
+      location = "group:../SwiftUIExtensions">
    </FileRef>
    <FileRef
       location = "group:../BindingsExtensions">

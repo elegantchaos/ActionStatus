@@ -20,7 +20,12 @@ class Job: Option {
         super.init(id, name: name)
     }
 
-    func yaml(build: Bool, test: Bool, notify: Bool, upload: Bool, package: String, configurations: [String]) -> String {
+    func yaml(repo: Repo, configurations: [String]) -> String {
+        let settings = repo.settings
+        let package = repo.name
+        let test = settings.test
+        let build = settings.build
+        
         var yaml =
             """
                 \(id):
@@ -118,7 +123,7 @@ class Job: Option {
                         """
                         
                                 - name: Build (\(platform)/\(config))
-                                  run: set -o pipefail; xcodebuild clean build -workspace . -scheme \(package) -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-\(platform)-build-\(config.lowercased()).log | xcpretty
+                        run: set -o pipefail; xcodebuild clean build -workspace . -scheme \(package) -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-\(platform)-build-\(config.lowercased()).log | xcpretty
                         """
                     )
                 }
@@ -148,7 +153,7 @@ class Job: Option {
             }
         }
 
-        if upload {
+        if settings.upload {
             yaml.append(
                 """
 
@@ -162,7 +167,7 @@ class Job: Option {
         }
 
 
-        if notify {
+        if settings.notify {
             yaml.append(
                 """
                 

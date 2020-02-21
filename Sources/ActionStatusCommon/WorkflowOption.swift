@@ -3,15 +3,13 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-class Option: ObservableObject {
+class Option {
     let id: String
     let name: String
-    @Published var included: Bool
     
     init(_ id: String, name: String) {
         self.id = id
         self.name = name
-        self.included = true
     }
 }
 
