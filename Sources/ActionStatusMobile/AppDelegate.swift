@@ -64,49 +64,10 @@ class AppDelegate: AppCommon {
 
     @IBAction func addLocalRepos() {
         pickFilesToOpen(types: ["public.folder"]) { urls in
-            
-            
-            let fm = FileManager.default
-            for url in urls {
-                if
-                    let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue),
-                    let items = try? fm.contentsOfDirectory(at: url, includingPropertiesForKeys: [], options: []) {
-                    for item in items {
-                        if item.lastPathComponent == ".git" {
-                            print(item.deletingLastPathComponent())
-                            if let config = try? String(contentsOf: item.appendingPathComponent("config")) {
-                                let tweaked = config.replacingOccurrences(of: "git@github.com:", with: "https://github.com/")
-                                let range = NSRange(location: 0, length: tweaked.count)
-                                for result in detector.matches(in: tweaked, options: [], range: range) {
-                                    if let url = result.url, url.scheme == "https", url.host == "github.com" {
-                                        let repo = url.deletingPathExtension().lastPathComponent
-                                        let owner = url.deletingLastPathComponent().lastPathComponent
-                                        self.addRepo(name: repo, owner: owner)
-                                    }
-                                }
-//                                let lines = config.split(separator: "\n").filter({ $0.contains("github.com") })
-//                                for line in lines {
-//                                    if line.contains("git@github.com:") {
-//                                        let spec = line.split(separator: ":")[1].split(separator: "/")
-//                                        self.addRepo(name: String(spec[0]), owner: String(spec[1]))
-//                                    } else if line.contains("https://github.com/") {
-//                                        let spec = line.split(separator: "/")
-//                                        self.addRepo(name: String(spec[3]), owner: String(spec[4]))
-//                                    }
-//                                }
-                            }
-                        }
-                    }
-                }
-            }
+            self.repos.add(fromFolders: urls)
         }
     }
     
-    func addRepo(name: String, owner: String) {
-        print(name)
-        print(owner)
-    }
-
     class CustomPicker: UIDocumentPickerViewController, UIDocumentPickerDelegate {
         typealias Completion = ([URL]) -> Void
         

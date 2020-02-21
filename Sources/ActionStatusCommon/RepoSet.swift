@@ -132,19 +132,61 @@ class RepoSet: ObservableObject {
             
             DispatchQueue.main.async {
                 print("Completed Refresh")
-                self.items = reloaded
+                var included: [Repo] = []
+                let remainingIDs = Set<String>(self.items.map({ $0.id.uuidString }))
+                let reloadedToUse = reloaded.filter({ remainingIDs.contains($0.id.uuidString)})
+                self.items = reloadedToUse
                 self.block?()
                 self.scheduleRefresh(after: 10.0)
             }
         }
     }
 
-    func addRepo() -> Repo {
+    @discardableResult func addRepo() -> Repo {
         let repo = Repo()
         items.append(repo)
         return repo
     }
     
+    @discardableResult func addRepo(name: String, owner: String) -> Repo {
+        let repo = Repo(name, owner: owner, workflow: "Tests")
+        items.append(repo)
+        return repo
+    }
+    
+    func add(fromFolders urls: [URL]) {
+        if let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) {
+            let fm = FileManager.default
+            for url in urls {
+                if let enumerator = fm.enumerator(at: url, includingPropertiesForKeys: []) {
+                    while let url = enumerator.nextObject() as? URL {
+                        if url.lastPathComponent == ".git" {
+                            add(fromGitRepo: url, detector: detector)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func add(fromGitRepo url: URL, detector: NSDataDetector) {
+        if let config = try? String(contentsOf: url.appendingPathComponent("config")) {
+            let tweaked = config.replacingOccurrences(of: "git@github.com:", with: "https://github.com/")
+            let range = NSRange(location: 0, length: tweaked.count)
+            for result in detector.matches(in: tweaked, options: [], range: range) {
+                if let url = result.url, url.scheme == "https", url.host == "github.com" {
+                    let name = url.deletingPathExtension().lastPathComponent
+                    let owner = url.deletingLastPathComponent().lastPathComponent
+                    let existing = items.filter({ $0.name == name && $0.owner == owner })
+                    if existing.count == 0 {
+                        addRepo(name: name, owner: owner)
+                    }
+                }
+            }
+        }
+    }
+    
+
     func remove(repo: Repo) {
         if let index = items.firstIndex(of: repo) {
             var updated = items
