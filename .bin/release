@@ -1,0 +1,7 @@
+set -e
+
+swift run rt archive
+swift run rt export
+swift run rt compress --to="Dependencies/Website/updates/" --latest="Dependencies/Website/"
+swift run rt appcast --to="Dependencies/Website/updates/"
+swift run rt publish --repo="Dependencies/Website/updates/"

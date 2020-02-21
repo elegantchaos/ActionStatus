@@ -1,0 +1,3 @@
+source make-tools
+$RT compress --to=../downloads.elegantchaos.com/actionstatus --latest=../downloads.elegantchaos.com/actionstatus/latest
+

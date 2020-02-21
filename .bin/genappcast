@@ -1,0 +1,1 @@
+swift run rt appcast --to="Dependencies/Website/updates/"
