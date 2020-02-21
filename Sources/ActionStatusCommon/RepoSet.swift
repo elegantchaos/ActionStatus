@@ -112,30 +112,32 @@ class RepoSet: ObservableObject {
     func doRefresh() {
         DispatchQueue.global(qos: .background).async {
             print("Refreshing...")
-            var reloaded: [Repo] = []
+            var newState: [UUID: Repo.State] = [:]
             for repo in self.items {
-                var updated = repo
-                updated.reload()
-                reloaded.append(updated)
-            }
-            reloaded.sort { (r1, r2) -> Bool in
-                if (r1.state == r2.state) {
-                    return r1.name < r2.name
-                }
-                
-                if (r1.state == .failing) {
-                    return true
-                }
-                
-                return r1.name < r2.name
+                newState[repo.id] = repo.checkState()
             }
             
             DispatchQueue.main.async {
                 print("Completed Refresh")
-                var included: [Repo] = []
-                let remainingIDs = Set<String>(self.items.map({ $0.id.uuidString }))
-                let reloadedToUse = reloaded.filter({ remainingIDs.contains($0.id.uuidString)})
-                self.items = reloadedToUse
+                
+                for n in 0 ..< self.items.count {
+                    if let state = newState[self.items[n].id] {
+                        self.items[n].state = state
+                    }
+                }
+
+                self.items.sort { (r1, r2) -> Bool in
+                    if (r1.state == r2.state) {
+                        return r1.name < r2.name
+                    }
+                    
+                    if (r1.state == .failing) {
+                        return true
+                    }
+                    
+                    return r1.name < r2.name
+                }
+                
                 self.block?()
                 self.scheduleRefresh(after: 10.0)
             }

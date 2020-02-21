@@ -78,7 +78,7 @@ struct Repo: Identifiable, Equatable {
         }
     }
     
-    mutating func reload() {
+    func checkState() -> State {
         // TODO: this should probably be more asynchronous
         var newState = State.unknown
         let queries = branches.count > 0 ? branches.map({ "?branch=\($0)" }) : [""]
@@ -94,7 +94,8 @@ struct Repo: Identifiable, Equatable {
                     }
             }
         }
-        state = newState
+        
+        return newState
     }
 }
 
