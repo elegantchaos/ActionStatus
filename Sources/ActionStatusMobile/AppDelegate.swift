@@ -19,6 +19,10 @@ class AppDelegate: AppCommon {
         super.setup(withOptions: options)
     }
     
+    override func didSetup(_ window: UIWindow) {
+        app.appKitBridge?.didSetup(window)
+    }
+    
     fileprivate func refreshBridge() {
         appKitBridge?.passing = repos.failingCount == 0
     }

@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             app.rootController = window.rootViewController
             window.makeKeyAndVisible()
             DispatchQueue.main.async {
-                app.appKitBridge?.didSetup(window)
+                app.didSetup(window)
             }
         }
     }

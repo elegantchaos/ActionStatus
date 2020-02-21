@@ -52,6 +52,10 @@ class AppCommon: AppBase {
         restoreState()
     }
     
+    func didSetup(_ window: UIWindow) {
+        
+    }
+    
     func stateWasEdited() {
         saveState()
         repos.refresh()
