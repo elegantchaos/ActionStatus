@@ -88,7 +88,7 @@ struct ContentView: View {
     }
     
     func rowView(for repo: Repo, selectable: Bool) -> some View {
-        return HStack(alignment: .center, spacing: 20.0) {
+        let view = HStack(alignment: .center, spacing: 20.0) {
             SystemImage(repo.badgeName)
                 .foregroundColor(repo.statusColor)
             Text(repo.name)
@@ -96,11 +96,15 @@ struct ContentView: View {
         .padding(.horizontal)
         .font(.title)
         .onTapGestureShim() {
-                if selectable {
-                    self.selectedID = repo.id
-                }
+            if selectable {
+                self.selectedID = repo.id
+            }
         }
-        .contextMenuShim() {
+        
+        #if os(tvOS)
+        return view
+        #else
+        return view.contextMenu() {
             VStack {
                 NavigationLink(
                     destination: EditView(repo: self.$repos.binding(for: repo, in: \.items)),
@@ -114,6 +118,7 @@ struct ContentView: View {
                 }
             }
         }
+        #endif
     }
 }
 

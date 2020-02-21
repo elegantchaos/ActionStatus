@@ -20,7 +20,7 @@ class AppDelegate: AppCommon {
     }
     
     override func didSetup(_ window: UIWindow) {
-        app.appKitBridge?.didSetup(window)
+        appKitBridge?.didSetup(window)
     }
     
     fileprivate func refreshBridge() {
