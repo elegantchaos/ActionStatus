@@ -1,5 +1,5 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-//  Created by Developer on 13/02/2020.
+//  Created by Sam Deane on 13/02/2020.
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -23,26 +23,16 @@ class AppCommon: AppBase {
     
     var rootController: UIViewController?
     
-    @State var repos = RepoSet([])
+    @State var model = Model([])
 
-    @State var testRepos = RepoSet([
+    @State var testRepos = Model([
         Repo("ApplicationExtensions", owner: "elegantchaos", workflow: "Tests", state: .failing),
         Repo("Datastore", owner: "elegantchaos", workflow: "Swift", state: .passing),
         Repo("DatastoreViewer", owner: "elegantchaos", workflow: "Build", state: .failing),
         Repo("Logger", owner: "elegantchaos", workflow: "tests", state: .unknown),
         Repo("ViewExtensions", owner: "elegantchaos", workflow: "Tests", state: .passing),
     ])
-    
-    class func defaultRepoSet() -> RepoSet {
-        return RepoSet([
-            Repo("ApplicationExtensions", owner: "elegantchaos", workflow: "Tests"),
-            Repo("Datastore", owner: "elegantchaos", workflow: "Swift"),
-            Repo("DatastoreViewer", owner: "elegantchaos", workflow: "Build"),
-            Repo("Logger", owner: "elegantchaos", workflow: "tests"),
-            Repo("ViewExtensions", owner: "elegantchaos", workflow: "Tests"),
-        ])
-    }
-    
+        
     @objc func changed() {
         restoreState()
     }
@@ -58,21 +48,21 @@ class AppCommon: AppBase {
     
     func stateWasEdited() {
         saveState()
-        repos.refresh()
+        model.refresh()
     }
     
     func saveState() {
-        repos.save(toDefaultsKey: stateKey)
+        model.save(toDefaultsKey: stateKey)
     }
     
     func restoreState() {
-        repos.load(fromDefaultsKey: stateKey)
+        model.load(fromDefaultsKey: stateKey)
     }
     
     
     func makeContentView() -> some View {
         let app = AppDelegate.shared
-        return ContentView(repos: app.repos)
+        return ContentView(repos: app.model)
     }
 }
 

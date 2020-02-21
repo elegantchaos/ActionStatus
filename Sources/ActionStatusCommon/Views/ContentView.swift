@@ -8,7 +8,7 @@ import SwiftUIExtensions
 import BindingsExtensions
 
 struct ContentView: View {
-    @ObservedObject var repos: RepoSet
+    @ObservedObject var repos: Model
     @State var selectedID: UUID? = nil
     @State var isEditing: Bool = false
     @State var isComposing: Bool = false
@@ -71,8 +71,9 @@ struct ContentView: View {
             return AnyView(DocumentPickerViewController(url: self.repos.exportURL!, onDismiss: { }))
             #endif
         } else {
-            let repo = self.$repos.items[self.repos.composingIndex!]
-            return AnyView(ComposeView(repo: repo, isPresented: self.$repos.isComposing))
+            let repo = self.repos.repoToCompose()
+            let binding = self.$repos.binding(for: repo, in: \.items)
+            return AnyView(ComposeView(repo: binding, isPresented: self.$repos.isComposing))
         }
     }
 
@@ -199,7 +200,7 @@ struct EditButton: View {
 
     var body: some View {
         Button(action: self.action) {
-            SystemImage(editMode?.wrappedValue.isEditing ?? true ? "pencil.circle.fill" : "pencil.circle").font(.title)
+            SystemImage(editMode?.wrappedValue.isEditing ?? true ? "ellipsis.circle.fill" : "ellipsis.circle").font(.title)
         }
     }
 }

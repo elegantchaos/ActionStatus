@@ -17,9 +17,9 @@ import SwiftUI
 
 struct Repo: Identifiable, Equatable {
     enum State: Int, Codable {
-        case unknown = 0
-        case failing = 1
-        case passing = 2
+        case failing = 0
+        case passing = 1
+        case unknown = 2
     }
 
     let id: UUID

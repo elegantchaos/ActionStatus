@@ -18,6 +18,8 @@ struct ComposeView: View {
        
     var body: some View {
         VStack {
+            Text("\(repo.name)/\(repo.owner)").multilineTextAlignment(.center)
+            
             Form {
                 togglesSection(title: "Platforms", options: self.generator.platforms, toggles: $platforms)
                 togglesSection(title: "Configuration", options: self.generator.configurations, toggles: $configurations)

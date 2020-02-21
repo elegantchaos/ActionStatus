@@ -19,7 +19,7 @@
 		8B430E7E23F586830050BF2A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64AA23EAE62D00B28168 /* ContentView.swift */; };
 		8B430E8023F586830050BF2A /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F181723F459570029F9CC /* EditView.swift */; };
 		8B430E8123F586830050BF2A /* Repo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B451DFB23F415E10056EF3E /* Repo.swift */; };
-		8B430E8223F586830050BF2A /* RepoSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9B2DB123F452B00087283B /* RepoSet.swift */; };
+		8B430E8223F586830050BF2A /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9B2DB123F452B00087283B /* Model.swift */; };
 		8B430E8423F5877D0050BF2A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B430E7523F586110050BF2A /* LaunchScreen.storyboard */; };
 		8B430E8523F587830050BF2A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B430E6C23F586100050BF2A /* AppDelegate.swift */; };
 		8B430E8723F587E30050BF2A /* AppCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B430E8623F587E30050BF2A /* AppCommon.swift */; };
@@ -30,8 +30,8 @@
 		8B4336EC23FFE53700598A04 /* DocumentPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4336EB23FFE53700598A04 /* DocumentPickerViewController.swift */; };
 		8B4336EE23FFE7C700598A04 /* DictionaryCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 8B4336ED23FFE7C700598A04 /* DictionaryCoding */; };
 		8B4336EF23FFE8E500598A04 /* WorkflowGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE923FD97EE0068C3FF /* WorkflowGenerator.swift */; };
-		8B4336F023FFE8ED00598A04 /* WorkflowOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE523FD97600068C3FF /* WorkflowOption.swift */; };
-		8B4336F123FFE8ED00598A04 /* WorkflowJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE723FD97670068C3FF /* WorkflowJob.swift */; };
+		8B4336F023FFE8ED00598A04 /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE523FD97600068C3FF /* Option.swift */; };
+		8B4336F123FFE8ED00598A04 /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE723FD97670068C3FF /* Job.swift */; };
 		8B4336F323FFEBAA00598A04 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */; };
 		8B4336F423FFED8000598A04 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */; };
 		8B451DFC23F415E10056EF3E /* Repo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B451DFB23F415E10056EF3E /* Repo.swift */; };
@@ -49,10 +49,10 @@
 		8B69B68B23FEDB6D00030A2B /* DictionaryCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 8B69B68A23FEDB6D00030A2B /* DictionaryCoding */; };
 		8B6F181823F459570029F9CC /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F181723F459570029F9CC /* EditView.swift */; };
 		8B880FE423FD7E000068C3FF /* BindingsExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B880FE323FD7E000068C3FF /* BindingsExtensions */; };
-		8B880FE623FD97600068C3FF /* WorkflowOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE523FD97600068C3FF /* WorkflowOption.swift */; };
-		8B880FE823FD97670068C3FF /* WorkflowJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE723FD97670068C3FF /* WorkflowJob.swift */; };
+		8B880FE623FD97600068C3FF /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE523FD97600068C3FF /* Option.swift */; };
+		8B880FE823FD97670068C3FF /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE723FD97670068C3FF /* Job.swift */; };
 		8B880FEA23FD97EE0068C3FF /* WorkflowGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE923FD97EE0068C3FF /* WorkflowGenerator.swift */; };
-		8B9B2DB223F452B00087283B /* RepoSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9B2DB123F452B00087283B /* RepoSet.swift */; };
+		8B9B2DB223F452B00087283B /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9B2DB123F452B00087283B /* Model.swift */; };
 		8BDAC2C223FE8A64004154A1 /* BindingsExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C123FE8A64004154A1 /* BindingsExtensions */; };
 		8BDAC2C423FE8A6E004154A1 /* ApplicationExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C323FE8A6E004154A1 /* ApplicationExtensions */; };
 /* End PBXBuildFile section */
@@ -137,10 +137,10 @@
 		8B5E7E9223F6C0B600087E15 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		8B5E7E9323F6C0C200087E15 /* AppKitBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppKitBridge.h; sourceTree = "<group>"; };
 		8B6F181723F459570029F9CC /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
-		8B880FE523FD97600068C3FF /* WorkflowOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkflowOption.swift; sourceTree = "<group>"; };
-		8B880FE723FD97670068C3FF /* WorkflowJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkflowJob.swift; sourceTree = "<group>"; };
+		8B880FE523FD97600068C3FF /* Option.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
+		8B880FE723FD97670068C3FF /* Job.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Job.swift; sourceTree = "<group>"; };
 		8B880FE923FD97EE0068C3FF /* WorkflowGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkflowGenerator.swift; sourceTree = "<group>"; };
-		8B9B2DB123F452B00087283B /* RepoSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoSet.swift; sourceTree = "<group>"; };
+		8B9B2DB123F452B00087283B /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,9 +216,9 @@
 		8B3E64A523EAE62D00B28168 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				8B5E7E5823F6A79900087E15 /* ActionStatusCommon */,
 				8B5E7E5723F6A79100087E15 /* ActionStatusMobile */,
 				8B430E6B23F586100050BF2A /* ActionStatusTV */,
-				8B5E7E5823F6A79900087E15 /* ActionStatusCommon */,
 				8B5E7E8423F6BB3500087E15 /* AppKitBridge */,
 			);
 			path = Sources;
@@ -257,6 +257,27 @@
 				8B3E64AF23EAE62E00B28168 /* Preview Assets.xcassets */,
 			);
 			path = PreviewContent;
+			sourceTree = "<group>";
+		};
+		8B4336F6240052DC00598A04 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8B5D864723FD52550085A570 /* ComposeView.swift */,
+				8B3E64AA23EAE62D00B28168 /* ContentView.swift */,
+				8B6F181723F459570029F9CC /* EditView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		8B4336F7240052FF00598A04 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				8B880FE723FD97670068C3FF /* Job.swift */,
+				8B9B2DB123F452B00087283B /* Model.swift */,
+				8B880FE523FD97600068C3FF /* Option.swift */,
+				8B451DFB23F415E10056EF3E /* Repo.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		8B522FA223F6E7B40020AD36 /* Tests */ = {
@@ -330,15 +351,10 @@
 			children = (
 				8B430E8623F587E30050BF2A /* AppCommon.swift */,
 				8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */,
-				8B3E64AA23EAE62D00B28168 /* ContentView.swift */,
-				8B5D864723FD52550085A570 /* ComposeView.swift */,
-				8B6F181723F459570029F9CC /* EditView.swift */,
-				8B451DFB23F415E10056EF3E /* Repo.swift */,
-				8B9B2DB123F452B00087283B /* RepoSet.swift */,
-				8B880FE523FD97600068C3FF /* WorkflowOption.swift */,
-				8B880FE723FD97670068C3FF /* WorkflowJob.swift */,
 				8B880FE923FD97EE0068C3FF /* WorkflowGenerator.swift */,
+				8B4336F7240052FF00598A04 /* Model */,
 				8B5B175223FADAAE00DD2AF5 /* Resources */,
+				8B4336F6240052DC00598A04 /* Views */,
 			);
 			path = ActionStatusCommon;
 			sourceTree = "<group>";
@@ -580,17 +596,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B9B2DB223F452B00087283B /* RepoSet.swift in Sources */,
+				8B9B2DB223F452B00087283B /* Model.swift in Sources */,
 				8B3E64A723EAE62D00B28168 /* AppDelegate.swift in Sources */,
 				8B3E64A923EAE62D00B28168 /* SceneDelegate.swift in Sources */,
 				8B430E8723F587E30050BF2A /* AppCommon.swift in Sources */,
 				8B6F181823F459570029F9CC /* EditView.swift in Sources */,
 				8B4336EC23FFE53700598A04 /* DocumentPickerViewController.swift in Sources */,
 				8B880FEA23FD97EE0068C3FF /* WorkflowGenerator.swift in Sources */,
-				8B880FE623FD97600068C3FF /* WorkflowOption.swift in Sources */,
+				8B880FE623FD97600068C3FF /* Option.swift in Sources */,
 				8B5D864823FD52550085A570 /* ComposeView.swift in Sources */,
 				8B451DFC23F415E10056EF3E /* Repo.swift in Sources */,
-				8B880FE823FD97670068C3FF /* WorkflowJob.swift in Sources */,
+				8B880FE823FD97670068C3FF /* Job.swift in Sources */,
 				8B3E64AB23EAE62D00B28168 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -620,12 +636,12 @@
 				8B430E8123F586830050BF2A /* Repo.swift in Sources */,
 				8B430E8823F587E60050BF2A /* AppCommon.swift in Sources */,
 				8B4336EF23FFE8E500598A04 /* WorkflowGenerator.swift in Sources */,
-				8B4336F023FFE8ED00598A04 /* WorkflowOption.swift in Sources */,
+				8B4336F023FFE8ED00598A04 /* Option.swift in Sources */,
 				8B430E8023F586830050BF2A /* EditView.swift in Sources */,
 				8B4336F423FFED8000598A04 /* SceneDelegate.swift in Sources */,
 				8B5D864923FD54160085A570 /* ComposeView.swift in Sources */,
-				8B4336F123FFE8ED00598A04 /* WorkflowJob.swift in Sources */,
-				8B430E8223F586830050BF2A /* RepoSet.swift in Sources */,
+				8B4336F123FFE8ED00598A04 /* Job.swift in Sources */,
+				8B430E8223F586830050BF2A /* Model.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -977,7 +993,7 @@
 			repositoryURL = "https://github.com/elegantchaos/SwiftUIExtensions.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.3;
+				minimumVersion = 1.0.4;
 			};
 		};
 		8B5D864423FD3F720085A570 /* XCRemoteSwiftPackageReference "ApplicationExtensions" */ = {
@@ -985,7 +1001,7 @@
 			repositoryURL = "https://github.com/elegantchaos/ApplicationExtensions.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.2;
+				minimumVersion = 1.0.4;
 			};
 		};
 		8B69B68923FEDB6D00030A2B /* XCRemoteSwiftPackageReference "DictionaryCoding" */ = {

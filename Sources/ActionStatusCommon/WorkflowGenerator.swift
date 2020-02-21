@@ -103,7 +103,7 @@ class WorkflowGenerator {
             do {
                 let url = UIApplication.newDocumentURL(name: repo.workflow, withPathExtension: "yml", makeUnique: false)
                 try data.write(to: url)
-                let model = AppDelegate.shared.repos
+                let model = AppDelegate.shared.model
                 
                 #if targetEnvironment(macCatalyst)
                 // ugly hack - the SwiftUI sheet doesn't work properly on the mac

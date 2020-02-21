@@ -6,7 +6,7 @@
 import SwiftUI
 import DictionaryCoding
 
-class RepoSet: ObservableObject {
+class Model: ObservableObject {
     typealias RepoList = [Repo]
     typealias RefreshBlock = () -> Void
     
@@ -14,7 +14,7 @@ class RepoSet: ObservableObject {
     let key: String = "State"
     var block: RefreshBlock?
     var timer: Timer?
-    var composingIndex: Int?
+    var composingID: UUID?
     var exportURL: URL?
     var exportYML: String?
 
@@ -44,13 +44,11 @@ class RepoSet: ObservableObject {
     }
     
     func showComposeWindow(for repo: Repo) {
-        if let index = items.firstIndex(of: repo) {
-            composingIndex = index
-            isSaving = false
-            isComposing = true
-            exportURL = nil
-            exportYML = ""
-        }
+        composingID = repo.id
+        isSaving = false
+        isComposing = true
+        exportURL = nil
+        exportYML = ""
     }
     
     func hideComposeWindow() {
@@ -58,7 +56,7 @@ class RepoSet: ObservableObject {
     }
     
     func repoToCompose() -> Repo {
-        return items[composingIndex!]
+        return items.first(where: { $0.id == composingID })!
     }
     
     func load(fromDefaultsKey key: String) {
@@ -73,6 +71,7 @@ class RepoSet: ObservableObject {
                 }
             }
             items = loadedRepos
+            sortItems()
         }
     }
     
@@ -126,24 +125,23 @@ class RepoSet: ObservableObject {
                     }
                 }
 
-                self.items.sort { (r1, r2) -> Bool in
-                    if (r1.state == r2.state) {
-                        return r1.name < r2.name
-                    }
-                    
-                    if (r1.state == .failing) {
-                        return true
-                    }
-                    
-                    return r1.name < r2.name
-                }
-                
+                self.sortItems()
                 self.block?()
                 self.scheduleRefresh(after: 10.0)
             }
         }
     }
 
+    func sortItems() {
+        self.items.sort { (r1, r2) -> Bool in
+            if (r1.state == r2.state) {
+                return r1.name < r2.name
+            }
+
+            return r1.state.rawValue < r2.state.rawValue
+        }
+    }
+    
     @discardableResult func addRepo() -> Repo {
         let repo = Repo()
         items.append(repo)
@@ -168,6 +166,7 @@ class RepoSet: ObservableObject {
                     }
                 }
             }
+            sortItems()
         }
     }
     

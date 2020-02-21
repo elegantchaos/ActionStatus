@@ -8,8 +8,9 @@ import AppKit
 
 @objc class AppKitBridgeImp: NSResponder {
     static let imageSize = NSSize(width: 16.0, height: 16.0)
-    let passingImage = setupPassingImage()
-    let failingImage = setupFailingImage()
+    let passingImage = setupImage("StatusPassing")
+    let failingImage = setupImage("StatusFailing")
+    let unknownImage = setupImage("StatusUnknown")
     let appName = Bundle.main.infoDictionary?["CFBundleName"] as! String
     var menuSource: MenuDataSource?
     var windowInterceptor: InterceptingDelegate?
@@ -20,14 +21,8 @@ import AppKit
         set { item.button?.image = newValue ? passingImage : failingImage }
     }
     
-    class func setupPassingImage() -> NSImage {
-        let image = NSImage(named: "StatusPassing")!
-        image.size = imageSize
-        return image
-    }
-
-    class func setupFailingImage() -> NSImage {
-        let image = NSImage(named: "StatusFailing")!
+    class func setupImage(_ name: String) -> NSImage {
+        let image = NSImage(named: name)!
         image.size = imageSize
         return image
     }
@@ -40,7 +35,7 @@ extension AppKitBridgeImp: AppKitBridge {
         item = status.statusItem(withLength: 22)
         if let button = item.button {
             button.title = "ActionStatus"
-            button.image = passingImage
+            button.image = unknownImage
         }
         
         let menu = NSMenu(title: "Repos")
@@ -76,7 +71,7 @@ extension AppKitBridgeImp: NSMenuDelegate {
                     switch menuSource.status(forItem: n) {
                         case .succeeded: item.image = passingImage
                         case .failed: item.image = failingImage
-                        default: item.image = nil
+                        default: item.image = unknownImage
                     }
                     
                     item.tag = n

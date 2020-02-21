@@ -86,7 +86,7 @@ struct EditView: View {
             }
         }
         .onAppear() {
-            AppDelegate.shared.repos.cancelRefresh()
+            AppDelegate.shared.model.cancelRefresh()
             self.load()
         }
         .onDisappear() {

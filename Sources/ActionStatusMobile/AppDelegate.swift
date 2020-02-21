@@ -14,7 +14,7 @@ class AppDelegate: AppCommon {
 
     override func setup(withOptions options: LaunchOptions) {
         loadBridge()
-        repos.block = { self.refreshBridge() }
+        model.block = { self.refreshBridge() }
 
         super.setup(withOptions: options)
     }
@@ -24,7 +24,7 @@ class AppDelegate: AppCommon {
     }
     
     fileprivate func refreshBridge() {
-        appKitBridge?.passing = repos.failingCount == 0
+        appKitBridge?.passing = model.failingCount == 0
     }
     
     fileprivate func loadBridge() {
@@ -64,7 +64,7 @@ class AppDelegate: AppCommon {
 
     @IBAction func addLocalRepos() {
         pickFilesToOpen(types: ["public.folder"]) { urls in
-            self.repos.add(fromFolders: urls)
+            self.model.add(fromFolders: urls)
         }
     }
     
@@ -128,15 +128,15 @@ class AppDelegate: AppCommon {
 
 extension AppDelegate: MenuDataSource {
     func itemCount() -> Int {
-        return repos.items.count
+        return model.items.count
     }
     
     func name(forItem item: Int) -> String {
-        return repos.items[item].name
+        return model.items[item].name
     }
     
     func status(forItem item: Int) -> ItemStatus {
-        switch repos.items[item].state {
+        switch model.items[item].state {
             case .unknown: return .unknown
             case .failing: return .failed
             case .passing: return .succeeded
@@ -144,7 +144,7 @@ extension AppDelegate: MenuDataSource {
     }
     
     func selectItem(_ item: Int) {
-        let repo = repos.items[item]
+        let repo = model.items[item]
         if let url = URL(string: "https://github.com/\(repo.owner)/\(repo.name)/actions?query=workflow%3A\(repo.workflow)") {
             UIApplication.shared.open(url)
         }
