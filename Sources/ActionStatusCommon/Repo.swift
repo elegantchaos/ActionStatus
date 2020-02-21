@@ -5,14 +5,14 @@
 
 import SwiftUI
 
-struct WorkflowSettings: Codable, Equatable {
-    var build = true
-    var test = true
-    var notify = true
-    var upload = true
-    var xCodeOnMac = true
-    var platforms: [String] = []
-    var configurations: [String] = []
+@dynamicMemberLookup struct WorkflowSettings: Codable, Equatable {
+    var options: [String] = []
+    
+    subscript(dynamicMember option: String) -> Bool {
+        return options.contains(option)
+    }
+    
+    var build: Bool { return options.contains("build") }
 }
 
 struct Repo: Identifiable, Equatable {

@@ -17,7 +17,7 @@
 		8B3E64BE23EAE62E00B28168 /* ActionStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64BD23EAE62E00B28168 /* ActionStatusTests.swift */; };
 		8B3E64C923EAE62F00B28168 /* ActionStatusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */; };
 		8B430E7E23F586830050BF2A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64AA23EAE62D00B28168 /* ContentView.swift */; };
-		8B430E8023F586830050BF2A /* RepoEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F181723F459570029F9CC /* RepoEditView.swift */; };
+		8B430E8023F586830050BF2A /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F181723F459570029F9CC /* EditView.swift */; };
 		8B430E8123F586830050BF2A /* Repo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B451DFB23F415E10056EF3E /* Repo.swift */; };
 		8B430E8223F586830050BF2A /* RepoSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9B2DB123F452B00087283B /* RepoSet.swift */; };
 		8B430E8423F5877D0050BF2A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B430E7523F586110050BF2A /* LaunchScreen.storyboard */; };
@@ -40,7 +40,7 @@
 		8B5E7E8923F6BB5100087E15 /* AppKitBridge.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8323F6BB3500087E15 /* AppKitBridge.bundle */; platformFilter = maccatalyst; };
 		8B5E7E8D23F6BB8900087E15 /* AppKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8C23F6BB8900087E15 /* AppKitBridge.swift */; };
 		8B69B68B23FEDB6D00030A2B /* DictionaryCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 8B69B68A23FEDB6D00030A2B /* DictionaryCoding */; };
-		8B6F181823F459570029F9CC /* RepoEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F181723F459570029F9CC /* RepoEditView.swift */; };
+		8B6F181823F459570029F9CC /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F181723F459570029F9CC /* EditView.swift */; };
 		8B880FE423FD7E000068C3FF /* BindingsExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B880FE323FD7E000068C3FF /* BindingsExtensions */; };
 		8B880FE623FD97600068C3FF /* WorkflowOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE523FD97600068C3FF /* WorkflowOption.swift */; };
 		8B880FE823FD97670068C3FF /* WorkflowJob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE723FD97670068C3FF /* WorkflowJob.swift */; };
@@ -128,7 +128,7 @@
 		8B5E7E9223F6C0B600087E15 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		8B5E7E9323F6C0C200087E15 /* AppKitBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppKitBridge.h; sourceTree = "<group>"; };
 		8B5E7E9423F6CC5B00087E15 /* Assets.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; path = Assets.sketch; sourceTree = "<group>"; };
-		8B6F181723F459570029F9CC /* RepoEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepoEditView.swift; sourceTree = "<group>"; };
+		8B6F181723F459570029F9CC /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
 		8B880FE523FD97600068C3FF /* WorkflowOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkflowOption.swift; sourceTree = "<group>"; };
 		8B880FE723FD97670068C3FF /* WorkflowJob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkflowJob.swift; sourceTree = "<group>"; };
 		8B880FE923FD97EE0068C3FF /* WorkflowGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkflowGenerator.swift; sourceTree = "<group>"; };
@@ -330,8 +330,8 @@
 				8B430E8623F587E30050BF2A /* AppCommon.swift */,
 				8B3E64AA23EAE62D00B28168 /* ContentView.swift */,
 				8B5D864723FD52550085A570 /* ComposeView.swift */,
+				8B6F181723F459570029F9CC /* EditView.swift */,
 				8B451DFB23F415E10056EF3E /* Repo.swift */,
-				8B6F181723F459570029F9CC /* RepoEditView.swift */,
 				8B9B2DB123F452B00087283B /* RepoSet.swift */,
 				8B880FE523FD97600068C3FF /* WorkflowOption.swift */,
 				8B880FE723FD97670068C3FF /* WorkflowJob.swift */,
@@ -580,7 +580,7 @@
 				8B3E64A723EAE62D00B28168 /* AppDelegate.swift in Sources */,
 				8B3E64A923EAE62D00B28168 /* SceneDelegate.swift in Sources */,
 				8B430E8723F587E30050BF2A /* AppCommon.swift in Sources */,
-				8B6F181823F459570029F9CC /* RepoEditView.swift in Sources */,
+				8B6F181823F459570029F9CC /* EditView.swift in Sources */,
 				8B880FEA23FD97EE0068C3FF /* WorkflowGenerator.swift in Sources */,
 				8B880FE623FD97600068C3FF /* WorkflowOption.swift in Sources */,
 				8B5D864823FD52550085A570 /* ComposeView.swift in Sources */,
@@ -614,7 +614,7 @@
 				8B430E7E23F586830050BF2A /* ContentView.swift in Sources */,
 				8B430E8123F586830050BF2A /* Repo.swift in Sources */,
 				8B430E8823F587E60050BF2A /* AppCommon.swift in Sources */,
-				8B430E8023F586830050BF2A /* RepoEditView.swift in Sources */,
+				8B430E8023F586830050BF2A /* EditView.swift in Sources */,
 				8B5D864923FD54160085A570 /* ComposeView.swift in Sources */,
 				8B430E8223F586830050BF2A /* RepoSet.swift in Sources */,
 			);

@@ -7,51 +7,21 @@ import SwiftUI
 import BindingsExtensions
 
 struct ComposeView: View {
-    @ObservedObject var generator = WorkflowGenerator()
-    var repo: Repo
-
+    let generator = WorkflowGenerator()
+    
+    @Binding var repo: Repo
     @Binding var isPresented: Bool
+    
     @State var platforms: [Bool] = []
     @State var configurations: [Bool] = []
-    @State var settings = WorkflowSettings()
-//    var platformBinding: Binding<[Job]> {
-//        return generator.$platforms
-//    }
-    
+    @State var general: [Bool] = []
+       
     var body: some View {
         VStack {
             Form {
-                Section(header: Text("Platforms")) {
-                    VStack {
-                        ForEach(0 ..< self.generator.platforms.count) { index in
-//                            Toggle(isOn: self.$platforms[index]) {
-                            Toggle(isOn: self.$generator.platforms[index].included) {
-                                Text(self.generator.platforms[index].name)
-                            }
-                        }
-                    }
-                }
-
-                Section(header: Text("Configuration")) {
-                    VStack {
-                        ForEach(0 ..< configurations.count) { index in
-                            Toggle(isOn: self.$configurations[index]) {
-                                Text(self.generator.configurations[index].name)
-                            }
-                        }
-                    }
-                }
-
-                Section(header: Text("Other Options")) {
-                    VStack {
-                        Toggle("Perform Build", isOn: $settings.build)
-                        Toggle("Run Tests", isOn: $settings.test)
-                        Toggle("Post Notification", isOn: $settings.notify)
-                        Toggle("Upload Logs", isOn: $settings.upload)
-                        Toggle("Prefer Xcode Build For macOS", isOn: $settings.xCodeOnMac)
-                    }
-                }
-
+                togglesSection(title: "Platforms", options: self.generator.platforms, toggles: $platforms)
+                togglesSection(title: "Configuration", options: self.generator.configurations, toggles: $configurations)
+                togglesSection(title: "Other Options", options: self.generator.general, toggles: $general)
             }.padding()
             
             HStack(spacing: 100.0) {
@@ -59,33 +29,59 @@ struct ComposeView: View {
                     Text("Cancel")
                 }
                 
-                Button(action: { self.generator.generateWorkflow(for: self.repo, settings: self.settings) }) {
+                Button(action: { self.generator.generateWorkflow(for: self.repo) }) {
                     Text("Generate \(repo.workflow).yml")
                 }
             }
         }
         .padding()
-        .onAppear() {
-            self.platforms = self.generator.platforms.map({ $0.included })
-            self.platforms = self.generator.platforms.map({ $0.included })
-            self.settings = self.repo.settings
-        }
-        .onDisappear() {
-//            self.repo.settings = self.settings
-        }
+        .onAppear(perform: onAppear)
+        .onDisappear(perform: onDisappear)
     }
     
-    func section(for options: Binding<[Option]>, label: String) -> some View {
-        Section(header: Text(label)) {
+    func onAppear() {
+        let settings = repo.settings
+        platforms = generator.toggleSet(for: generator.platforms, in: settings)
+        configurations = generator.toggleSet(for: generator.configurations, in: settings)
+        general = generator.toggleSet(for: generator.general, in: settings)
+    }
+    
+    func onDisappear() {
+        var options: [String] = []
+        options.append(contentsOf: generator.identifiers(for: generator.platforms, toggleSet: platforms))
+        options.append(contentsOf: generator.identifiers(for: generator.configurations, toggleSet: configurations))
+        options.append(contentsOf: generator.identifiers(for: generator.general, toggleSet: general))
+        repo.settings.options = options
+    }
+    
+    
+    func togglesSection(title: String, options: [Option], toggles: Binding<[Bool]>) -> some View {
+        let allSet = toggles.wrappedValue.filter({ $0 }).count == toggles.wrappedValue.count
+        return Section(header:
+            HStack {
+                Text(title).font(.headline)
+                Spacer()
+                Button(action: {
+                    for n in 0 ..< toggles.wrappedValue.count {
+                        toggles[n].wrappedValue = !allSet
+                    }
+                }) {
+                    Text(allSet ? "disable all" : "enable all")
+                        
+                }
+            }
+        ) {
+                    
             VStack {
-                ForEach(options.wrappedValue, id: \.id) { option in
-                    Toggle(isOn: options.binding(for: \.included, of: option)) {
-                        Text(option.name)
+                ForEach(0 ..< toggles.wrappedValue.count) { index in
+                    Toggle(isOn: toggles[index]) {
+                        Text(options[index].name)
                     }
                 }
             }
         }
     }
+ 
 }
 
 struct OptionsSection: View {
@@ -107,7 +103,7 @@ struct OptionsSection: View {
 
 struct ComposeView_Previews: PreviewProvider {
     static var previews: some View {
-        ComposeView(repo: AppDelegate.shared.testRepos.items[0], isPresented: .constant(false))
+        ComposeView(repo: AppDelegate.shared.$testRepos.items[0], isPresented: .constant(false))
     }
 }
 

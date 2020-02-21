@@ -5,7 +5,7 @@
 
 import SwiftUI
 
-struct RepoEditView: View {
+struct EditView: View {
     #if os(tvOS)
     let style = DefaultTextFieldStyle()
     #else
@@ -133,7 +133,7 @@ struct RepoEditView: View {
 
 struct RepoEditView_Previews: PreviewProvider {
     static var previews: some View {
-        RepoEditView(repo: AppDelegate.shared.$testRepos.items[0])
+        EditView(repo: AppDelegate.shared.$testRepos.items[0])
     }
 }
 

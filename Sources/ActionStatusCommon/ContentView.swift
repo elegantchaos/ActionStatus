@@ -33,7 +33,7 @@ struct ContentView: View {
                             ForEach(repos.items) { repo in
                                 if self.isEditing {
                                     NavigationLink(
-                                        destination: RepoEditView(repo: self.$repos.binding(for: repo, in: \.items)),
+                                        destination: EditView(repo: self.$repos.binding(for: repo, in: \.items)),
                                         tag: repo.id,
                                         selection: self.$selectedID) {
                                             self.rowView(for: repo, selectable: true)
@@ -53,21 +53,25 @@ struct ContentView: View {
                 }
                 .setupNavigation(editAction: { self.isEditing.toggle() }, addAction: { self.addRepo() })
                 .bindEditing(to: $isEditing)
-                .sheet(isPresented: $repos.isComposing) {
-                    if self.repos.isSaving {
-//                        ShareSheet(activityItems: [self.repos.exportYML])
-                        DocumentPickerViewController(url: self.repos.exportURL!, onDismiss: { })
-                    } else {
-                        ComposeView(repo: self.repos.repoToCompose(), isPresented: self.$repos.isComposing)
-                    }
-                }
+                .sheet(isPresented: $repos.isComposing) { self.sheetView() }
         }
             .setupNavigationStyle()
-            .onAppear() {
-                self.repos.refresh()
-            }
+            .onAppear(perform: onAppear)
     }
     
+    func onAppear()  {
+        self.repos.refresh()
+    }
+    
+    func sheetView() -> some View {
+        if self.repos.isSaving {
+            return AnyView(DocumentPickerViewController(url: self.repos.exportURL!, onDismiss: { }))
+        } else {
+            let repo = self.$repos.items[self.repos.composingIndex!]
+            return AnyView(ComposeView(repo: repo, isPresented: self.$repos.isComposing))
+        }
+    }
+
     func addRepo() {
         let newRepo = repos.addRepo()
         AppDelegate.shared.saveState()
@@ -95,7 +99,7 @@ struct ContentView: View {
         .contextMenu() {
             VStack {
                 NavigationLink(
-                    destination: RepoEditView(repo: self.$repos.binding(for: repo, in: \.items)),
+                    destination: EditView(repo: self.$repos.binding(for: repo, in: \.items)),
                     tag: repo.id,
                     selection: self.$selectedID) {
                         Text("Edit")

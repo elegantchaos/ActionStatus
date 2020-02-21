@@ -6,7 +6,7 @@
 import UIKit
 
 class WorkflowGenerator {
-    var platforms = [
+    let platforms = [
         Job("macOS", name: "macOS", platform: .mac),
         Job("iOS", name: "iOS", platform: .mac),
         Job("tvOS", name: "tvOS", platform: .mac),
@@ -14,17 +14,25 @@ class WorkflowGenerator {
         Job("linux-50", name: "Linux (Swift 5.0)", swift: "5.0"),
         Job("linux-51", name: "Linux (Swift 5.1)", swift: "5.1")
     ]
-
-    var configurations = [
+    
+    let configurations = [
         Option("debug", name: "Debug"),
         Option("release", name: "Release")
     ]
-
+    
+    let general = [
+        Option("build", name: "Perform Build"),
+        Option("test", name: "Run Tests"),
+        Option("notify", name: "Post Notifications"),
+        Option("upload", name: "Upload Logs"),
+        Option("useXcodeForMac", name: "Use Xcode For macOS Target")
+    ]
+    
     func enabledJobs(settings: WorkflowSettings) -> [Job] {
         var jobs: [Job] = []
         var macPlatforms: [String] = []
         for platform in platforms {
-            if settings.platforms.contains(platform.id) {
+            if settings.options.contains(platform.id) {
                 switch platform.platform {
                     case .mac:
                         macPlatforms.append(platform.id)
@@ -38,8 +46,8 @@ class WorkflowGenerator {
             let macID = macPlatforms.joined(separator: "-")
             let macName = macPlatforms.joined(separator: "/")
             
-            // unless xCodeOnMac is set, remove macOS from the platforms built with xCode
-            if !settings.xCodeOnMac, let index = macPlatforms.firstIndex(of: "macOS") {
+            // unless useXcodeForMac is set, remove macOS from the platforms built with xCode
+            if !settings.useXcodeForMac, let index = macPlatforms.firstIndex(of: "macOS") {
                 macPlatforms.remove(at: index)
             }
             
@@ -52,11 +60,29 @@ class WorkflowGenerator {
         return jobs
     }
     
+    func toggleSet(for options: [Option], in settings: WorkflowSettings) -> [Bool] {
+        var toggles: [Bool] = []
+        for option in options {
+            toggles.append(settings.options.contains(option.id))
+        }
+        return toggles
+    }
+    
+    func identifiers(for options: [Option], toggleSet toggles: [Bool]) -> [String] {
+        var identifiers: [String] = []
+        for n in 0 ..< options.count {
+            if toggles[n] {
+                identifiers.append(options[n].id)
+            }
+        }
+        return identifiers
+    }
+    
     func enabledConfigs() -> [String] {
         return configurations.filter({ $0.included }).map({ $0.name })
     }
     
-    func generateWorkflow(for repo: Repo, settings: WorkflowSettings) {
+    func generateWorkflow(for repo: Repo) {
         var source =
         """
         name: \(repo.workflow)
@@ -64,9 +90,10 @@ class WorkflowGenerator {
         on: [push, pull_request]
         
         jobs:
-
+        
         """
         
+        let settings = repo.settings
         for job in enabledJobs(settings: settings) {
             source.append(job.yaml(build: settings.build, test: settings.test, notify: settings.notify, upload: settings.upload, package: repo.name, configurations: enabledConfigs()))
         }
