@@ -1,5 +1,6 @@
 #RTDIR=Extras/Tools
 RTDIR=../ReleaseTools
 
+set -e
 swift build --package-path=$RTDIR --product rt --configuration release
 RT=$RTDIR/.build/release/rt

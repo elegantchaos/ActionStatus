@@ -7,4 +7,10 @@
    <FileRef
       location = "group:Dependencies/Sparkle/Sparkle.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:../ReleaseTools">
+   </FileRef>
+   <FileRef
+      location = "group:../CommandShell">
+   </FileRef>
 </Workspace>

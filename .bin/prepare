@@ -1,5 +1,5 @@
-set -e
 source make-tools
+$RT archive
 $RT export
-$RT compress --to=../downloads.elegantchaos.com/actionstatus/ --latest=../downloads.elegantchaos.com/actionstatus/
-$RT appcast --to="../downloads.elegantchaos.com/actionstatus/"
+$RT compress --to=Dependencies/Website/updates --latest=Dependencies/Website/
+$RT appcast --to=Dependencies/Website/
