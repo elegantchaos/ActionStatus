@@ -15,7 +15,7 @@
                   <BuildableReference
                      BuildableIdentifier = "primary"
                      BlueprintIdentifier = "8B430E6923F586100050BF2A"
-                     BuildableName = "Action Status.app"
+                     BuildableName = "ActionStatus.app"
                      BlueprintName = "ActionStatusTV"
                      ReferencedContainer = "container:ActionStatus.xcodeproj">
                   </BuildableReference>
@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8B430E6923F586100050BF2A"
-               BuildableName = "Action Status.app"
+               BuildableName = "ActionStatus.app"
                BlueprintName = "ActionStatusTV"
                ReferencedContainer = "container:ActionStatus.xcodeproj">
             </BuildableReference>
@@ -91,7 +91,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8B430E6923F586100050BF2A"
-            BuildableName = "Action Status.app"
+            BuildableName = "ActionStatus.app"
             BlueprintName = "ActionStatusTV"
             ReferencedContainer = "container:ActionStatus.xcodeproj">
          </BuildableReference>
@@ -108,7 +108,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8B430E6923F586100050BF2A"
-            BuildableName = "Action Status.app"
+            BuildableName = "ActionStatus.app"
             BlueprintName = "ActionStatusTV"
             ReferencedContainer = "container:ActionStatus.xcodeproj">
          </BuildableReference>
@@ -130,7 +130,7 @@
                   <BuildableReference
                      BuildableIdentifier = "primary"
                      BlueprintIdentifier = "8B430E6923F586100050BF2A"
-                     BuildableName = "Action Status.app"
+                     BuildableName = "ActionStatus.app"
                      BlueprintName = "ActionStatusTV"
                      ReferencedContainer = "container:ActionStatus.xcodeproj">
                   </BuildableReference>

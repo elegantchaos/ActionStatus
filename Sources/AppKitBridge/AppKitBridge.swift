@@ -5,6 +5,7 @@
 
 import Foundation
 import AppKit
+import Sparkle
 
 @objc class AppKitBridgeImp: NSResponder {
     static let imageSize = NSSize(width: 16.0, height: 16.0)
@@ -12,6 +13,8 @@ import AppKit
     let failingImage = setupImage("StatusFailing")
     let unknownImage = setupImage("StatusUnknown")
     let appName = Bundle.main.infoDictionary?["CFBundleName"] as! String
+    var updateController: SPUStandardUpdaterController!
+    
     var menuSource: MenuDataSource?
     var windowInterceptor: InterceptingDelegate?
     var mainWindow: NSWindow?
@@ -31,6 +34,7 @@ import AppKit
 
 extension AppKitBridgeImp: AppKitBridge {
     @objc func setup() {
+        updateController = SPUStandardUpdaterController(updaterDelegate: self, userDriverDelegate: nil)
         let status = NSStatusBar.system
         item = status.statusItem(withLength: 22)
         if let button = item.button {
@@ -119,5 +123,19 @@ extension AppKitBridgeImp: NSWindowDelegate {
     func windowShouldClose(_ sender: NSWindow) -> Bool {
         sender.setIsVisible(false)
         return false;
+    }
+}
+
+extension AppKitBridgeImp: SPUUpdaterDelegate {
+    func updaterDidNotFindUpdate(_ updater: SPUUpdater) {
+        print("arse")
+    }
+    
+    func updater(_ updater: SPUUpdater, didFinishLoading appcast: SUAppcast) {
+        print("arse")
+    }
+    
+    func updater(_ updater: SPUUpdater, willScheduleUpdateCheckAfterDelay delay: TimeInterval) {
+        print("delay \(delay)")
     }
 }

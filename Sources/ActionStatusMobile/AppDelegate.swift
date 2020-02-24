@@ -11,7 +11,7 @@ import SwiftUI
 class AppDelegate: AppCommon {
     var appKitBridge: AppKitBridge? = nil
     var filePicker: UIDocumentPickerViewController?
-
+    
     override func setup(withOptions options: LaunchOptions) {
         loadBridge()
         model.block = { self.refreshBridge() }

@@ -15,7 +15,7 @@
                   <BuildableReference
                      BuildableIdentifier = "primary"
                      BlueprintIdentifier = "8B3E64A223EAE62D00B28168"
-                     BuildableName = "Action Status.app"
+                     BuildableName = "ActionStatus.app"
                      BlueprintName = "ActionStatusMobile"
                      ReferencedContainer = "container:ActionStatus.xcodeproj">
                   </BuildableReference>
@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8B3E64A223EAE62D00B28168"
-               BuildableName = "Action Status.app"
+               BuildableName = "ActionStatus.app"
                BlueprintName = "ActionStatusMobile"
                ReferencedContainer = "container:ActionStatus.xcodeproj">
             </BuildableReference>
@@ -51,7 +51,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8B3E64B823EAE62E00B28168"
-               BuildableName = "Action Status.xctest"
+               BuildableName = "ActionStatus.xctest"
                BlueprintName = "ActionStatusTests"
                ReferencedContainer = "container:ActionStatus.xcodeproj">
             </BuildableReference>
@@ -61,7 +61,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8B3E64C323EAE62F00B28168"
-               BuildableName = "Action Status.xctest"
+               BuildableName = "ActionStatus.xctest"
                BlueprintName = "ActionStatusUITests"
                ReferencedContainer = "container:ActionStatus.xcodeproj">
             </BuildableReference>
@@ -83,7 +83,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8B3E64A223EAE62D00B28168"
-            BuildableName = "Action Status.app"
+            BuildableName = "ActionStatus.app"
             BlueprintName = "ActionStatusMobile"
             ReferencedContainer = "container:ActionStatus.xcodeproj">
          </BuildableReference>
@@ -100,7 +100,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8B3E64A223EAE62D00B28168"
-            BuildableName = "Action Status.app"
+            BuildableName = "ActionStatus.app"
             BlueprintName = "ActionStatusMobile"
             ReferencedContainer = "container:ActionStatus.xcodeproj">
          </BuildableReference>
@@ -122,7 +122,7 @@
                   <BuildableReference
                      BuildableIdentifier = "primary"
                      BlueprintIdentifier = "8B3E64A223EAE62D00B28168"
-                     BuildableName = "Action Status.app"
+                     BuildableName = "ActionStatus.app"
                      BlueprintName = "ActionStatusMobile"
                      ReferencedContainer = "container:ActionStatus.xcodeproj">
                   </BuildableReference>

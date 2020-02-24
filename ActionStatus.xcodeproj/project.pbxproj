@@ -53,6 +53,9 @@
 		8B880FE823FD97670068C3FF /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE723FD97670068C3FF /* Job.swift */; };
 		8B880FEA23FD97EE0068C3FF /* WorkflowGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE923FD97EE0068C3FF /* WorkflowGenerator.swift */; };
 		8B9B2DB223F452B00087283B /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9B2DB123F452B00087283B /* Model.swift */; };
+		8BBFAA952403F8E80091157A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BBFAA942403F8E80091157A /* Sparkle.framework */; };
+		8BBFAA962403F8F40091157A /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8BBFAA942403F8E80091157A /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8BBFAA99240401C30091157A /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 8BBFAA8B2403F09F0091157A /* dsa_pub.pem */; };
 		8BDAC2C223FE8A64004154A1 /* BindingsExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C123FE8A64004154A1 /* BindingsExtensions */; };
 		8BDAC2C423FE8A6E004154A1 /* ApplicationExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C323FE8A6E004154A1 /* ApplicationExtensions */; };
 /* End PBXBuildFile section */
@@ -90,6 +93,16 @@
 			files = (
 			);
 			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8BBFAA982404013B0091157A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8BBFAA962403F8F40091157A /* Sparkle.framework in CopyFiles */,
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -141,6 +154,10 @@
 		8B880FE723FD97670068C3FF /* Job.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Job.swift; sourceTree = "<group>"; };
 		8B880FE923FD97EE0068C3FF /* WorkflowGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkflowGenerator.swift; sourceTree = "<group>"; };
 		8B9B2DB123F452B00087283B /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		8BBFAA8B2403F09F0091157A /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
+		8BBFAA8D2403F1030091157A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sparkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BBFAA902403F27B0091157A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sparkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BBFAA942403F8E80091157A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sparkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +201,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BBFAA952403F8E80091157A /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,6 +314,7 @@
 				8B5E7E6323F6A9C600087E15 /* Mobile.xcconfig */,
 				8B451E1623F446BA0056EF3E /* ActionStatus.entitlements */,
 				8B3E64B423EAE62E00B28168 /* Info.plist */,
+				8BBFAA8B2403F09F0091157A /* dsa_pub.pem */,
 				8B3E64B123EAE62E00B28168 /* LaunchScreen.storyboard */,
 			);
 			path = Resources;
@@ -362,6 +381,9 @@
 		8B5E7E7823F6BA8400087E15 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8BBFAA942403F8E80091157A /* Sparkle.framework */,
+				8BBFAA902403F27B0091157A /* Sparkle.framework */,
+				8BBFAA8D2403F1030091157A /* Sparkle.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -472,6 +494,7 @@
 				8B5E7E7F23F6BB3500087E15 /* Sources */,
 				8B5E7E8023F6BB3500087E15 /* Frameworks */,
 				8B5E7E8123F6BB3500087E15 /* Resources */,
+				8BBFAA982404013B0091157A /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -546,6 +569,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B5B175623FAE7E800DD2AF5 /* pre-archive.sh in Resources */,
+				8BBFAA99240401C30091157A /* dsa_pub.pem in Resources */,
 				8B5E7E8923F6BB5100087E15 /* AppKitBridge.bundle in Resources */,
 				8B3E64B323EAE62E00B28168 /* LaunchScreen.storyboard in Resources */,
 				8B5B175923FAE7E800DD2AF5 /* pre-build.sh in Resources */,
