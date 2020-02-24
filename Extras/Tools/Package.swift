@@ -8,7 +8,7 @@ let package = Package(
         .macOS(.v10_15)
     ],
     dependencies: [
-         .package(url: "https://github.com/elegantchaos/ReleaseTools", from: "1.0.3"),
+         .package(url: "https://github.com/elegantchaos/ReleaseTools", from: "1.0.4"),
     ],
     targets: [
         .target(
