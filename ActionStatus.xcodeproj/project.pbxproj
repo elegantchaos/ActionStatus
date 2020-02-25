@@ -35,10 +35,6 @@
 		8B4336F323FFEBAA00598A04 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */; };
 		8B4336F423FFED8000598A04 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */; };
 		8B451DFC23F415E10056EF3E /* Repo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B451DFB23F415E10056EF3E /* Repo.swift */; };
-		8B5B175423FAE7E800DD2AF5 /* pre-archive.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8B522FA623F6ED390020AD36 /* pre-archive.sh */; };
-		8B5B175623FAE7E800DD2AF5 /* pre-archive.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8B522FA623F6ED390020AD36 /* pre-archive.sh */; };
-		8B5B175723FAE7E800DD2AF5 /* pre-build.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8B522FA723F6ED390020AD36 /* pre-build.sh */; };
-		8B5B175923FAE7E800DD2AF5 /* pre-build.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8B522FA723F6ED390020AD36 /* pre-build.sh */; };
 		8B5B175C23FAEB8200DD2AF5 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5B175B23FAEB8200DD2AF5 /* SwiftUIExtensions */; };
 		8B5B175E23FAEBD300DD2AF5 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5B175D23FAEBD300DD2AF5 /* SwiftUIExtensions */; };
 		8B5D864623FD3F720085A570 /* ApplicationExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5D864523FD3F720085A570 /* ApplicationExtensions */; };
@@ -108,6 +104,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8B045A782405588A00EC21D6 /* Extras */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Extras; sourceTree = "<group>"; };
+		8B045A7A2405591400EC21D6 /* make-tools */ = {isa = PBXFileReference; lastKnownFileType = text; path = "make-tools"; sourceTree = "<group>"; };
+		8B045A7B2405591400EC21D6 /* prepare */ = {isa = PBXFileReference; lastKnownFileType = text; path = prepare; sourceTree = "<group>"; };
+		8B045A7C2405591400EC21D6 /* release */ = {isa = PBXFileReference; lastKnownFileType = text; path = release; sourceTree = "<group>"; };
+		8B045A7D2405591400EC21D6 /* rt */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = rt; sourceTree = "<group>"; };
+		8B045A7E2405591400EC21D6 /* pre-build */ = {isa = PBXFileReference; lastKnownFileType = text; path = "pre-build"; sourceTree = "<group>"; };
+		8B045A7F2405591400EC21D6 /* downloads */ = {isa = PBXFileReference; lastKnownFileType = text; path = downloads; sourceTree = "<group>"; };
+		8B045A802405591400EC21D6 /* pre-archive */ = {isa = PBXFileReference; lastKnownFileType = text; path = "pre-archive"; sourceTree = "<group>"; };
 		8B2F0AB923FC195700B2E62A /* InterceptingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterceptingDelegate.h; sourceTree = "<group>"; };
 		8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterceptingDelegate.m; sourceTree = "<group>"; };
 		8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -132,14 +136,11 @@
 		8B430E7823F586110050BF2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B430E8623F587E30050BF2A /* AppCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommon.swift; sourceTree = "<group>"; };
 		8B4336EB23FFE53700598A04 /* DocumentPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPickerViewController.swift; sourceTree = "<group>"; };
-		8B4336F523FFF26D00598A04 /* Extras */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Extras; sourceTree = "<group>"; };
 		8B451DFB23F415E10056EF3E /* Repo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repo.swift; sourceTree = "<group>"; };
 		8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BuildNumber.xcconfig; sourceTree = "<group>"; };
 		8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ActionStatus.xcconfig; sourceTree = "<group>"; };
 		8B451E1623F446BA0056EF3E /* ActionStatus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ActionStatus.entitlements; sourceTree = "<group>"; };
 		8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppKitBridge.xcconfig; sourceTree = "<group>"; };
-		8B522FA623F6ED390020AD36 /* pre-archive.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "pre-archive.sh"; sourceTree = "<group>"; };
-		8B522FA723F6ED390020AD36 /* pre-build.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "pre-build.sh"; sourceTree = "<group>"; };
 		8B5D864723FD52550085A570 /* ComposeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeView.swift; sourceTree = "<group>"; };
 		8B5E7E6223F6A97D00087E15 /* Tests.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Tests.xcconfig; sourceTree = "<group>"; };
 		8B5E7E6323F6A9C600087E15 /* Mobile.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Mobile.xcconfig; sourceTree = "<group>"; };
@@ -209,12 +210,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8B045A792405591400EC21D6 /* .bin */ = {
+			isa = PBXGroup;
+			children = (
+				8B045A7A2405591400EC21D6 /* make-tools */,
+				8B045A7B2405591400EC21D6 /* prepare */,
+				8B045A7C2405591400EC21D6 /* release */,
+				8B045A7D2405591400EC21D6 /* rt */,
+				8B045A7E2405591400EC21D6 /* pre-build */,
+				8B045A7F2405591400EC21D6 /* downloads */,
+				8B045A802405591400EC21D6 /* pre-archive */,
+			);
+			path = .bin;
+			sourceTree = "<group>";
+		};
 		8B3E649A23EAE62D00B28168 = {
 			isa = PBXGroup;
 			children = (
 				8B3E64A523EAE62D00B28168 /* Sources */,
 				8B522FA223F6E7B40020AD36 /* Tests */,
-				8B4336F523FFF26D00598A04 /* Extras */,
+				8B045A782405588A00EC21D6 /* Extras */,
+				8B045A792405591400EC21D6 /* .bin */,
 				8B3E64A423EAE62D00B28168 /* Products */,
 				8B5E7E7823F6BA8400087E15 /* Frameworks */,
 			);
@@ -339,8 +355,6 @@
 				8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */,
 				8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */,
 				8B3E64AC23EAE62E00B28168 /* Assets.xcassets */,
-				8B522FA623F6ED390020AD36 /* pre-archive.sh */,
-				8B522FA723F6ED390020AD36 /* pre-build.sh */,
 				8B430E9023F58E060050BF2A /* PreviewContent */,
 			);
 			path = Resources;
@@ -552,6 +566,7 @@
 				8B5D864423FD3F720085A570 /* XCRemoteSwiftPackageReference "ApplicationExtensions" */,
 				8B880FE223FD7E000068C3FF /* XCRemoteSwiftPackageReference "BindingsExtensions" */,
 				8B69B68923FEDB6D00030A2B /* XCRemoteSwiftPackageReference "DictionaryCoding" */,
+				8B045A77240556E600EC21D6 /* XCRemoteSwiftPackageReference "ReleaseTools" */,
 			);
 			productRefGroup = 8B3E64A423EAE62D00B28168 /* Products */;
 			projectDirPath = "";
@@ -572,10 +587,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B5E7E8923F6BB5100087E15 /* AppKitBridge.bundle in Resources */,
-				8B5B175623FAE7E800DD2AF5 /* pre-archive.sh in Resources */,
 				8BBFAA99240401C30091157A /* dsa_pub.pem in Resources */,
 				8B3E64B323EAE62E00B28168 /* LaunchScreen.storyboard in Resources */,
-				8B5B175923FAE7E800DD2AF5 /* pre-build.sh in Resources */,
 				8B430E9123F5947E0050BF2A /* Assets.xcassets in Resources */,
 				8B3E64B023EAE62E00B28168 /* Preview Assets.xcassets in Resources */,
 				8B2F0ABD23FC2FA400B2E62A /* Settings.bundle in Resources */,
@@ -601,8 +614,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B430E8E23F58AE10050BF2A /* Assets.xcassets in Resources */,
-				8B5B175723FAE7E800DD2AF5 /* pre-build.sh in Resources */,
-				8B5B175423FAE7E800DD2AF5 /* pre-archive.sh in Resources */,
 				8B430E8F23F58CEE0050BF2A /* Preview Assets.xcassets in Resources */,
 				8B4336F323FFEBAA00598A04 /* Settings.bundle in Resources */,
 				8B430E8423F5877D0050BF2A /* LaunchScreen.storyboard in Resources */,
@@ -1038,6 +1049,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		8B045A77240556E600EC21D6 /* XCRemoteSwiftPackageReference "ReleaseTools" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elegantchaos/ReleaseTools.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.5;
+			};
+		};
 		8B5B175A23FAEB8200DD2AF5 /* XCRemoteSwiftPackageReference "SwiftUIExtensions" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/elegantchaos/SwiftUIExtensions.git";
