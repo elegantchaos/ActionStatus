@@ -6,6 +6,21 @@
 	objectVersion = 52;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		8B045A8524055E3C00EC21D6 /* Tools */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 8B045A8624055E3C00EC21D6 /* Build configuration list for PBXAggregateTarget "Tools" */;
+			buildPhases = (
+				8B045A8B24055E5900EC21D6 /* ShellScript */,
+			);
+			dependencies = (
+				8B045A8A24055E4B00EC21D6 /* PBXTargetDependency */,
+			);
+			name = Tools;
+			productName = Tools;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		8B2F0ABB23FC195800B2E62A /* InterceptingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */; };
 		8B2F0ABD23FC2FA400B2E62A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */; };
@@ -540,6 +555,9 @@
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Elegant Chaos";
 				TargetAttributes = {
+					8B045A8524055E3C00EC21D6 = {
+						CreatedOnToolsVersion = 11.4;
+					};
 					8B3E64A223EAE62D00B28168 = {
 						CreatedOnToolsVersion = 11.3.1;
 					};
@@ -585,6 +603,7 @@
 				8B5E7E8223F6BB3500087E15 /* AppKitBridge */,
 				8B3E64B823EAE62E00B28168 /* ActionStatusTests */,
 				8B3E64C323EAE62F00B28168 /* ActionStatusUITests */,
+				8B045A8524055E3C00EC21D6 /* Tools */,
 			);
 		};
 /* End PBXProject section */
@@ -638,6 +657,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		8B045A8B24055E5900EC21D6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp \"$BUILD_ROOT/Release/rt\" .bin/rt\n";
+		};
 		8B3BA5A5240541AD0071F0C1 /* Sign Embedded Stuff */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -724,6 +760,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		8B045A8A24055E4B00EC21D6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = maccatalyst;
+			productRef = 8B045A8924055E4B00EC21D6 /* rt */;
+		};
 		8B3E64BB23EAE62E00B28168 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8B3E64A223EAE62D00B28168 /* ActionStatusMobile */;
@@ -762,6 +803,24 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		8B045A8724055E3C00EC21D6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2H48644JM2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		8B045A8824055E3C00EC21D6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2H48644JM2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		8B3E64CB23EAE62F00B28168 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1000,6 +1059,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		8B045A8624055E3C00EC21D6 /* Build configuration list for PBXAggregateTarget "Tools" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B045A8724055E3C00EC21D6 /* Debug */,
+				8B045A8824055E3C00EC21D6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		8B3E649E23EAE62D00B28168 /* Build configuration list for PBXProject "ActionStatus" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1100,6 +1168,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		8B045A8924055E4B00EC21D6 /* rt */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B045A77240556E600EC21D6 /* XCRemoteSwiftPackageReference "ReleaseTools" */;
+			productName = rt;
+		};
 		8B4336ED23FFE7C700598A04 /* DictionaryCoding */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DictionaryCoding;
