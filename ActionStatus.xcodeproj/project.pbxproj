@@ -44,7 +44,7 @@
 		8B5D864623FD3F720085A570 /* ApplicationExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5D864523FD3F720085A570 /* ApplicationExtensions */; };
 		8B5D864823FD52550085A570 /* ComposeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5D864723FD52550085A570 /* ComposeView.swift */; };
 		8B5D864923FD54160085A570 /* ComposeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5D864723FD52550085A570 /* ComposeView.swift */; };
-		8B5E7E8923F6BB5100087E15 /* AppKitBridge.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8323F6BB3500087E15 /* AppKitBridge.bundle */; platformFilter = maccatalyst; };
+		8B5E7E8923F6BB5100087E15 /* AppKitBridge.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8323F6BB3500087E15 /* AppKitBridge.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8B5E7E8D23F6BB8900087E15 /* AppKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8C23F6BB8900087E15 /* AppKitBridge.swift */; };
 		8B69B68B23FEDB6D00030A2B /* DictionaryCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 8B69B68A23FEDB6D00030A2B /* DictionaryCoding */; };
 		8B6F181823F459570029F9CC /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F181723F459570029F9CC /* EditView.swift */; };
@@ -54,7 +54,7 @@
 		8B880FEA23FD97EE0068C3FF /* WorkflowGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE923FD97EE0068C3FF /* WorkflowGenerator.swift */; };
 		8B9B2DB223F452B00087283B /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9B2DB123F452B00087283B /* Model.swift */; };
 		8BBFAA952403F8E80091157A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BBFAA942403F8E80091157A /* Sparkle.framework */; };
-		8BBFAA962403F8F40091157A /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8BBFAA942403F8E80091157A /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8BBFAA962403F8F40091157A /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8BBFAA942403F8E80091157A /* Sparkle.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8BBFAA99240401C30091157A /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 8BBFAA8B2403F09F0091157A /* dsa_pub.pem */; };
 		8BDAC2C223FE8A64004154A1 /* BindingsExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C123FE8A64004154A1 /* BindingsExtensions */; };
 		8BDAC2C423FE8A6E004154A1 /* ApplicationExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C323FE8A6E004154A1 /* ApplicationExtensions */; };
@@ -89,7 +89,7 @@
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 10;
+			dstSubfolderSpec = 7;
 			files = (
 			);
 			name = "Embed Frameworks";
@@ -111,6 +111,7 @@
 		8B2F0AB923FC195700B2E62A /* InterceptingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterceptingDelegate.h; sourceTree = "<group>"; };
 		8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterceptingDelegate.m; sourceTree = "<group>"; };
 		8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		8B3BA5A4240540CC0071F0C1 /* AppKitBridge.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppKitBridge.entitlements; sourceTree = "<group>"; };
 		8B3E64A323EAE62D00B28168 /* ActionStatus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ActionStatus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B3E64A623EAE62D00B28168 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -349,6 +350,7 @@
 			isa = PBXGroup;
 			children = (
 				8B5E7E9223F6C0B600087E15 /* BridgingHeader.h */,
+				8B3BA5A4240540CC0071F0C1 /* AppKitBridge.entitlements */,
 				8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */,
 				8B5E7E8523F6BB3500087E15 /* Info.plist */,
 			);
@@ -411,6 +413,7 @@
 				8B3E64A023EAE62D00B28168 /* Frameworks */,
 				8B3E64A123EAE62D00B28168 /* Resources */,
 				8B5E7E7E23F6BAC800087E15 /* Embed Frameworks */,
+				8B3BA5A5240541AD0071F0C1 /* Sign Embedded Stuff */,
 			);
 			buildRules = (
 			);
@@ -568,9 +571,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B5E7E8923F6BB5100087E15 /* AppKitBridge.bundle in Resources */,
 				8B5B175623FAE7E800DD2AF5 /* pre-archive.sh in Resources */,
 				8BBFAA99240401C30091157A /* dsa_pub.pem in Resources */,
-				8B5E7E8923F6BB5100087E15 /* AppKitBridge.bundle in Resources */,
 				8B3E64B323EAE62E00B28168 /* LaunchScreen.storyboard in Resources */,
 				8B5B175923FAE7E800DD2AF5 /* pre-build.sh in Resources */,
 				8B430E9123F5947E0050BF2A /* Assets.xcassets in Resources */,
@@ -614,6 +617,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8B3BA5A5240541AD0071F0C1 /* Sign Embedded Stuff */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Sign Embedded Stuff";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nLOCATION=\"${BUILT_PRODUCTS_DIR}\"/\"${CONTENTS_FOLDER_PATH}/Resources\"\n\n# By default, use the configured code signing identity for the project/target\nIDENTITY=\"${EXPANDED_CODE_SIGN_IDENTITY}\"\nif [ \"$IDENTITY\" == \"\" ]\nthen\n    # If a code signing identity is not specified, use ad hoc signing\n    IDENTITY=\"-\"\nfi\n\ncodesign --verbose --force --deep --options runtime --sign \"$IDENTITY\" \"$LOCATION/AppKitBridge.bundle/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/AutoUpdate.app\"\ncodesign --verbose --force --deep --options runtime --sign \"$IDENTITY\" \"$LOCATION/AppKitBridge.bundle/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Updater.app\"\ncodesign --verbose --force --deep --options runtime --sign \"$IDENTITY\" \"$LOCATION/AppKitBridge.bundle/Contents/Frameworks/Sparkle.framework/Versions/A\"\ncodesign --verbose --force --deep --options runtime --sign \"$IDENTITY\" \"$LOCATION/AppKitBridge.bundle\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8B3E649F23EAE62D00B28168 /* Sources */ = {
@@ -933,6 +957,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.elegantchaos.actionstatus;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -948,6 +973,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.elegantchaos.actionstatus;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

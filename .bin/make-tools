@@ -4,3 +4,4 @@ RTDIR=../ReleaseTools
 set -e
 swift build --package-path=$RTDIR --product rt --configuration release
 RT=$RTDIR/.build/release/rt
+cp -f "$RT" .bin/
