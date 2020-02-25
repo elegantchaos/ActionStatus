@@ -28,14 +28,14 @@
 	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>$(ACTION_STATUS_COPYRIGHT)</string>
-    <key>SUPublicDSAKeyFile</key>
-    <string>dsa_pub.pem</string>
-    <key>SUEnableAutomaticChecks</key>
-    <true/>
-    <key>SUFeedURL</key>
-    <string>https://downloads.elegantchaos.com/actionstatus/appcast.xml</string>
-    <key>SUScheduledCheckInterval</key>
-    <integer>86400</integer>
+	<key>SUPublicDSAKeyFile</key>
+	<string>dsa_pub.pem</string>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUFeedURL</key>
+	<string>https://actionstatus.elegantchaos.com/appcast.xml</string>
+	<key>SUScheduledCheckInterval</key>
+	<integer>86400</integer>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

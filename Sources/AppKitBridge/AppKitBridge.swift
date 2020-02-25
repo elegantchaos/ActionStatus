@@ -86,6 +86,7 @@ extension AppKitBridgeImp: NSMenuDelegate {
             menu.addItem(withTitle: "About \(appName)", action: #selector(handleAbout(_:)), keyEquivalent: "")
             menu.addItem(withTitle: "Open \(appName)", action: #selector(handleShow(_:)), keyEquivalent: "")
             menu.addItem(withTitle: "Preferences…", action: #selector(handlePreferences(_:)), keyEquivalent: "")
+            menu.addItem(withTitle: "Check For Updates…", action: #selector(handleCheckForUpdates(_:)), keyEquivalent: "")
             menu.addItem(withTitle: "Quit \(appName)", action: #selector(handleQuit(_:)), keyEquivalent: "")
         }
     }
@@ -105,6 +106,10 @@ extension AppKitBridgeImp: NSMenuDelegate {
         NSApp.perform(command)
     }
 
+    @IBAction func handleCheckForUpdates(_ sender: Any) {
+        updateController.checkForUpdates(sender)
+    }
+    
     @IBAction func handleShow(_ sender: Any) {
         mainWindow?.setIsVisible(true)
         mainWindow?.makeKeyAndOrderFront(self)
