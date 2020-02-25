@@ -28,6 +28,8 @@
 	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>$(ACTION_STATUS_COPYRIGHT)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 	<key>SUEnableAutomaticChecks</key>

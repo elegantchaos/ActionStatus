@@ -361,7 +361,6 @@
 				8B5E7E6323F6A9C600087E15 /* Mobile.xcconfig */,
 				8BA522A32405804500B82857 /* ExportOptions-iOS.plist */,
 				8BA5228D240573F400B82857 /* ExportOptions-macOS.plist */,
-				8BE3D08F2405934C00AB6CAD /* ExportOptions-tvOS.plist */,
 				8B451E1623F446BA0056EF3E /* ActionStatus.entitlements */,
 				8B3E64B423EAE62E00B28168 /* Info.plist */,
 				8BBFAA8B2403F09F0091157A /* dsa_pub.pem */,
@@ -374,6 +373,7 @@
 			isa = PBXGroup;
 			children = (
 				8B5E7E6423F6A9C600087E15 /* TV.xcconfig */,
+				8BE3D08F2405934C00AB6CAD /* ExportOptions-tvOS.plist */,
 				8B430E7823F586110050BF2A /* Info.plist */,
 				8B430E7523F586110050BF2A /* LaunchScreen.storyboard */,
 			);
@@ -1141,7 +1141,7 @@
 			repositoryURL = "https://github.com/elegantchaos/ReleaseTools.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.5;
+				minimumVersion = 1.0.6;
 			};
 		};
 		8B5B175A23FAEB8200DD2AF5 /* XCRemoteSwiftPackageReference "SwiftUIExtensions" */ = {

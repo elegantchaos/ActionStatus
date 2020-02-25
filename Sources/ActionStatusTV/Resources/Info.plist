@@ -22,6 +22,8 @@
 	<string>$(ACTION_STATUS_COMMIT)</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>$(ACTION_STATUS_COPYRIGHT)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
