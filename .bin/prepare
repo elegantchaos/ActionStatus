@@ -1,5 +1,4 @@
 source make-tools
-#security unlock-keychain
 $RT archive --show-output
 $RT export
 $RT notarize

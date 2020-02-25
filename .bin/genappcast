@@ -1,2 +1,0 @@
-source make-tools
-$RT appcast --to="Dependencies/Website/updates/"

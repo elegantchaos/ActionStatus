@@ -1,3 +1,0 @@
-source make-tools
-$RT compress --to=Dependencies/Website/updates/ --latest=Dependencies/Website/
-
