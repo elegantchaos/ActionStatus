@@ -1,7 +1,8 @@
-source make-tools
-$RT archive --show-output
-$RT export
-$RT notarize
-$RT wait
-$RT compress
-$RT appcast --show-output
+set -e
+source make-tools 2> /dev/null
+rt archive --show-output $@
+rt export
+rt notarize
+rt wait
+rt compress
+rt appcast --show-output
