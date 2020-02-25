@@ -1,0 +1,6 @@
+set -e
+source make-tools
+rm -rf .build
+rt archive --show-output --platform=iOS
+rt export --platform=iOS
+rt upload --platform=tvOS

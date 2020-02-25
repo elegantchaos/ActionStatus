@@ -5,6 +5,13 @@
       location = "group:ActionStatus.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Dependencies/Sparkle/Sparkle.xcodeproj">
+      location = "group:../ReleaseTools">
    </FileRef>
+   <Group
+      location = "group:"
+      name = "Dependencies">
+      <FileRef
+         location = "group:Dependencies/Sparkle/Sparkle.xcodeproj">
+      </FileRef>
+   </Group>
 </Workspace>
