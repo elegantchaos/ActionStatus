@@ -1,7 +1,3 @@
-#RTDIR=Extras/Tools
-RTDIR=../ReleaseTools
+#!/bin/sh
 
-set -e
-swift build --package-path=$RTDIR --product rt --configuration release
-RT=$RTDIR/.build/release/rt
-cp -f "$RT" .bin/
+xcodebuild clean build -workspace ActionStatus.xcworkspace -scheme Tools -configuration Release
