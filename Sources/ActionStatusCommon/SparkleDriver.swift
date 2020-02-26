@@ -7,22 +7,41 @@ import Foundation
 
 typealias SparkleUpdatePermissionRequest = [[String:String]]
 
-struct SparkleUpdatePermissionResponse {
-    let automaticUpdateChecks: Bool
-    let sendSystemProfile: Bool
-}
-
 enum SparkleUserInitiatedCheckStatus: UInt {
     case done = 0
     case cancelled = 1
 }
 
+enum SparkleInstallUpdateStatus: UInt {
+    case install
+    case installAndRelaunch
+    case dismiss
+}
+
+enum SparkleInformationalUpdateAlertChoice: Int {
+    case dismiss
+    case skip
+}
+
+enum SparkleDownloadUpdateStatus: UInt {
+    case done
+    case cancelled
+}
+
+struct SparkleUpdatePermissionResponse {
+    let automaticUpdateChecks: Bool
+    let sendSystemProfile: Bool
+}
+
+enum SparkleUpdateAlertChoice: Int {
+    case update
+    case later
+    case skip
+}
+
 struct SparkleAppcastItem { }
-struct SparkleUpdateAlertChoice { }
-struct SparkleInstallUpdateStatus { }
-struct SparkleInformationalUpdateAlertChoice { }
 struct SparkleDownloadData { }
-struct SparkleDownloadUpdateStatus { }
+
 
 protocol SparkleDriver {
     func showCanCheck(forUpdates canCheckForUpdates: Bool)

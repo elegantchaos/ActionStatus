@@ -6,6 +6,35 @@
 import Foundation
 import Sparkle
 
+protocol SparkleConvertable: RawRepresentable {
+    associatedtype SparkleType
+    var converted: SparkleType { get }
+}
+
+extension SparkleConvertable where SparkleType: RawRepresentable, RawValue == SparkleType.RawValue {
+    var converted: SparkleType { return SparkleType(rawValue: self.rawValue)! }
+}
+
+extension SparkleUserInitiatedCheckStatus: SparkleConvertable {
+    typealias SparkleType = SPUUserInitiatedCheckStatus
+}
+
+extension SparkleDownloadUpdateStatus: SparkleConvertable {
+    typealias SparkleType = SPUDownloadUpdateStatus
+}
+
+extension SparkleInstallUpdateStatus: SparkleConvertable {
+    typealias SparkleType = SPUInstallUpdateStatus
+}
+
+extension SparkleUpdateAlertChoice: SparkleConvertable {
+    typealias SparkleType = SPUUpdateAlertChoice
+}
+
+extension SparkleInformationalUpdateAlertChoice: SparkleConvertable {
+    typealias SparkleType = SPUInformationalUpdateAlertChoice
+}
+
 class WrappedUserDriver: NSObject, SPUUserDriver {
     let driver: SparkleDriver
 
@@ -25,7 +54,7 @@ class WrappedUserDriver: NSObject, SPUUserDriver {
     
     func showUserInitiatedUpdateCheck(completion updateCheckStatusCompletion: @escaping (SPUUserInitiatedCheckStatus) -> Void) {
         driver.showUserInitiatedUpdateCheck() { status in
-            updateCheckStatusCompletion(SPUUserInitiatedCheckStatus(rawValue: status.rawValue)!)
+            updateCheckStatusCompletion(status.converted)
         }
     }
     
@@ -34,6 +63,7 @@ class WrappedUserDriver: NSObject, SPUUserDriver {
     }
     
     func showUpdateFound(with appcastItem: SUAppcastItem, userInitiated: Bool, reply: @escaping (SPUUpdateAlertChoice) -> Void) {
+        driver.showUpdateFound(with: <#T##SparkleAppcastItem#>, userInitiated: <#T##Bool#>, reply: <#T##(SparkleUpdateAlertChoice) -> Void#>)
     }
     
     func showDownloadedUpdateFound(with appcastItem: SUAppcastItem, userInitiated: Bool, reply: @escaping (SPUUpdateAlertChoice) -> Void) {
