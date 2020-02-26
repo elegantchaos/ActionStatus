@@ -35,7 +35,7 @@
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUFeedURL</key>
-	<string>https://actionstatus.elegantchaos.com/appcast.xml</string>
+	<string>https://actionstatus.elegantchaos.com/updates/appcast.xml</string>
 	<key>SUScheduledCheckInterval</key>
 	<integer>86400</integer>
 	<key>UIApplicationSceneManifest</key>
