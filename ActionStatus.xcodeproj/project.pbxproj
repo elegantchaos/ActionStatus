@@ -120,8 +120,8 @@
 
 /* Begin PBXFileReference section */
 		8B045A7A2405591400EC21D6 /* make-tools */ = {isa = PBXFileReference; lastKnownFileType = text; path = "make-tools"; sourceTree = "<group>"; };
-		8B045A7B2405591400EC21D6 /* prepare-macos */ = {isa = PBXFileReference; lastKnownFileType = text; path = "prepare-macos"; sourceTree = "<group>"; };
-		8B045A7C2405591400EC21D6 /* release */ = {isa = PBXFileReference; lastKnownFileType = text; path = release; sourceTree = "<group>"; };
+		8B045A7B2405591400EC21D6 /* prepare-mac */ = {isa = PBXFileReference; lastKnownFileType = text; path = "prepare-mac"; sourceTree = "<group>"; };
+		8B045A7C2405591400EC21D6 /* release-mac */ = {isa = PBXFileReference; lastKnownFileType = text; path = "release-mac"; sourceTree = "<group>"; };
 		8B045A7D2405591400EC21D6 /* rt */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = rt; sourceTree = "<group>"; };
 		8B045A7E2405591400EC21D6 /* pre-build */ = {isa = PBXFileReference; lastKnownFileType = text; path = "pre-build"; sourceTree = "<group>"; };
 		8B045A7F2405591400EC21D6 /* downloads */ = {isa = PBXFileReference; lastKnownFileType = text; path = downloads; sourceTree = "<group>"; };
@@ -172,13 +172,12 @@
 		8B880FE923FD97EE0068C3FF /* WorkflowGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkflowGenerator.swift; sourceTree = "<group>"; };
 		8B9B2DB123F452B00087283B /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		8BA5228D240573F400B82857 /* ExportOptions-macOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ExportOptions-macOS.plist"; sourceTree = "<group>"; };
-		8BA522A224057CAE00B82857 /* prepare-ios */ = {isa = PBXFileReference; lastKnownFileType = text; path = "prepare-ios"; sourceTree = "<group>"; };
+		8BA522A224057CAE00B82857 /* upload-mobile */ = {isa = PBXFileReference; lastKnownFileType = text; path = "upload-mobile"; sourceTree = "<group>"; };
 		8BA522A32405804500B82857 /* ExportOptions-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ExportOptions-iOS.plist"; sourceTree = "<group>"; };
 		8BBFAA8B2403F09F0091157A /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		8BBFAA8D2403F1030091157A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sparkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BBFAA902403F27B0091157A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sparkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BBFAA942403F8E80091157A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sparkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8BE3D08E240592DA00AB6CAD /* prepare-tvos */ = {isa = PBXFileReference; lastKnownFileType = text; path = "prepare-tvos"; sourceTree = "<group>"; };
 		8BE3D08F2405934C00AB6CAD /* ExportOptions-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ExportOptions-tvOS.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -234,10 +233,9 @@
 			isa = PBXGroup;
 			children = (
 				8B045A7A2405591400EC21D6 /* make-tools */,
-				8B045A7B2405591400EC21D6 /* prepare-macos */,
-				8BE3D08E240592DA00AB6CAD /* prepare-tvos */,
-				8BA522A224057CAE00B82857 /* prepare-ios */,
-				8B045A7C2405591400EC21D6 /* release */,
+				8B045A7B2405591400EC21D6 /* prepare-mac */,
+				8BA522A224057CAE00B82857 /* upload-mobile */,
+				8B045A7C2405591400EC21D6 /* release-mac */,
 				8B045A7D2405591400EC21D6 /* rt */,
 				8B045A7E2405591400EC21D6 /* pre-build */,
 				8B045A7F2405591400EC21D6 /* downloads */,

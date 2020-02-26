@@ -1,0 +1,19 @@
+set -e
+rm -rf .build
+source make-tools 2> /dev/null
+
+echo "*************"
+echo "Uploading iOS  "
+echo "*************"
+
+rt archive --show-output --platform=iOS | xcpretty
+rt export --platform=iOS
+rt upload --platform=iOS
+
+echo "**************"
+echo "Uploading tvOS"
+echo "**************"
+
+rt archive --show-output --platform=tvOS | xcpretty
+rt export --platform=tvOS
+rt upload --platform=tvOS

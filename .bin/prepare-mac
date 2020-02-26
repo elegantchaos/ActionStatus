@@ -1,5 +1,11 @@
 set -e
+rm -rf .build
 source make-tools 2> /dev/null
+
+echo "***************"
+echo "Preparing macOS"
+echo "***************"
+
 rt archive --show-output $@ | xcpretty
 rt export
 rt notarize
