@@ -46,27 +46,39 @@ struct SparkleDownloadData {
     let mimeType: String?
 }
 
-protocol SparkleDriver {
+@objc protocol SparkleDriver {
     func showCanCheck(forUpdates canCheckForUpdates: Bool)
+    func show(_ request: SparkleUpdatePermissionRequest, reply: @escaping ([String:Bool]) -> Void)
+    func showUserInitiatedUpdateCheck(completion updateCheckStatusCompletion: @escaping (UInt) -> Void)
+    func dismissUserInitiatedUpdateCheck()
+    func showUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (Int) -> Void)
+    func showDownloadedUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (Int) -> Void)
+    func showResumableUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (UInt) -> Void)
+    func showInformationalUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (Int) -> Void)
+    func showUpdateReleaseNotes(with downloadData: [String:Any])
+    func showUpdateReleaseNotesFailedToDownloadWithError(_ error: Error)
+    func showUpdateNotFound(acknowledgement: @escaping () -> Void)
+    func showUpdaterError(_ error: Error, acknowledgement: @escaping () -> Void)
+    func showDownloadInitiated(completion downloadUpdateStatusCompletion: @escaping (UInt) -> Void)
+    func showDownloadDidReceiveExpectedContentLength(_ expectedContentLength: UInt64)
+    func showDownloadDidReceiveData(ofLength length: UInt64)
+    func showDownloadDidStartExtractingUpdate()
+    func showExtractionReceivedProgress(_ progress: Double)
+    func showReady(toInstallAndRelaunch installUpdateHandler: @escaping (UInt) -> Void)
+    func showInstallingUpdate()
+    func showSendingTerminationSignal()
+    func showUpdateInstallationDidFinish(acknowledgement: @escaping () -> Void)
+    func dismissUpdateInstallation()
+}
+
+protocol ExpandedSparkleDriver: SparkleDriver {
     func show(_ request: SparkleUpdatePermissionRequest, reply: @escaping (SparkleUpdatePermissionResponse) -> Void)
     func showUserInitiatedUpdateCheck(completion updateCheckStatusCompletion: @escaping (SparkleUserInitiatedCheckStatus) -> Void)
-    func dismissUserInitiatedUpdateCheck()
     func showUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (SparkleUpdateAlertChoice) -> Void)
     func showDownloadedUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (SparkleUpdateAlertChoice) -> Void)
     func showResumableUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (SparkleInstallUpdateStatus) -> Void)
     func showInformationalUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (SparkleInformationalUpdateAlertChoice) -> Void)
     func showUpdateReleaseNotes(with downloadData: SparkleDownloadData)
-    func showUpdateReleaseNotesFailedToDownloadWithError(_ error: Error)
-    func showUpdateNotFound(acknowledgement: @escaping () -> Void)
-    func showUpdaterError(_ error: Error, acknowledgement: @escaping () -> Void)
     func showDownloadInitiated(completion downloadUpdateStatusCompletion: @escaping (SparkleDownloadUpdateStatus) -> Void)
-    func showDownloadDidReceiveExpectedContentLength(_ expectedContentLength: UInt64)
-    func showDownloadDidReceiveData(ofLength length: UInt64)
-    func showDownloadDidStartExtractingUpdate()
-    func showExtractionReceivedProgress(_ progress: Double)
     func showReady(toInstallAndRelaunch installUpdateHandler: @escaping (SparkleInstallUpdateStatus) -> Void)
-    func showInstallingUpdate()
-    func showSendingTerminationSignal()
-    func showUpdateInstallationDidFinish(acknowledgement: @escaping () -> Void)
-    func dismissUpdateInstallation()
 }

@@ -31,8 +31,6 @@
 		8B3E64B323EAE62E00B28168 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64B123EAE62E00B28168 /* LaunchScreen.storyboard */; };
 		8B3E64BE23EAE62E00B28168 /* ActionStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64BD23EAE62E00B28168 /* ActionStatusTests.swift */; };
 		8B3E64C923EAE62F00B28168 /* ActionStatusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */; };
-		8B3F81692406D9DD0006EC84 /* UpdateAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F81682406D9DC0006EC84 /* UpdateAlert.xib */; };
-		8B3F816B2406E0BC0006EC84 /* AlternateAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F816A2406E0BC0006EC84 /* AlternateAlert.xib */; };
 		8B3F816E2406EA850006EC84 /* WrappedUserDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F816D2406EA850006EC84 /* WrappedUserDriver.swift */; };
 		8B3F81702406EBF40006EC84 /* SparkleDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F816F2406EBF40006EC84 /* SparkleDriver.swift */; };
 		8B3F81712406EBF40006EC84 /* SparkleDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F816F2406EBF40006EC84 /* SparkleDriver.swift */; };
@@ -671,8 +669,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B3F81692406D9DD0006EC84 /* UpdateAlert.xib in Resources */,
-				8B3F816B2406E0BC0006EC84 /* AlternateAlert.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -39,6 +39,15 @@ extension SparkleUpdatePermissionResponse {
     var converted: SUUpdatePermissionResponse { return SUUpdatePermissionResponse(automaticUpdateChecks: automaticUpdateChecks, sendSystemProfile: sendSystemProfile) }
 }
 
+extension SUUpdatePermissionResponse {
+    convenience init(_ dictionary: [String:Bool]) {
+        self.init(
+            automaticUpdateChecks: dictionary["automaticUpdateChecks"]!,
+            sendSystemProfile: dictionary["sendSystemProfile"]!
+        )
+    }
+}
+
 extension SparkleDownloadData {
     var converted: SPUDownloadData { return SPUDownloadData(data: data, textEncodingName: encoding, mimeType: mimeType) }
 }
@@ -55,11 +64,13 @@ internal class WrappedUserDriver: NSObject, SPUUserDriver {
     }
     
     func show(_ request: SPUUpdatePermissionRequest, reply: @escaping (SUUpdatePermissionResponse) -> Void) {
-        driver.show(request.systemProfile) { response in reply(response.converted) }
+        driver.show(request.systemProfile) { response in reply(SUUpdatePermissionResponse(response)) }
     }
     
     func showUserInitiatedUpdateCheck(completion updateCheckStatusCompletion: @escaping (SPUUserInitiatedCheckStatus) -> Void) {
-        driver.showUserInitiatedUpdateCheck() { status in updateCheckStatusCompletion(status.converted) }
+        driver.showUserInitiatedUpdateCheck() { status in
+            updateCheckStatusCompletion(SPUUserInitiatedCheckStatus(rawValue: status)!)
+        }
     }
     
     func dismissUserInitiatedUpdateCheck() {
@@ -67,23 +78,38 @@ internal class WrappedUserDriver: NSObject, SPUUserDriver {
     }
     
     func showUpdateFound(with appcastItem: SUAppcastItem, userInitiated: Bool, reply: @escaping (SPUUpdateAlertChoice) -> Void) {
-        driver.showUpdateFound(with: appcastItem.propertiesDictionary, userInitiated: userInitiated) { choice in reply(choice.converted) }
+        driver.showUpdateFound(with: appcastItem.propertiesDictionary, userInitiated: userInitiated) { choice in
+            reply(SPUUpdateAlertChoice(rawValue: choice)!)
+        }
     }
     
     func showDownloadedUpdateFound(with appcastItem: SUAppcastItem, userInitiated: Bool, reply: @escaping (SPUUpdateAlertChoice) -> Void) {
-        driver.showDownloadedUpdateFound(with: appcastItem.propertiesDictionary, userInitiated: userInitiated) { choice in reply(choice.converted) }
+        driver.showDownloadedUpdateFound(with: appcastItem.propertiesDictionary, userInitiated: userInitiated) { choice in
+            reply(SPUUpdateAlertChoice(rawValue: choice)! )
+        }
     }
     
     func showResumableUpdateFound(with appcastItem: SUAppcastItem, userInitiated: Bool, reply: @escaping (SPUInstallUpdateStatus) -> Void) {
-        driver.showResumableUpdateFound(with: appcastItem.propertiesDictionary, userInitiated: userInitiated) { choice in reply(choice.converted) }
+        driver.showResumableUpdateFound(with: appcastItem.propertiesDictionary, userInitiated: userInitiated) { choice in
+            reply(SPUInstallUpdateStatus(rawValue: choice)!)
+        }
     }
     
     func showInformationalUpdateFound(with appcastItem: SUAppcastItem, userInitiated: Bool, reply: @escaping (SPUInformationalUpdateAlertChoice) -> Void) {
-        driver.showInformationalUpdateFound(with: appcastItem.propertiesDictionary, userInitiated: userInitiated) { choice in reply(choice.converted) }
+        driver.showInformationalUpdateFound(with: appcastItem.propertiesDictionary, userInitiated: userInitiated) { choice in
+            reply(SPUInformationalUpdateAlertChoice(rawValue: choice)!)
+        }
     }
     
     func showUpdateReleaseNotes(with downloadData: SPUDownloadData) {
-        driver.showUpdateReleaseNotes(with: SparkleDownloadData(data: downloadData.data, encoding: downloadData.textEncodingName, mimeType: downloadData.mimeType))
+        var data: [String:Any] = [ "data": downloadData.data ]
+        if let name = downloadData.textEncodingName {
+            data["textEncodingName"] = name
+        }
+        if let type = downloadData.mimeType {
+            data["mimeType"] = type
+        }
+        driver.showUpdateReleaseNotes(with: data)
     }
     
     func showUpdateReleaseNotesFailedToDownloadWithError(_ error: Error) {
@@ -103,7 +129,9 @@ internal class WrappedUserDriver: NSObject, SPUUserDriver {
     }
     
     func showDownloadInitiated(completion downloadUpdateStatusCompletion: @escaping (SPUDownloadUpdateStatus) -> Void) {
-        driver.showDownloadInitiated() { status in downloadUpdateStatusCompletion(status.converted) }
+        driver.showDownloadInitiated() { status in
+            downloadUpdateStatusCompletion(SPUDownloadUpdateStatus(rawValue: status)!)
+        }
     }
     
     func showDownloadDidReceiveExpectedContentLength(_ expectedContentLength: UInt64) {
@@ -123,7 +151,9 @@ internal class WrappedUserDriver: NSObject, SPUUserDriver {
     }
     
     func showReady(toInstallAndRelaunch installUpdateHandler: @escaping (SPUInstallUpdateStatus) -> Void) {
-        driver.showReady() { status in installUpdateHandler(status.converted) }
+        driver.showReady() { status in
+            installUpdateHandler(SPUInstallUpdateStatus(rawValue: status)!)
+        }
     }
     
     func showInstallingUpdate() {

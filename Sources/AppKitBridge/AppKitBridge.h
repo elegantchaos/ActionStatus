@@ -9,11 +9,38 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSUInteger, ItemStatus) {
     ItemStatusUnknown,
     ItemStatusFailed,
     ItemStatusSucceeded,
 };
+
+@protocol SparkleDriver <NSObject>
+- (void)showCanCheckForUpdates:(BOOL)canCheckForUpdates;
+- (void)showUpdatePermissionRequest:(NSDictionary *)request reply:(void (^)(NSDictionary *))reply;
+- (void)showUserInitiatedUpdateCheckWithCompletion:(void (^)(NSInteger))updateCheckStatusCompletion;
+- (void) dismissUserInitiatedUpdateCheck;
+- (void)showUpdateFoundWithAppcastItem:(NSDictionary *)appcastItem userInitiated:(BOOL)userInitiated reply:(void (^)(NSUInteger))reply;
+- (void)showDownloadedUpdateFoundWithAppcastItem:(NSDictionary *)appcastItem userInitiated:(BOOL)userInitiated reply:(void (^)(NSInteger))reply;
+- (void)showResumableUpdateFoundWithAppcastItem:(NSDictionary *)appcastItem userInitiated:(BOOL)userInitiated reply:(void (^)(NSUInteger))reply;
+- (void)showInformationalUpdateFoundWithAppcastItem:(NSDictionary *)appcastItem userInitiated:(BOOL)userInitiated reply:(void (^)(NSInteger))reply;
+- (void)showUpdateReleaseNotesWithDownloadData:(NSDictionary *)downloadData;
+- (void)showUpdateReleaseNotesFailedToDownloadWithError:(NSError *)error;
+- (void)showUpdateNotFoundWithAcknowledgement:(void (^)(void))acknowledgement;
+- (void)showUpdaterError:(NSError *)error acknowledgement:(void (^)(void))acknowledgement;
+- (void)showDownloadInitiatedWithCompletion:(void (^)(NSUInteger))downloadUpdateStatusCompletion;
+- (void)showDownloadDidReceiveExpectedContentLength:(uint64_t)expectedContentLength;
+- (void)showDownloadDidReceiveDataOfLength:(uint64_t)length;
+- (void)showDownloadDidStartExtractingUpdate;
+- (void)showExtractionReceivedProgress:(double)progress;
+- (void)showReadyToInstallAndRelaunch:(void (^)(NSUInteger))installUpdateHandler;
+- (void)showInstallingUpdate;
+- (void)showSendingTerminationSignal;
+- (void)showUpdateInstallationDidFinishWithAcknowledgement:(void (^)(void))acknowledgement;
+- (void)dismissUpdateInstallation;
+@end
 
 @protocol MenuDataSource <NSObject>
 - (NSInteger) itemCount;
@@ -27,7 +54,7 @@ typedef NS_ENUM(NSUInteger, ItemStatus) {
 @property BOOL showInMenu;
 @property BOOL showInDock;
 
-- (void) setupWithSparkleDriver: (nonnull id)sparkleDriver;
+- (void) setupWithSparkleDriver: (nonnull id<SparkleDriver>)sparkleDriver;
 - (void) didSetup: (nonnull id) window;
 - (void) setDataSource: (nonnull id<MenuDataSource>) source;
 - (nonnull SEL) showHandler;
@@ -35,3 +62,5 @@ typedef NS_ENUM(NSUInteger, ItemStatus) {
 
 @interface AppKitBridgeImp <AppKitBridge>
 @end
+
+NS_ASSUME_NONNULL_END

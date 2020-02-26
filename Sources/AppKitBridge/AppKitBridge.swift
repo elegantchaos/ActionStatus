@@ -6,7 +6,6 @@
 import Foundation
 import AppKit
 import Sparkle
-import SparkleBridge
 
 @objc class AppKitBridgeImp: NSResponder {
     static let imageSize = NSSize(width: 16.0, height: 16.0)
