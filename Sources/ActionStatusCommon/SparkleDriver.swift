@@ -6,6 +6,7 @@
 import Foundation
 
 typealias SparkleUpdatePermissionRequest = [[String:String]]
+typealias SparkleAppcastItem = [AnyHashable:Any]
 
 enum SparkleUserInitiatedCheckStatus: UInt {
     case done = 0
@@ -28,19 +29,23 @@ enum SparkleDownloadUpdateStatus: UInt {
     case cancelled
 }
 
-struct SparkleUpdatePermissionResponse {
-    let automaticUpdateChecks: Bool
-    let sendSystemProfile: Bool
-}
-
 enum SparkleUpdateAlertChoice: Int {
     case update
     case later
     case skip
 }
 
-struct SparkleAppcastItem { }
-struct SparkleDownloadData { }
+
+struct SparkleUpdatePermissionResponse {
+    let automaticUpdateChecks: Bool
+    let sendSystemProfile: Bool
+}
+
+struct SparkleDownloadData {
+    let data: Data
+    let encoding: String?
+    let mimeType: String?
+}
 
 
 protocol SparkleDriver {
