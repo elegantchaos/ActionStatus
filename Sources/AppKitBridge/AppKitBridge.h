@@ -27,7 +27,7 @@ typedef NS_ENUM(NSUInteger, ItemStatus) {
 @property BOOL showInMenu;
 @property BOOL showInDock;
 
-- (void) setup;
+- (void) setupWithSparkleDriver: (nonnull id)sparkleDriver;
 - (void) didSetup: (nonnull id) window;
 - (void) setDataSource: (nonnull id<MenuDataSource>) source;
 - (nonnull SEL) showHandler;

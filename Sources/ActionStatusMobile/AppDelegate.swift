@@ -6,6 +6,7 @@
 
 import UIKit
 import SwiftUI
+import Logger
 
 @UIApplicationMain
 class AppDelegate: AppCommon {
@@ -39,7 +40,7 @@ class AppDelegate: AppCommon {
             if let cls = bundle.principalClass as? NSObject.Type {
                 if let instance = cls.init() as? AppKitBridge {
                     appKitBridge = instance
-                    instance.setup()
+                    instance.setup(withSparkleDriver: self)
                     instance.setDataSource(self)
                 }
             }
@@ -162,4 +163,96 @@ extension AppDelegate: MenuDataSource {
     }
 }
 
+let sparkleChannel = Channel("Sparkle")
 
+extension AppDelegate: SparkleDriver {
+    func showCanCheck(forUpdates canCheckForUpdates: Bool) {
+        sparkleChannel.debug("canCheckForUpdates: \(canCheckForUpdates)")
+    }
+    
+    func show(_ request: SparkleUpdatePermissionRequest, reply: @escaping (SparkleUpdatePermissionResponse) -> Void) {
+        sparkleChannel.debug("show")
+    }
+    
+    func showUserInitiatedUpdateCheck(completion updateCheckStatusCompletion: @escaping (SparkleUserInitiatedCheckStatus) -> Void) {
+        sparkleChannel.debug("showUserInitiatedUpdateCheck")
+    }
+    
+    func dismissUserInitiatedUpdateCheck() {
+        sparkleChannel.debug("dismissUserInitiatedUpdateCheck")
+    }
+    
+    func showUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (SparkleUpdateAlertChoice) -> Void) {
+        sparkleChannel.debug("showUpdateFound")
+    }
+    
+    func showDownloadedUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (SparkleUpdateAlertChoice) -> Void) {
+        sparkleChannel.debug("showDownloadedUpdateFound")
+    }
+    
+    func showResumableUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (SparkleInstallUpdateStatus) -> Void) {
+        sparkleChannel.debug("showResumableUpdateFound")
+    }
+    
+    func showInformationalUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (SparkleInformationalUpdateAlertChoice) -> Void) {
+        sparkleChannel.debug("showInformationalUpdateFound")
+    }
+    
+    func showUpdateReleaseNotes(with downloadData: SparkleDownloadData) {
+        sparkleChannel.debug("showUpdateReleaseNotes")
+    }
+    
+    func showUpdateReleaseNotesFailedToDownloadWithError(_ error: Error) {
+        sparkleChannel.debug("showUpdateReleaseNotesFailedToDownloadWithError")
+    }
+    
+    func showUpdateNotFound(acknowledgement: @escaping () -> Void) {
+        sparkleChannel.debug("showUpdaterError")
+    }
+    
+    func showUpdaterError(_ error: Error, acknowledgement: @escaping () -> Void) {
+        sparkleChannel.debug("showUpdaterError")
+    }
+    
+    func showDownloadInitiated(completion downloadUpdateStatusCompletion: @escaping (SparkleDownloadUpdateStatus) -> Void) {
+        sparkleChannel.debug("showDownloadInitiated")
+    }
+    
+    func showDownloadDidReceiveExpectedContentLength(_ expectedContentLength: UInt64) {
+        sparkleChannel.debug("showDownloadDidReceiveExpectedContentLength")
+    }
+    
+    func showDownloadDidReceiveData(ofLength length: UInt64) {
+        sparkleChannel.debug("showDownloadDidReceiveData")
+    }
+    
+    func showDownloadDidStartExtractingUpdate() {
+        sparkleChannel.debug("showDownloadDidStartExtractingUpdate")
+    }
+    
+    func showExtractionReceivedProgress(_ progress: Double) {
+        sparkleChannel.debug("showExtractionReceivedProgress")
+    }
+    
+    func showReady(toInstallAndRelaunch installUpdateHandler: @escaping (SparkleInstallUpdateStatus) -> Void) {
+        sparkleChannel.debug("showReady")
+    }
+    
+    func showInstallingUpdate() {
+        sparkleChannel.debug("showInstallingUpdate")
+    }
+    
+    func showSendingTerminationSignal() {
+        sparkleChannel.debug("showSendingTerminationSignal")
+    }
+    
+    func showUpdateInstallationDidFinish(acknowledgement: @escaping () -> Void) {
+        sparkleChannel.debug("showUpdateInstallationDidFinish")
+    }
+    
+    func dismissUpdateInstallation() {
+        sparkleChannel.debug("dismissUpdateInstallation")
+    }
+    
+    
+}

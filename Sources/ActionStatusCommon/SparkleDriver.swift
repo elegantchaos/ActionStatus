@@ -35,7 +35,6 @@ enum SparkleUpdateAlertChoice: Int {
     case skip
 }
 
-
 struct SparkleUpdatePermissionResponse {
     let automaticUpdateChecks: Bool
     let sendSystemProfile: Bool
@@ -46,7 +45,6 @@ struct SparkleDownloadData {
     let encoding: String?
     let mimeType: String?
 }
-
 
 protocol SparkleDriver {
     func showCanCheck(forUpdates canCheckForUpdates: Bool)

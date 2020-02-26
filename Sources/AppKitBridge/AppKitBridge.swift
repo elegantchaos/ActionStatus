@@ -6,6 +6,7 @@
 import Foundation
 import AppKit
 import Sparkle
+import SparkleBridge
 
 @objc class AppKitBridgeImp: NSResponder {
     static let imageSize = NSSize(width: 16.0, height: 16.0)
@@ -13,13 +14,15 @@ import Sparkle
     let failingImage = setupImage("StatusFailing")
     let unknownImage = setupImage("StatusUnknown")
     let appName = Bundle.main.infoDictionary?["CFBundleName"] as! String
-    var updateController: SPUStandardUpdaterController!
+    
+    var updateDriver: WrappedUserDriver!
+    var updater: SPUUpdater!
     
     var menuSource: MenuDataSource?
     var windowInterceptor: InterceptingDelegate?
     var mainWindow: NSWindow?
     var item: NSStatusItem?
-    
+        
     var passing: Bool {
         get { return item?.button?.image == passingImage }
         set { item?.button?.image = newValue ? passingImage : failingImage }
@@ -51,9 +54,38 @@ import Sparkle
         NSStatusBar.system.removeStatusItem(item!)
         item = nil
     }
+    
+    func setupSparkle(driver: SparkleDriver) {
+        let hostBundle = Bundle.main
+        updateDriver = WrappedUserDriver(wrapping: driver)
+        updater = SPUUpdater(hostBundle: hostBundle, applicationBundle: hostBundle, userDriver: updateDriver, delegate: self)
+        do {
+            try updater.start()
+        } catch {
+            // Delay the alert four seconds so it doesn't show RIGHT as the app launches, but also doesn't interrupt the user once they really get to work.
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: .seconds(4))) {
+                let alert = NSAlert()
+                alert.messageText = "Unable to Check For Updates"
+                alert.informativeText = "The update checker failed to start correctly. You should contact the app developer to report this issue and verify that you have the latest version."
+                alert.addButton(withTitle: "OK")
+                alert.runModal()
+            }
+        }
+    }
 }
 
+
 extension AppKitBridgeImp: AppKitBridge {
+    func setup(withSparkleDriver sparkleDriver: Any) {
+        print(sparkleDriver)
+        if let driver = sparkleDriver as? SparkleDriver {
+            setupSparkle(driver: driver)
+        }
+
+        self.nextResponder = NSApp.nextResponder
+        NSApp.nextResponder = self
+    }
+    
     var showInDock: Bool {
         get { return item != nil }
         set { }
@@ -68,12 +100,6 @@ extension AppKitBridgeImp: AppKitBridge {
                 tearDownMenu()
             }
         }
-    }
-    
-    @objc func setup() {
-        updateController = SPUStandardUpdaterController(updaterDelegate: self, userDriverDelegate: nil)
-        self.nextResponder = NSApp.nextResponder
-        NSApp.nextResponder = self
     }
     
     @objc func didSetup(_ uiWindow: Any) {
@@ -133,7 +159,7 @@ extension AppKitBridgeImp: NSMenuDelegate {
     }
 
     @IBAction func handleCheckForUpdates(_ sender: Any) {
-        updateController.checkForUpdates(sender)
+        updater.checkForUpdates()
     }
     
     @IBAction func handleShow(_ sender: Any) {
@@ -158,15 +184,44 @@ extension AppKitBridgeImp: NSWindowDelegate {
 }
 
 extension AppKitBridgeImp: SPUUpdaterDelegate {
-    func updaterDidNotFindUpdate(_ updater: SPUUpdater) {
-        print("arse")
+}
+
+class CustomAlert: NSWindowController, SPUStandardUpdateAlert {
+    @objc var allowsAutomaticUpdates: Bool = false
+    @objc var descriptionText: String = "blah"
+    
+//    @IBOutlet var releaseNotesView: WKWebView!
+    @IBOutlet var releaseNotesContainerView: NSView!
+    @IBOutlet var descriptionField: NSTextField!
+    @IBOutlet var automaticallyInstallUpdatesButton: NSButton!
+    @IBOutlet var installButton: NSButton!
+    @IBOutlet var skipButton: NSButton!
+    @IBOutlet var laterButton: NSButton!
+
+    override func windowDidLoad() {
+        
+    }
+    func showUpdateReleaseNotes(with downloadData: SPUDownloadData) {
+        
     }
     
-    func updater(_ updater: SPUUpdater, didFinishLoading appcast: SUAppcast) {
-        print("arse")
+    func showReleaseNotesFailedToDownload() {
+        
     }
     
-    func updater(_ updater: SPUUpdater, willScheduleUpdateCheckAfterDelay delay: TimeInterval) {
-        print("delay \(delay)")
+    
+}
+
+extension AppKitBridgeImp: SPUStandardUserDriverDelegate {
+    func standardUserDriverMakeAlert(with item: SUAppcastItem, alreadyDownloaded: Bool, host aHost: SUHost, versionDisplayer aVersionDisplayer: SUVersionDisplay, completionBlock block: @escaping (SPUUpdateAlertChoice) -> Void) -> NSWindowController & SPUStandardUpdateAlert {
+        return CustomAlert(windowNibName: "AlternateAlert")
+    }
+    
+    func standardUserDriverMakeAlert(with item: SUAppcastItem, host aHost: SUHost, versionDisplayer aVersionDisplayer: SUVersionDisplay, resumableCompletionBlock block: @escaping (SPUInstallUpdateStatus) -> Void) -> NSWindowController & SPUStandardUpdateAlert {
+        return CustomAlert(windowNibName: "AlternateAlert")
+    }
+    
+    func standardUserDriverMakeAlert(with item: SUAppcastItem, host aHost: SUHost, versionDisplayer aVersionDisplayer: SUVersionDisplay, informationalCompletionBlock block: @escaping (SPUInformationalUpdateAlertChoice) -> Void) -> NSWindowController & SPUStandardUpdateAlert {
+        return CustomAlert(windowNibName: "AlternateAlert")
     }
 }

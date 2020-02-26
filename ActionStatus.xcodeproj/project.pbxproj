@@ -31,6 +31,12 @@
 		8B3E64B323EAE62E00B28168 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64B123EAE62E00B28168 /* LaunchScreen.storyboard */; };
 		8B3E64BE23EAE62E00B28168 /* ActionStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64BD23EAE62E00B28168 /* ActionStatusTests.swift */; };
 		8B3E64C923EAE62F00B28168 /* ActionStatusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */; };
+		8B3F81692406D9DD0006EC84 /* UpdateAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F81682406D9DC0006EC84 /* UpdateAlert.xib */; };
+		8B3F816B2406E0BC0006EC84 /* AlternateAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F816A2406E0BC0006EC84 /* AlternateAlert.xib */; };
+		8B3F816E2406EA850006EC84 /* WrappedUserDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F816D2406EA850006EC84 /* WrappedUserDriver.swift */; };
+		8B3F81702406EBF40006EC84 /* SparkleDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F816F2406EBF40006EC84 /* SparkleDriver.swift */; };
+		8B3F81712406EBF40006EC84 /* SparkleDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F816F2406EBF40006EC84 /* SparkleDriver.swift */; };
+		8B3F81732406ECBE0006EC84 /* SparkleDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F816F2406EBF40006EC84 /* SparkleDriver.swift */; };
 		8B430E7E23F586830050BF2A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64AA23EAE62D00B28168 /* ContentView.swift */; };
 		8B430E8023F586830050BF2A /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F181723F459570029F9CC /* EditView.swift */; };
 		8B430E8123F586830050BF2A /* Repo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B451DFB23F415E10056EF3E /* Repo.swift */; };
@@ -145,6 +151,10 @@
 		8B3E64C423EAE62F00B28168 /* Action Status.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Action Status.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionStatusUITests.swift; sourceTree = "<group>"; };
 		8B3E64CA23EAE62F00B28168 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8B3F81682406D9DC0006EC84 /* UpdateAlert.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UpdateAlert.xib; sourceTree = "<group>"; };
+		8B3F816A2406E0BC0006EC84 /* AlternateAlert.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlternateAlert.xib; sourceTree = "<group>"; };
+		8B3F816D2406EA850006EC84 /* WrappedUserDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrappedUserDriver.swift; sourceTree = "<group>"; };
+		8B3F816F2406EBF40006EC84 /* SparkleDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleDriver.swift; sourceTree = "<group>"; };
 		8B430E6A23F586100050BF2A /* Action Status.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Action Status.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B430E6C23F586100050BF2A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B430E7623F586110050BF2A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -175,8 +185,6 @@
 		8BA522A224057CAE00B82857 /* upload-mobile */ = {isa = PBXFileReference; lastKnownFileType = text; path = "upload-mobile"; sourceTree = "<group>"; };
 		8BA522A32405804500B82857 /* ExportOptions-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ExportOptions-iOS.plist"; sourceTree = "<group>"; };
 		8BBFAA8B2403F09F0091157A /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
-		8BBFAA8D2403F1030091157A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sparkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8BBFAA902403F27B0091157A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sparkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BBFAA942403F8E80091157A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sparkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BE3D08F2405934C00AB6CAD /* ExportOptions-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ExportOptions-tvOS.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -396,6 +404,8 @@
 			children = (
 				8B5E7E9223F6C0B600087E15 /* BridgingHeader.h */,
 				8B3BA5A4240540CC0071F0C1 /* AppKitBridge.entitlements */,
+				8B3F81682406D9DC0006EC84 /* UpdateAlert.xib */,
+				8B3F816A2406E0BC0006EC84 /* AlternateAlert.xib */,
 				8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */,
 				8B5E7E8523F6BB3500087E15 /* Info.plist */,
 			);
@@ -418,6 +428,7 @@
 				8B430E8623F587E30050BF2A /* AppCommon.swift */,
 				8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */,
 				8B880FE923FD97EE0068C3FF /* WorkflowGenerator.swift */,
+				8B3F816F2406EBF40006EC84 /* SparkleDriver.swift */,
 				8B4336F7240052FF00598A04 /* Model */,
 				8B5B175223FADAAE00DD2AF5 /* Resources */,
 				8B4336F6240052DC00598A04 /* Views */,
@@ -429,8 +440,6 @@
 			isa = PBXGroup;
 			children = (
 				8BBFAA942403F8E80091157A /* Sparkle.framework */,
-				8BBFAA902403F27B0091157A /* Sparkle.framework */,
-				8BBFAA8D2403F1030091157A /* Sparkle.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -442,6 +451,7 @@
 				8B2F0AB923FC195700B2E62A /* InterceptingDelegate.h */,
 				8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */,
 				8B5E7E9323F6C0C200087E15 /* AppKitBridge.h */,
+				8B3F816D2406EA850006EC84 /* WrappedUserDriver.swift */,
 				8B5B175323FAE05600DD2AF5 /* Resources */,
 			);
 			path = AppKitBridge;
@@ -549,6 +559,8 @@
 			dependencies = (
 			);
 			name = AppKitBridge;
+			packageProductDependencies = (
+			);
 			productName = AppKitBridge;
 			productReference = 8B5E7E8323F6BB3500087E15 /* AppKitBridge.bundle */;
 			productType = "com.apple.product-type.bundle";
@@ -659,6 +671,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B3F81692406D9DD0006EC84 /* UpdateAlert.xib in Resources */,
+				8B3F816B2406E0BC0006EC84 /* AlternateAlert.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -713,6 +727,7 @@
 				8B3E64A923EAE62D00B28168 /* SceneDelegate.swift in Sources */,
 				8B430E8723F587E30050BF2A /* AppCommon.swift in Sources */,
 				8B6F181823F459570029F9CC /* EditView.swift in Sources */,
+				8B3F81702406EBF40006EC84 /* SparkleDriver.swift in Sources */,
 				8B4336EC23FFE53700598A04 /* DocumentPickerViewController.swift in Sources */,
 				8B880FEA23FD97EE0068C3FF /* WorkflowGenerator.swift in Sources */,
 				8B880FE623FD97600068C3FF /* Option.swift in Sources */,
@@ -747,6 +762,7 @@
 				8B430E7E23F586830050BF2A /* ContentView.swift in Sources */,
 				8B430E8123F586830050BF2A /* Repo.swift in Sources */,
 				8B430E8823F587E60050BF2A /* AppCommon.swift in Sources */,
+				8B3F81712406EBF40006EC84 /* SparkleDriver.swift in Sources */,
 				8B4336EF23FFE8E500598A04 /* WorkflowGenerator.swift in Sources */,
 				8B4336F023FFE8ED00598A04 /* Option.swift in Sources */,
 				8B430E8023F586830050BF2A /* EditView.swift in Sources */,
@@ -761,8 +777,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B3F81732406ECBE0006EC84 /* SparkleDriver.swift in Sources */,
 				8B5E7E8D23F6BB8900087E15 /* AppKitBridge.swift in Sources */,
 				8B2F0ABB23FC195800B2E62A /* InterceptingDelegate.m in Sources */,
+				8B3F816E2406EA850006EC84 /* WrappedUserDriver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
