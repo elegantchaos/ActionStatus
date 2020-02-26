@@ -17,7 +17,8 @@ class Model: ObservableObject {
     var composingID: UUID?
     var exportURL: URL?
     var exportYML: String?
-
+    var refreshInterval: Double = 10.0
+    
     @Published var items: [Repo]
     @Published var isComposing = false
     @Published var isSaving = false
@@ -127,7 +128,7 @@ class Model: ObservableObject {
 
                 self.sortItems()
                 self.block?()
-                self.scheduleRefresh(after: 10.0)
+                self.scheduleRefresh(after: self.refreshInterval)
             }
         }
     }

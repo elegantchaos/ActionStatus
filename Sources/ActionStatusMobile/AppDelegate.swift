@@ -12,18 +12,25 @@ class AppDelegate: AppCommon {
     var appKitBridge: AppKitBridge? = nil
     var filePicker: UIDocumentPickerViewController?
     
-    override func setup(withOptions options: LaunchOptions) {
+    override func setUp(withOptions options: LaunchOptions) {
         loadBridge()
-        model.block = { self.refreshBridge() }
+        model.block = { self.updateBridge() }
 
-        super.setup(withOptions: options)
+        super.setUp(withOptions: options)
     }
     
     override func didSetup(_ window: UIWindow) {
         appKitBridge?.didSetup(window)
     }
     
-    fileprivate func refreshBridge() {
+    override func applySettings() {
+        super.applySettings()
+        updateBridge()
+    }
+    
+    fileprivate func updateBridge() {
+        appKitBridge?.showInMenu = UserDefaults.standard.bool(forKey: "ShowInMenu")
+        appKitBridge?.showInDock = UserDefaults.standard.bool(forKey: "ShowInDock")
         appKitBridge?.passing = model.failingCount == 0
     }
     

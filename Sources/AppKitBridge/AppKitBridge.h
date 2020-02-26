@@ -24,6 +24,9 @@ typedef NS_ENUM(NSUInteger, ItemStatus) {
 
 @protocol AppKitBridge <NSObject>
 @property BOOL passing;
+@property BOOL showInMenu;
+@property BOOL showInDock;
+
 - (void) setup;
 - (void) didSetup: (nonnull id) window;
 - (void) setDataSource: (nonnull id<MenuDataSource>) source;

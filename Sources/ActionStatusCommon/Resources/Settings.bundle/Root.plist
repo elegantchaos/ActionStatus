@@ -18,7 +18,7 @@
 			<key>Title</key>
 			<string>Refresh Every</string>
 			<key>Key</key>
-			<string>RefreshDelay</string>
+			<string>RefreshInterval</string>
 			<key>DefaultValue</key>
 			<string>1 Minute</string>
 			<key>Values</key>
@@ -53,7 +53,7 @@
 			<key>Title</key>
 			<string>Show In Menubar</string>
 			<key>Key</key>
-			<string>ShowInMenubar</string>
+			<string>ShowInMenu</string>
 			<key>DefaultValue</key>
 			<true/>
 		</dict>

@@ -18,10 +18,11 @@ import Sparkle
     var menuSource: MenuDataSource?
     var windowInterceptor: InterceptingDelegate?
     var mainWindow: NSWindow?
-    var item: NSStatusItem!
+    var item: NSStatusItem?
+    
     var passing: Bool {
-        get { return item.button?.image == passingImage }
-        set { item.button?.image = newValue ? passingImage : failingImage }
+        get { return item?.button?.image == passingImage }
+        set { item?.button?.image = newValue ? passingImage : failingImage }
     }
     
     class func setupImage(_ name: String) -> NSImage {
@@ -30,22 +31,47 @@ import Sparkle
         return image
     }
 
-}
-
-extension AppKitBridgeImp: AppKitBridge {
-    @objc func setup() {
-        updateController = SPUStandardUpdaterController(updaterDelegate: self, userDriverDelegate: nil)
+    func setupMenu() {
+        assert(item == nil)
         let status = NSStatusBar.system
-        item = status.statusItem(withLength: 22)
-        if let button = item.button {
+        let newItem = status.statusItem(withLength: 22)
+        if let button = newItem.button {
             button.title = "ActionStatus"
             button.image = unknownImage
         }
         
         let menu = NSMenu(title: "Repos")
         menu.delegate = self
-        item.menu = menu
-        
+        newItem.menu = menu
+        item = newItem
+    }
+    
+    func tearDownMenu() {
+        assert(item != nil)
+        NSStatusBar.system.removeStatusItem(item!)
+        item = nil
+    }
+}
+
+extension AppKitBridgeImp: AppKitBridge {
+    var showInDock: Bool {
+        get { return item != nil }
+        set { }
+    }
+    
+    var showInMenu: Bool {
+        get { return item != nil }
+        set {
+            if newValue && (item == nil) {
+                setupMenu()
+            } else if !newValue && (item != nil) {
+                tearDownMenu()
+            }
+        }
+    }
+    
+    @objc func setup() {
+        updateController = SPUStandardUpdaterController(updaterDelegate: self, userDriverDelegate: nil)
         self.nextResponder = NSApp.nextResponder
         NSApp.nextResponder = self
     }
@@ -66,7 +92,7 @@ extension AppKitBridgeImp: AppKitBridge {
 
 extension AppKitBridgeImp: NSMenuDelegate {
     func menuNeedsUpdate(_ menu: NSMenu) {
-        if menu == item.menu {
+        if menu == item?.menu {
             menu.removeAllItems()
             if let menuSource = menuSource {
                 for n in 0 ..< menuSource.itemCount() {

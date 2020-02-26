@@ -1,6 +1,6 @@
 set -e
 source make-tools 2> /dev/null
-rt archive --show-output $@
+rt archive --show-output $@ | xcpretty
 rt export
 rt notarize
 rt wait
