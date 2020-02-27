@@ -12,6 +12,7 @@ import Logger
 class AppDelegate: AppCommon {
     var appKitBridge: AppKitBridge? = nil
     var filePicker: UIDocumentPickerViewController?
+    var sparkleDriver: ActionStatusSparkleDriver?
     
     override func setUp(withOptions options: LaunchOptions) {
         loadBridge()
@@ -21,7 +22,9 @@ class AppDelegate: AppCommon {
     }
     
     override func didSetup(_ window: UIWindow) {
-        appKitBridge?.didSetup(window)
+        let driver = ActionStatusSparkleDriver()
+        sparkleDriver = driver
+        appKitBridge?.setup(with: driver, capturingWindowNamed: info.name, dataSource: self)
     }
     
     override func applySettings() {
@@ -40,8 +43,6 @@ class AppDelegate: AppCommon {
             if let cls = bundle.principalClass as? NSObject.Type {
                 if let instance = cls.init() as? AppKitBridge {
                     appKitBridge = instance
-                    instance.setup(withSparkleDriver: self)
-                    instance.setDataSource(self)
                 }
             }
         }
@@ -165,92 +166,93 @@ extension AppDelegate: MenuDataSource {
 
 let sparkleChannel = Channel("Sparkle")
 
-extension AppDelegate: SparkleDriver {
-    func showCanCheck(forUpdates canCheckForUpdates: Bool) {
+class ActionStatusSparkleDriver: ExpandedSparkleDriver {
+    
+    override func showCanCheck(forUpdates canCheckForUpdates: Bool) {
         sparkleChannel.debug("canCheckForUpdates: \(canCheckForUpdates)")
     }
     
-    func show(_ request: SparkleUpdatePermissionRequest, reply: @escaping (SparkleUpdatePermissionResponse) -> Void) {
+    override func show(_ request: SparkleUpdatePermissionRequest, reply: @escaping (SparkleUpdatePermissionResponse) -> Void) {
         sparkleChannel.debug("show")
     }
     
-    func showUserInitiatedUpdateCheck(completion updateCheckStatusCompletion: @escaping (SparkleUserInitiatedCheckStatus) -> Void) {
+    override func showUserInitiatedUpdateCheck(completion updateCheckStatusCompletion: @escaping (SparkleUserInitiatedCheckStatus) -> Void) {
         sparkleChannel.debug("showUserInitiatedUpdateCheck")
     }
     
-    func dismissUserInitiatedUpdateCheck() {
+    override func dismissUserInitiatedUpdateCheck() {
         sparkleChannel.debug("dismissUserInitiatedUpdateCheck")
     }
     
-    func showUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (SparkleUpdateAlertChoice) -> Void) {
+    override func showUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (SparkleUpdateAlertChoice) -> Void) {
         sparkleChannel.debug("showUpdateFound")
     }
     
-    func showDownloadedUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (SparkleUpdateAlertChoice) -> Void) {
+    override func showDownloadedUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (SparkleUpdateAlertChoice) -> Void) {
         sparkleChannel.debug("showDownloadedUpdateFound")
     }
     
-    func showResumableUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (SparkleInstallUpdateStatus) -> Void) {
+    override func showResumableUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (SparkleInstallUpdateStatus) -> Void) {
         sparkleChannel.debug("showResumableUpdateFound")
     }
     
-    func showInformationalUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (SparkleInformationalUpdateAlertChoice) -> Void) {
+    override func showInformationalUpdateFound(with appcastItem: SparkleAppcastItem, userInitiated: Bool, reply: @escaping (SparkleInformationalUpdateAlertChoice) -> Void) {
         sparkleChannel.debug("showInformationalUpdateFound")
     }
     
-    func showUpdateReleaseNotes(with downloadData: SparkleDownloadData) {
+    override func showUpdateReleaseNotes(with downloadData: SparkleDownloadData) {
         sparkleChannel.debug("showUpdateReleaseNotes")
     }
     
-    func showUpdateReleaseNotesFailedToDownloadWithError(_ error: Error) {
+    override func showUpdateReleaseNotesFailedToDownloadWithError(_ error: Error) {
         sparkleChannel.debug("showUpdateReleaseNotesFailedToDownloadWithError")
     }
     
-    func showUpdateNotFound(acknowledgement: @escaping () -> Void) {
+    override func showUpdateNotFound(acknowledgement: @escaping () -> Void) {
         sparkleChannel.debug("showUpdaterError")
     }
     
-    func showUpdaterError(_ error: Error, acknowledgement: @escaping () -> Void) {
+    override func showUpdaterError(_ error: Error, acknowledgement: @escaping () -> Void) {
         sparkleChannel.debug("showUpdaterError")
     }
     
-    func showDownloadInitiated(completion downloadUpdateStatusCompletion: @escaping (SparkleDownloadUpdateStatus) -> Void) {
+    override func showDownloadInitiated(completion downloadUpdateStatusCompletion: @escaping (SparkleDownloadUpdateStatus) -> Void) {
         sparkleChannel.debug("showDownloadInitiated")
     }
     
-    func showDownloadDidReceiveExpectedContentLength(_ expectedContentLength: UInt64) {
+    override func showDownloadDidReceiveExpectedContentLength(_ expectedContentLength: UInt64) {
         sparkleChannel.debug("showDownloadDidReceiveExpectedContentLength")
     }
     
-    func showDownloadDidReceiveData(ofLength length: UInt64) {
+    override func showDownloadDidReceiveData(ofLength length: UInt64) {
         sparkleChannel.debug("showDownloadDidReceiveData")
     }
     
-    func showDownloadDidStartExtractingUpdate() {
+    override func showDownloadDidStartExtractingUpdate() {
         sparkleChannel.debug("showDownloadDidStartExtractingUpdate")
     }
     
-    func showExtractionReceivedProgress(_ progress: Double) {
+    override func showExtractionReceivedProgress(_ progress: Double) {
         sparkleChannel.debug("showExtractionReceivedProgress")
     }
     
-    func showReady(toInstallAndRelaunch installUpdateHandler: @escaping (SparkleInstallUpdateStatus) -> Void) {
+    override func showReady(toInstallAndRelaunch installUpdateHandler: @escaping (SparkleInstallUpdateStatus) -> Void) {
         sparkleChannel.debug("showReady")
     }
     
-    func showInstallingUpdate() {
+    override func showInstallingUpdate() {
         sparkleChannel.debug("showInstallingUpdate")
     }
     
-    func showSendingTerminationSignal() {
+    override func showSendingTerminationSignal() {
         sparkleChannel.debug("showSendingTerminationSignal")
     }
     
-    func showUpdateInstallationDidFinish(acknowledgement: @escaping () -> Void) {
+    override func showUpdateInstallationDidFinish(acknowledgement: @escaping () -> Void) {
         sparkleChannel.debug("showUpdateInstallationDidFinish")
     }
     
-    func dismissUpdateInstallation() {
+    override func dismissUpdateInstallation() {
         sparkleChannel.debug("dismissUpdateInstallation")
     }
     

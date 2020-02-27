@@ -75,14 +75,21 @@ import Sparkle
 
 
 extension AppKitBridgeImp: AppKitBridge {
-    func setup(withSparkleDriver sparkleDriver: Any) {
-        print(sparkleDriver)
-        if let driver = sparkleDriver as? SparkleDriver {
-            setupSparkle(driver: driver)
-        }
+    @objc func setup(with sparkleDriver: SparkleDriver, capturingWindowNamed windowName: String, dataSource source: MenuDataSource) {
+        menuSource = source
+        setupSparkle(driver: sparkleDriver)
 
         self.nextResponder = NSApp.nextResponder
         NSApp.nextResponder = self
+
+
+        for window in NSApp.windows {
+            if window.title == windowName {
+                windowInterceptor = InterceptingDelegate(window: window, interceptor: self)
+                mainWindow = window
+            }
+        }
+
     }
     
     var showInDock: Bool {
@@ -99,19 +106,6 @@ extension AppKitBridgeImp: AppKitBridge {
                 tearDownMenu()
             }
         }
-    }
-    
-    @objc func didSetup(_ uiWindow: Any) {
-        for window in NSApp.windows {
-            if window.title == appName {
-                windowInterceptor = InterceptingDelegate(window: window, interceptor: self)
-                mainWindow = window
-            }
-        }
-    }
-    
-    @objc func setDataSource(_ source: MenuDataSource) {
-        menuSource = source
     }
 }
 

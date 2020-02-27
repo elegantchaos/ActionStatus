@@ -19,10 +19,10 @@ typedef NS_ENUM(NSUInteger, ItemStatus) {
 
 @protocol SparkleDriver <NSObject>
 - (void)showCanCheckForUpdates:(BOOL)canCheckForUpdates;
-- (void)showUpdatePermissionRequest:(NSDictionary *)request reply:(void (^)(NSDictionary *))reply;
-- (void)showUserInitiatedUpdateCheckWithCompletion:(void (^)(NSInteger))updateCheckStatusCompletion;
-- (void) dismissUserInitiatedUpdateCheck;
-- (void)showUpdateFoundWithAppcastItem:(NSDictionary *)appcastItem userInitiated:(BOOL)userInitiated reply:(void (^)(NSUInteger))reply;
+- (void)showUpdatePermissionRequest:(NSArray<NSDictionary<NSString *, NSString *> *> *)request reply:(void (^)(NSDictionary<NSString *, NSNumber *> *))reply;
+- (void)showUserInitiatedUpdateCheckWithCompletion:(void (^)(NSUInteger))updateCheckStatusCompletion;
+- (void)dismissUserInitiatedUpdateCheck;
+- (void)showUpdateFoundWithAppcastItem:(NSDictionary *)appcastItem userInitiated:(BOOL)userInitiated reply:(void (^)(NSInteger))reply;
 - (void)showDownloadedUpdateFoundWithAppcastItem:(NSDictionary *)appcastItem userInitiated:(BOOL)userInitiated reply:(void (^)(NSInteger))reply;
 - (void)showResumableUpdateFoundWithAppcastItem:(NSDictionary *)appcastItem userInitiated:(BOOL)userInitiated reply:(void (^)(NSUInteger))reply;
 - (void)showInformationalUpdateFoundWithAppcastItem:(NSDictionary *)appcastItem userInitiated:(BOOL)userInitiated reply:(void (^)(NSInteger))reply;
@@ -54,9 +54,7 @@ typedef NS_ENUM(NSUInteger, ItemStatus) {
 @property BOOL showInMenu;
 @property BOOL showInDock;
 
-- (void) setupWithSparkleDriver: (nonnull id<SparkleDriver>)sparkleDriver;
-- (void) didSetup: (nonnull id) window;
-- (void) setDataSource: (nonnull id<MenuDataSource>) source;
+- (void) setupWithSparkleDriver: (nonnull id<SparkleDriver>)sparkleDriver capturingWindowNamed: (nonnull NSString*) windowName dataSource: (nonnull id<MenuDataSource>) source;
 - (nonnull SEL) showHandler;
 @end
 

@@ -6,51 +6,18 @@
 import Foundation
 import Sparkle
 
-protocol SparkleConvertable: RawRepresentable {
-    associatedtype SparkleType
-    var converted: SparkleType { get }
-}
-
-extension SparkleConvertable where SparkleType: RawRepresentable, RawValue == SparkleType.RawValue {
-    var converted: SparkleType { return SparkleType(rawValue: self.rawValue)! }
-}
-
-extension SparkleUserInitiatedCheckStatus: SparkleConvertable {
-    typealias SparkleType = SPUUserInitiatedCheckStatus
-}
-
-extension SparkleDownloadUpdateStatus: SparkleConvertable {
-    typealias SparkleType = SPUDownloadUpdateStatus
-}
-
-extension SparkleInstallUpdateStatus: SparkleConvertable {
-    typealias SparkleType = SPUInstallUpdateStatus
-}
-
-extension SparkleUpdateAlertChoice: SparkleConvertable {
-    typealias SparkleType = SPUUpdateAlertChoice
-}
-
-extension SparkleInformationalUpdateAlertChoice: SparkleConvertable {
-    typealias SparkleType = SPUInformationalUpdateAlertChoice
-}
-
-extension SparkleUpdatePermissionResponse {
-    var converted: SUUpdatePermissionResponse { return SUUpdatePermissionResponse(automaticUpdateChecks: automaticUpdateChecks, sendSystemProfile: sendSystemProfile) }
-}
-
 extension SUUpdatePermissionResponse {
-    convenience init(_ dictionary: [String:Bool]) {
+    convenience init(_ dictionary: [String:NSNumber]) {
         self.init(
-            automaticUpdateChecks: dictionary["automaticUpdateChecks"]!,
-            sendSystemProfile: dictionary["sendSystemProfile"]!
+            automaticUpdateChecks: dictionary["automaticUpdateChecks"]!.boolValue,
+            sendSystemProfile: dictionary["sendSystemProfile"]!.boolValue
         )
     }
 }
-
-extension SparkleDownloadData {
-    var converted: SPUDownloadData { return SPUDownloadData(data: data, textEncodingName: encoding, mimeType: mimeType) }
-}
+//
+//extension SparkleDownloadData {
+//    var converted: SPUDownloadData { return SPUDownloadData(data: data, textEncodingName: encoding, mimeType: mimeType) }
+//}
     
 internal class WrappedUserDriver: NSObject, SPUUserDriver {
     let driver: SparkleDriver
@@ -64,7 +31,9 @@ internal class WrappedUserDriver: NSObject, SPUUserDriver {
     }
     
     func show(_ request: SPUUpdatePermissionRequest, reply: @escaping (SUUpdatePermissionResponse) -> Void) {
-        driver.show(request.systemProfile) { response in reply(SUUpdatePermissionResponse(response)) }
+        driver.showUpdatePermissionRequest(request.systemProfile) { response in
+            reply(SUUpdatePermissionResponse(response))
+        }
     }
     
     func showUserInitiatedUpdateCheck(completion updateCheckStatusCompletion: @escaping (SPUUserInitiatedCheckStatus) -> Void) {
@@ -78,25 +47,25 @@ internal class WrappedUserDriver: NSObject, SPUUserDriver {
     }
     
     func showUpdateFound(with appcastItem: SUAppcastItem, userInitiated: Bool, reply: @escaping (SPUUpdateAlertChoice) -> Void) {
-        driver.showUpdateFound(with: appcastItem.propertiesDictionary, userInitiated: userInitiated) { choice in
+        driver.showUpdateFound(withAppcastItem: appcastItem.propertiesDictionary, userInitiated: userInitiated) { choice in
             reply(SPUUpdateAlertChoice(rawValue: choice)!)
         }
     }
     
     func showDownloadedUpdateFound(with appcastItem: SUAppcastItem, userInitiated: Bool, reply: @escaping (SPUUpdateAlertChoice) -> Void) {
-        driver.showDownloadedUpdateFound(with: appcastItem.propertiesDictionary, userInitiated: userInitiated) { choice in
+        driver.showDownloadedUpdateFound(withAppcastItem: appcastItem.propertiesDictionary, userInitiated: userInitiated) { choice in
             reply(SPUUpdateAlertChoice(rawValue: choice)! )
         }
     }
     
     func showResumableUpdateFound(with appcastItem: SUAppcastItem, userInitiated: Bool, reply: @escaping (SPUInstallUpdateStatus) -> Void) {
-        driver.showResumableUpdateFound(with: appcastItem.propertiesDictionary, userInitiated: userInitiated) { choice in
+        driver.showResumableUpdateFound(withAppcastItem: appcastItem.propertiesDictionary, userInitiated: userInitiated) { choice in
             reply(SPUInstallUpdateStatus(rawValue: choice)!)
         }
     }
     
     func showInformationalUpdateFound(with appcastItem: SUAppcastItem, userInitiated: Bool, reply: @escaping (SPUInformationalUpdateAlertChoice) -> Void) {
-        driver.showInformationalUpdateFound(with: appcastItem.propertiesDictionary, userInitiated: userInitiated) { choice in
+        driver.showInformationalUpdateFound(withAppcastItem: appcastItem.propertiesDictionary, userInitiated: userInitiated) { choice in
             reply(SPUInformationalUpdateAlertChoice(rawValue: choice)!)
         }
     }
@@ -109,7 +78,7 @@ internal class WrappedUserDriver: NSObject, SPUUserDriver {
         if let type = downloadData.mimeType {
             data["mimeType"] = type
         }
-        driver.showUpdateReleaseNotes(with: data)
+        driver.showUpdateReleaseNotes(withDownloadData: data)
     }
     
     func showUpdateReleaseNotesFailedToDownloadWithError(_ error: Error) {

@@ -34,7 +34,6 @@
 		8B3F816E2406EA850006EC84 /* WrappedUserDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F816D2406EA850006EC84 /* WrappedUserDriver.swift */; };
 		8B3F81702406EBF40006EC84 /* SparkleDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F816F2406EBF40006EC84 /* SparkleDriver.swift */; };
 		8B3F81712406EBF40006EC84 /* SparkleDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F816F2406EBF40006EC84 /* SparkleDriver.swift */; };
-		8B3F81732406ECBE0006EC84 /* SparkleDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F816F2406EBF40006EC84 /* SparkleDriver.swift */; };
 		8B430E7E23F586830050BF2A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64AA23EAE62D00B28168 /* ContentView.swift */; };
 		8B430E8023F586830050BF2A /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F181723F459570029F9CC /* EditView.swift */; };
 		8B430E8123F586830050BF2A /* Repo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B451DFB23F415E10056EF3E /* Repo.swift */; };
@@ -773,7 +772,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B3F81732406ECBE0006EC84 /* SparkleDriver.swift in Sources */,
 				8B5E7E8D23F6BB8900087E15 /* AppKitBridge.swift in Sources */,
 				8B2F0ABB23FC195800B2E62A /* InterceptingDelegate.m in Sources */,
 				8B3F816E2406EA850006EC84 /* WrappedUserDriver.swift in Sources */,
