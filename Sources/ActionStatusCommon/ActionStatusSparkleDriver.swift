@@ -108,18 +108,24 @@ class ActionStatusSparkleDriver: SparkleDriver, ObservableObject {
     
     override func showExtractionReceivedProgress(_ progress: Double) {
         sparkleChannel.debug("showExtractionReceivedProgress")
+        let percent = Int(progress * 100.0)
+        status = "Extracting update... (\(percent)%)"
     }
     
     override func showReady(toInstallAndRelaunch installUpdateHandler: @escaping UpdateStatusCallback) {
         sparkleChannel.debug("showReady")
+        status = "Restarting..."
+        installUpdateHandler(.installAndRelaunch)
     }
     
     override func showInstallingUpdate() {
         sparkleChannel.debug("showInstallingUpdate")
+        status = "Installing update..."
     }
     
     override func showSendingTerminationSignal() {
         sparkleChannel.debug("showSendingTerminationSignal")
+        status = "Sending termination..."
     }
     
     override func showUpdateInstallationDidFinish(acknowledgement: @escaping () -> Void) {

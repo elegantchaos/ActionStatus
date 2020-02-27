@@ -12,7 +12,12 @@ fi
 
 echo "Copying XPCs"
 
-ditto "${ACTION_STATUS_MAC_PRODUCTS_DIR}/org.sparkle-project.InstallerStatus.xpc" "${ACTION_STATUS_BUILT_XPCSERVICES_DIR}/org.sparkle-project.InstallerStatus.xpc"
+XPCS=(org.sparkle-project.InstallerStatus.xpc org.sparkle-project.InstallerLauncher.xpc org.sparkle-project.InstallerConnection.xpc)
+for name in ${XPCS[@]}
+do
+    echo "Copying $name"
+    ditto "$ACTION_STATUS_MAC_PRODUCTS_DIR/$name" "$ACTION_STATUS_BUILT_XPCSERVICES_DIR/$name"
+done
 
 echo "Re-signing embedded frameworks."
 
@@ -28,3 +33,9 @@ fi
 codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$ACTION_STATUS_BUILT_RESOURCES_DIR/AppKitBridge.bundle/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Updater.app"
 codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$ACTION_STATUS_BUILT_RESOURCES_DIR/AppKitBridge.bundle/Contents/Frameworks/Sparkle.framework/Versions/A"
 codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$ACTION_STATUS_BUILT_RESOURCES_DIR/AppKitBridge.bundle"
+
+for name in ${XPCS[@]}
+do
+    echo "Re-signing $name"
+    codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$ACTION_STATUS_BUILT_XPCSERVICES_DIR/$name"
+done
