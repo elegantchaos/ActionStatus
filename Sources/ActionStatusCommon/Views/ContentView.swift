@@ -75,14 +75,14 @@ struct ContentView: View {
     }
     
     var showProgress: Bool {
-        return sparkleDriver.expected != 0
+        return sparkleDriver.expected != sparkleDriver.received
     }
     
     var statusText: String {
-         if repos.sparkleStatus.isEmpty {
+         if sparkleDriver.status.isEmpty {
              return "Monitoring \(repos.items.count) repos."
          } else {
-             return repos.sparkleStatus
+             return sparkleDriver.status
          }
      }
 

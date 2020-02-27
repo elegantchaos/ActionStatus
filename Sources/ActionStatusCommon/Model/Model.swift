@@ -22,7 +22,6 @@ class Model: ObservableObject {
     @Published var items: [Repo]
     @Published var isComposing = false
     @Published var isSaving = false
-    @Published var sparkleStatus = ""
     @Published var sparkleUpdate: SparkleDriver.UpdateAlertChoice? = nil
     
     init(_ repos: [Repo], store: NSUbiquitousKeyValueStore = NSUbiquitousKeyValueStore.default, block: RefreshBlock? = nil) {
