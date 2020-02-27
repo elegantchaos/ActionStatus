@@ -17,16 +17,21 @@ typedef NS_ENUM(NSUInteger, ItemStatus) {
     ItemStatusSucceeded,
 };
 
-@protocol SparkleDriver <NSObject>
+typedef struct {
+    BOOL automaticUpdateChecks;
+    BOOL sendSystemProfile;
+} SparkleBridgeUpdatePermissionResponse;
+
+@protocol SparkleBridge <NSObject>
 - (void)showCanCheckForUpdates:(BOOL)canCheckForUpdates;
-- (void)showUpdatePermissionRequest:(NSArray<NSDictionary<NSString *, NSString *> *> *)request reply:(void (^)(NSDictionary<NSString *, NSNumber *> *))reply;
+- (void)showUpdatePermissionRequest:(NSArray<NSDictionary<NSString *, NSString *> *> *)request reply:(void (^)(SparkleBridgeUpdatePermissionResponse))reply;
 - (void)showUserInitiatedUpdateCheckWithCompletion:(void (^)(NSUInteger))updateCheckStatusCompletion;
 - (void)dismissUserInitiatedUpdateCheck;
 - (void)showUpdateFoundWithAppcastItem:(NSDictionary *)appcastItem userInitiated:(BOOL)userInitiated reply:(void (^)(NSInteger))reply;
 - (void)showDownloadedUpdateFoundWithAppcastItem:(NSDictionary *)appcastItem userInitiated:(BOOL)userInitiated reply:(void (^)(NSInteger))reply;
 - (void)showResumableUpdateFoundWithAppcastItem:(NSDictionary *)appcastItem userInitiated:(BOOL)userInitiated reply:(void (^)(NSUInteger))reply;
 - (void)showInformationalUpdateFoundWithAppcastItem:(NSDictionary *)appcastItem userInitiated:(BOOL)userInitiated reply:(void (^)(NSInteger))reply;
-- (void)showUpdateReleaseNotesWithDownloadData:(NSDictionary *)downloadData;
+- (void)showUpdateReleaseNotesWithDownloadData:(NSData *)downloadData encoding: (nullable NSString *) encoding mimeType: (nullable NSString *) mimeType;
 - (void)showUpdateReleaseNotesFailedToDownloadWithError:(NSError *)error;
 - (void)showUpdateNotFoundWithAcknowledgement:(void (^)(void))acknowledgement;
 - (void)showUpdaterError:(NSError *)error acknowledgement:(void (^)(void))acknowledgement;
@@ -44,18 +49,18 @@ typedef NS_ENUM(NSUInteger, ItemStatus) {
 
 @protocol MenuDataSource <NSObject>
 - (NSInteger) itemCount;
-- (nonnull NSString*) nameForItem: (NSInteger) item;
+- (NSString*) nameForItem: (NSInteger) item;
 - (ItemStatus) statusForItem: (NSInteger) item;
 - (void) selectItem: (NSInteger) item;
 @end
 
 @protocol AppKitBridge <NSObject>
-@property BOOL passing;
-@property BOOL showInMenu;
-@property BOOL showInDock;
+@property (nonatomic)BOOL passing;
+@property (nonatomic)BOOL showInMenu;
+@property (nonatomic) BOOL showInDock;
+@property (nonatomic, readonly) SEL showWindowSelector;
 
-- (void) setupWithSparkleDriver: (nonnull id<SparkleDriver>)sparkleDriver capturingWindowNamed: (nonnull NSString*) windowName dataSource: (nonnull id<MenuDataSource>) source;
-- (nonnull SEL) showHandler;
+- (void) setupWithSparkleBridge: (id<SparkleBridge>)sparkleDriver capturingWindowNamed: (NSString*) windowName dataSource: (id<MenuDataSource>) source;
 @end
 
 @interface AppKitBridgeImp <AppKitBridge>

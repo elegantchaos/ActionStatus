@@ -7,22 +7,15 @@ import Foundation
 import Sparkle
 
 extension SUUpdatePermissionResponse {
-    convenience init(_ dictionary: [String:NSNumber]) {
-        self.init(
-            automaticUpdateChecks: dictionary["automaticUpdateChecks"]!.boolValue,
-            sendSystemProfile: dictionary["sendSystemProfile"]!.boolValue
-        )
+    convenience init(_ bridged: SparkleBridgeUpdatePermissionResponse) {
+        self.init(automaticUpdateChecks: bridged.automaticUpdateChecks.boolValue, sendSystemProfile: bridged.sendSystemProfile.boolValue)
     }
 }
-//
-//extension SparkleDownloadData {
-//    var converted: SPUDownloadData { return SPUDownloadData(data: data, textEncodingName: encoding, mimeType: mimeType) }
-//}
-    
-internal class WrappedUserDriver: NSObject, SPUUserDriver {
-    let driver: SparkleDriver
 
-    init(wrapping driver: SparkleDriver) {
+internal class WrappedUserDriver: NSObject, SPUUserDriver {
+    let driver: SparkleBridge
+
+    init(wrapping driver: SparkleBridge) {
         self.driver = driver
     }
     
@@ -71,14 +64,7 @@ internal class WrappedUserDriver: NSObject, SPUUserDriver {
     }
     
     func showUpdateReleaseNotes(with downloadData: SPUDownloadData) {
-        var data: [String:Any] = [ "data": downloadData.data ]
-        if let name = downloadData.textEncodingName {
-            data["textEncodingName"] = name
-        }
-        if let type = downloadData.mimeType {
-            data["mimeType"] = type
-        }
-        driver.showUpdateReleaseNotes(withDownloadData: data)
+        driver.showUpdateReleaseNotes(withDownloadData: downloadData.data, encoding: downloadData.textEncodingName, mimeType: downloadData.mimeType)
     }
     
     func showUpdateReleaseNotesFailedToDownloadWithError(_ error: Error) {

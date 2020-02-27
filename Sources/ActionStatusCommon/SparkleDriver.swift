@@ -120,7 +120,7 @@ struct SparkleDownloadData {
 //    func showReady(toInstallAndRelaunch installUpdateHandler: @escaping (SparkleInstallUpdateStatus) -> Void)
 //}
 
-class ExpandedSparkleDriver: NSObject, SparkleDriver {
+class ExpandedSparkleDriver: NSObject, SparkleBridge {
     func showCanCheck(forUpdates canCheckForUpdates: Bool) {
     }
     

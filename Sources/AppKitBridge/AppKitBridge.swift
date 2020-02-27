@@ -54,7 +54,7 @@ import Sparkle
         item = nil
     }
     
-    func setupSparkle(driver: SparkleDriver) {
+    func setupSparkle(driver: SparkleBridge) {
         let hostBundle = Bundle.main
         updateDriver = WrappedUserDriver(wrapping: driver)
         updater = SPUUpdater(hostBundle: hostBundle, applicationBundle: hostBundle, userDriver: updateDriver, delegate: self)
@@ -75,9 +75,9 @@ import Sparkle
 
 
 extension AppKitBridgeImp: AppKitBridge {
-    @objc func setup(with sparkleDriver: SparkleDriver, capturingWindowNamed windowName: String, dataSource source: MenuDataSource) {
+    @objc func setup(withSparkle sparkleBridge: SparkleBridge, capturingWindowNamed windowName: String, dataSource source: MenuDataSource) {
         menuSource = source
-        setupSparkle(driver: sparkleDriver)
+        setupSparkle(driver: sparkleBridge)
 
         self.nextResponder = NSApp.nextResponder
         NSApp.nextResponder = self
@@ -107,6 +107,11 @@ extension AppKitBridgeImp: AppKitBridge {
             }
         }
     }
+    
+    var showWindowSelector: Selector {
+        return #selector(handleShow(_:))
+    }
+
 }
 
 extension AppKitBridgeImp: NSMenuDelegate {
@@ -164,9 +169,6 @@ extension AppKitBridgeImp: NSMenuDelegate {
         NSApp.terminate(self)
     }
 
-    func showHandler() -> Selector {
-        return #selector(handleShow(_:))
-    }
 }
 
 extension AppKitBridgeImp: NSWindowDelegate {
@@ -177,44 +179,4 @@ extension AppKitBridgeImp: NSWindowDelegate {
 }
 
 extension AppKitBridgeImp: SPUUpdaterDelegate {
-}
-
-class CustomAlert: NSWindowController, SPUStandardUpdateAlert {
-    @objc var allowsAutomaticUpdates: Bool = false
-    @objc var descriptionText: String = "blah"
-    
-//    @IBOutlet var releaseNotesView: WKWebView!
-    @IBOutlet var releaseNotesContainerView: NSView!
-    @IBOutlet var descriptionField: NSTextField!
-    @IBOutlet var automaticallyInstallUpdatesButton: NSButton!
-    @IBOutlet var installButton: NSButton!
-    @IBOutlet var skipButton: NSButton!
-    @IBOutlet var laterButton: NSButton!
-
-    override func windowDidLoad() {
-        
-    }
-    func showUpdateReleaseNotes(with downloadData: SPUDownloadData) {
-        
-    }
-    
-    func showReleaseNotesFailedToDownload() {
-        
-    }
-    
-    
-}
-
-extension AppKitBridgeImp: SPUStandardUserDriverDelegate {
-    func standardUserDriverMakeAlert(with item: SUAppcastItem, alreadyDownloaded: Bool, host aHost: SUHost, versionDisplayer aVersionDisplayer: SUVersionDisplay, completionBlock block: @escaping (SPUUpdateAlertChoice) -> Void) -> NSWindowController & SPUStandardUpdateAlert {
-        return CustomAlert(windowNibName: "AlternateAlert")
-    }
-    
-    func standardUserDriverMakeAlert(with item: SUAppcastItem, host aHost: SUHost, versionDisplayer aVersionDisplayer: SUVersionDisplay, resumableCompletionBlock block: @escaping (SPUInstallUpdateStatus) -> Void) -> NSWindowController & SPUStandardUpdateAlert {
-        return CustomAlert(windowNibName: "AlternateAlert")
-    }
-    
-    func standardUserDriverMakeAlert(with item: SUAppcastItem, host aHost: SUHost, versionDisplayer aVersionDisplayer: SUVersionDisplay, informationalCompletionBlock block: @escaping (SPUInformationalUpdateAlertChoice) -> Void) -> NSWindowController & SPUStandardUpdateAlert {
-        return CustomAlert(windowNibName: "AlternateAlert")
-    }
 }
