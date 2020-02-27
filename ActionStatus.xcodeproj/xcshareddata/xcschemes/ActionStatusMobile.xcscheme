@@ -32,6 +32,20 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "724BB3921D333832005D534A"
+               BuildableName = "org.sparkle-project.InstallerStatus.xpc"
+               BlueprintName = "SparkleInstallerStatus"
+               ReferencedContainer = "container:Dependencies/Sparkle/Sparkle.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "8B3E64A223EAE62D00B28168"
                BuildableName = "Action Status.app"
                BlueprintName = "ActionStatusMobile"

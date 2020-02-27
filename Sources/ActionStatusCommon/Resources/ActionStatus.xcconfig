@@ -21,8 +21,20 @@ ACTION_STATUS_COMMON_NAME = ActionStatusCommon
 ACTION_STATUS_COMMON_SOURCE_PATH = $(ACTION_STATUS_SOURCE_ROOT)/$(ACTION_STATUS_COMMON_NAME)
 ACTION_STATUS_COMMON_RESOURCE_PATH = $(ACTION_STATUS_RESOURCE_ROOT)/$(ACTION_STATUS_COMMON_NAME)/$(ACTION_STATUS_RESOURCE_CONTAINER)
 ACTION_STATUS_BUNDLE_IDENTIFIER = com.elegantchaos.actionstatus
+
+// location of our build and release scripts
 ACTION_STATUS_SCRIPTS_PATH = $(PROJECT_DIR)/.bin
 
+// location of the AppKit built products (used to find AppKit things when we're building for Catalyst)
+ACTION_STATUS_MAC_PRODUCTS_DIR= ${BUILT_PRODUCTS_DIR}/../${CONFIGURATION}
+
+// location of the Resources/ folder inside the built application
+ACTION_STATUS_BUILT_RESOURCES_DIR = ${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/Resources
+
+// location of the XPCServices/ folder inside the built application
+ACTION_STATUS_BUILT_XPCSERVICES_DIR = ${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/XPCServices
+
+// location of the ReleaseTools executable
 RELEASE_TOOLS = $(ACTION_STATUS_SCRIPTS_PATH)/rt
 
 INFOPLIST_FILE = $(ACTION_STATUS_RESOURCE_PATH)/Info.plist
