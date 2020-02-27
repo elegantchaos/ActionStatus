@@ -99,6 +99,8 @@ class ActionStatusSparkleDriver: SparkleDriver, ObservableObject {
     override func showDownloadDidReceiveData(ofLength length: UInt64) {
         sparkleChannel.debug("showDownloadDidReceiveData")
         received += length
+        let percent = (length * 100) / expected
+        status = "Downloading update... (\(percent)%)"
     }
     
     override func showDownloadDidStartExtractingUpdate() {
@@ -130,10 +132,12 @@ class ActionStatusSparkleDriver: SparkleDriver, ObservableObject {
     
     override func showUpdateInstallationDidFinish(acknowledgement: @escaping () -> Void) {
         sparkleChannel.debug("showUpdateInstallationDidFinish")
+        status = "Installation finished."
     }
     
     override func dismissUpdateInstallation() {
         sparkleChannel.debug("dismissUpdateInstallation")
+        status = ""
     }
     
     
