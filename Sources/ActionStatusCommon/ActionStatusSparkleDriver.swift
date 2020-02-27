@@ -7,7 +7,31 @@ import Logger
 
 let sparkleChannel = Channel("Sparkle")
 
-class ActionStatusSparkleDriver: SparkleDriver {
+class ActionStatusSparkleDriver: SparkleDriver, ObservableObject {
+    var updateCallback: UpdateAlertCallback?
+    
+    @Published var expected: UInt64 = 0
+    @Published var received: UInt64 = 0
+    @Published var status: String = ""
+    
+    var hasUpdate: Bool {
+        return updateCallback != nil
+    }
+    
+    func installUpdate() {
+        updateCallback?(.update)
+        updateCallback = nil
+    }
+    
+    func skipUpdate() {
+        updateCallback?(.skip)
+        updateCallback = nil
+    }
+    
+    func ignoreUpdate() {
+        updateCallback?(.later)
+        updateCallback = nil
+    }
     
     override func showCanCheck(forUpdates canCheckForUpdates: Bool) {
         sparkleChannel.debug("canCheckForUpdates: \(canCheckForUpdates)")
@@ -19,25 +43,29 @@ class ActionStatusSparkleDriver: SparkleDriver {
     
     override func showUserInitiatedUpdateCheck(completion updateCheckStatusCompletion: @escaping (UserInitiatedCheckStatus) -> Void) {
         sparkleChannel.debug("showUserInitiatedUpdateCheck")
+        status = "Checking for update."
     }
     
     override func dismissUserInitiatedUpdateCheck() {
         sparkleChannel.debug("dismissUserInitiatedUpdateCheck")
+        status = ""
     }
     
-    override func showUpdateFound(with appcastItem: AppcastItem, userInitiated: Bool, reply: @escaping (UpdateAlertChoice) -> Void) {
+    override func showUpdateFound(with appcastItem: AppcastItem, userInitiated: Bool, reply: @escaping UpdateAlertCallback) {
         sparkleChannel.debug("showUpdateFound")
+        status = "Update available."
+        updateCallback = reply
     }
     
-    override func showDownloadedUpdateFound(with appcastItem: AppcastItem, userInitiated: Bool, reply: @escaping (UpdateAlertChoice) -> Void) {
+    override func showDownloadedUpdateFound(with appcastItem: AppcastItem, userInitiated: Bool, reply: @escaping UpdateAlertCallback) {
         sparkleChannel.debug("showDownloadedUpdateFound")
     }
     
-    override func showResumableUpdateFound(with appcastItem: AppcastItem, userInitiated: Bool, reply: @escaping (InstallUpdateStatus) -> Void) {
+    override func showResumableUpdateFound(with appcastItem: AppcastItem, userInitiated: Bool, reply: @escaping UpdateStatusCallback) {
         sparkleChannel.debug("showResumableUpdateFound")
     }
     
-    override func showInformationalUpdateFound(with appcastItem: AppcastItem, userInitiated: Bool, reply: @escaping (InformationalUpdateAlertChoice) -> Void) {
+    override func showInformationalUpdateFound(with appcastItem: AppcastItem, userInitiated: Bool, reply: @escaping InformationCallback) {
         sparkleChannel.debug("showInformationalUpdateFound")
     }
     
@@ -55,29 +83,34 @@ class ActionStatusSparkleDriver: SparkleDriver {
     
     override func showUpdaterError(_ error: Error, acknowledgement: @escaping () -> Void) {
         sparkleChannel.debug("showUpdaterError")
+        status = "Failed to launch installer."
     }
     
-    override func showDownloadInitiated(completion downloadUpdateStatusCompletion: @escaping (DownloadUpdateStatus) -> Void) {
+    override func showDownloadInitiated(completion downloadUpdateStatusCompletion: @escaping DownloadStatusCallback) {
         sparkleChannel.debug("showDownloadInitiated")
+        status = "Downloading update..."
     }
     
     override func showDownloadDidReceiveExpectedContentLength(_ expectedContentLength: UInt64) {
         sparkleChannel.debug("showDownloadDidReceiveExpectedContentLength")
+        expected = expectedContentLength
     }
     
     override func showDownloadDidReceiveData(ofLength length: UInt64) {
         sparkleChannel.debug("showDownloadDidReceiveData")
+        received += length
     }
     
     override func showDownloadDidStartExtractingUpdate() {
         sparkleChannel.debug("showDownloadDidStartExtractingUpdate")
+        status = "Extracting update..."
     }
     
     override func showExtractionReceivedProgress(_ progress: Double) {
         sparkleChannel.debug("showExtractionReceivedProgress")
     }
     
-    override func showReady(toInstallAndRelaunch installUpdateHandler: @escaping (InstallUpdateStatus) -> Void) {
+    override func showReady(toInstallAndRelaunch installUpdateHandler: @escaping UpdateStatusCallback) {
         sparkleChannel.debug("showReady")
     }
     

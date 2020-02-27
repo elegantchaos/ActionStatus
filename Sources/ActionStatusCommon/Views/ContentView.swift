@@ -8,7 +8,10 @@ import SwiftUIExtensions
 import BindingsExtensions
 
 struct ContentView: View {
+    
+    @ObservedObject var sparkleDriver: ActionStatusSparkleDriver
     @ObservedObject var repos: Model
+    
     @State var selectedID: UUID? = nil
     @State var isEditing: Bool = false
     @State var isComposing: Bool = false
@@ -49,7 +52,15 @@ struct ContentView: View {
                     
                     Spacer()
                     
-                    Text("Monitoring \(repos.items.count) repos.").font(.footnote)
+                    VStack {
+                        Text(statusText).statusStyle()
+                        if hasUpdate {
+                            SparkleView(driver: sparkleDriver)
+                        }
+                        if showProgress {
+                            SparkleProgressView(driver: sparkleDriver)
+                        }                        
+                    }.padding()
                 }
                 .setupNavigation(editAction: { self.isEditing.toggle() }, addAction: { self.addRepo() })
                 .bindEditing(to: $isEditing)
@@ -59,6 +70,22 @@ struct ContentView: View {
             .onAppear(perform: onAppear)
     }
     
+    var hasUpdate: Bool {
+        return sparkleDriver.hasUpdate
+    }
+    
+    var showProgress: Bool {
+        return sparkleDriver.expected != 0
+    }
+    
+    var statusText: String {
+         if repos.sparkleStatus.isEmpty {
+             return "Monitoring \(repos.items.count) repos."
+         } else {
+             return repos.sparkleStatus
+         }
+     }
+
     func onAppear()  {
         self.repos.refresh()
     }
@@ -76,7 +103,8 @@ struct ContentView: View {
             return AnyView(ComposeView(repo: binding, isPresented: self.$repos.isComposing))
         }
     }
-
+    
+     
     func addRepo() {
         let newRepo = repos.addRepo()
         AppDelegate.shared.saveState()
@@ -120,6 +148,12 @@ struct ContentView: View {
             }
         }
         #endif
+    }
+}
+
+internal extension View {
+    func statusStyle() -> some View {
+        return font(.footnote)
     }
 }
 
@@ -169,10 +203,9 @@ fileprivate extension View {
     }
     #endif
 }
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(repos: AppDelegate.shared.testRepos)
+        ContentView(sparkleDriver: ActionStatusSparkleDriver(), repos: AppDelegate.shared.testRepos)
     }
 }
 

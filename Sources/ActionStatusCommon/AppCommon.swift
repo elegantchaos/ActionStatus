@@ -22,6 +22,7 @@ class AppCommon: AppBase {
     #endif
     
     var rootController: UIViewController?
+    var sparkleDriver: ActionStatusSparkleDriver = ActionStatusSparkleDriver()
     var settingsObserver: Any?
     
     @State var model = Model([])
@@ -80,10 +81,9 @@ class AppCommon: AppBase {
         model.load(fromDefaultsKey: stateKey)
     }
     
-    
     func makeContentView() -> some View {
         let app = AppDelegate.shared
-        return ContentView(repos: app.model)
+        return ContentView(sparkleDriver: sparkleDriver, repos: app.model)
     }
 }
 

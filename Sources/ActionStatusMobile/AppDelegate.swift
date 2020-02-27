@@ -12,7 +12,6 @@ import Logger
 class AppDelegate: AppCommon {
     var appKitBridge: AppKitBridge? = nil
     var filePicker: UIDocumentPickerViewController?
-    var sparkleDriver: ActionStatusSparkleDriver?
     
     override func setUp(withOptions options: LaunchOptions) {
         loadBridge()
@@ -22,9 +21,9 @@ class AppDelegate: AppCommon {
     }
     
     override func didSetup(_ window: UIWindow) {
-        let driver = ActionStatusSparkleDriver()
-        sparkleDriver = driver
-        appKitBridge?.setup(withSparkle: driver, capturingWindowNamed: info.name, dataSource: self)
+        if let bridge = appKitBridge {
+            bridge.setup(withSparkle: sparkleDriver, capturingWindowNamed: info.name, dataSource: self)
+        }
     }
     
     override func applySettings() {
@@ -43,6 +42,7 @@ class AppDelegate: AppCommon {
             if let cls = bundle.principalClass as? NSObject.Type {
                 if let instance = cls.init() as? AppKitBridge {
                     appKitBridge = instance
+                    sparkleDriver = ActionStatusSparkleDriver()
                 }
             }
         }
