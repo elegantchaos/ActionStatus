@@ -9,20 +9,11 @@ import Logger
 
 let settingsChannel = Channel("Settings")
 
-
-#if os(macOS)
-import AppKit
-typealias AppBase = NSObject
-#else
-import UIKit
-typealias AppBase = BasicApplication
-#endif
-
 fileprivate extension String {
     static let refreshIntervalKey = "RefreshInterval"
 }
 
-class AppCommon: AppBase {
+class Application: BasicApplication {
 
     #if DEBUG
         let stateKey = "StateDebug"
@@ -31,7 +22,6 @@ class AppCommon: AppBase {
     #endif
     
     var rootController: UIViewController?
-    var sparkleDriver: ActionStatusSparkleDriver = ActionStatusSparkleDriver()
     var settingsObserver: Any?
     
     @State var model = Model([])
@@ -92,27 +82,4 @@ class AppCommon: AppBase {
     func restoreState() {
         model.load(fromDefaultsKey: stateKey)
     }
-    
-    func makeContentView() -> some View {
-        let app = AppDelegate.shared
-        return ContentView(sparkleDriver: sparkleDriver, repos: app.model)
-    }
 }
-
-#if os(macOS)
-
-extension AppCommon: NSApplicationDelegate {
-    class var shared: AppDelegate {
-        NSApp.delegate as! AppDelegate
-    }
-}
-
-#else
-
-extension AppCommon {
-    class var shared: AppDelegate {
-        UIApplication.shared.delegate as! AppDelegate
-    }
-}
-
-#endif

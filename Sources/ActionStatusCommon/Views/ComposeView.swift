@@ -52,7 +52,7 @@ struct ComposeView: View {
     }
     func onGenerate() {
         storeSettings()
-        AppDelegate.shared.saveState()
+        Application.shared.saveState()
         generator.generateWorkflow(for: repo)
     }
     
@@ -103,6 +103,6 @@ struct ComposeView: View {
 
 struct ComposeView_Previews: PreviewProvider {
     static var previews: some View {
-        ComposeView(repo: AppDelegate.shared.$testRepos.items[0], isPresented: .constant(false))
+        ComposeView(repo: Application.shared.$testRepos.items[0], isPresented: .constant(false))
     }
 }

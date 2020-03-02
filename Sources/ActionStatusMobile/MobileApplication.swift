@@ -14,11 +14,19 @@ fileprivate extension String {
     static let showInDockKey = "ShowInDock"
 }
 
+extension Application {
+    class var shared: MobileApplication {
+        UIApplication.shared.delegate as! MobileApplication
+    }
+}
+
+
 @UIApplicationMain
-class AppDelegate: AppCommon {
+class MobileApplication: Application {
     var appKitBridge: AppKitBridge? = nil
     var sparkleBridge: SparkleBridgePlugin? = nil
-    
+    var sparkleUpdater = SparkleUpdater()
+
     var filePicker: UIDocumentPickerViewController?
     
     override func setUp(withOptions options: LaunchOptions) {
@@ -50,6 +58,11 @@ class AppDelegate: AppCommon {
         settingsChannel.log("\(String.showInDockKey) is \(appKitBridge?.showInDock ?? false)")
     }
     
+    func makeContentView() -> some View {
+        let app = Application.shared
+        return ContentView(updater: sparkleUpdater, repos: app.model)
+    }
+
     fileprivate func updateBridge() {
         appKitBridge?.showInMenu = UserDefaults.standard.bool(forKey: .showInMenuKey)
         appKitBridge?.showInDock = UserDefaults.standard.bool(forKey: .showInDockKey)
@@ -57,8 +70,7 @@ class AppDelegate: AppCommon {
     }
     
     fileprivate func loadSparkle() {
-        sparkleDriver = ActionStatusSparkleDriver()
-        let result = SparkleBridgeClient.load(with: sparkleDriver)
+        let result = SparkleBridgeClient.load(with: sparkleUpdater.driver)
         switch result {
             case .success(let plugin):
                 sparkleBridge = plugin
@@ -72,7 +84,6 @@ class AppDelegate: AppCommon {
             if let cls = bundle.principalClass as? NSObject.Type {
                 if let instance = cls.init() as? AppKitBridge {
                     appKitBridge = instance
-                    sparkleDriver = ActionStatusSparkleDriver()
                 }
             }
         }
@@ -137,7 +148,7 @@ class AppDelegate: AppCommon {
             for url in cleanupURLS {
                 try? FileManager.default.removeItem(at: url)
             }
-            AppDelegate.shared.filePicker = nil
+            Application.shared.filePicker = nil
         }
         
         func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
@@ -165,7 +176,7 @@ class AppDelegate: AppCommon {
     }
 }
 
-extension AppDelegate: MenuDataSource {
+extension MobileApplication: MenuDataSource {
     func itemCount() -> Int {
         return model.items.count
     }

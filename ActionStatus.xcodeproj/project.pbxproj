@@ -24,7 +24,7 @@
 /* Begin PBXBuildFile section */
 		8B2F0ABB23FC195800B2E62A /* InterceptingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */; };
 		8B2F0ABD23FC2FA400B2E62A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */; };
-		8B3E64A723EAE62D00B28168 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64A623EAE62D00B28168 /* AppDelegate.swift */; };
+		8B3E64A723EAE62D00B28168 /* MobileApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64A623EAE62D00B28168 /* MobileApplication.swift */; };
 		8B3E64A923EAE62D00B28168 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */; };
 		8B3E64AB23EAE62D00B28168 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64AA23EAE62D00B28168 /* ContentView.swift */; };
 		8B3E64B023EAE62E00B28168 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64AF23EAE62E00B28168 /* Preview Assets.xcassets */; };
@@ -36,9 +36,9 @@
 		8B430E8123F586830050BF2A /* Repo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B451DFB23F415E10056EF3E /* Repo.swift */; };
 		8B430E8223F586830050BF2A /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9B2DB123F452B00087283B /* Model.swift */; };
 		8B430E8423F5877D0050BF2A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B430E7523F586110050BF2A /* LaunchScreen.storyboard */; };
-		8B430E8523F587830050BF2A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B430E6C23F586100050BF2A /* AppDelegate.swift */; };
-		8B430E8723F587E30050BF2A /* AppCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B430E8623F587E30050BF2A /* AppCommon.swift */; };
-		8B430E8823F587E60050BF2A /* AppCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B430E8623F587E30050BF2A /* AppCommon.swift */; };
+		8B430E8523F587830050BF2A /* TVApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B430E6C23F586100050BF2A /* TVApplication.swift */; };
+		8B430E8723F587E30050BF2A /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B430E8623F587E30050BF2A /* Application.swift */; };
+		8B430E8823F587E60050BF2A /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B430E8623F587E30050BF2A /* Application.swift */; };
 		8B430E8E23F58AE10050BF2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64AC23EAE62E00B28168 /* Assets.xcassets */; };
 		8B430E8F23F58CEE0050BF2A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64AF23EAE62E00B28168 /* Preview Assets.xcassets */; };
 		8B430E9123F5947E0050BF2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64AC23EAE62E00B28168 /* Assets.xcassets */; };
@@ -50,8 +50,10 @@
 		8B4336F323FFEBAA00598A04 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */; };
 		8B4336F423FFED8000598A04 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */; };
 		8B451DFC23F415E10056EF3E /* Repo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B451DFB23F415E10056EF3E /* Repo.swift */; };
-		8B48938E240D235D00E3E112 /* libSparkleBridgeClient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B48938D240D235D00E3E112 /* libSparkleBridgeClient.a */; platformFilter = maccatalyst; };
-		8B5AEB482407EE630065524B /* ActionStatusSparkleDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5AEB472407EE630065524B /* ActionStatusSparkleDriver.swift */; };
+		8B48938F240D502000E3E112 /* SparkleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5AEB492407F8410065524B /* SparkleView.swift */; };
+		8B4893AD240D581300E3E112 /* SparkleBridgeClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4893AC240D581200E3E112 /* SparkleBridgeClient.framework */; platformFilter = maccatalyst; };
+		8B4893AE240D581300E3E112 /* SparkleBridgeClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4893AC240D581200E3E112 /* SparkleBridgeClient.framework */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8B5AEB482407EE630065524B /* SparkleUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5AEB472407EE630065524B /* SparkleUpdater.swift */; };
 		8B5AEB4A2407F8410065524B /* SparkleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5AEB492407F8410065524B /* SparkleView.swift */; };
 		8B5B175C23FAEB8200DD2AF5 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5B175B23FAEB8200DD2AF5 /* SwiftUIExtensions */; };
 		8B5B175E23FAEBD300DD2AF5 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5B175D23FAEBD300DD2AF5 /* SwiftUIExtensions */; };
@@ -99,6 +101,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		8B4893AF240D581300E3E112 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8B4893AE240D581300E3E112 /* SparkleBridgeClient.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8B5AEB55240819F50065524B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -144,7 +157,7 @@
 		8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		8B3BA5A4240540CC0071F0C1 /* AppKitBridge.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppKitBridge.entitlements; sourceTree = "<group>"; };
 		8B3E64A323EAE62D00B28168 /* Action Status.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Action Status.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8B3E64A623EAE62D00B28168 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		8B3E64A623EAE62D00B28168 /* MobileApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileApplication.swift; sourceTree = "<group>"; };
 		8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		8B3E64AA23EAE62D00B28168 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8B3E64AC23EAE62E00B28168 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -158,18 +171,18 @@
 		8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionStatusUITests.swift; sourceTree = "<group>"; };
 		8B3E64CA23EAE62F00B28168 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B430E6A23F586100050BF2A /* Action Status.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Action Status.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		8B430E6C23F586100050BF2A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		8B430E6C23F586100050BF2A /* TVApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVApplication.swift; sourceTree = "<group>"; };
 		8B430E7623F586110050BF2A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B430E7823F586110050BF2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8B430E8623F587E30050BF2A /* AppCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommon.swift; sourceTree = "<group>"; };
+		8B430E8623F587E30050BF2A /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		8B4336EB23FFE53700598A04 /* DocumentPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPickerViewController.swift; sourceTree = "<group>"; };
 		8B451DFB23F415E10056EF3E /* Repo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repo.swift; sourceTree = "<group>"; };
 		8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BuildNumber.xcconfig; sourceTree = "<group>"; };
 		8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ActionStatus.xcconfig; sourceTree = "<group>"; };
 		8B451E1623F446BA0056EF3E /* ActionStatus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ActionStatus.entitlements; sourceTree = "<group>"; };
-		8B48938D240D235D00E3E112 /* libSparkleBridgeClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libSparkleBridgeClient.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B4893AC240D581200E3E112 /* SparkleBridgeClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SparkleBridgeClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppKitBridge.xcconfig; sourceTree = "<group>"; };
-		8B5AEB472407EE630065524B /* ActionStatusSparkleDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ActionStatusSparkleDriver.swift; path = Sources/ActionStatusCommon/ActionStatusSparkleDriver.swift; sourceTree = SOURCE_ROOT; };
+		8B5AEB472407EE630065524B /* SparkleUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SparkleUpdater.swift; path = Sources/ActionStatusCommon/SparkleUpdater.swift; sourceTree = SOURCE_ROOT; };
 		8B5AEB492407F8410065524B /* SparkleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleView.swift; sourceTree = "<group>"; };
 		8B5AEB5224080D720065524B /* embed */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = embed; sourceTree = "<group>"; };
 		8B5D864723FD52550085A570 /* ComposeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeView.swift; sourceTree = "<group>"; };
@@ -200,7 +213,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B48938E240D235D00E3E112 /* libSparkleBridgeClient.a in Frameworks */,
+				8B4893AD240D581300E3E112 /* SparkleBridgeClient.framework in Frameworks */,
 				8B5B175C23FAEB8200DD2AF5 /* SwiftUIExtensions in Frameworks */,
 				8B880FE423FD7E000068C3FF /* BindingsExtensions in Frameworks */,
 				8B69B68B23FEDB6D00030A2B /* DictionaryCoding in Frameworks */,
@@ -295,9 +308,9 @@
 		8B3E64A523EAE62D00B28168 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				8B5E7E5823F6A79900087E15 /* ActionStatusCommon */,
 				8B5E7E5723F6A79100087E15 /* ActionStatusMobile */,
 				8B430E6B23F586100050BF2A /* ActionStatusTV */,
+				8B5E7E5823F6A79900087E15 /* ActionStatusCommon */,
 				8B5E7E8423F6BB3500087E15 /* AppKitBridge */,
 			);
 			path = Sources;
@@ -324,7 +337,7 @@
 		8B430E6B23F586100050BF2A /* ActionStatusTV */ = {
 			isa = PBXGroup;
 			children = (
-				8B430E6C23F586100050BF2A /* AppDelegate.swift */,
+				8B430E6C23F586100050BF2A /* TVApplication.swift */,
 				8B5B175123FADA9D00DD2AF5 /* Resources */,
 			);
 			path = ActionStatusTV;
@@ -422,8 +435,8 @@
 		8B5E7E5723F6A79100087E15 /* ActionStatusMobile */ = {
 			isa = PBXGroup;
 			children = (
-				8B5AEB472407EE630065524B /* ActionStatusSparkleDriver.swift */,
-				8B3E64A623EAE62D00B28168 /* AppDelegate.swift */,
+				8B3E64A623EAE62D00B28168 /* MobileApplication.swift */,
+				8B5AEB472407EE630065524B /* SparkleUpdater.swift */,
 				8B4336EB23FFE53700598A04 /* DocumentPickerViewController.swift */,
 				8B5B174F23FADA8500DD2AF5 /* Resources */,
 			);
@@ -433,7 +446,7 @@
 		8B5E7E5823F6A79900087E15 /* ActionStatusCommon */ = {
 			isa = PBXGroup;
 			children = (
-				8B430E8623F587E30050BF2A /* AppCommon.swift */,
+				8B430E8623F587E30050BF2A /* Application.swift */,
 				8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */,
 				8B880FE923FD97EE0068C3FF /* WorkflowGenerator.swift */,
 				8B4336F7240052FF00598A04 /* Model */,
@@ -446,7 +459,7 @@
 		8B5E7E7823F6BA8400087E15 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8B48938D240D235D00E3E112 /* libSparkleBridgeClient.a */,
+				8B4893AC240D581200E3E112 /* SparkleBridgeClient.framework */,
 				8BBFAA942403F8E80091157A /* Sparkle.framework */,
 			);
 			name = Frameworks;
@@ -477,6 +490,7 @@
 				8B5E7E7E23F6BAC800087E15 /* Embed Frameworks */,
 				8B5AEB55240819F50065524B /* CopyFiles */,
 				8B3BA5A5240541AD0071F0C1 /* Sign Embedded Stuff */,
+				8B4893AF240D581300E3E112 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -729,13 +743,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B9B2DB223F452B00087283B /* Model.swift in Sources */,
-				8B3E64A723EAE62D00B28168 /* AppDelegate.swift in Sources */,
+				8B3E64A723EAE62D00B28168 /* MobileApplication.swift in Sources */,
 				8B3E64A923EAE62D00B28168 /* SceneDelegate.swift in Sources */,
-				8B430E8723F587E30050BF2A /* AppCommon.swift in Sources */,
+				8B430E8723F587E30050BF2A /* Application.swift in Sources */,
 				8B6F181823F459570029F9CC /* EditView.swift in Sources */,
 				8B4336EC23FFE53700598A04 /* DocumentPickerViewController.swift in Sources */,
 				8B880FEA23FD97EE0068C3FF /* WorkflowGenerator.swift in Sources */,
-				8B5AEB482407EE630065524B /* ActionStatusSparkleDriver.swift in Sources */,
+				8B5AEB482407EE630065524B /* SparkleUpdater.swift in Sources */,
 				8B880FE623FD97600068C3FF /* Option.swift in Sources */,
 				8B5D864823FD52550085A570 /* ComposeView.swift in Sources */,
 				8B5AEB4A2407F8410065524B /* SparkleView.swift in Sources */,
@@ -765,11 +779,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B430E8523F587830050BF2A /* AppDelegate.swift in Sources */,
+				8B430E8523F587830050BF2A /* TVApplication.swift in Sources */,
 				8B430E7E23F586830050BF2A /* ContentView.swift in Sources */,
 				8B430E8123F586830050BF2A /* Repo.swift in Sources */,
-				8B430E8823F587E60050BF2A /* AppCommon.swift in Sources */,
+				8B430E8823F587E60050BF2A /* Application.swift in Sources */,
 				8B4336EF23FFE8E500598A04 /* WorkflowGenerator.swift in Sources */,
+				8B48938F240D502000E3E112 /* SparkleView.swift in Sources */,
 				8B4336F023FFE8ED00598A04 /* Option.swift in Sources */,
 				8B430E8023F586830050BF2A /* EditView.swift in Sources */,
 				8B4336F423FFED8000598A04 /* SceneDelegate.swift in Sources */,
@@ -970,6 +985,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8B5E7E6323F6A9C600087E15 /* Mobile.xcconfig */;
 			buildSettings = {
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 			};
 			name = Debug;
 		};
@@ -977,6 +996,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8B5E7E6323F6A9C600087E15 /* Mobile.xcconfig */;
 			buildSettings = {
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 			};
 			name = Release;
 		};

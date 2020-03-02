@@ -9,7 +9,7 @@ import BindingsExtensions
 
 struct ContentView: View {
     
-    @ObservedObject var sparkleDriver: ActionStatusSparkleDriver
+    @ObservedObject var updater: Updater
     @ObservedObject var repos: Model
     
     @State var selectedID: UUID? = nil
@@ -55,11 +55,11 @@ struct ContentView: View {
                     VStack(spacing: 10) {
                         Text(statusText).statusStyle()
                         if hasUpdate {
-                            SparkleView(driver: sparkleDriver)
+                            SparkleView(updater: updater)
                         }
                         if showProgress {
                             GeometryReader { geometryReader in
-                                SparkleProgressView(driver: self.sparkleDriver).frame(width: geometryReader.size.width * 0.25)
+                                SparkleProgressView(updater: self.updater).frame(width: geometryReader.size.width * 0.25)
                             }
                         }
                     }.padding()
@@ -73,18 +73,18 @@ struct ContentView: View {
     }
     
     var hasUpdate: Bool {
-        return sparkleDriver.hasUpdate
+        return updater.hasUpdate
     }
     
     var showProgress: Bool {
-        return sparkleDriver.expected != sparkleDriver.received
+        return (updater.progress > 0.0) && (updater.progress < 1.0)
     }
     
     var statusText: String {
-         if sparkleDriver.status.isEmpty {
+         if updater.status.isEmpty {
              return "Monitoring \(repos.items.count) repos."
          } else {
-             return sparkleDriver.status
+             return updater.status
          }
      }
 
@@ -109,13 +109,13 @@ struct ContentView: View {
      
     func addRepo() {
         let newRepo = repos.addRepo()
-        AppDelegate.shared.saveState()
+        Application.shared.saveState()
         selectedID = newRepo.id
     }
     
     func delete(at offsets: IndexSet) {
         repos.items.remove(atOffsets: offsets)
-        AppDelegate.shared.saveState()
+        Application.shared.saveState()
     }
     
     func rowView(for repo: Repo, selectable: Bool) -> some View {
@@ -207,7 +207,7 @@ fileprivate extension View {
 }
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(sparkleDriver: ActionStatusSparkleDriver(), repos: AppDelegate.shared.testRepos)
+        ContentView(updater: Updater(), repos: Application.shared.testRepos)
     }
 }
 

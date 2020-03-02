@@ -103,13 +103,13 @@ class WorkflowGenerator {
             do {
                 let url = UIApplication.newDocumentURL(name: repo.workflow, withPathExtension: "yml", makeUnique: false)
                 try data.write(to: url)
-                let model = AppDelegate.shared.model
+                let model = Application.shared.model
                 
                 #if targetEnvironment(macCatalyst)
                 // ugly hack - the SwiftUI sheet doesn't work properly on the mac
                 model.hideComposeWindow()
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: .seconds(1))) {
-                    AppDelegate.shared.pickFile(url: url)
+                    Application.shared.pickFile(url: url)
                 }
                 #else
                 model.exportURL = url

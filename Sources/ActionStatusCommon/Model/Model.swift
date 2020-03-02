@@ -5,7 +5,6 @@
 
 import SwiftUI
 import DictionaryCoding
-import SparkleBridgeClient
 
 class Model: ObservableObject {
     typealias RepoList = [Repo]
@@ -23,7 +22,6 @@ class Model: ObservableObject {
     @Published var items: [Repo]
     @Published var isComposing = false
     @Published var isSaving = false
-    @Published var sparkleUpdate: SparkleDriver.UpdateAlertChoice? = nil
     
     init(_ repos: [Repo], store: NSUbiquitousKeyValueStore = NSUbiquitousKeyValueStore.default, block: RefreshBlock? = nil) {
         self.block = block

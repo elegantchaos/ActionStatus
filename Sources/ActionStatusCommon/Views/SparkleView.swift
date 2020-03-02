@@ -5,14 +5,24 @@
 
 import SwiftUI
 
+class Updater: ObservableObject {
+    @Published var progress: Double = 0
+    @Published var status: String = ""
+    @Published var hasUpdate: Bool = false
+
+    func installUpdate() { }
+    func skipUpdate() { }
+    func ignoreUpdate() { }
+}
+
 struct SparkleView: View {
-    let driver: ActionStatusSparkleDriver
+    let updater: Updater
     
     var body: some View {
         HStack {
-            Button(action: driver.installUpdate) { Text("Update") }
-            Button(action: driver.skipUpdate) { Text("Skip") }
-            Button(action: driver.ignoreUpdate) { Text("Later") }
+            Button(action: updater.installUpdate) { Text("Update") }
+            Button(action: updater.skipUpdate) { Text("Skip") }
+            Button(action: updater.ignoreUpdate) { Text("Later") }
         }.statusStyle()
     }
     
@@ -24,7 +34,7 @@ extension Color {
 }
 
 struct SparkleProgressView: View {
-    @ObservedObject var driver: ActionStatusSparkleDriver
+    @ObservedObject var updater: Updater
     
     let height: CGFloat = 16.0
     
@@ -32,8 +42,8 @@ struct SparkleProgressView: View {
     private let backgroundColor: Color
     private let foregroundColor: Color
     
-    init(driver: ActionStatusSparkleDriver, backgroundEnabled: Bool = true, backgroundColor: Color = .defaultProgressBackground, foregroundColor: Color = .defaultProgressForeground) {
-        self.driver = driver
+    init(updater: Updater, backgroundEnabled: Bool = true, backgroundColor: Color = .defaultProgressBackground, foregroundColor: Color = .defaultProgressForeground) {
+        self.updater = updater
         self.backgroundEnabled = backgroundEnabled
         self.backgroundColor = backgroundColor
         self.foregroundColor = foregroundColor
@@ -49,7 +59,7 @@ struct SparkleProgressView: View {
                 }
                 
                 Capsule()
-                    .frame(width: geometryReader.size.width * CGFloat(self.driver.progress), height: self.height)
+                    .frame(width: geometryReader.size.width * CGFloat(self.updater.progress), height: self.height)
                     .foregroundColor(self.foregroundColor)
                     .animation(.easeIn)
             }

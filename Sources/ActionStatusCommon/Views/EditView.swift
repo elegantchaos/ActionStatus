@@ -86,7 +86,7 @@ struct EditView: View {
             }
         }
         .onAppear() {
-            AppDelegate.shared.model.cancelRefresh()
+            Application.shared.model.cancelRefresh()
             self.load()
         }
         .onDisappear() {
@@ -127,13 +127,13 @@ struct EditView: View {
         repo.owner = trimmedOwner
         repo.workflow = trimmedWorkflow
         repo.branches = trimmedBranches
-        AppDelegate.shared.stateWasEdited()
+        Application.shared.stateWasEdited()
     }
 }
 
 struct RepoEditView_Previews: PreviewProvider {
     static var previews: some View {
-        EditView(repo: AppDelegate.shared.$testRepos.items[0])
+        EditView(repo: Application.shared.$testRepos.items[0])
     }
 }
 
