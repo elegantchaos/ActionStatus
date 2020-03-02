@@ -7,10 +7,13 @@
 import UIKit
 import SwiftUI
 import Logger
+import SparkleBridgeClient
 
 @UIApplicationMain
 class AppDelegate: AppCommon {
     var appKitBridge: AppKitBridge? = nil
+    var sparkleBridge: SparkleBridgePlugin? = nil
+    
     var filePicker: UIDocumentPickerViewController?
     
     override func setUp(withOptions options: LaunchOptions) {
@@ -22,7 +25,7 @@ class AppDelegate: AppCommon {
     
     override func didSetup(_ window: UIWindow) {
         if let bridge = appKitBridge {
-            bridge.setup(withSparkle: sparkleDriver, capturingWindowNamed: info.name, dataSource: self)
+            bridge.setupCapturingWindowNamed(info.name, dataSource: self)
         }
     }
     
@@ -35,6 +38,17 @@ class AppDelegate: AppCommon {
         appKitBridge?.showInMenu = UserDefaults.standard.bool(forKey: "ShowInMenu")
         appKitBridge?.showInDock = UserDefaults.standard.bool(forKey: "ShowInDock")
         appKitBridge?.passing = model.failingCount == 0
+    }
+    
+    fileprivate func loadSparkle() {
+        sparkleDriver = ActionStatusSparkleDriver()
+        let result = SparkleBridgeClient.load(with: sparkleDriver)
+        switch result {
+            case .success(let plugin):
+                sparkleBridge = plugin
+            case .failure(let error):
+                print(error)
+        }
     }
     
     fileprivate func loadBridge() {
@@ -159,7 +173,7 @@ extension AppDelegate: MenuDataSource {
         }
     }
     
-    func handlePreferences() {
-        
+    func checkForUpdates() {
+        sparkleBridge?.checkForUpdates()
     }
 }

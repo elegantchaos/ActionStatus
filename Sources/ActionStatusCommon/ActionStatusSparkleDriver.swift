@@ -4,6 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Logger
+import SparkleBridgeClient
 
 let sparkleChannel = Channel("Sparkle")
 

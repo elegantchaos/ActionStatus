@@ -5,6 +5,7 @@
 
 import SwiftUI
 import DictionaryCoding
+import SparkleBridgeClient
 
 class Model: ObservableObject {
     typealias RepoList = [Repo]

@@ -5,7 +5,6 @@
 
 import Foundation
 import AppKit
-import Sparkle
 
 @objc class AppKitBridgeImp: NSResponder {
     static let imageSize = NSSize(width: 16.0, height: 16.0)
@@ -13,9 +12,6 @@ import Sparkle
     let failingImage = setupImage("StatusFailing")
     let unknownImage = setupImage("StatusUnknown")
     let appName = Bundle.main.infoDictionary?["CFBundleName"] as! String
-    
-    var updateDriver: WrappedUserDriver!
-    var updater: SPUUpdater!
     
     var menuSource: MenuDataSource?
     var windowInterceptor: InterceptingDelegate?
@@ -53,31 +49,12 @@ import Sparkle
         NSStatusBar.system.removeStatusItem(item!)
         item = nil
     }
-    
-    func setupSparkle(driver: SparkleBridge) {
-        let hostBundle = Bundle.main
-        updateDriver = WrappedUserDriver(wrapping: driver)
-        updater = SPUUpdater(hostBundle: hostBundle, applicationBundle: hostBundle, userDriver: updateDriver, delegate: self)
-        do {
-            try updater.start()
-        } catch {
-            // Delay the alert four seconds so it doesn't show RIGHT as the app launches, but also doesn't interrupt the user once they really get to work.
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: .seconds(4))) {
-                let alert = NSAlert()
-                alert.messageText = "Unable to Check For Updates"
-                alert.informativeText = "The update checker failed to start correctly. You should contact the app developer to report this issue and verify that you have the latest version."
-                alert.addButton(withTitle: "OK")
-                alert.runModal()
-            }
-        }
-    }
 }
 
 
 extension AppKitBridgeImp: AppKitBridge {
-    @objc func setup(withSparkle sparkleBridge: SparkleBridge, capturingWindowNamed windowName: String, dataSource source: MenuDataSource) {
+    func setupCapturingWindowNamed(_ windowName: String, dataSource source: MenuDataSource) {
         menuSource = source
-        setupSparkle(driver: sparkleBridge)
 
         self.nextResponder = NSApp.nextResponder
         NSApp.nextResponder = self
@@ -157,7 +134,7 @@ extension AppKitBridgeImp: NSMenuDelegate {
     }
 
     @IBAction func handleCheckForUpdates(_ sender: Any) {
-        updater.checkForUpdates()
+        menuSource?.checkForUpdates()
     }
     
     @IBAction func handleShow(_ sender: Any) {
@@ -176,7 +153,4 @@ extension AppKitBridgeImp: NSWindowDelegate {
         sender.setIsVisible(false)
         return false;
     }
-}
-
-extension AppKitBridgeImp: SPUUpdaterDelegate {
 }
