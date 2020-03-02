@@ -70,8 +70,15 @@ extension AppKitBridgeImp: AppKitBridge {
     }
     
     var showInDock: Bool {
-        get { return item != nil }
-        set { }
+        get { return NSApp.activationPolicy() == .regular }
+        set {
+            let newPolicy: NSApplication.ActivationPolicy = newValue ? .regular : .accessory
+            if newPolicy != NSApp.activationPolicy() {
+                let window = NSApp.mainWindow
+                NSApp.setActivationPolicy(newPolicy)
+                window?.makeKeyAndOrderFront(self)
+            }
+        }
     }
     
     var showInMenu: Bool {
