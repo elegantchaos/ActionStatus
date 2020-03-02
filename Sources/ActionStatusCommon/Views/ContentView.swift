@@ -89,6 +89,7 @@ struct ContentView: View {
      }
 
     func onAppear()  {
+        UITableView.appearance().separatorStyle = .none
         self.repos.refresh()
     }
     

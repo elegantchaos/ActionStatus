@@ -6,13 +6,56 @@
 import SwiftUI
 import SwiftUIExtensions
 
+extension View {
+    func nameOrgStyle() -> some View {
+
+        return textFieldStyle(EditView.fieldStyle)
+            .keyboardType(.namePhonePad)
+            .textContentType(.name)
+            .disableAutocorrection(true)
+    }
+
+    func branchListStyle() -> some View {
+        return textFieldStyle(EditView.fieldStyle)
+            .keyboardType(.alphabet)
+            .disableAutocorrection(true)
+    }
+
+}
+
+struct ClearButton: ViewModifier
+{
+    @Binding var text: String
+
+    public func body(content: Content) -> some View
+    {
+        ZStack(alignment: .trailing)
+        {
+            content
+
+            if !text.isEmpty
+            {
+                Button(action:
+                {
+                    self.text = ""
+                })
+                {
+                    Image(systemName: "multiply.circle.fill")
+                        .foregroundColor(Color(UIColor.opaqueSeparator))
+                }
+                .padding(.trailing, 8)
+            }
+        }
+    }
+}
+
 struct EditView: View {
     #if os(tvOS)
-    let style = DefaultTextFieldStyle()
+    static let fieldStyle = DefaultTextFieldStyle()
     #else
-    let style = RoundedBorderTextFieldStyle()
+    static let fieldStyle = RoundedBorderTextFieldStyle()
     #endif
-    
+
     @Binding var repo: Repo
     @State var name = ""
     @State var owner = ""
@@ -27,7 +70,8 @@ struct EditView: View {
                         .font(.callout)
                         .bold()
                     TextField("github repo name", text: $name)
-                        .textFieldStyle(style)
+                        .nameOrgStyle()
+                        .modifier(ClearButton(text: $name))
                 }
                 
                 HStack {
@@ -36,7 +80,8 @@ struct EditView: View {
                         .bold()
                     
                     TextField("github user or organisation", text: $owner)
-                        .textFieldStyle(style)
+                        .nameOrgStyle()
+                        .modifier(ClearButton(text: $owner))
                 }
                 
                 HStack {
@@ -45,7 +90,8 @@ struct EditView: View {
                         .bold()
                     
                     TextField("Tests.yml", text: $workflow)
-                        .textFieldStyle(style)
+                        .nameOrgStyle()
+                        .modifier(ClearButton(text: $workflow))
                 }
 
                 HStack {
@@ -53,9 +99,9 @@ struct EditView: View {
                         .font(.callout)
                         .bold()
                     
-                    TextField("branches to check (uses default branch if empty)", text: $branches)
-                        .textFieldStyle(style)
-                    
+                    TextField("comma-separated list of branches (leave empty for default branch)", text: $branches)
+                        .branchListStyle()
+                        .modifier(ClearButton(text: $branches))
                 }
 
             }

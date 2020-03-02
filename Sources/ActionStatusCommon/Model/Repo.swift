@@ -32,8 +32,8 @@ struct Repo: Identifiable, Equatable {
     
     init() {
         id = UUID()
-        name = "repo"
-        owner = "org"
+        name = ""
+        owner = ""
         workflow = "Tests"
         branches = []
         state = .unknown
