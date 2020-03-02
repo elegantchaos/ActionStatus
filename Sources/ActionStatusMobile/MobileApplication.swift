@@ -7,7 +7,10 @@
 import UIKit
 import SwiftUI
 import Logger
+
+#if canImport(SparkleBridgeClient)
 import SparkleBridgeClient
+#endif
 
 fileprivate extension String {
     static let showInMenuKey = "ShowInMenu"
@@ -24,9 +27,14 @@ extension Application {
 @UIApplicationMain
 class MobileApplication: Application {
     var appKitBridge: AppKitBridge? = nil
+    
+    #if canImport(SparkleBridgeClient)
     var sparkleBridge: SparkleBridgePlugin? = nil
-    var sparkleUpdater = SparkleUpdater()
-
+    var updater = SparkleUpdater()
+    #else
+    var updater = Updater()
+    #endif
+    
     var filePicker: UIDocumentPickerViewController?
     
     override func setUp(withOptions options: LaunchOptions) {
@@ -60,7 +68,7 @@ class MobileApplication: Application {
     
     func makeContentView() -> some View {
         let app = Application.shared
-        return ContentView(updater: sparkleUpdater, repos: app.model)
+        return ContentView(updater: updater, repos: app.model)
     }
 
     fileprivate func updateBridge() {
@@ -70,13 +78,15 @@ class MobileApplication: Application {
     }
     
     fileprivate func loadSparkle() {
-        let result = SparkleBridgeClient.load(with: sparkleUpdater.driver)
+        #if canImport(SparkleBridgeClient)
+        let result = SparkleBridgeClient.load(with: updater.driver)
         switch result {
             case .success(let plugin):
                 sparkleBridge = plugin
             case .failure(let error):
                 print(error)
         }
+        #endif
     }
     
     fileprivate func loadBridge() {
@@ -201,6 +211,8 @@ extension MobileApplication: MenuDataSource {
     }
     
     func checkForUpdates() {
+        #if canImport(SparkleBridgeClient)
         sparkleBridge?.checkForUpdates()
+        #endif
     }
 }

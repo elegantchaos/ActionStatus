@@ -4,6 +4,8 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Logger
+
+#if canImport(SparkleBridgeClient)
 import SparkleBridgeClient
 
 let sparkleChannel = Channel("Sparkle")
@@ -164,3 +166,4 @@ class SparkleUpdater: Updater {
         
     }
 }
+#endif
