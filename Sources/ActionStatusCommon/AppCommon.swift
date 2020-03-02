@@ -5,6 +5,10 @@
 
 import SwiftUI
 import ApplicationExtensions
+import Logger
+
+let settingsChannel = Channel("Settings")
+
 
 #if os(macOS)
 import AppKit
@@ -14,7 +18,12 @@ import UIKit
 typealias AppBase = BasicApplication
 #endif
 
+fileprivate extension String {
+    static let refreshIntervalKey = "RefreshInterval"
+}
+
 class AppCommon: AppBase {
+
     #if DEBUG
         let stateKey = "StateDebug"
     #else
@@ -42,9 +51,9 @@ class AppCommon: AppBase {
     override func setUp(withOptions options: BasicApplication.LaunchOptions) {
         super.setUp(withOptions: options)
         
-        settingsObserver = NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: nil) { notification in
-            self.applySettings()
-        }
+        UserDefaults.standard.register(defaults: [
+            .refreshIntervalKey : 60
+        ])
         
         restoreState()
     }
@@ -55,17 +64,20 @@ class AppCommon: AppBase {
         }
     }
 
-    func didSetup(_ window: UIWindow) {
+    func didSetUp(_ window: UIWindow) {
         applySettings()
+        settingsObserver = NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: nil) { notification in
+            self.applySettings()
+        }
     }
     
     func applySettings() {
-        let intervalSetting = UserDefaults.standard.string(forKey: "RefreshInterval")
-        let interval: Double
-        switch intervalSetting {
-            default: interval = 10.0
+        let interval = UserDefaults.standard.integer(forKey: .refreshIntervalKey)
+        if interval > 0 {
+            model.refreshInterval = Double(interval)
         }
-        model.refreshInterval = interval
+
+        settingsChannel.log("\(String.refreshIntervalKey) is \(interval)")
     }
     
     func stateWasEdited() {

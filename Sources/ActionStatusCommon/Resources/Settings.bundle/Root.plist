@@ -23,6 +23,14 @@
 			<string>1 Minute</string>
 			<key>Values</key>
 			<array>
+				<string>10</string>
+				<string>30</string>
+				<string>60</string>
+				<string>300</string>
+				<string>600</string>
+			</array>
+			<key>Titles</key>
+			<array>
 				<string>10 Seconds</string>
 				<string>30 Seconds</string>
 				<string>1 Minute</string>

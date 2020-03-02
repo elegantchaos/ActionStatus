@@ -9,6 +9,11 @@ import SwiftUI
 import Logger
 import SparkleBridgeClient
 
+fileprivate extension String {
+    static let showInMenuKey = "ShowInMenu"
+    static let showInDockKey = "ShowInDock"
+}
+
 @UIApplicationMain
 class AppDelegate: AppCommon {
     var appKitBridge: AppKitBridge? = nil
@@ -18,25 +23,36 @@ class AppDelegate: AppCommon {
     
     override func setUp(withOptions options: LaunchOptions) {
         loadBridge()
+        loadSparkle()
         model.block = { self.updateBridge() }
+        
+        UserDefaults.standard.register(defaults: [
+            .showInMenuKey: true,
+            .showInDockKey: true
+            ]
+        )
 
         super.setUp(withOptions: options)
     }
     
-    override func didSetup(_ window: UIWindow) {
+    override func didSetUp(_ window: UIWindow) {
         if let bridge = appKitBridge {
             bridge.setupCapturingWindowNamed(info.name, dataSource: self)
         }
+        super.didSetUp(window)
     }
     
     override func applySettings() {
         super.applySettings()
         updateBridge()
+        
+        settingsChannel.log("\(String.showInMenuKey) is \(appKitBridge?.showInMenu ?? false)")
+        settingsChannel.log("\(String.showInDockKey) is \(appKitBridge?.showInDock ?? false)")
     }
     
     fileprivate func updateBridge() {
-        appKitBridge?.showInMenu = UserDefaults.standard.bool(forKey: "ShowInMenu")
-        appKitBridge?.showInDock = UserDefaults.standard.bool(forKey: "ShowInDock")
+        appKitBridge?.showInMenu = UserDefaults.standard.bool(forKey: .showInMenuKey)
+        appKitBridge?.showInDock = UserDefaults.standard.bool(forKey: .showInDockKey)
         appKitBridge?.passing = model.failingCount == 0
     }
     
