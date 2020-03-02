@@ -25,11 +25,13 @@ extension Color {
 
 struct SparkleProgressView: View {
     @ObservedObject var driver: ActionStatusSparkleDriver
-
+    
+    let height: CGFloat = 16.0
+    
     private let backgroundEnabled: Bool
     private let backgroundColor: Color
     private let foregroundColor: Color
-
+    
     init(driver: ActionStatusSparkleDriver, backgroundEnabled: Bool = true, backgroundColor: Color = .defaultProgressBackground, foregroundColor: Color = .defaultProgressForeground) {
         self.driver = driver
         self.backgroundEnabled = backgroundEnabled
@@ -39,20 +41,19 @@ struct SparkleProgressView: View {
     
     var body: some View {
         ZStack {
-            // 2
             GeometryReader { geometryReader in
-                // 3
                 if self.backgroundEnabled {
                     Capsule()
-                        .foregroundColor(self.backgroundColor) // 4
+                        .frame(height: self.height)
+                        .foregroundColor(self.backgroundColor)
                 }
-                    
+                
                 Capsule()
-                    .frame(width: geometryReader.size.width) // 5
-                    .foregroundColor(self.foregroundColor) // 6
-                    .animation(.easeIn) // 7
+                    .frame(width: geometryReader.size.width * CGFloat(self.driver.progress), height: self.height)
+                    .foregroundColor(self.foregroundColor)
+                    .animation(.easeIn)
             }
-        }
+        }.frame(height: height)
     }
     
 }

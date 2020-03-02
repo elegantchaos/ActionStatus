@@ -52,14 +52,16 @@ struct ContentView: View {
                     
                     Spacer()
                     
-                    VStack {
+                    VStack(spacing: 10) {
                         Text(statusText).statusStyle()
                         if hasUpdate {
                             SparkleView(driver: sparkleDriver)
                         }
                         if showProgress {
-                            SparkleProgressView(driver: sparkleDriver)
-                        }                        
+                            GeometryReader { geometryReader in
+                                SparkleProgressView(driver: self.sparkleDriver).frame(width: geometryReader.size.width * 0.25)
+                            }
+                        }
                     }.padding()
                 }
                 .setupNavigation(editAction: { self.isEditing.toggle() }, addAction: { self.addRepo() })

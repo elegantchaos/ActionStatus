@@ -158,8 +158,6 @@
 		8B3E64C423EAE62F00B28168 /* Action Status.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Action Status.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionStatusUITests.swift; sourceTree = "<group>"; };
 		8B3E64CA23EAE62F00B28168 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8B3F81682406D9DC0006EC84 /* UpdateAlert.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UpdateAlert.xib; sourceTree = "<group>"; };
-		8B3F816A2406E0BC0006EC84 /* AlternateAlert.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlternateAlert.xib; sourceTree = "<group>"; };
 		8B3F816D2406EA850006EC84 /* WrappedUserDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrappedUserDriver.swift; sourceTree = "<group>"; };
 		8B3F816F2406EBF40006EC84 /* SparkleDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleDriver.swift; sourceTree = "<group>"; };
 		8B430E6A23F586100050BF2A /* Action Status.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Action Status.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -416,8 +414,6 @@
 			children = (
 				8B5E7E9223F6C0B600087E15 /* BridgingHeader.h */,
 				8B3BA5A4240540CC0071F0C1 /* AppKitBridge.entitlements */,
-				8B3F81682406D9DC0006EC84 /* UpdateAlert.xib */,
-				8B3F816A2406E0BC0006EC84 /* AlternateAlert.xib */,
 				8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */,
 				8B5E7E8523F6BB3500087E15 /* Info.plist */,
 			);

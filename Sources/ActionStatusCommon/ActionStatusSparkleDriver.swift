@@ -10,8 +10,22 @@ let sparkleChannel = Channel("Sparkle")
 class ActionStatusSparkleDriver: SparkleDriver, ObservableObject {
     var updateCallback: UpdateAlertCallback?
     
-    @Published var expected: UInt64 = 0
-    @Published var received: UInt64 = 0
+    var expected: UInt64 = 0 {
+        didSet {
+            progress = expected > 0 ? Double(received)/Double(expected) : 0
+        }
+    }
+    var received: UInt64 = 0 {
+        didSet {
+            progress = expected > 0 ? Double(received)/Double(expected) : 0
+        }
+    }
+    
+    var percent: Int {
+        return Int(progress * 100)
+    }
+    
+    @Published var progress: Double = 0
     @Published var status: String = ""
     
     var hasUpdate: Bool {
@@ -99,7 +113,6 @@ class ActionStatusSparkleDriver: SparkleDriver, ObservableObject {
     override func showDownloadDidReceiveData(ofLength length: UInt64) {
         sparkleChannel.debug("showDownloadDidReceiveData")
         received += length
-        let percent = (length * 100) / expected
         status = "Downloading update... (\(percent)%)"
     }
     
@@ -110,7 +123,7 @@ class ActionStatusSparkleDriver: SparkleDriver, ObservableObject {
     
     override func showExtractionReceivedProgress(_ progress: Double) {
         sparkleChannel.debug("showExtractionReceivedProgress")
-        let percent = Int(progress * 100.0)
+        self.progress = progress
         status = "Extracting update... (\(percent)%)"
     }
     
