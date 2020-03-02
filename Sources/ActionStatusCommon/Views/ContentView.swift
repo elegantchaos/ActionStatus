@@ -124,6 +124,8 @@ struct ContentView: View {
             SystemImage(repo.badgeName)
                 .foregroundColor(repo.statusColor)
             Text(repo.name)
+                .allowsTightening(true)
+                .truncationMode(.middle)
         }
         .padding(.horizontal)
         .font(.title)
