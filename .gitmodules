@@ -4,3 +4,6 @@
 [submodule "Dependencies/Website"]
 	path = Dependencies/Website
 	url = git@github.com:samdeane/actionstatus.elegantchaos.com.git
+[submodule "Dependencies/CatalystSparkle"]
+	path = Dependencies/CatalystSparkle
+	url = git@github.com:elegantchaos/CatalystSparkle
