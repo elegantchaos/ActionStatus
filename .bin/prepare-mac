@@ -11,4 +11,4 @@ rt export
 rt notarize
 rt wait
 rt compress
-rt appcast --show-output
+rt appcast --show-output | xcpretty
