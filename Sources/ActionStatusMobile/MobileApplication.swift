@@ -205,9 +205,7 @@ extension MobileApplication: MenuDataSource {
     
     func selectItem(_ item: Int) {
         let repo = model.items[item]
-        if let url = URL(string: "https://github.com/\(repo.owner)/\(repo.name)/actions?query=workflow%3A\(repo.workflow)") {
-            UIApplication.shared.open(url)
-        }
+        repo.openInGithub()
     }
     
     func checkForUpdates() {

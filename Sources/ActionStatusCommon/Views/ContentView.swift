@@ -141,11 +141,23 @@ struct ContentView: View {
                     destination: EditView(repo: self.$repos.binding(for: repo, in: \.items)),
                     tag: repo.id,
                     selection: self.$selectedID) {
-                        Text("Edit")
+                        Text("Edit…")
+                }
+
+                Button(action: { self.repos.remove(repo: repo) }) {
+                    Text("Delete")
+                }
+
+                Button(action: { repo.openInGithub(destination: .repo) }) {
+                    Text("Show Repository In Github…")
+                }
+
+                Button(action: { repo.openInGithub(destination: .workflow) }) {
+                    Text("Show Workflow In Github…")
                 }
                 
                 Button(action: { self.repos.showComposeWindow(for: repo) }) {
-                    Text("Generate Workflow")
+                    Text("Generate Workflow…")
                 }
             }
         }
@@ -235,7 +247,7 @@ struct EditButton: View {
 
     var body: some View {
         Button(action: self.action) {
-            SystemImage(editMode?.wrappedValue.isEditing ?? true ? "ellipsis.circle.fill" : "ellipsis.circle").font(.title)
+            SystemImage(editMode?.wrappedValue.isEditing ?? true ? "hammer.fill" : "hammer").font(.title)
         }
     }
 }

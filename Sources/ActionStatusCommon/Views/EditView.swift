@@ -4,6 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import SwiftUI
+import SwiftUIExtensions
 
 struct EditView: View {
     #if os(tvOS)
@@ -61,27 +62,39 @@ struct EditView: View {
             
             Section {
                 HStack {
-                    Text("Repo")
-                        .font(.callout)
-                        .bold()
-                    
-                    Text("https://github.com/\(trimmedOwner)/\(trimmedName)")
-                }
-                
-                HStack {
-                    Text("File")
+                    Text("Workflow File")
                         .font(.callout)
                         .bold()
                     
                     Text("\(trimmedWorkflow).yml")
                 }
-                
-                HStack{
-                    Text("Status")
+
+                HStack {
+                    Text("Repo URL")
                         .font(.callout)
                         .bold()
                     
-                    Text("https://github.com/elegantchaos/Logger/actions?query=workflow%3A\(trimmedWorkflow)")
+                    Text("https://github.com/\(trimmedOwner)/\(trimmedName)")
+                    
+                    Spacer()
+                    
+                    Button(action: { self.repo.openInGithub(destination: .repo) }) {
+                        SystemImage("arrowshape.turn.up.right")
+                    }
+                }
+                
+                HStack{
+                    Text("Workflow URL")
+                        .font(.callout)
+                        .bold()
+                    
+                    Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions?query=workflow%3A\(trimmedWorkflow)")
+                    
+                    Spacer()
+                    
+                    Button(action: { self.repo.openInGithub(destination: .workflow) }) {
+                        SystemImage("arrowshape.turn.up.right")
+                    }
                 }
             }
         }

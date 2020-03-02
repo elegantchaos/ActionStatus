@@ -97,6 +97,18 @@ struct Repo: Identifiable, Equatable {
         
         return newState
     }
+    
+    enum GithubLocation {
+        case repo
+        case workflow
+    }
+    
+    func openInGithub(destination: GithubLocation = .workflow) {
+        let suffix = destination == .workflow ? "/actions?query=workflow%3A\(workflow)" : ""
+        if let url = URL(string: "https://github.com/\(owner)/\(name)\(suffix)") {
+            UIApplication.shared.open(url)
+        }
+    }
 }
 
 extension Repo: Codable {
