@@ -181,6 +181,7 @@
 		8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ActionStatus.xcconfig; sourceTree = "<group>"; };
 		8B451E1623F446BA0056EF3E /* ActionStatus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ActionStatus.entitlements; sourceTree = "<group>"; };
 		8B4893AC240D581200E3E112 /* SparkleBridgeClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SparkleBridgeClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B4893B4240D686200E3E112 /* ActionStatus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ActionStatus.entitlements; sourceTree = "<group>"; };
 		8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppKitBridge.xcconfig; sourceTree = "<group>"; };
 		8B5AEB472407EE630065524B /* SparkleUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SparkleUpdater.swift; path = Sources/ActionStatusCommon/SparkleUpdater.swift; sourceTree = SOURCE_ROOT; };
 		8B5AEB492407F8410065524B /* SparkleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleView.swift; sourceTree = "<group>"; };
@@ -404,6 +405,7 @@
 				8BE3D08F2405934C00AB6CAD /* ExportOptions-tvOS.plist */,
 				8B430E7823F586110050BF2A /* Info.plist */,
 				8B430E7523F586110050BF2A /* LaunchScreen.storyboard */,
+				8B4893B4240D686200E3E112 /* ActionStatus.entitlements */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
