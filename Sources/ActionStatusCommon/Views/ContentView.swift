@@ -43,7 +43,7 @@ struct ContentView: View {
                                     }
                                     .padding([.leading, .trailing], 10)
                                 } else {
-                                    self.rowView(for: repo, selectable: false)
+                                    self.rowView(for: repo, selectable: false).padding()
                                 }
                             }
                             .onDelete(perform: delete)
@@ -89,7 +89,10 @@ struct ContentView: View {
      }
 
     func onAppear()  {
+        #if !os(tvOS)
         UITableView.appearance().separatorStyle = .none
+        #endif
+        
         self.repos.refresh()
     }
     
@@ -127,7 +130,7 @@ struct ContentView: View {
                 .allowsTightening(true)
                 .truncationMode(.middle)
         }
-        .padding(.horizontal)
+        .rowPadding()
         .font(.title)
         .onTapGestureShim() {
             if selectable {
@@ -190,6 +193,10 @@ fileprivate extension View {
         return self
     }
     
+    func rowPadding() -> some View {
+        return self.padding(.horizontal, 80.0) // TODO: remove this special case
+    }
+    
     #elseif canImport(UIKit)
     
     // MARK: iOS/tvOS
@@ -207,7 +214,11 @@ fileprivate extension View {
     func bindEditing(to binding: Binding<Bool>) -> some View {
         environment(\.editMode, .constant(binding.wrappedValue ? .active : .inactive))
     }
-    
+
+    func rowPadding() -> some View {
+        return self.padding(.horizontal)
+    }
+
     #else // MARK: AppKit Overrides
     func setupNavigation(editAction: @escaping () -> (Void), addAction: @escaping () -> (Void)) -> some View {
         return navigationViewStyle(DefaultNavigationViewStyle())
