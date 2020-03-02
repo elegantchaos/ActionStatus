@@ -1,2 +1,2 @@
-source prepare
-$RT publish --repo="Dependencies/Website/updates/"
+source prepare-mac
+rt publish
