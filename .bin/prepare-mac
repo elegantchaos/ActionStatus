@@ -6,7 +6,7 @@ echo "***************"
 echo "Preparing macOS"
 echo "***************"
 
-rt archive --show-output $@ | xcpretty
+rt archive --scheme=ActionStatusMac --set-default --show-output $@ | xcpretty
 rt export
 rt notarize
 rt wait
