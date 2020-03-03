@@ -9,6 +9,8 @@ jobs:
         steps:
         - name: Checkout
           uses: actions/checkout@v1
+        - name: Submodules
+          run: git submodule update --init --recursive
         - name: Swift Version
           run: swift --version
         - name: Make Logs Directory
