@@ -11,6 +11,9 @@
       location = "group:"
       name = "Dependencies">
       <FileRef
+         location = "group:../SwiftUI-Introspect">
+      </FileRef>
+      <FileRef
          location = "group:Dependencies/CatalystSparkle/CatalystSparkle.xcodeproj">
       </FileRef>
       <FileRef
