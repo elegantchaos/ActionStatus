@@ -4,9 +4,6 @@
    <FileRef
       location = "group:ActionStatus.xcodeproj">
    </FileRef>
-   <FileRef
-      location = "group:../ReleaseTools">
-   </FileRef>
    <Group
       location = "group:"
       name = "Dependencies">

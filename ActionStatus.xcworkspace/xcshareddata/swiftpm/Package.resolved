@@ -65,21 +65,21 @@
         }
       },
       {
+        "package": "ReleaseTools",
+        "repositoryURL": "https://github.com/elegantchaos/ReleaseTools.git",
+        "state": {
+          "branch": null,
+          "revision": "eb3d08f9009448d2db2758ee3420c04a0b0ea055",
+          "version": "1.0.7"
+        }
+      },
+      {
         "package": "Runner",
         "repositoryURL": "https://github.com/elegantchaos/Runner.git",
         "state": {
           "branch": null,
           "revision": "394f2a5a92ac6b81215a3eeaec5ee4c8227a4a47",
           "version": "1.0.5"
-        }
-      },
-      {
-        "package": "Introspect",
-        "repositoryURL": "https://github.com/elegantchaos/SwiftUI-Introspect.git",
-        "state": {
-          "branch": null,
-          "revision": "de5c32c15ae169cfcb27397ffb2734dcd0e1e6d5",
-          "version": "0.1.0"
         }
       },
       {
