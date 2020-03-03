@@ -64,6 +64,7 @@
 		8B5E7E8D23F6BB8900087E15 /* AppKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8C23F6BB8900087E15 /* AppKitBridge.swift */; };
 		8B69B68B23FEDB6D00030A2B /* DictionaryCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 8B69B68A23FEDB6D00030A2B /* DictionaryCoding */; };
 		8B6F181823F459570029F9CC /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F181723F459570029F9CC /* EditView.swift */; };
+		8B736F9F240E79860025D583 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 8B736F9E240E79860025D583 /* Introspect */; };
 		8B880FE423FD7E000068C3FF /* BindingsExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B880FE323FD7E000068C3FF /* BindingsExtensions */; };
 		8B880FE623FD97600068C3FF /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE523FD97600068C3FF /* Option.swift */; };
 		8B880FE823FD97670068C3FF /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE723FD97670068C3FF /* Job.swift */; };
@@ -215,6 +216,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B4893AD240D581300E3E112 /* SparkleBridgeClient.framework in Frameworks */,
+				8B736F9F240E79860025D583 /* Introspect in Frameworks */,
 				8B5B175C23FAEB8200DD2AF5 /* SwiftUIExtensions in Frameworks */,
 				8B880FE423FD7E000068C3FF /* BindingsExtensions in Frameworks */,
 				8B69B68B23FEDB6D00030A2B /* DictionaryCoding in Frameworks */,
@@ -505,6 +507,7 @@
 				8B5D864523FD3F720085A570 /* ApplicationExtensions */,
 				8B880FE323FD7E000068C3FF /* BindingsExtensions */,
 				8B69B68A23FEDB6D00030A2B /* DictionaryCoding */,
+				8B736F9E240E79860025D583 /* Introspect */,
 			);
 			productName = GithubStatus;
 			productReference = 8B3E64A323EAE62D00B28168 /* Action Status.app */;
@@ -637,6 +640,7 @@
 				8B880FE223FD7E000068C3FF /* XCRemoteSwiftPackageReference "BindingsExtensions" */,
 				8B69B68923FEDB6D00030A2B /* XCRemoteSwiftPackageReference "DictionaryCoding" */,
 				8B045A77240556E600EC21D6 /* XCRemoteSwiftPackageReference "ReleaseTools" */,
+				8B736F9D240E79860025D583 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 			);
 			productRefGroup = 8B3E64A423EAE62D00B28168 /* Products */;
 			projectDirPath = "";
@@ -1213,6 +1217,14 @@
 				minimumVersion = 1.0.9;
 			};
 		};
+		8B736F9D240E79860025D583 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/timbersoftware/SwiftUI-Introspect.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
 		8B880FE223FD7E000068C3FF /* XCRemoteSwiftPackageReference "BindingsExtensions" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/elegantchaos/BindingsExtensions.git";
@@ -1251,6 +1263,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8B69B68923FEDB6D00030A2B /* XCRemoteSwiftPackageReference "DictionaryCoding" */;
 			productName = DictionaryCoding;
+		};
+		8B736F9E240E79860025D583 /* Introspect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B736F9D240E79860025D583 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			productName = Introspect;
 		};
 		8B880FE323FD7E000068C3FF /* BindingsExtensions */ = {
 			isa = XCSwiftPackageProductDependency;

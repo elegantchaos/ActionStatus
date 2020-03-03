@@ -5,6 +5,7 @@
 
 import SwiftUI
 import SwiftUIExtensions
+import Introspect
 
 extension View {
     func nameOrgStyle() -> some View {
@@ -72,6 +73,9 @@ struct EditView: View {
                     TextField("github repo name", text: $name)
                         .nameOrgStyle()
                         .modifier(ClearButton(text: $name))
+                        .introspectTextField { textField in
+                            textField.becomeFirstResponder()
+                        }
                 }
                 
                 HStack {
@@ -207,4 +211,51 @@ fileprivate extension View {
         return self
     }
     #endif
+}
+
+
+struct CustomTextField: UIViewRepresentable {
+
+    class Coordinator: NSObject, UITextFieldDelegate {
+
+        @Binding var text: String
+        var didBecomeFirstResponder = false
+
+        init(text: Binding<String>) {
+            _text = text
+        }
+
+        func textFieldDidChangeSelection(_ textField: UITextField) {
+            text = textField.text ?? ""
+        }
+
+    }
+
+    init(_ prototype: String, text: Binding<String>, isFirstResponder: Bool) {
+        self.prototype = prototype
+        self._text = text
+        self.isFirstResponder = isFirstResponder
+    }
+    
+    let prototype: String
+    @Binding var text: String
+    var isFirstResponder: Bool = false
+
+    func makeUIView(context: UIViewRepresentableContext<CustomTextField>) -> UITextField {
+        let textField = UITextField(frame: .zero)
+        textField.delegate = context.coordinator
+        return textField
+    }
+
+    func makeCoordinator() -> CustomTextField.Coordinator {
+        return Coordinator(text: $text)
+    }
+
+    func updateUIView(_ uiView: UITextField, context: UIViewRepresentableContext<CustomTextField>) {
+        uiView.text = text
+        if isFirstResponder && !context.coordinator.didBecomeFirstResponder  {
+            uiView.becomeFirstResponder()
+            context.coordinator.didBecomeFirstResponder = true
+        }
+    }
 }
