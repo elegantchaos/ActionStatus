@@ -43,7 +43,7 @@ struct ContentView: View {
                                     }
                                     .padding([.leading, .trailing], 10)
                                 } else {
-                                    self.rowView(for: repo, selectable: false).padding()
+                                    self.rowView(for: repo, selectable: false)
                                 }
                             }
                             .onDelete(perform: delete)
@@ -129,6 +129,7 @@ struct ContentView: View {
             Text(repo.name)
                 .allowsTightening(true)
                 .truncationMode(.middle)
+                .lineLimit(1)
         }
         .rowPadding()
         .font(.title)
@@ -149,15 +150,15 @@ struct ContentView: View {
                     selection: self.$selectedID) {
                         Text("Edit…")
                 }
-
+                
                 Button(action: { self.repos.remove(repo: repo) }) {
                     Text("Delete")
                 }
-
+                
                 Button(action: { repo.openInGithub(destination: .repo) }) {
                     Text("Show Repository In Github…")
                 }
-
+                
                 Button(action: { repo.openInGithub(destination: .workflow) }) {
                     Text("Show Workflow In Github…")
                 }
@@ -216,7 +217,8 @@ fileprivate extension View {
     }
 
     func rowPadding() -> some View {
-        return self.padding(.horizontal)
+//        return self.padding(.horizontal)
+        return self
     }
 
     #else // MARK: AppKit Overrides
