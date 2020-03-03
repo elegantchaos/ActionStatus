@@ -75,6 +75,8 @@
 		8BBFAA99240401C30091157A /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 8BBFAA8B2403F09F0091157A /* dsa_pub.pem */; };
 		8BDAC2C223FE8A64004154A1 /* BindingsExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C123FE8A64004154A1 /* BindingsExtensions */; };
 		8BDAC2C423FE8A6E004154A1 /* ApplicationExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C323FE8A6E004154A1 /* ApplicationExtensions */; };
+		8BE1601A240ED708002FB6C3 /* Repo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B451DFB23F415E10056EF3E /* Repo.swift */; };
+		8BE1601C240ED7BB002FB6C3 /* DictionaryCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 8BE1601B240ED7BB002FB6C3 /* DictionaryCoding */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -243,6 +245,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BE1601C240ED7BB002FB6C3 /* DictionaryCoding in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -607,6 +610,9 @@
 				8B3E64BB23EAE62E00B28168 /* PBXTargetDependency */,
 			);
 			name = ActionStatusTests;
+			packageProductDependencies = (
+				8BE1601B240ED7BB002FB6C3 /* DictionaryCoding */,
+			);
 			productName = GithubStatusTests;
 			productReference = 8B3E64B923EAE62E00B28168 /* Action Status.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -850,6 +856,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B3E64BE23EAE62E00B28168 /* ActionStatusTests.swift in Sources */,
+				8BE1601A240ED708002FB6C3 /* Repo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1361,6 +1368,11 @@
 		8BDAC2C323FE8A6E004154A1 /* ApplicationExtensions */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ApplicationExtensions;
+		};
+		8BE1601B240ED7BB002FB6C3 /* DictionaryCoding */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B69B68923FEDB6D00030A2B /* XCRemoteSwiftPackageReference "DictionaryCoding" */;
+			productName = DictionaryCoding;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

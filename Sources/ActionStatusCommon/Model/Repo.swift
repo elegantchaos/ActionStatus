@@ -15,6 +15,11 @@ import SwiftUI
     var build: Bool { return options.contains("build") }
 }
 
+
+internal extension String {
+    static let defaultOwnerKey = "DefaultOwner"
+}
+
 struct Repo: Identifiable, Equatable {
     enum State: Int, Codable {
         case failing = 0
@@ -29,6 +34,7 @@ struct Repo: Identifiable, Equatable {
     var branches: [String]
     var state: State
     var settings: WorkflowSettings
+    var local: [String:String]
     
     init() {
         id = UUID()
@@ -38,6 +44,7 @@ struct Repo: Identifiable, Equatable {
         branches = []
         state = .unknown
         settings = WorkflowSettings()
+        local = [:]
     }
     
     init(_ name: String, owner: String, workflow: String, id: UUID? = nil, state: State = .unknown, branches: [String] = [], settings: WorkflowSettings = WorkflowSettings()) {
@@ -48,6 +55,7 @@ struct Repo: Identifiable, Equatable {
         self.branches = branches
         self.state = state
         self.settings = settings
+        self.local = [:]
     }
     
     func state(fromSVG svg: String) -> State {

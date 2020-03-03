@@ -11,7 +11,6 @@ let settingsChannel = Channel("Settings")
 
 internal extension String {
     static let refreshIntervalKey = "RefreshInterval"
-    static let defaultOwnerKey = "DefaultOwner"
 }
 
 class Application: BasicApplication {
