@@ -33,7 +33,7 @@ struct Repo: Identifiable, Equatable {
     init() {
         id = UUID()
         name = ""
-        owner = ""
+        owner = UserDefaults.standard.string(forKey: .defaultOwnerKey) ?? ""
         workflow = "Tests"
         branches = []
         state = .unknown

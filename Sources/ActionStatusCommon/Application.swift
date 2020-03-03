@@ -9,8 +9,9 @@ import Logger
 
 let settingsChannel = Channel("Settings")
 
-fileprivate extension String {
+internal extension String {
     static let refreshIntervalKey = "RefreshInterval"
+    static let defaultOwnerKey = "DefaultOwner"
 }
 
 class Application: BasicApplication {
