@@ -14,12 +14,14 @@ extension View {
             .keyboardType(.namePhonePad)
             .textContentType(.name)
             .disableAutocorrection(true)
+            .autocapitalization(.none)
     }
 
     func branchListStyle() -> some View {
         return textFieldStyle(EditView.fieldStyle)
             .keyboardType(.alphabet)
             .disableAutocorrection(true)
+            .autocapitalization(.none)
     }
 
 }
