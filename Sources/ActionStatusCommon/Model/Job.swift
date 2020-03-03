@@ -73,6 +73,30 @@ class Job: Option {
                           run: xcodebuild -version
                         - name: XC Pretty
                           run: sudo gem install xcpretty-travis-formatter
+                        - name: Detect Workspace & Scheme
+                          run: |
+                            WORKSPACE="\(package).xcworkspace"
+                            if [[ ! -e "$WORKSPACE" ]]
+                            then
+                                WORKSPACE="."
+                                GOTPACKAGE=$(xcodebuild -workspace . -list | (grep \(package)-Package || true))
+                                if [[ $GOTPACKAGE != "" ]]
+                                then
+                                    SCHEME="\(package)-Package"
+                                else
+                                    SCHEME="\(package)"
+                                fi
+                                MACOS_SCHEME="$SCHEME"
+                                IOS_SCHEME="$SCHEME"
+                                TVOS_SCHEME="$SCHEME"
+                            else
+                                MACOS_SCHEME="\(package)-macOS"
+                                IOS_SCHEME="\(package)-iOS"
+                                TVOS_SCHEME="\(package)-tvOS"
+                            fi
+                            echo "WORKSPACE='$WORKSPACE'; SCHEME='$MACOS_SCHEME'" > names-macOS.sh
+                            echo "WORKSPACE='$WORKSPACE'; SCHEME='$IOS_SCHEME'" > names-iOS.sh
+                            echo "WORKSPACE='$WORKSPACE'; SCHEME='$TVOS_SCHEME'" > names-tvOS.sh
                 """
             )
         }
@@ -123,7 +147,10 @@ class Job: Option {
                         """
                         
                                 - name: Build (\(platform)/\(config))
-                                  run: set -o pipefail; xcodebuild clean build -workspace . -scheme \(package) -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-\(platform)-build-\(config.lowercased()).log | xcpretty
+                                  run: |
+                                    set -o pipefail
+                                    source "names-\(platform).sh"
+                                    xcodebuild clean build -workspace "$WORKSPACE" -scheme "$SCHEME" -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-\(platform)-build-\(config.lowercased()).log | xcpretty
                         """
                     )
                 }
@@ -137,16 +164,9 @@ class Job: Option {
                         
                                 - name: Test (\(platform)/\(config))
                                   run: |
-                                    GOTPACKAGE=$(xcodebuild -workspace . -list | (grep \(package)-Package || true))
-                                    echo "*$GOTPACKAGE*"
-                                    if [[ $GOTPACKAGE != "" ]]
-                                    then
-                                        SCHEME="\(package)-Package"
-                                    else
-                                        SCHEME="\(package)"
-                                    fi
                                     set -o pipefail
-                                    xcodebuild test -workspace . -scheme $SCHEME \(destination) -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \(extraArgs) | tee logs/xcodebuild-\(platform)-test-\(config.lowercased()).log | xcpretty
+                                    source "names-\(platform).sh"
+                                    xcodebuild test -workspace "$WORKSPACE" -scheme "$SCHEME" \(destination) -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \(extraArgs) | tee logs/xcodebuild-\(platform)-test-\(config.lowercased()).log | xcpretty
                         """
                     )
                 }
