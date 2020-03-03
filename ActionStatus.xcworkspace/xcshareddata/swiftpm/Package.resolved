@@ -65,15 +65,6 @@
         }
       },
       {
-        "package": "ReleaseTools",
-        "repositoryURL": "https://github.com/elegantchaos/ReleaseTools.git",
-        "state": {
-          "branch": null,
-          "revision": "eb3d08f9009448d2db2758ee3420c04a0b0ea055",
-          "version": "1.0.7"
-        }
-      },
-      {
         "package": "Runner",
         "repositoryURL": "https://github.com/elegantchaos/Runner.git",
         "state": {
