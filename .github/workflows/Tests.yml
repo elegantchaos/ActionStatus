@@ -23,9 +23,16 @@ jobs:
             if [[ ! -e "$WORKSPACE" ]]
             then
                 WORKSPACE="."
-                MACOS_SCHEME="ActionStatus"
-                IOS_SCHEME="ActionStatus"
-                TVOS_SCHEME="ActionStatus"
+                GOTPACKAGE=$(xcodebuild -workspace . -list | (grep ActionStatus-Package || true))
+                if [[ $GOTPACKAGE != "" ]]
+                then
+                    SCHEME="ActionStatus-Package"
+                else
+                    SCHEME="ActionStatus"
+                fi
+                MACOS_SCHEME="$SCHEME"
+                IOS_SCHEME="$SCHEME"
+                TVOS_SCHEME="$SCHEME"
             else
                 MACOS_SCHEME="ActionStatus-macOS"
                 IOS_SCHEME="ActionStatus-iOS"
@@ -34,22 +41,36 @@ jobs:
             echo "WORKSPACE='$WORKSPACE'; SCHEME='$MACOS_SCHEME'" > names-macOS.sh
             echo "WORKSPACE='$WORKSPACE'; SCHEME='$IOS_SCHEME'" > names-iOS.sh
             echo "WORKSPACE='$WORKSPACE'; SCHEME='$TVOS_SCHEME'" > names-tvOS.sh
-
         - name: Build (macOS/Debug)
           run: |
             set -o pipefail
             source "names-macOS.sh"
             xcodebuild clean build -workspace "$WORKSPACE" -scheme "$SCHEME" -configuration Debug CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-macOS-build-debug.log | xcpretty
         - name: Build (macOS/Release)
-          run: set -o pipefail; xcodebuild clean build -workspace . -scheme ActionStatus -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-macOS-build-release.log | xcpretty
+          run: |
+            set -o pipefail
+            source "names-macOS.sh"
+            xcodebuild clean build -workspace "$WORKSPACE" -scheme "$SCHEME" -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-macOS-build-release.log | xcpretty
         - name: Build (iOS/Debug)
-          run: set -o pipefail; xcodebuild clean build -workspace . -scheme ActionStatus -configuration Debug CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-iOS-build-debug.log | xcpretty
+          run: |
+            set -o pipefail
+            source "names-iOS.sh"
+            xcodebuild clean build -workspace "$WORKSPACE" -scheme "$SCHEME" -configuration Debug CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-iOS-build-debug.log | xcpretty
         - name: Build (iOS/Release)
-          run: set -o pipefail; xcodebuild clean build -workspace . -scheme ActionStatus -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-iOS-build-release.log | xcpretty
+          run: |
+            set -o pipefail
+            source "names-iOS.sh"
+            xcodebuild clean build -workspace "$WORKSPACE" -scheme "$SCHEME" -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-iOS-build-release.log | xcpretty
         - name: Build (tvOS/Debug)
-          run: set -o pipefail; xcodebuild clean build -workspace . -scheme ActionStatus -configuration Debug CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-tvOS-build-debug.log | xcpretty
+          run: |
+            set -o pipefail
+            source "names-tvOS.sh"
+            xcodebuild clean build -workspace "$WORKSPACE" -scheme "$SCHEME" -configuration Debug CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-tvOS-build-debug.log | xcpretty
         - name: Build (tvOS/Release)
-          run: set -o pipefail; xcodebuild clean build -workspace . -scheme ActionStatus -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-tvOS-build-release.log | xcpretty
+          run: |
+            set -o pipefail
+            source "names-tvOS.sh"
+            xcodebuild clean build -workspace "$WORKSPACE" -scheme "$SCHEME" -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-tvOS-build-release.log | xcpretty
         - name: Upload Logs
           uses: actions/upload-artifact@v1
           with:
