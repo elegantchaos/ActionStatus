@@ -17,12 +17,29 @@ jobs:
           run: xcodebuild -version
         - name: XC Pretty
           run: sudo gem install xcpretty-travis-formatter
-        - name: Build (macOS/Debug)
+        - name: Detect Workspace & Scheme
           run: |
             WORKSPACE="ActionStatus.xcworkspace"
-            if [[ ! -e "$WORKSPACE" ]]; then WORKSPACE="."; fi
+            if [[ ! -e "$WORKSPACE" ]]
+            then
+                WORKSPACE="."
+                MACOS_SCHEME="ActionStatus"
+                IOS_SCHEME="ActionStatus"
+                TVOS_SCHEME="ActionStatus"
+            else
+                MACOS_SCHEME="ActionStatus-macOS"
+                IOS_SCHEME="ActionStatus-iOS"
+                TVOS_SCHEME="ActionStatus-tvOS"
+            fi
+            echo "WORKSPACE='$WORKSPACE'; SCHEME='$MACOS_SCHEME'" > names-macOS.sh
+            echo "WORKSPACE='$WORKSPACE'; SCHEME='$IOS_SCHEME'" > names-iOS.sh
+            echo "WORKSPACE='$WORKSPACE'; SCHEME='$TVOS_SCHEME'" > names-tvOS.sh
+
+        - name: Build (macOS/Debug)
+          run: |
             set -o pipefail
-            xcodebuild clean build -workspace "$WORKSPACE" -scheme ActionStatus -configuration Debug CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-macOS-build-debug.log | xcpretty
+            source "names-macOS.sh"
+            xcodebuild clean build -workspace "$WORKSPACE" -scheme "$SCHEME" -configuration Debug CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-macOS-build-debug.log | xcpretty
         - name: Build (macOS/Release)
           run: set -o pipefail; xcodebuild clean build -workspace . -scheme ActionStatus -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-macOS-build-release.log | xcpretty
         - name: Build (iOS/Debug)
