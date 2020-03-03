@@ -75,9 +75,9 @@ struct EditView: View {
                     TextField("github repo name", text: $name)
                         .nameOrgStyle()
                         .modifier(ClearButton(text: $name))
-                        .introspectTextField { textField in
-                            textField.becomeFirstResponder()
-                        }
+//                        .introspectTextField { textField in
+//                            textField.becomeFirstResponder()
+//                        }
                 }
                 
                 HStack {
