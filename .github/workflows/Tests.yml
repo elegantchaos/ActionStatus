@@ -18,7 +18,11 @@ jobs:
         - name: XC Pretty
           run: sudo gem install xcpretty-travis-formatter
         - name: Build (macOS/Debug)
-          run: set -o pipefail; xcodebuild clean build -workspace . -scheme ActionStatus -configuration Debug CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-macOS-build-debug.log | xcpretty
+          run: |
+            WORKSPACE="ActionStatus.xcworkspace"
+            if [[ ! -e "$WORKSPACE" ]]; then WORKSPACE="." fi
+            set -o pipefail
+            xcodebuild clean build -workspace "$WORKSPACE" -scheme ActionStatus -configuration Debug CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-macOS-build-debug.log | xcpretty
         - name: Build (macOS/Release)
           run: set -o pipefail; xcodebuild clean build -workspace . -scheme ActionStatus -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-macOS-build-release.log | xcpretty
         - name: Build (iOS/Debug)
