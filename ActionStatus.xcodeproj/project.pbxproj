@@ -1301,8 +1301,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/elegantchaos/SwiftUI-Introspect.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.0;
+				branch = master;
+				kind = branch;
 			};
 		};
 		8B880FE223FD7E000068C3FF /* XCRemoteSwiftPackageReference "BindingsExtensions" */ = {
