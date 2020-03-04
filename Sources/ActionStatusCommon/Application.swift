@@ -87,4 +87,28 @@ class Application: BasicApplication {
     func openGithub(with repo: Repo, at location: Repo.GithubLocation = .workflow) {
         UIApplication.shared.open(repo.githubURL(for: location))
     }
+    
+    func saveWorkflow(named name: String, source: String) {
+        if let data = source.data(using: .utf8) {
+            do {
+                let url = UIApplication.newDocumentURL(name: name, withPathExtension: "yml", makeUnique: false)
+                try data.write(to: url)
+                let model = Application.shared.model
+                
+                #if targetEnvironment(macCatalyst)
+                // ugly hack - the SwiftUI sheet doesn't work properly on the mac
+                model.hideComposeWindow()
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: .seconds(1))) {
+                    Application.shared.pickFile(url: url)
+                }
+                #else
+                model.exportURL = url
+                model.exportYML = source
+                model.isSaving = true
+                #endif
+            } catch {
+                print(error)
+            }
+        }
+    }
 }

@@ -1,0 +1,45 @@
+{
+  "configurations" : [
+    {
+      "id" : "3DCCAE4F-6007-435D-A3A9-8C13D41FC669",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:ActionStatus.xcodeproj",
+      "identifier" : "8B3E64A223EAE62D00B28168",
+      "name" : "ActionStatusMobile"
+    }
+  },
+  "testTargets" : [
+    {
+      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:ActionStatus.xcodeproj",
+        "identifier" : "8B3E64B823EAE62E00B28168",
+        "name" : "ActionStatusTests"
+      }
+    },
+    {
+      "enabled" : false,
+      "target" : {
+        "containerPath" : "container:ActionStatus.xcodeproj",
+        "identifier" : "8B3E64C323EAE62F00B28168",
+        "name" : "ActionStatusUITests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/ActionStatusCore",
+        "identifier" : "ActionStatusCoreTests",
+        "name" : "ActionStatusCoreTests"
+      }
+    }
+  ],
+  "version" : 1
+}

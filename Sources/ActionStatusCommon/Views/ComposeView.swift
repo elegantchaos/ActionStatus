@@ -54,7 +54,8 @@ struct ComposeView: View {
     func onGenerate() {
         storeSettings()
         Application.shared.saveState()
-        generator.generateWorkflow(for: repo)
+        let source = generator.generateWorkflow(for: repo)
+        Application.shared.saveWorkflow(named: repo.workflow, source: source)
     }
     
     func fetchSettings() {
