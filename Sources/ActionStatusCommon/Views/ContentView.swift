@@ -3,6 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import ActionStatusCore
 import SwiftUI
 import SwiftUIExtensions
 import BindingsExtensions
@@ -155,11 +156,11 @@ struct ContentView: View {
                     Text("Delete")
                 }
                 
-                Button(action: { repo.openInGithub(destination: .repo) }) {
+                Button(action: { Application.shared.openGithub(with: repo, at: .repo) }) {
                     Text("Show Repository In Github…")
                 }
                 
-                Button(action: { repo.openInGithub(destination: .workflow) }) {
+                Button(action: { Application.shared.openGithub(with: repo, at: .workflow) }) {
                     Text("Show Workflow In Github…")
                 }
                 

@@ -24,6 +24,7 @@
 /* Begin PBXBuildFile section */
 		8B2F0ABB23FC195800B2E62A /* InterceptingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */; };
 		8B2F0ABD23FC2FA400B2E62A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */; };
+		8B3C0564240FBA0F00FB533B /* ActionStatusCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8B3C0563240FBA0F00FB533B /* ActionStatusCore */; };
 		8B3E64A723EAE62D00B28168 /* MobileApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64A623EAE62D00B28168 /* MobileApplication.swift */; };
 		8B3E64A923EAE62D00B28168 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */; };
 		8B3E64AB23EAE62D00B28168 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64AA23EAE62D00B28168 /* ContentView.swift */; };
@@ -33,8 +34,6 @@
 		8B3E64C923EAE62F00B28168 /* ActionStatusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */; };
 		8B430E7E23F586830050BF2A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64AA23EAE62D00B28168 /* ContentView.swift */; };
 		8B430E8023F586830050BF2A /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F181723F459570029F9CC /* EditView.swift */; };
-		8B430E8123F586830050BF2A /* Repo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B451DFB23F415E10056EF3E /* Repo.swift */; };
-		8B430E8223F586830050BF2A /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9B2DB123F452B00087283B /* Model.swift */; };
 		8B430E8423F5877D0050BF2A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B430E7523F586110050BF2A /* LaunchScreen.storyboard */; };
 		8B430E8523F587830050BF2A /* TVApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B430E6C23F586100050BF2A /* TVApplication.swift */; };
 		8B430E8723F587E30050BF2A /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B430E8623F587E30050BF2A /* Application.swift */; };
@@ -45,11 +44,8 @@
 		8B4336EC23FFE53700598A04 /* DocumentPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4336EB23FFE53700598A04 /* DocumentPickerViewController.swift */; };
 		8B4336EE23FFE7C700598A04 /* DictionaryCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 8B4336ED23FFE7C700598A04 /* DictionaryCoding */; };
 		8B4336EF23FFE8E500598A04 /* WorkflowGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE923FD97EE0068C3FF /* WorkflowGenerator.swift */; };
-		8B4336F023FFE8ED00598A04 /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE523FD97600068C3FF /* Option.swift */; };
-		8B4336F123FFE8ED00598A04 /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE723FD97670068C3FF /* Job.swift */; };
 		8B4336F323FFEBAA00598A04 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */; };
 		8B4336F423FFED8000598A04 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */; };
-		8B451DFC23F415E10056EF3E /* Repo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B451DFB23F415E10056EF3E /* Repo.swift */; };
 		8B48938F240D502000E3E112 /* SparkleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5AEB492407F8410065524B /* SparkleView.swift */; };
 		8B4893AD240D581300E3E112 /* SparkleBridgeClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4893AC240D581200E3E112 /* SparkleBridgeClient.framework */; platformFilter = maccatalyst; };
 		8B4893AE240D581300E3E112 /* SparkleBridgeClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4893AC240D581200E3E112 /* SparkleBridgeClient.framework */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -66,16 +62,12 @@
 		8B6F181823F459570029F9CC /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F181723F459570029F9CC /* EditView.swift */; };
 		8B736FA2240E9B2D0025D583 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 8B736FA1240E9B2D0025D583 /* Introspect */; };
 		8B880FE423FD7E000068C3FF /* BindingsExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B880FE323FD7E000068C3FF /* BindingsExtensions */; };
-		8B880FE623FD97600068C3FF /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE523FD97600068C3FF /* Option.swift */; };
-		8B880FE823FD97670068C3FF /* Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE723FD97670068C3FF /* Job.swift */; };
 		8B880FEA23FD97EE0068C3FF /* WorkflowGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B880FE923FD97EE0068C3FF /* WorkflowGenerator.swift */; };
-		8B9B2DB223F452B00087283B /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9B2DB123F452B00087283B /* Model.swift */; };
 		8BBFAA952403F8E80091157A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BBFAA942403F8E80091157A /* Sparkle.framework */; };
 		8BBFAA962403F8F40091157A /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8BBFAA942403F8E80091157A /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8BBFAA99240401C30091157A /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 8BBFAA8B2403F09F0091157A /* dsa_pub.pem */; };
 		8BDAC2C223FE8A64004154A1 /* BindingsExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C123FE8A64004154A1 /* BindingsExtensions */; };
 		8BDAC2C423FE8A6E004154A1 /* ApplicationExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C323FE8A6E004154A1 /* ApplicationExtensions */; };
-		8BE1601A240ED708002FB6C3 /* Repo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B451DFB23F415E10056EF3E /* Repo.swift */; };
 		8BE1601C240ED7BB002FB6C3 /* DictionaryCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 8BE1601B240ED7BB002FB6C3 /* DictionaryCoding */; };
 /* End PBXBuildFile section */
 
@@ -179,7 +171,6 @@
 		8B430E7823F586110050BF2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B430E8623F587E30050BF2A /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		8B4336EB23FFE53700598A04 /* DocumentPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPickerViewController.swift; sourceTree = "<group>"; };
-		8B451DFB23F415E10056EF3E /* Repo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repo.swift; sourceTree = "<group>"; };
 		8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BuildNumber.xcconfig; sourceTree = "<group>"; };
 		8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ActionStatus.xcconfig; sourceTree = "<group>"; };
 		8B451E1623F446BA0056EF3E /* ActionStatus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ActionStatus.entitlements; sourceTree = "<group>"; };
@@ -200,10 +191,7 @@
 		8B5E7E9223F6C0B600087E15 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		8B5E7E9323F6C0C200087E15 /* AppKitBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppKitBridge.h; sourceTree = "<group>"; };
 		8B6F181723F459570029F9CC /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
-		8B880FE523FD97600068C3FF /* Option.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
-		8B880FE723FD97670068C3FF /* Job.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Job.swift; sourceTree = "<group>"; };
 		8B880FE923FD97EE0068C3FF /* WorkflowGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkflowGenerator.swift; sourceTree = "<group>"; };
-		8B9B2DB123F452B00087283B /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		8BA5228D240573F400B82857 /* ExportOptions-macOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ExportOptions-macOS.plist"; sourceTree = "<group>"; };
 		8BA522A224057CAE00B82857 /* upload-mobile */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = "upload-mobile"; sourceTree = "<group>"; };
 		8BA522A32405804500B82857 /* ExportOptions-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ExportOptions-iOS.plist"; sourceTree = "<group>"; };
@@ -235,6 +223,7 @@
 				8B4893AD240D581300E3E112 /* SparkleBridgeClient.framework in Frameworks */,
 				8B736FA2240E9B2D0025D583 /* Introspect in Frameworks */,
 				8B5B175C23FAEB8200DD2AF5 /* SwiftUIExtensions in Frameworks */,
+				8B3C0564240FBA0F00FB533B /* ActionStatusCore in Frameworks */,
 				8B880FE423FD7E000068C3FF /* BindingsExtensions in Frameworks */,
 				8B69B68B23FEDB6D00030A2B /* DictionaryCoding in Frameworks */,
 				8B5D864623FD3F720085A570 /* ApplicationExtensions in Frameworks */,
@@ -385,17 +374,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		8B4336F7240052FF00598A04 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				8B880FE723FD97670068C3FF /* Job.swift */,
-				8B9B2DB123F452B00087283B /* Model.swift */,
-				8B880FE523FD97600068C3FF /* Option.swift */,
-				8B451DFB23F415E10056EF3E /* Repo.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
 		8B522FA223F6E7B40020AD36 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -474,7 +452,6 @@
 				8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */,
 				8B880FE923FD97EE0068C3FF /* WorkflowGenerator.swift */,
 				8B4336F6240052DC00598A04 /* Views */,
-				8B4336F7240052FF00598A04 /* Model */,
 				8B5B175223FADAAE00DD2AF5 /* Resources */,
 			);
 			path = ActionStatusCommon;
@@ -591,6 +568,7 @@
 				8B880FE323FD7E000068C3FF /* BindingsExtensions */,
 				8B69B68A23FEDB6D00030A2B /* DictionaryCoding */,
 				8B736FA1240E9B2D0025D583 /* Introspect */,
+				8B3C0563240FBA0F00FB533B /* ActionStatusCore */,
 			);
 			productName = GithubStatus;
 			productReference = 8B3E64A323EAE62D00B28168 /* Action Status.app */;
@@ -727,6 +705,7 @@
 				8B69B68923FEDB6D00030A2B /* XCRemoteSwiftPackageReference "DictionaryCoding" */,
 				8B045A77240556E600EC21D6 /* XCRemoteSwiftPackageReference "ReleaseTools" */,
 				8B736FA0240E9B2D0025D583 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
+				8B3C0562240FBA0F00FB533B /* XCRemoteSwiftPackageReference "ActionStatusCore" */,
 			);
 			productRefGroup = 8B3E64A423EAE62D00B28168 /* Products */;
 			projectDirPath = "";
@@ -834,7 +813,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B9B2DB223F452B00087283B /* Model.swift in Sources */,
 				8B3E64A723EAE62D00B28168 /* MobileApplication.swift in Sources */,
 				8B3E64A923EAE62D00B28168 /* SceneDelegate.swift in Sources */,
 				8B430E8723F587E30050BF2A /* Application.swift in Sources */,
@@ -842,11 +820,8 @@
 				8B4336EC23FFE53700598A04 /* DocumentPickerViewController.swift in Sources */,
 				8B880FEA23FD97EE0068C3FF /* WorkflowGenerator.swift in Sources */,
 				8B5AEB482407EE630065524B /* SparkleUpdater.swift in Sources */,
-				8B880FE623FD97600068C3FF /* Option.swift in Sources */,
 				8B5D864823FD52550085A570 /* ComposeView.swift in Sources */,
 				8B5AEB4A2407F8410065524B /* SparkleView.swift in Sources */,
-				8B451DFC23F415E10056EF3E /* Repo.swift in Sources */,
-				8B880FE823FD97670068C3FF /* Job.swift in Sources */,
 				8B3E64AB23EAE62D00B28168 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -856,7 +831,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B3E64BE23EAE62E00B28168 /* ActionStatusTests.swift in Sources */,
-				8BE1601A240ED708002FB6C3 /* Repo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -874,16 +848,12 @@
 			files = (
 				8B430E8523F587830050BF2A /* TVApplication.swift in Sources */,
 				8B430E7E23F586830050BF2A /* ContentView.swift in Sources */,
-				8B430E8123F586830050BF2A /* Repo.swift in Sources */,
 				8B430E8823F587E60050BF2A /* Application.swift in Sources */,
 				8B4336EF23FFE8E500598A04 /* WorkflowGenerator.swift in Sources */,
 				8B48938F240D502000E3E112 /* SparkleView.swift in Sources */,
-				8B4336F023FFE8ED00598A04 /* Option.swift in Sources */,
 				8B430E8023F586830050BF2A /* EditView.swift in Sources */,
 				8B4336F423FFED8000598A04 /* SceneDelegate.swift in Sources */,
 				8B5D864923FD54160085A570 /* ComposeView.swift in Sources */,
-				8B4336F123FFE8ED00598A04 /* Job.swift in Sources */,
-				8B430E8223F586830050BF2A /* Model.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1280,6 +1250,14 @@
 				minimumVersion = 1.0.7;
 			};
 		};
+		8B3C0562240FBA0F00FB533B /* XCRemoteSwiftPackageReference "ActionStatusCore" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elegantchaos/ActionStatusCore.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		8B5B175A23FAEB8200DD2AF5 /* XCRemoteSwiftPackageReference "SwiftUIExtensions" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/elegantchaos/SwiftUIExtensions.git";
@@ -1327,6 +1305,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8B045A77240556E600EC21D6 /* XCRemoteSwiftPackageReference "ReleaseTools" */;
 			productName = rt;
+		};
+		8B3C0563240FBA0F00FB533B /* ActionStatusCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B3C0562240FBA0F00FB533B /* XCRemoteSwiftPackageReference "ActionStatusCore" */;
+			productName = ActionStatusCore;
 		};
 		8B4336ED23FFE7C700598A04 /* DictionaryCoding */ = {
 			isa = XCSwiftPackageProductDependency;

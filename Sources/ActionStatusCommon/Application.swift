@@ -3,9 +3,10 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import SwiftUI
+import ActionStatusCore
 import ApplicationExtensions
 import Logger
+import SwiftUI
 
 let settingsChannel = Channel("Settings")
 
@@ -81,5 +82,9 @@ class Application: BasicApplication {
     
     func restoreState() {
         model.load(fromDefaultsKey: stateKey)
+    }
+    
+    func openGithub(with repo: Repo, at location: Repo.GithubLocation = .workflow) {
+        UIApplication.shared.open(repo.githubURL(for: location))
     }
 }

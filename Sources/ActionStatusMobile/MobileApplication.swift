@@ -205,7 +205,7 @@ extension MobileApplication: MenuDataSource {
     
     func selectItem(_ item: Int) {
         let repo = model.items[item]
-        repo.openInGithub()
+        Application.shared.openGithub(with: repo)
     }
     
     func checkForUpdates() {

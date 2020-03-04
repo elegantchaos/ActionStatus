@@ -3,6 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import ActionStatusCore
 import SwiftUI
 import SwiftUIExtensions
 import Introspect
@@ -130,7 +131,7 @@ struct EditView: View {
                     
                     Spacer()
                     
-                    Button(action: { self.repo.openInGithub(destination: .repo) }) {
+                    Button(action: { Application.shared.openGithub(with: self.repo, at: .repo) }) {
                         SystemImage("arrowshape.turn.up.right")
                     }
                 }
@@ -144,7 +145,7 @@ struct EditView: View {
                     
                     Spacer()
                     
-                    Button(action: { self.repo.openInGithub(destination: .workflow) }) {
+                    Button(action: { Application.shared.openGithub(with: self.repo, at: .workflow) }) {
                         SystemImage("arrowshape.turn.up.right")
                     }
                 }
