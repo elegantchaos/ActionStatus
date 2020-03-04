@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "ActionStatusCore",
-        "repositoryURL": "https://github.com/elegantchaos/ActionStatusCore.git",
-        "state": {
-          "branch": "master",
-          "revision": "5993464a190d36e4283e45909c72eb6cdd4632f5",
-          "version": null
-        }
-      },
-      {
         "package": "ApplicationExtensions",
         "repositoryURL": "https://github.com/elegantchaos/ApplicationExtensions.git",
         "state": {
