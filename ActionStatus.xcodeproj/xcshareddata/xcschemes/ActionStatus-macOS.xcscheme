@@ -103,7 +103,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:Sources/ActionStatusCommon/Resources/ActionStatus.xctestplan"
+            reference = "container:Sources/ActionStatus/Resources/ActionStatus.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
@@ -113,7 +113,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8B3E64B823EAE62E00B28168"
-               BuildableName = "Action Status.xctest"
+               BuildableName = ".xctest"
                BlueprintName = "ActionStatusTests"
                ReferencedContainer = "container:ActionStatus.xcodeproj">
             </BuildableReference>
@@ -123,7 +123,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8B3E64C323EAE62F00B28168"
-               BuildableName = "Action Status.xctest"
+               BuildableName = ".xctest"
                BlueprintName = "ActionStatusUITests"
                ReferencedContainer = "container:ActionStatus.xcodeproj">
             </BuildableReference>

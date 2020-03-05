@@ -3,7 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-#include "Sources/ActionStatusCommon/Resources/ActionStatus.xcconfig"
+#include "Sources/ActionStatus/Resources/ActionStatus.xcconfig"
 
 ACTION_STATUS_TYPE = TV
 

@@ -25,6 +25,7 @@ import AppKit
     
     class func setupImage(_ name: String) -> NSImage {
         let image = NSImage(named: name)!
+//        image.isTemplate = true
         image.size = imageSize
         return image
     }

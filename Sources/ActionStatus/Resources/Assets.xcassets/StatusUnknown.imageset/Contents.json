@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "StatusFailing.pdf",
+      "filename" : "StatusUnknown.pdf",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "StatusUnknown.pdf",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "StatusUnknown.pdf",
       "idiom" : "universal",
       "scale" : "3x"
     }
@@ -17,5 +19,8 @@
   "info" : {
     "author" : "xcode",
     "version" : 1
+  },
+  "properties" : {
+    "template-rendering-intent" : "original"
   }
 }
