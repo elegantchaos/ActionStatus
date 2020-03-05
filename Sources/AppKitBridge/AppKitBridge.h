@@ -11,11 +11,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NSString* ItemStatus NS_TYPED_ENUM;
-
-ItemStatus const ItemStatusUnknown = @"StatusUnknown";
-ItemStatus const ItemStatusFailed = @"StatusFailing";
-ItemStatus const ItemStatusSucceeded = @"StatusPassing";
+typedef NS_CLOSED_ENUM(NSUInteger, ItemStatus) {
+    ItemStatusUnknown,
+    ItemStatusFailed,
+    ItemStatusSucceeded,
+};
 
 @protocol MenuDataSource <NSObject>
 - (NSInteger) itemCount;

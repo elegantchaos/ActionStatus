@@ -15,11 +15,19 @@ extension ItemStatus: CaseIterable {
     public static var allCases: [ItemStatus] {
         return [.failed, .succeeded, .unknown]
     }
+
+    var asString: String {
+        switch self {
+            case .unknown: return "StatusUnknown"
+            case .succeeded: return "StatusPassing"
+            case .failed: return "StatusFailing"
+        }
+    }
     
     func imageName(mode: ImageMode) -> String {
         switch mode {
-            case .foreground: return "\(rawValue)Solid"
-            case .background: return rawValue
+            case .foreground: return "\(asString)Solid"
+            case .background: return asString
         }
     }
 
@@ -35,14 +43,6 @@ extension ItemStatus: CaseIterable {
     let images = setupImages()
     let appName = Bundle.main.infoDictionary?["CFBundleName"] as! String
     
-    
-//    enum State: String, CaseIterable {
-//        case unknown = "StatusUnknown"
-//        case failed = "StatusFailing"
-//        case succeeded = "StatusPassing"
-//
-//    }
-
     var menuSource: MenuDataSource?
     var windowInterceptor: InterceptingDelegate?
     var mainWindow: NSWindow?
@@ -63,7 +63,9 @@ extension ItemStatus: CaseIterable {
             var modeImages:[ItemStatus:NSImage] = [:]
             for status in ItemStatus.allCases {
                 let name = status.imageName(mode: mode)
-                modeImages[status] = NSImage(named: name)!
+                let image = NSImage(named: name)!
+                image.size = imageSize
+                modeImages[status] = image
             }
             images[mode] = modeImages
         }
