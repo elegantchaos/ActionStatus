@@ -23,7 +23,6 @@ extension Application {
     }
 }
 
-
 @UIApplicationMain
 class MobileApplication: Application {
     var appKitBridge: AppKitBridge? = nil

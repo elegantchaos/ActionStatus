@@ -1,33 +1,73 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-//  Created by Developer on 14/02/2020.
+//  Created by Sam Deane on 14/02/2020.
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Foundation
 import AppKit
 
+enum ImageMode: CaseIterable {
+    case foreground
+    case background
+}
+
+extension ItemStatus: CaseIterable {
+    public static var allCases: [ItemStatus] {
+        return [.failed, .succeeded, .unknown]
+    }
+    
+    func imageName(mode: ImageMode) -> String {
+        switch mode {
+            case .foreground: return "\(rawValue)Solid"
+            case .background: return rawValue
+        }
+    }
+
+    public typealias AllCases = [ItemStatus]
+}
+
 @objc class AppKitBridgeImp: NSResponder {
     static let imageSize = NSSize(width: 16.0, height: 16.0)
-    let passingImage = setupImage("StatusPassing")
-    let failingImage = setupImage("StatusFailing")
-    let unknownImage = setupImage("StatusUnknown")
+    
+    typealias StatusImages = [ItemStatus:NSImage]
+    typealias ImageTable = [ImageMode:StatusImages]
+    
+    let images = setupImages()
     let appName = Bundle.main.infoDictionary?["CFBundleName"] as! String
     
+    
+//    enum State: String, CaseIterable {
+//        case unknown = "StatusUnknown"
+//        case failed = "StatusFailing"
+//        case succeeded = "StatusPassing"
+//
+//    }
+
     var menuSource: MenuDataSource?
     var windowInterceptor: InterceptingDelegate?
     var mainWindow: NSWindow?
     var item: NSStatusItem?
-        
-    var passing: Bool {
-        get { return item?.button?.image == passingImage }
-        set { item?.button?.image = newValue ? passingImage : failingImage }
-    }
+    var status: ItemStatus = .unknown
     
-    class func setupImage(_ name: String) -> NSImage {
-        let image = NSImage(named: name)!
-//        image.isTemplate = true
-        image.size = imageSize
-        return image
+    var passing: Bool {
+        get { return status == .succeeded }
+        set {
+            status = newValue ? .succeeded : .failed
+            updateImage()
+        }
+    }
+
+    class func setupImages() -> ImageTable {
+        var images: ImageTable = [:]
+        for mode in ImageMode.allCases {
+            var modeImages:[ItemStatus:NSImage] = [:]
+            for status in ItemStatus.allCases {
+                let name = status.imageName(mode: mode)
+                modeImages[status] = NSImage(named: name)!
+            }
+            images[mode] = modeImages
+        }
+        return images
     }
 
     func setupMenu() {
@@ -36,19 +76,26 @@ import AppKit
         let newItem = status.statusItem(withLength: 22)
         if let button = newItem.button {
             button.title = "ActionStatus"
-            button.image = unknownImage
         }
         
         let menu = NSMenu(title: "Repos")
         menu.delegate = self
         newItem.menu = menu
         item = newItem
+        updateImage()
     }
     
     func tearDownMenu() {
         assert(item != nil)
         NSStatusBar.system.removeStatusItem(item!)
         item = nil
+    }
+    
+    func updateImage() {
+        if let button = item?.button {
+            let mode: ImageMode = (mainWindow?.isKeyWindow ?? false) ? .foreground : .background
+            button.image = (images[mode])?[status]
+        }
     }
 }
 
@@ -107,12 +154,8 @@ extension AppKitBridgeImp: NSMenuDelegate {
                 for n in 0 ..< menuSource.itemCount() {
                     let name = menuSource.name(forItem: n)
                     let item = menu.addItem(withTitle: name, action: #selector(handleItem(_:)), keyEquivalent: "")
-                    switch menuSource.status(forItem: n) {
-                        case .succeeded: item.image = passingImage
-                        case .failed: item.image = failingImage
-                        default: item.image = unknownImage
-                    }
-                    
+                    let status = menuSource.status(forItem: n)
+                    item.image = images[.foreground]?[status]
                     item.tag = n
                 }
             }

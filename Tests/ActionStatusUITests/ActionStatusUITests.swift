@@ -2,7 +2,7 @@
 //  GithubStatusUITests.swift
 //  GithubStatusUITests
 //
-//  Created by Developer on 05/02/2020.
+//  Created by Sam Deane on 05/02/2020.
 //  Copyright © 2020 Elegant Chaos. All rights reserved.
 //
 

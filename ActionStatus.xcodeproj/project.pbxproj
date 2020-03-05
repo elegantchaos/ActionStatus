@@ -69,6 +69,7 @@
 		8BDAC2C223FE8A64004154A1 /* BindingsExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C123FE8A64004154A1 /* BindingsExtensions */; };
 		8BDAC2C423FE8A6E004154A1 /* ApplicationExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C323FE8A6E004154A1 /* ApplicationExtensions */; };
 		8BE1601C240ED7BB002FB6C3 /* DictionaryCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 8BE1601B240ED7BB002FB6C3 /* DictionaryCoding */; };
+		8BE300592411701400669547 /* AppKitBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BE300582411701400669547 /* AppKitBridge.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -212,6 +213,7 @@
 		8BDBC6A3240EB752005CDA0D /* Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.44.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.44.png"; sourceTree = "<group>"; };
 		8BDBC6A4240EB752005CDA0D /* Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.19.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.19.png"; sourceTree = "<group>"; };
 		8BDBC6A6240EB752005CDA0D /* Simulator Screen Shot - Apple TV 4K - 2020-03-02 at 18.38.36.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - Apple TV 4K - 2020-03-02 at 18.38.36.png"; sourceTree = "<group>"; };
+		8BE300582411701400669547 /* AppKitBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppKitBridge.m; sourceTree = "<group>"; };
 		8BE3D08F2405934C00AB6CAD /* ExportOptions-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ExportOptions-tvOS.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -475,6 +477,7 @@
 				8B2F0AB923FC195700B2E62A /* InterceptingDelegate.h */,
 				8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */,
 				8B5E7E9323F6C0C200087E15 /* AppKitBridge.h */,
+				8BE300582411701400669547 /* AppKitBridge.m */,
 				8B5B175323FAE05600DD2AF5 /* Resources */,
 			);
 			path = AppKitBridge;
@@ -863,6 +866,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BE300592411701400669547 /* AppKitBridge.m in Sources */,
 				8B5E7E8D23F6BB8900087E15 /* AppKitBridge.swift in Sources */,
 				8B2F0ABB23FC195800B2E62A /* InterceptingDelegate.m in Sources */,
 			);

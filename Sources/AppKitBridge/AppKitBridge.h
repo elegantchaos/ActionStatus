@@ -2,7 +2,7 @@
 //  AppKitBridge.h
 //  ActionStatus
 //
-//  Created by Developer on 14/02/2020.
+//  Created by Sam Deane on 14/02/2020.
 //  Copyright © 2020 Elegant Chaos. All rights reserved.
 //
 
@@ -11,11 +11,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSUInteger, ItemStatus) {
-    ItemStatusUnknown,
-    ItemStatusFailed,
-    ItemStatusSucceeded,
-};
+typedef NSString* ItemStatus NS_TYPED_ENUM;
+
+ItemStatus const ItemStatusUnknown = @"StatusUnknown";
+ItemStatus const ItemStatusFailed = @"StatusFailing";
+ItemStatus const ItemStatusSucceeded = @"StatusPassing";
 
 @protocol MenuDataSource <NSObject>
 - (NSInteger) itemCount;
