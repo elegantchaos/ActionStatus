@@ -127,16 +127,16 @@ class Application: BasicApplication {
         }
     }
     
-    func saveWorkflow(_ data: Data, for repo: Repo, to url: URL?) {
-        if let url = url {
-            url.accessSecurityScopedResource(withPathComponents: [".github", "workflows", "\(repo.workflow).yml"]) { url in
+    func saveWorkflow(_ data: Data, for repo: Repo, to rootURL: URL?) {
+        if let rootURL = rootURL {
+            rootURL.accessSecurityScopedResource(withPathComponents: [".github", "workflows", "\(repo.workflow).yml"]) { url in
                 var error: NSError? = nil
                 NSFileCoordinator().coordinate(readingItemAt: url, error: &error) { (url) in
                     do {
                         try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
                         try data.write(to: url)
                         if let identifier = Device.main.identifier {
-                            model.remember(path: url.path, forDevice: identifier, inRepo: repo)
+                            model.remember(path: rootURL.path, forDevice: identifier, inRepo: repo)
                         }
                     } catch {
                         print(error)
