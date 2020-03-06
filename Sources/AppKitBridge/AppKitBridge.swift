@@ -95,7 +95,7 @@ extension ItemStatus: CaseIterable {
     
     func updateImage() {
         if let button = item?.button {
-            let mode: ImageMode = (mainWindow?.isKeyWindow ?? false) ? .foreground : .background
+            let mode: ImageMode = NSApp.isActive ? .foreground : .background
             button.image = (images[mode])?[status]
         }
     }
@@ -109,6 +109,13 @@ extension AppKitBridgeImp: AppKitBridge {
         self.nextResponder = NSApp.nextResponder
         NSApp.nextResponder = self
 
+        NotificationCenter.default.addObserver(forName: NSApplication.didBecomeActiveNotification, object: nil, queue: nil) { notification in
+            self.updateImage()
+        }
+
+        NotificationCenter.default.addObserver(forName: NSApplication.didResignActiveNotification, object: nil, queue: nil) { notification in
+            self.updateImage()
+        }
 
         for window in NSApp.windows {
             if window.title == windowName {

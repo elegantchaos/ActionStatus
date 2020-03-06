@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/elegantchaos/ApplicationExtensions.git",
         "state": {
           "branch": null,
-          "revision": "f834120e265af71bf903be2de85fcb91174f1da5",
-          "version": "1.0.5"
+          "revision": "75d5fde7133d0b4806e47e068512911e98955d10",
+          "version": "1.0.6"
         }
       },
       {
@@ -60,8 +60,8 @@
         "repositoryURL": "https://github.com/elegantchaos/Logger.git",
         "state": {
           "branch": null,
-          "revision": "287605d02a34b5aba501f5a5d923e04315e9b822",
-          "version": "1.5.1"
+          "revision": "e4073d0427146d2884730d0cdcb62e4ce0f80938",
+          "version": "1.5.2"
         }
       },
       {

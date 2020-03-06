@@ -34,7 +34,7 @@ class MobileApplication: Application {
     var updater = Updater()
     #endif
     
-    var filePicker: UIDocumentPickerViewController?
+    var filePicker: FilePicker?
     
     override func setUp(withOptions options: LaunchOptions) {
         loadBridge()
@@ -122,66 +122,16 @@ class MobileApplication: Application {
     }
 
     @IBAction func addLocalRepos() {
-        pickFilesToOpen(types: ["public.folder"]) { urls in
+        let picker = CustomPicker(forOpeningFolderStartingIn: nil) { urls in
             self.model.add(fromFolders: urls)
         }
+        presentPicker(picker)
     }
     
-    class CustomPicker: UIDocumentPickerViewController, UIDocumentPickerDelegate {
-        typealias Completion = ([URL]) -> Void
-        
-        let cleanupURLS: [URL]
-        let completion: Completion?
-        
-        init(url: URL, in mode: UIDocumentPickerMode, completion: Completion? = nil) {
-            self.cleanupURLS = [url]
-            self.completion = completion
-            super.init(url: url, in: mode)
-            delegate = self
-            modalPresentationStyle = .overFullScreen
+    func presentPicker(_ picker: FilePicker) {
+        rootController?.present(picker, animated: true) {
         }
-
-        init(documentTypes allowedUTIs: [String], in mode: UIDocumentPickerMode, completion: Completion? = nil) {
-            self.cleanupURLS = []
-            self.completion = completion
-            super.init(documentTypes: allowedUTIs, in: mode)
-            delegate = self
-            modalPresentationStyle = .overFullScreen
-        }
-        
-        required init?(coder: NSCoder) {
-            fatalError()
-        }
-        
-        func cleanup() {
-            for url in cleanupURLS {
-                try? FileManager.default.removeItem(at: url)
-            }
-            Application.shared.filePicker = nil
-        }
-        
-        func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-            cleanup()
-        }
-        
-        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-            completion?(urls)
-            cleanup()
-        }
-    }
-
-    func pickFilesToOpen(types: [String], completion: CustomPicker.Completion? = nil) {
-        let controller = CustomPicker(documentTypes: types, in: .open, completion: completion)
-        rootController?.present(controller, animated: true) {
-        }
-        filePicker = controller
-    }
-    
-    func pickFile(url: URL) {
-        let controller = CustomPicker(url: url, in: UIDocumentPickerMode.moveToService)
-        rootController?.present(controller, animated: true) {
-        }
-        filePicker = controller
+        filePicker = picker
     }
 }
 

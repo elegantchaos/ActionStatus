@@ -7,6 +7,8 @@ import ActionStatusCore
 import ApplicationExtensions
 import Logger
 import SwiftUI
+import URLExtensions
+import Hardware
 
 let settingsChannel = Channel("Settings")
 
@@ -15,18 +17,20 @@ internal extension String {
 }
 
 class Application: BasicApplication {
-
+    
     #if DEBUG
-        let stateKey = "StateDebug"
+    let stateKey = "StateDebug"
     #else
-        let stateKey = "State"
+    let stateKey = "State"
     #endif
     
     var rootController: UIViewController?
     var settingsObserver: Any?
-    
-    @State var model = Model([])
+    var exportData: Data? = nil
+    var exportRepo: UUID? = nil
 
+    @State var model = Model([])
+    
     @State var testRepos = Model([
         Repo("ApplicationExtensions", owner: "elegantchaos", workflow: "Tests", state: .failing),
         Repo("Datastore", owner: "elegantchaos", workflow: "Swift", state: .passing),
@@ -34,7 +38,7 @@ class Application: BasicApplication {
         Repo("Logger", owner: "elegantchaos", workflow: "tests", state: .unknown),
         Repo("ViewExtensions", owner: "elegantchaos", workflow: "Tests", state: .passing),
     ])
-        
+    
     @objc func changed() {
         restoreState()
     }
@@ -48,13 +52,13 @@ class Application: BasicApplication {
         
         restoreState()
     }
-
+    
     override func tearDown() {
         if let observer = settingsObserver {
             NotificationCenter.default.removeObserver(observer, name: UserDefaults.didChangeNotification, object: nil)
         }
     }
-
+    
     func didSetUp(_ window: UIWindow) {
         applySettings()
         settingsObserver = NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: nil) { notification in
@@ -67,7 +71,7 @@ class Application: BasicApplication {
         if interval > 0 {
             model.refreshInterval = Double(interval)
         }
-
+        
         settingsChannel.log("\(String.refreshIntervalKey) is \(interval)")
     }
     
@@ -88,26 +92,56 @@ class Application: BasicApplication {
         UIApplication.shared.open(repo.githubURL(for: location))
     }
     
-    func saveWorkflow(named name: String, source: String) {
+    func pickerForSavingWorkflow() -> CustomPicker {
+        let data = exportData!
+        let repo = model.repo(withIdentifier: exportRepo!)!
+        
+        let defaultURL: URL?
+        if let identifier = Device.main.identifier, let path = repo.path(forDevice: identifier) {
+            defaultURL = URL(fileURLWithPath: path)
+        } else {
+            defaultURL = nil
+        }
+            
+        let picker = CustomPicker(forOpeningFolderStartingIn: defaultURL) { urls in
+            self.saveWorkflow(data, for: repo, to: urls.first)
+        }
+        
+        return picker
+    }
+    
+    func saveWorkflow(_ source: String, for repo: Repo) {
         if let data = source.data(using: .utf8) {
-            do {
-                let url = UIApplication.newDocumentURL(name: name, withPathExtension: "yml", makeUnique: false)
-                try data.write(to: url)
-                let model = Application.shared.model
-                
-                #if targetEnvironment(macCatalyst)
-                // ugly hack - the SwiftUI sheet doesn't work properly on the mac
-                model.hideComposeWindow()
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: .seconds(1))) {
-                    Application.shared.pickFile(url: url)
+            exportData = data
+            exportRepo = repo.id
+
+            #if targetEnvironment(macCatalyst)
+            // ugly hack - the SwiftUI sheet doesn't work properly on the mac
+            model.hideComposeWindow()
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: .seconds(1))) {
+                Application.shared.presentPicker(self.pickerForSavingWorkflow())
+            }
+            #else
+            model.isSaving = true
+            #endif
+        }
+    }
+    
+    func saveWorkflow(_ data: Data, for repo: Repo, to url: URL?) {
+        if let url = url {
+            url.accessSecurityScopedResource(withPathComponents: [".github", "workflows", "\(repo.workflow).yml"]) { url in
+                var error: NSError? = nil
+                NSFileCoordinator().coordinate(readingItemAt: url, error: &error) { (url) in
+                    do {
+                        try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
+                        try data.write(to: url)
+                        if let identifier = Device.main.identifier {
+                            model.remember(path: url.path, forDevice: identifier, inRepo: repo)
+                        }
+                    } catch {
+                        print(error)
+                    }
                 }
-                #else
-                model.exportURL = url
-                model.exportYML = source
-                model.isSaving = true
-                #endif
-            } catch {
-                print(error)
             }
         }
     }

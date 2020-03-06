@@ -102,7 +102,7 @@ struct ContentView: View {
             #if os(tvOS)
             return AnyView(EmptyView())
             #else
-            return AnyView(DocumentPickerViewController(url: self.repos.exportURL!, onDismiss: { }))
+            return AnyView(DocumentPickerViewController(picker: Application.shared.pickerForSavingWorkflow()))
             #endif
         } else {
             let repo = self.repos.repoToCompose()
