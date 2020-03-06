@@ -60,7 +60,14 @@ struct EditView: View {
     static let fieldStyle = RoundedBorderTextFieldStyle()
     #endif
 
-    @Binding var repo: Repo
+    let repoID: UUID
+    
+    @EnvironmentObject var model: Model
+    
+    var repo: Repo {
+        model.repo(withIdentifier: repoID)!
+    }
+    
     @State var name = ""
     @State var owner = ""
     @State var workflow = ""
@@ -199,7 +206,7 @@ struct EditView: View {
 
 struct RepoEditView_Previews: PreviewProvider {
     static var previews: some View {
-        EditView(repo: Application.shared.$testRepos.items[0])
+        EditView(repoID: Application.shared.testRepos[0].id)
     }
 }
 

@@ -1,81 +1,34 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-//  Created by Sam Deane on 12/02/20.
+//  Created by Developer on 06/03/2020.
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import ActionStatusCore
 import SwiftUI
 import SwiftUIExtensions
-import BindingsExtensions
+import ActionStatusCore
 
-struct ContentView: View {
-    
+struct ReposView: View {
     @EnvironmentObject var model: Model
     @EnvironmentObject var viewState: ViewState
-    @State var isEditing: Bool = false
+
     @State var selectedID: UUID? = nil
+    @State var isEditing: Bool = false
+    
 
     var body: some View {
-            NavigationView {
-                VStack(alignment: .center) {
-                    if model.itemIdentifiers.count == 0 {
-                        NoReposView(action: {
-                            self.isEditing = true
-                            self.addRepo()
-                        })
-                    }
-
-                    VStack(alignment: .leading) {
-                        List {
-                            ForEach(model.itemIdentifiers, id: \.self) { repoID in
-                                self.rowView(for: repoID, selectable: false)
-                            }
-                            .onDelete(perform: delete)
-                        }
-                    }.bindEditing(to: $isEditing)
-
-                    Spacer()
-                    FooterView()
+        VStack(alignment: .leading) {
+            List {
+                ForEach(model.itemIdentifiers, id: \.self) { repoID in
+                    self.rowView(for: repoID, selectable: false)
                 }
-                .setupNavigation(editAction: { self.isEditing.toggle() }, addAction: { self.addRepo() })
-                .sheet(isPresented: $viewState.hasSheet) { self.sheetView() }
-        }
-            .setupNavigationStyle()
-            .onAppear(perform: onAppear)
-    }
-    
-    func onAppear()  {
-        #if !os(tvOS)
-        UITableView.appearance().separatorStyle = .none
-        #endif
+                .onDelete(perform: delete)
+            }
+        }.bindEditing(to: $isEditing)
+
         
-        self.model.refresh()
+
     }
-    
-    func sheetView() -> some View {
-        switch viewState.sheetType {
-            case .save:
-            #if !os(tvOS)
-                return AnyView(DocumentPickerViewController(picker: Application.shared.pickerForSavingWorkflow()))
-            #endif
-            
-            case .compose:
-                if let id = viewState.composingID {
-                    return AnyView(ComposeView(repoID: id, isPresented: self.$viewState.hasSheet))
-                }
-        }
-        
-        return AnyView(EmptyView())
-    }
-    
-     
-    func addRepo() {
-        let newRepo = model.addRepo()
-        Application.shared.saveState()
-        selectedID = newRepo.id
-    }
-    
-    
+
     func delete(at offsets: IndexSet) {
     //        model.items.remove(atOffsets: offsets)
             Application.shared.saveState()
@@ -146,5 +99,4 @@ struct ContentView: View {
         }
         #endif
     }
-
 }

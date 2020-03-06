@@ -61,13 +61,13 @@ class Application: BasicApplication {
 
     @State var model = Model([])
     
-    @State var testRepos = Model([
+    @State var testRepos = [
         Repo("ApplicationExtensions", owner: "elegantchaos", workflow: "Tests", state: .failing),
         Repo("Datastore", owner: "elegantchaos", workflow: "Swift", state: .passing),
         Repo("DatastoreViewer", owner: "elegantchaos", workflow: "Build", state: .failing),
         Repo("Logger", owner: "elegantchaos", workflow: "tests", state: .unknown),
         Repo("ViewExtensions", owner: "elegantchaos", workflow: "Tests", state: .passing),
-    ])
+    ]
     
     @objc func changed() {
         restoreState()

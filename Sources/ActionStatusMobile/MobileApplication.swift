@@ -66,9 +66,7 @@ class MobileApplication: Application {
     }
     
     func makeContentView() -> some View {
-        let app = Application.shared
-        return ContentView(updater: updater, repos: app.model)
-            .environmentObject(app.viewState)
+        return ContentView()
     }
 
     fileprivate func updateBridge() {
@@ -138,15 +136,17 @@ class MobileApplication: Application {
 
 extension MobileApplication: MenuDataSource {
     func itemCount() -> Int {
-        return model.items.count
+        return model.itemIdentifiers.count
     }
     
     func name(forItem item: Int) -> String {
-        return model.items[item].name
+        let id = model.itemIdentifiers[item]
+        return model.repo(withIdentifier: id)?.name ?? ""
     }
     
     func status(forItem item: Int) -> ItemStatus {
-        switch model.items[item].state {
+        let id = model.itemIdentifiers[item]
+        switch model.repo(withIdentifier: id)?.state ?? .unknown {
             case .unknown: return .unknown
             case .failing: return .failed
             case .passing: return .succeeded
@@ -154,8 +154,10 @@ extension MobileApplication: MenuDataSource {
     }
     
     func selectItem(_ item: Int) {
-        let repo = model.items[item]
-        Application.shared.openGithub(with: repo)
+        let id = model.itemIdentifiers[item]
+        if let repo = model.repo(withIdentifier: id) {
+            Application.shared.openGithub(with: repo)
+        }
     }
     
     func checkForUpdates() {

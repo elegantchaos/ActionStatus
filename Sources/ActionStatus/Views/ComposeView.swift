@@ -9,14 +9,19 @@ import BindingsExtensions
 
 struct ComposeView: View {
     let generator = WorkflowGenerator()
+    let repoID: UUID
     
-    @Binding var repo: Repo
+    @EnvironmentObject var model: Model
     @Binding var isPresented: Bool
     
     @State var platforms: [Bool] = []
     @State var configurations: [Bool] = []
     @State var general: [Bool] = []
-       
+
+    var repo: Repo {
+        model.repo(withIdentifier: repoID)!
+    }
+    
     var body: some View {
         VStack {
             Text("\(repo.name)/\(repo.owner)").multilineTextAlignment(.center)
@@ -105,6 +110,6 @@ struct ComposeView: View {
 
 struct ComposeView_Previews: PreviewProvider {
     static var previews: some View {
-        ComposeView(repo: Application.shared.$testRepos.items[0], isPresented: .constant(false))
+        ComposeView(repoID: Application.shared.testRepos[0].id, isPresented: .constant(false))
     }
 }
