@@ -6,14 +6,14 @@
 import SwiftUI
 
 struct DocumentPickerViewController {
-    private let picker: CustomPicker
-    init(picker: CustomPicker) {
+    private let picker: UIViewController
+    init(picker: UIViewController) {
         self.picker = picker
     }
 }
 
 extension DocumentPickerViewController: UIViewControllerRepresentable {
-    typealias UIViewControllerType = CustomPicker
+    typealias UIViewControllerType = UIViewController
 
     func makeUIViewController(context: Context) -> UIViewControllerType {
         return picker

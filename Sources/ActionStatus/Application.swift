@@ -29,6 +29,8 @@ class Application: BasicApplication {
     var exportData: Data? = nil
     var exportRepo: UUID? = nil
 
+    var filePickerClass: FilePicker.Type { return StubFilePicker.self }
+
     @State var model = Model([])
     
     @State var testRepos = Model([
@@ -92,7 +94,7 @@ class Application: BasicApplication {
         UIApplication.shared.open(repo.githubURL(for: location))
     }
     
-    func pickerForSavingWorkflow() -> CustomPicker {
+    func pickerForSavingWorkflow() -> FilePicker {
         let data = exportData!
         let repo = model.repo(withIdentifier: exportRepo!)!
         
@@ -103,7 +105,7 @@ class Application: BasicApplication {
             defaultURL = nil
         }
             
-        let picker = CustomPicker(forOpeningFolderStartingIn: defaultURL) { urls in
+        let picker = filePickerClass.init(forOpeningFolderStartingIn: defaultURL) { urls in
             self.saveWorkflow(data, for: repo, to: urls.first)
         }
         

@@ -35,7 +35,8 @@ class MobileApplication: Application {
     #endif
     
     var filePicker: FilePicker?
-    
+    override var filePickerClass: FilePicker.Type { return MobileFilePicker.self }
+
     override func setUp(withOptions options: LaunchOptions) {
         loadBridge()
         loadSparkle()
@@ -122,7 +123,7 @@ class MobileApplication: Application {
     }
 
     @IBAction func addLocalRepos() {
-        let picker = CustomPicker(forOpeningFolderStartingIn: nil) { urls in
+        let picker = filePickerClass.init(forOpeningFolderStartingIn: nil) { urls in
             self.model.add(fromFolders: urls)
         }
         presentPicker(picker)

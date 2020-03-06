@@ -6,20 +6,12 @@
 import UIKit
 import Foundation
 
-class CustomPicker: UIDocumentPickerViewController {
+class MobileFilePicker: UIDocumentPickerViewController {
     typealias Completion = ([URL]) -> Void
     
     let cleanupURLS: [URL]
     let completion: Completion?
 
-    
-    required init(forOpeningFolderStartingIn startURL: URL?, completion: FilePickerCompletion?) {
-        self.cleanupURLS = []
-        self.completion = completion
-        super.init(documentTypes: ["public.folder"], in: .open) // kUTTypeFolder
-        setup(startURL: startURL)
-    }
-    
     required init(forOpeningDocumentTypes types: [String], startingIn startURL: URL? = nil, completion: FilePickerCompletion? = nil) {
         self.cleanupURLS = []
         self.completion = completion
@@ -48,10 +40,10 @@ class CustomPicker: UIDocumentPickerViewController {
 
 }
 
-extension CustomPicker: FilePicker {
+extension MobileFilePicker: FilePicker {
 }
 
-extension CustomPicker: UIDocumentPickerDelegate {
+extension MobileFilePicker: UIDocumentPickerDelegate {
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
         completion?([])
         cleanup()

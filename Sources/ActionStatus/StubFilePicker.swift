@@ -1,16 +1,12 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-//  Created by Developer on 06/03/2020.
+//  Created by Sam Deane on 06/03/20.
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import UIKit
 
-class CustomPicker: UIViewController, FilePicker {
+class StubFilePicker: UIViewController, FilePicker {
     required init(forOpeningDocumentTypes: [String], startingIn: URL?, completion: FilePickerCompletion?) {
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init(forOpeningFolderStartingIn: URL?, completion: FilePickerCompletion?) {
         super.init(nibName: nil, bundle: nil)
     }
 
