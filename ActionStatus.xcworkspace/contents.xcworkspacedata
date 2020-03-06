@@ -8,12 +8,6 @@
       location = "group:"
       name = "Dependencies">
       <FileRef
-         location = "group:../URLExtensions">
-      </FileRef>
-      <FileRef
-         location = "group:../Hardware">
-      </FileRef>
-      <FileRef
          location = "group:../ActionStatusCore">
       </FileRef>
       <FileRef

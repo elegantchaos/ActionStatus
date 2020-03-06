@@ -6,7 +6,7 @@
 import UIKit
 import Foundation
 
-class MobileFilePicker: UIDocumentPickerViewController {
+class MobileFilePicker: UIDocumentPickerViewController, FilePicker {
     typealias Completion = ([URL]) -> Void
     
     let cleanupURLS: [URL]
@@ -36,12 +36,8 @@ class MobileFilePicker: UIDocumentPickerViewController {
             try? FileManager.default.removeItem(at: url)
         }
     }
-
-
 }
 
-extension MobileFilePicker: FilePicker {
-}
 
 extension MobileFilePicker: UIDocumentPickerDelegate {
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {

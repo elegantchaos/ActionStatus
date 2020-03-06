@@ -34,7 +34,6 @@ class MobileApplication: Application {
     var updater = Updater()
     #endif
     
-    var filePicker: FilePicker?
     override var filePickerClass: FilePicker.Type { return MobileFilePicker.self }
 
     override func setUp(withOptions options: LaunchOptions) {
@@ -69,6 +68,7 @@ class MobileApplication: Application {
     func makeContentView() -> some View {
         let app = Application.shared
         return ContentView(updater: updater, repos: app.model)
+            .environmentObject(app.viewState)
     }
 
     fileprivate func updateBridge() {

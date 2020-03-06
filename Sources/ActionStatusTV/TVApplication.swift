@@ -18,6 +18,7 @@ class TVApplication: Application {
     func makeContentView() -> some View {
         let app = Application.shared
         return ContentView(updater: stubUpdater, repos: app.model)
+            .environmentObject(app.viewState)
     }
 }
 

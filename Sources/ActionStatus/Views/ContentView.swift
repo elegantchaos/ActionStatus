@@ -12,10 +12,10 @@ struct ContentView: View {
     
     @ObservedObject var updater: Updater
     @ObservedObject var repos: Model
-    
+    @EnvironmentObject var viewState: ViewState
+
     @State var selectedID: UUID? = nil
     @State var isEditing: Bool = false
-    @State var isComposing: Bool = false
     
     var body: some View {
             NavigationView {
@@ -67,7 +67,7 @@ struct ContentView: View {
                 }
                 .setupNavigation(editAction: { self.isEditing.toggle() }, addAction: { self.addRepo() })
                 .bindEditing(to: $isEditing)
-                .sheet(isPresented: $repos.isComposing) { self.sheetView() }
+                .sheet(isPresented: $viewState.hasAlert) { self.sheetView() }
         }
             .setupNavigationStyle()
             .onAppear(perform: onAppear)
@@ -98,17 +98,16 @@ struct ContentView: View {
     }
     
     func sheetView() -> some View {
-        if self.repos.isSaving {
-            #if os(tvOS)
-            return AnyView(EmptyView())
-            #else
-            return AnyView(DocumentPickerViewController(picker: Application.shared.pickerForSavingWorkflow()))
+        if viewState.isSaving {
+            #if !os(tvOS)
+                return AnyView(DocumentPickerViewController(picker: Application.shared.pickerForSavingWorkflow()))
             #endif
-        } else {
-            let repo = self.repos.repoToCompose()
+        } else if let id = viewState.composingID, let repo = self.repos.repo(withIdentifier: id) {
             let binding = self.$repos.binding(for: repo, in: \.items)
-            return AnyView(ComposeView(repo: binding, isPresented: self.$repos.isComposing))
+            return AnyView(ComposeView(repo: binding, isPresented: self.$viewState.hasAlert))
         }
+
+        return AnyView(EmptyView())
     }
     
      
@@ -164,7 +163,11 @@ struct ContentView: View {
                     Text("Show Workflow In Github…")
                 }
                 
-                Button(action: { self.repos.showComposeWindow(for: repo) }) {
+                Button(action: {
+                    self.viewState.composingID = repo.id
+                    self.viewState.isSaving = false
+                    self.viewState.hasAlert = true
+                }) {
                     Text("Generate Workflow…")
                 }
             }

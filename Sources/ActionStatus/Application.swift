@@ -16,6 +16,12 @@ internal extension String {
     static let refreshIntervalKey = "RefreshInterval"
 }
 
+class ViewState: ObservableObject {
+    @Published var hasAlert = false
+    @Published var isSaving = false
+    @Published var composingID: UUID? = nil
+}
+
 class Application: BasicApplication {
     
     #if DEBUG
@@ -28,7 +34,8 @@ class Application: BasicApplication {
     var settingsObserver: Any?
     var exportData: Data? = nil
     var exportRepo: UUID? = nil
-
+    var viewState = ViewState()
+    var filePicker: FilePicker?
     var filePickerClass: FilePicker.Type { return StubFilePicker.self }
 
     @State var model = Model([])
@@ -99,8 +106,8 @@ class Application: BasicApplication {
         let repo = model.repo(withIdentifier: exportRepo!)!
         
         let defaultURL: URL?
-        if let identifier = Device.main.identifier, let path = repo.path(forDevice: identifier) {
-            defaultURL = URL(fileURLWithPath: path)
+        if let identifier = Device.main.identifier {
+            defaultURL = repo.url(forDevice: identifier)
         } else {
             defaultURL = nil
         }
@@ -119,7 +126,7 @@ class Application: BasicApplication {
 
             #if targetEnvironment(macCatalyst)
             // ugly hack - the SwiftUI sheet doesn't work properly on the mac
-            model.hideComposeWindow()
+            viewState.hasAlert = false
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: .seconds(1))) {
                 Application.shared.presentPicker(self.pickerForSavingWorkflow())
             }
@@ -135,10 +142,10 @@ class Application: BasicApplication {
                 var error: NSError? = nil
                 NSFileCoordinator().coordinate(readingItemAt: url, error: &error) { (url) in
                     do {
-                        try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
+                        try? FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
                         try data.write(to: url)
                         if let identifier = Device.main.identifier {
-                            model.remember(path: rootURL.path, forDevice: identifier, inRepo: repo)
+                            model.remember(url: rootURL, forDevice: identifier, inRepo: repo)
                         }
                     } catch {
                         print(error)

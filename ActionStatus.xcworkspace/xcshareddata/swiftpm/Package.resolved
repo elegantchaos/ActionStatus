@@ -56,6 +56,15 @@
         }
       },
       {
+        "package": "Hardware",
+        "repositoryURL": "https://github.com/elegantchaos/Hardware.git",
+        "state": {
+          "branch": null,
+          "revision": "a9f223b6aa675c37b6090e3d431346f5c73a1f3d",
+          "version": "1.0.0"
+        }
+      },
+      {
         "package": "Logger",
         "repositoryURL": "https://github.com/elegantchaos/Logger.git",
         "state": {
@@ -80,6 +89,15 @@
           "branch": null,
           "revision": "73f97316000da554ebb899168399d23506aea29e",
           "version": "1.0.4"
+        }
+      },
+      {
+        "package": "URLExtensions",
+        "repositoryURL": "https://github.com/elegantchaos/URLExtensions.git",
+        "state": {
+          "branch": null,
+          "revision": "f1e416bcaaff3b00974f2d1eb4f7f82a36a755d5",
+          "version": "1.0.1"
         }
       },
       {
