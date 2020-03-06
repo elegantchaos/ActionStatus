@@ -17,9 +17,30 @@ internal extension String {
 }
 
 class ViewState: ObservableObject {
-    @Published var hasAlert = false
-    @Published var isSaving = false
+    enum SheetType {
+        case compose
+        case save
+    }
+
+    @Published var hasSheet = false
+    @Published var sheetType: SheetType = .compose
     @Published var composingID: UUID? = nil
+    
+    func showComposeSheet(forRepoId id: UUID) {
+        composingID = id
+        sheetType = .compose
+        hasSheet = true
+    }
+    
+    func showSaveSheet() {
+        sheetType = .save
+        hasSheet = true
+    }
+    
+    func hideSheet() {
+        hasSheet = false
+        composingID = nil
+    }
 }
 
 class Application: BasicApplication {
@@ -124,15 +145,14 @@ class Application: BasicApplication {
             exportData = data
             exportRepo = repo.id
 
-            #if targetEnvironment(macCatalyst)
-            // ugly hack - the SwiftUI sheet doesn't work properly on the mac
-            viewState.hasAlert = false
+            viewState.hideSheet()
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: .seconds(1))) {
-                Application.shared.presentPicker(self.pickerForSavingWorkflow())
+                #if targetEnvironment(macCatalyst)
+                Application.shared.presentPicker(self.pickerForSavingWorkflow()) // ugly hack - the SwiftUI sheet doesn't work properly on the mac
+                #else
+                self.viewState.showSaveSheet()
+                #endif
             }
-            #else
-            model.isSaving = true
-            #endif
         }
     }
     

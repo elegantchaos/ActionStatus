@@ -67,7 +67,7 @@ struct ContentView: View {
                 }
                 .setupNavigation(editAction: { self.isEditing.toggle() }, addAction: { self.addRepo() })
                 .bindEditing(to: $isEditing)
-                .sheet(isPresented: $viewState.hasAlert) { self.sheetView() }
+                .sheet(isPresented: $viewState.hasSheet) { self.sheetView() }
         }
             .setupNavigationStyle()
             .onAppear(perform: onAppear)
@@ -98,15 +98,19 @@ struct ContentView: View {
     }
     
     func sheetView() -> some View {
-        if viewState.isSaving {
+        switch viewState.sheetType {
+            case .save:
             #if !os(tvOS)
                 return AnyView(DocumentPickerViewController(picker: Application.shared.pickerForSavingWorkflow()))
             #endif
-        } else if let id = viewState.composingID, let repo = self.repos.repo(withIdentifier: id) {
-            let binding = self.$repos.binding(for: repo, in: \.items)
-            return AnyView(ComposeView(repo: binding, isPresented: self.$viewState.hasAlert))
+            
+            case .compose:
+                if let id = viewState.composingID, let repo = self.repos.repo(withIdentifier: id) {
+                    let binding = self.$repos.binding(for: repo, in: \.items)
+                    return AnyView(ComposeView(repo: binding, isPresented: self.$viewState.hasSheet))
+                }
         }
-
+        
         return AnyView(EmptyView())
     }
     
@@ -164,9 +168,7 @@ struct ContentView: View {
                 }
                 
                 Button(action: {
-                    self.viewState.composingID = repo.id
-                    self.viewState.isSaving = false
-                    self.viewState.hasAlert = true
+                    self.viewState.showComposeSheet(forRepoId: repo.id)
                 }) {
                     Text("Generate Workflow…")
                 }
