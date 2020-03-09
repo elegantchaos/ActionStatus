@@ -6,7 +6,7 @@ echo "*************"
 echo "Uploading iOS  "
 echo "*************"
 
-rt archive --show-output --platform=iOS | xcpretty
+rt archive --scheme ActionStatus-iOS --set-default --show-output --platform=iOS | xcpretty
 rt export --platform=iOS
 rt upload --platform=iOS
 
@@ -14,6 +14,6 @@ echo "**************"
 echo "Uploading tvOS"
 echo "**************"
 
-rt archive --show-output --platform=tvOS | xcpretty
+rt archive --scheme ActionStatus-tvOS --set-default --show-output --platform=tvOS | xcpretty
 rt export --platform=tvOS
 rt upload --platform=tvOS
