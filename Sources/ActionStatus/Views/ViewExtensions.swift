@@ -37,7 +37,7 @@ internal extension View {
         return navigationBarHidden(false)
         .navigationBarTitle("Action Status", displayMode: .inline)
         .navigationBarItems(
-            leading: AddButton(action: addAction),
+            leading: AddButton(),
             trailing: EditButton())
     }
     func setupNavigationStyle() -> some View {

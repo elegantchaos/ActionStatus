@@ -9,19 +9,15 @@ import ActionStatusCore
 
 #if canImport(UIKit)
 struct AddButton: View {
-    @Environment(\.editMode) var editMode
-    var action: () -> (Void)
+    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var model: Model
     
     var body: some View {
-        Button(action: self.action) {
+        Button(action: { self.model.addRepo() } ) {
             SystemImage("plus.circle").font(.title)
         }
-        .disabled(showAdd)
-        .opacity((editMode?.wrappedValue.isEditing ?? true) ? 1.0 : 0.0)
-    }
-    
-    var showAdd: Bool {
-        return !(editMode?.wrappedValue.isEditing ?? true)
+        .disabled(!viewState.isEditing)
+        .opacity(viewState.isEditing ? 1.0 : 0.0)
     }
 }
 #endif
