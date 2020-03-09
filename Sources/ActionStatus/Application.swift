@@ -51,6 +51,8 @@ class Application: BasicApplication {
     let stateKey = "State"
     #endif
     
+    lazy var updater: Updater = makeUpdater()
+    
     var rootController: UIViewController?
     var settingsObserver: Any?
     var exportData: Data? = nil
@@ -68,6 +70,10 @@ class Application: BasicApplication {
         Repo("Logger", owner: "elegantchaos", workflow: "tests", state: .unknown),
         Repo("ViewExtensions", owner: "elegantchaos", workflow: "Tests", state: .passing),
     ]
+    
+    func makeUpdater() -> Updater {
+        return Updater()
+    }
     
     @objc func changed() {
         restoreState()

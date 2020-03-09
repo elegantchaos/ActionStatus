@@ -14,11 +14,8 @@ extension Application {
 
 @UIApplicationMain
 class TVApplication: Application {
-    let stubUpdater = Updater()
-    func makeContentView() -> some View {
-        let app = Application.shared
-        return ContentView(updater: stubUpdater, model: app.model)
-            .environmentObject(app.viewState)
+    override init() {
+        super.init(updater: Updater())
     }
 }
 

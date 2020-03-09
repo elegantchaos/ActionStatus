@@ -11,7 +11,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         let app = Application.shared
-        let content = app.makeContentView()
+        let content = ContentView()
             .environmentObject(app.viewState)
             .environmentObject(app.model)
             .environmentObject(app.updater)

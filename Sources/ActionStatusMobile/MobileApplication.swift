@@ -26,13 +26,11 @@ extension Application {
 @UIApplicationMain
 class MobileApplication: Application {
     var appKitBridge: AppKitBridge? = nil
-    
-    #if canImport(SparkleBridgeClient)
     var sparkleBridge: SparkleBridgePlugin? = nil
-    var updater = SparkleUpdater()
-    #else
-    var updater = Updater()
-    #endif
+
+    override func makeUpdater() -> Updater {
+        return SparkleUpdater()
+    }
     
     override var filePickerClass: FilePicker.Type { return MobileFilePicker.self }
 
@@ -64,10 +62,6 @@ class MobileApplication: Application {
         settingsChannel.log("\(String.showInMenuKey) is \(appKitBridge?.showInMenu ?? false)")
         settingsChannel.log("\(String.showInDockKey) is \(appKitBridge?.showInDock ?? false)")
     }
-    
-    func makeContentView() -> some View {
-        return ContentView()
-    }
 
     fileprivate func updateBridge() {
         appKitBridge?.showInMenu = UserDefaults.standard.bool(forKey: .showInMenuKey)
@@ -77,12 +71,14 @@ class MobileApplication: Application {
     
     fileprivate func loadSparkle() {
         #if canImport(SparkleBridgeClient)
-        let result = SparkleBridgeClient.load(with: updater.driver)
-        switch result {
-            case .success(let plugin):
-                sparkleBridge = plugin
-            case .failure(let error):
-                print(error)
+        if let updater = updater as? SparkleUpdater {
+            let result = SparkleBridgeClient.load(with: updater.driver)
+            switch result {
+                case .success(let plugin):
+                    sparkleBridge = plugin
+                case .failure(let error):
+                    print(error)
+            }
         }
         #endif
     }
