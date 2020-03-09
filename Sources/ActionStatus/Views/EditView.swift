@@ -201,6 +201,7 @@ struct EditView: View {
         repo.workflow = trimmedWorkflow
         repo.branches = trimmedBranches
         Application.shared.stateWasEdited()
+        model.itemIdentifiers = model.itemIdentifiers
     }
 }
 
