@@ -16,35 +16,6 @@ internal extension String {
     static let refreshIntervalKey = "RefreshInterval"
 }
 
-class ViewState: ObservableObject {
-    enum SheetType {
-        case compose
-        case save
-    }
-
-    @Published var hasSheet = false
-    @Published var sheetType: SheetType = .compose
-    @Published var composingID: UUID? = nil
-    @Published var isEditing: Bool = false
-    @State var selectedID: UUID? = nil
-    
-    func showComposeSheet(forRepoId id: UUID) {
-        composingID = id
-        sheetType = .compose
-        hasSheet = true
-    }
-    
-    func showSaveSheet() {
-        sheetType = .save
-        hasSheet = true
-    }
-    
-    func hideSheet() {
-        hasSheet = false
-        composingID = nil
-    }
-}
-
 class Application: BasicApplication {
     
     #if DEBUG

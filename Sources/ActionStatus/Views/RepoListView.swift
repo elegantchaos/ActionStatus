@@ -7,13 +7,9 @@ import SwiftUI
 import SwiftUIExtensions
 import ActionStatusCore
 
-struct ReposView: View {
+struct RepoListView: View {
     @EnvironmentObject var model: Model
     @EnvironmentObject var viewState: ViewState
-
-    @State var selectedID: UUID? = nil
-    @State var isEditing: Bool = false
-    
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -23,7 +19,7 @@ struct ReposView: View {
                 }
                 .onDelete(perform: delete)
             }
-        }.bindEditing(to: $isEditing)
+        }.bindEditing(to: $viewState.isEditing)
     }
 
     func delete(at offsets: IndexSet) {
@@ -32,11 +28,11 @@ struct ReposView: View {
     }
 
     func rowView(for repoID: UUID, selectable: Bool) -> some View {
-        if self.isEditing {
+        if viewState.isEditing {
             return AnyView(NavigationLink(
                 destination: EditView(repoID: repoID),
                 tag: repoID,
-                selection: self.$selectedID) {
+                selection: $viewState.selectedID) {
                     self.basicRowView(for: repoID, selectable: true)
             }
             .padding([.leading, .trailing], 10))
@@ -59,7 +55,7 @@ struct ReposView: View {
         .font(.title)
         .onTapGestureShim() {
             if selectable {
-                self.selectedID = repo.id
+                self.viewState.selectedID = repo.id
             }
         }
         
@@ -71,7 +67,7 @@ struct ReposView: View {
                 NavigationLink(
                     destination: EditView(repoID: repoID),
                     tag: repoID,
-                    selection: self.$selectedID) {
+                    selection: $viewState.selectedID) {
                         Text("Edit…")
                 }
                 
@@ -96,4 +92,24 @@ struct ReposView: View {
         }
         #endif
     }
+}
+
+fileprivate extension View {
+    #if os(tvOS)
+    
+    // MARK: tvOS Overrides
+    
+    func bindEditing(to binding: Binding<Bool>) -> some View {
+        return self
+    }
+    
+    #elseif canImport(UIKit)
+    
+    // MARK: iOS/tvOS
+    
+    func bindEditing(to binding: Binding<Bool>) -> some View {
+        environment(\.editMode, .constant(binding.wrappedValue ? .active : .inactive))
+    }
+
+    #endif
 }

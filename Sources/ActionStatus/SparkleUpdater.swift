@@ -102,11 +102,11 @@ class SparkleUpdater: Updater {
         }
         
         override func showUpdateNotFound(acknowledgement: @escaping () -> Void) {
-            sparkleChannel.debug("showUpdaterError")
+            sparkleChannel.debug("showUpdateNotFound")
         }
         
         override func showUpdaterError(_ error: Error, acknowledgement: @escaping () -> Void) {
-            sparkleChannel.debug("showUpdaterError")
+            sparkleChannel.debug("showUpdaterError \(error)")
             updater?.status = "Failed to launch installer."
         }
         
