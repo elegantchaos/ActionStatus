@@ -26,11 +26,14 @@ extension Application {
 @UIApplicationMain
 class MobileApplication: Application {
     var appKitBridge: AppKitBridge? = nil
+
+    #if canImport(SparkleBridgeClient)
     var sparkleBridge: SparkleBridgePlugin? = nil
 
     override func makeUpdater() -> Updater {
         return SparkleUpdater()
     }
+    #endif
     
     override var filePickerClass: FilePicker.Type { return MobileFilePicker.self }
 
