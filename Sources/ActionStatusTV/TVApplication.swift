@@ -14,8 +14,5 @@ extension Application {
 
 @UIApplicationMain
 class TVApplication: Application {
-    override init() {
-        super.init(updater: Updater())
-    }
 }
 

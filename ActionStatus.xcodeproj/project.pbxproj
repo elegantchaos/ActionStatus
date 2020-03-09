@@ -37,6 +37,7 @@
 		8B12FD3724168192006BFEE0 /* Updater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD3524168192006BFEE0 /* Updater.swift */; };
 		8B12FD39241681D7006BFEE0 /* SparkleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD38241681D7006BFEE0 /* SparkleProgressView.swift */; };
 		8B12FD3A241681D7006BFEE0 /* SparkleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD38241681D7006BFEE0 /* SparkleProgressView.swift */; };
+		8B12FD3B24169E16006BFEE0 /* RepoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B43A9892412CF5B00A076AC /* RepoListView.swift */; };
 		8B2F0ABB23FC195800B2E62A /* InterceptingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */; };
 		8B2F0ABD23FC2FA400B2E62A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */; };
 		8B3C0564240FBA0F00FB533B /* ActionStatusCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8B3C0563240FBA0F00FB533B /* ActionStatusCore */; };
@@ -929,6 +930,7 @@
 				8B12FD3A241681D7006BFEE0 /* SparkleProgressView.swift in Sources */,
 				8B43A97B24127D9700A076AC /* StubFilePicker.swift in Sources */,
 				8B430E8023F586830050BF2A /* EditView.swift in Sources */,
+				8B12FD3B24169E16006BFEE0 /* RepoListView.swift in Sources */,
 				8B43A97D2412800100A076AC /* FilePicker.swift in Sources */,
 				8B12FD3424167E0B006BFEE0 /* ViewExtensions.swift in Sources */,
 				8B4336F423FFED8000598A04 /* SceneDelegate.swift in Sources */,

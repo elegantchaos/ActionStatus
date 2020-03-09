@@ -72,7 +72,7 @@ fileprivate extension View {
 
     // MARK: tvOS Overrides
     
-    func setupNavigation(editAction: @escaping () -> (Void), addAction: @escaping () -> (Void)) -> some View {
+    func setupNavigation() -> some View {
         return navigationBarHidden(false)
     }
     func setupNavigationStyle() -> some View {
