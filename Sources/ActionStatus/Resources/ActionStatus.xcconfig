@@ -23,7 +23,7 @@ ACTION_STATUS_COMMON_RESOURCE_PATH = $(ACTION_STATUS_RESOURCE_ROOT)/$(ACTION_STA
 ACTION_STATUS_BUNDLE_IDENTIFIER = com.elegantchaos.actionstatus
 
 // uncomment the line below to force the build number to something old, in order to test Sparkle
-ACTION_STATUS_BUILD = 100
+//ACTION_STATUS_BUILD = 100
 
 // location of our build and release scripts
 ACTION_STATUS_SCRIPTS_PATH = $(PROJECT_DIR)/.bin
