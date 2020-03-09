@@ -12,7 +12,7 @@ struct ContentView: View {
     
     @EnvironmentObject var model: Model
     @EnvironmentObject var viewState: ViewState
-
+    
     var body: some View {
             NavigationView {
                 VStack(alignment: .center) {
@@ -26,7 +26,7 @@ struct ContentView: View {
                 }
                 .setupNavigation()
                 .sheet(isPresented: $viewState.hasSheet) { self.sheetView() }
-        }
+            }
             .setupNavigationStyle()
             .onAppear(perform: onAppear)
     }
@@ -45,13 +45,16 @@ struct ContentView: View {
             #if !os(tvOS)
                 return AnyView(DocumentPickerViewController(picker: Application.shared.pickerForSavingWorkflow()))
             #endif
-            
+
             case .compose:
                 if let id = viewState.composingID {
-                    return AnyView(GenerateView(repoID: id, isPresented: self.$viewState.hasSheet))
+                    return AnyView(
+                        GenerateView(repoID: id, isPresented: self.$viewState.hasSheet)
+                                                .environmentObject(self.model) // TODO: this should not be needed, but seems to be :(
+                    )
                 }
         }
-        
+
         return AnyView(EmptyView())
     }
 
