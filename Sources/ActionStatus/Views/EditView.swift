@@ -196,12 +196,13 @@ struct EditView: View {
     }
     
     func save() {
-        repo.name = trimmedName
-        repo.owner = trimmedOwner
-        repo.workflow = trimmedWorkflow
-        repo.branches = trimmedBranches
+        var updated = repo
+        updated.name = trimmedName
+        updated.owner = trimmedOwner
+        updated.workflow = trimmedWorkflow
+        updated.branches = trimmedBranches
+        model.update(repo: updated)
         Application.shared.stateWasEdited()
-        model.itemIdentifiers = model.itemIdentifiers
     }
 }
 

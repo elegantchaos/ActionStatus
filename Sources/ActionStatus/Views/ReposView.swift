@@ -24,15 +24,12 @@ struct ReposView: View {
                 .onDelete(perform: delete)
             }
         }.bindEditing(to: $isEditing)
-
-        
-
     }
 
     func delete(at offsets: IndexSet) {
-    //        model.items.remove(atOffsets: offsets)
-            Application.shared.saveState()
-        }
+        model.remove(atOffsets: offsets)
+        Application.shared.saveState()
+    }
 
     func rowView(for repoID: UUID, selectable: Bool) -> some View {
         if self.isEditing {
@@ -78,7 +75,7 @@ struct ReposView: View {
                         Text("Edit…")
                 }
                 
-                Button(action: { self.model.remove(repo: repo) }) {
+                Button(action: { self.model.remove(repos: [repoID]) }) {
                     Text("Delete")
                 }
                 

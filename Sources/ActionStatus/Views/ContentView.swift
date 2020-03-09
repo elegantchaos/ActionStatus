@@ -61,7 +61,7 @@ struct ContentView: View {
             
             case .compose:
                 if let id = viewState.composingID {
-                    return AnyView(ComposeView(repoID: id, isPresented: self.$viewState.hasSheet))
+                    return AnyView(GenerateView(repoID: id, isPresented: self.$viewState.hasSheet))
                 }
         }
         
@@ -125,7 +125,7 @@ struct ContentView: View {
                         Text("Edit…")
                 }
                 
-                Button(action: { self.model.remove(repo: repo) }) {
+                Button(action: { self.model.remove(repos: [repoID]) }) {
                     Text("Delete")
                 }
                 
