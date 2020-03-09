@@ -24,17 +24,6 @@ struct AddButton: View {
         return !(editMode?.wrappedValue.isEditing ?? true)
     }
 }
-
-struct EditButton: View {
-    @Environment(\.editMode) var editMode
-    var action: () -> (Void)
-
-    var body: some View {
-        Button(action: self.action) {
-            SystemImage(editMode?.wrappedValue.isEditing ?? true ? "hammer.fill" : "hammer").font(.title)
-        }
-    }
-}
 #endif
 
 struct NoReposView: View {

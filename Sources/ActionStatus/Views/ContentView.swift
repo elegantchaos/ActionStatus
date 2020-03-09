@@ -12,17 +12,12 @@ struct ContentView: View {
     
     @EnvironmentObject var model: Model
     @EnvironmentObject var viewState: ViewState
-    @State var isEditing: Bool = false
-    @State var selectedID: UUID? = nil
 
     var body: some View {
             NavigationView {
                 VStack(alignment: .center) {
                     if model.itemIdentifiers.count == 0 {
-                        NoReposView(action: {
-                            self.isEditing = true
-                            self.addRepo()
-                        })
+                        NoReposView(action: makeInitialView)
                     }
 
                     VStack(alignment: .leading) {
@@ -32,12 +27,12 @@ struct ContentView: View {
                             }
                             .onDelete(perform: delete)
                         }
-                    }.bindEditing(to: $isEditing)
+                    }.bindEditing(to: $viewState.isEditing)
 
                     Spacer()
                     FooterView()
                 }
-                .setupNavigation(editAction: { self.isEditing.toggle() }, addAction: { self.addRepo() })
+                .setupNavigation(addAction: addRepo)
                 .sheet(isPresented: $viewState.hasSheet) { self.sheetView() }
         }
             .setupNavigationStyle()
@@ -68,11 +63,19 @@ struct ContentView: View {
         return AnyView(EmptyView())
     }
     
-     
+    func makeInitialView() {
+        viewState.isEditing = true
+        addRepo()
+    }
+    
+    func toggleEditing() {
+        viewState.isEditing.toggle()
+    }
+    
     func addRepo() {
         let newRepo = model.addRepo()
         Application.shared.saveState()
-        selectedID = newRepo.id
+        viewState.selectedID = newRepo.id
     }
     
     
@@ -82,11 +85,11 @@ struct ContentView: View {
         }
 
     func rowView(for repoID: UUID, selectable: Bool) -> some View {
-        if self.isEditing {
+        if viewState.isEditing {
             return AnyView(NavigationLink(
                 destination: EditView(repoID: repoID),
                 tag: repoID,
-                selection: self.$selectedID) {
+                selection: $viewState.selectedID) {
                     self.basicRowView(for: repoID, selectable: true)
             }
             .padding([.leading, .trailing], 10))
@@ -109,7 +112,7 @@ struct ContentView: View {
         .font(.title)
         .onTapGestureShim() {
             if selectable {
-                self.selectedID = repo.id
+                self.viewState.selectedID = repo.id
             }
         }
         
@@ -121,7 +124,7 @@ struct ContentView: View {
                 NavigationLink(
                     destination: EditView(repoID: repoID),
                     tag: repoID,
-                    selection: self.$selectedID) {
+                    selection: $viewState.selectedID) {
                         Text("Edit…")
                 }
                 

@@ -25,6 +25,8 @@ class ViewState: ObservableObject {
     @Published var hasSheet = false
     @Published var sheetType: SheetType = .compose
     @Published var composingID: UUID? = nil
+    @Published var isEditing: Bool = false
+    @State var selectedID: UUID? = nil
     
     func showComposeSheet(forRepoId id: UUID) {
         composingID = id

@@ -22,6 +22,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		8B12FD2624167314006BFEE0 /* ClearButtonModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD2524167314006BFEE0 /* ClearButtonModifier.swift */; };
+		8B12FD2724167314006BFEE0 /* ClearButtonModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD2524167314006BFEE0 /* ClearButtonModifier.swift */; };
+		8B12FD292416746D006BFEE0 /* EditButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD282416746D006BFEE0 /* EditButtonView.swift */; };
+		8B12FD2A2416746D006BFEE0 /* EditButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD282416746D006BFEE0 /* EditButtonView.swift */; };
 		8B2F0ABB23FC195800B2E62A /* InterceptingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */; };
 		8B2F0ABD23FC2FA400B2E62A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */; };
 		8B3C0564240FBA0F00FB533B /* ActionStatusCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8B3C0563240FBA0F00FB533B /* ActionStatusCore */; };
@@ -158,6 +162,8 @@
 		8B045A7F2405591400EC21D6 /* downloads */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = downloads; sourceTree = "<group>"; };
 		8B045A802405591400EC21D6 /* pre-archive */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = "pre-archive"; sourceTree = "<group>"; };
 		8B045A8424055A6200EC21D6 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Assets; path = Extras/Assets; sourceTree = "<group>"; };
+		8B12FD2524167314006BFEE0 /* ClearButtonModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearButtonModifier.swift; sourceTree = "<group>"; };
+		8B12FD282416746D006BFEE0 /* EditButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditButtonView.swift; sourceTree = "<group>"; };
 		8B2F0AB923FC195700B2E62A /* InterceptingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterceptingDelegate.h; sourceTree = "<group>"; };
 		8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterceptingDelegate.m; sourceTree = "<group>"; };
 		8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -392,6 +398,8 @@
 				8B6F181723F459570029F9CC /* EditView.swift */,
 				8B5AEB492407F8410065524B /* SparkleView.swift */,
 				8B43A9852412CCCC00A076AC /* AddButtonView.swift */,
+				8B12FD282416746D006BFEE0 /* EditButtonView.swift */,
+				8B12FD2524167314006BFEE0 /* ClearButtonModifier.swift */,
 				8B43A9892412CF5B00A076AC /* ReposView.swift */,
 				8B43A9872412CD0100A076AC /* ViewExtensions.swift */,
 			);
@@ -851,10 +859,12 @@
 				8B3E64A723EAE62D00B28168 /* MobileApplication.swift in Sources */,
 				8B3E64A923EAE62D00B28168 /* SceneDelegate.swift in Sources */,
 				8B430E8723F587E30050BF2A /* Application.swift in Sources */,
+				8B12FD2624167314006BFEE0 /* ClearButtonModifier.swift in Sources */,
 				8B6F181823F459570029F9CC /* EditView.swift in Sources */,
 				8B4336EC23FFE53700598A04 /* PickerViewController.swift in Sources */,
 				8B5AEB482407EE630065524B /* SparkleUpdater.swift in Sources */,
 				8B43A9882412CD0100A076AC /* ViewExtensions.swift in Sources */,
+				8B12FD292416746D006BFEE0 /* EditButtonView.swift in Sources */,
 				8B43A97E24128DF200A076AC /* StubFilePicker.swift in Sources */,
 				8B5D864823FD52550085A570 /* GenerateView.swift in Sources */,
 				8B43A97924127D4200A076AC /* FilePicker.swift in Sources */,
@@ -884,6 +894,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B430E8523F587830050BF2A /* TVApplication.swift in Sources */,
+				8B12FD2A2416746D006BFEE0 /* EditButtonView.swift in Sources */,
 				8B430E7E23F586830050BF2A /* ContentView.swift in Sources */,
 				8B430E8823F587E60050BF2A /* Application.swift in Sources */,
 				8B43A97C24127EAE00A076AC /* PickerViewController.swift in Sources */,
@@ -892,6 +903,7 @@
 				8B430E8023F586830050BF2A /* EditView.swift in Sources */,
 				8B43A97D2412800100A076AC /* FilePicker.swift in Sources */,
 				8B4336F423FFED8000598A04 /* SceneDelegate.swift in Sources */,
+				8B12FD2724167314006BFEE0 /* ClearButtonModifier.swift in Sources */,
 				8B5D864923FD54160085A570 /* GenerateView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

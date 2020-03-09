@@ -33,12 +33,12 @@ internal extension View {
     
     // MARK: iOS/tvOS
     
-    func setupNavigation(editAction: @escaping () -> (Void), addAction: @escaping () -> (Void)) -> some View {
+    func setupNavigation(addAction: @escaping () -> (Void)) -> some View {
         return navigationBarHidden(false)
         .navigationBarTitle("Action Status", displayMode: .inline)
         .navigationBarItems(
             leading: AddButton(action: addAction),
-            trailing: EditButton(action: editAction))
+            trailing: EditButton())
     }
     func setupNavigationStyle() -> some View {
         return navigationViewStyle(StackNavigationViewStyle())
