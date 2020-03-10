@@ -1,0 +1,10 @@
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+#  Created by Sam Deane on 27/02/2020.
+#  All code (c) 2020 - present day, Elegant Chaos Limited.
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+if [[ ("$ACTION" == "install") && ("$ACTION_STATUS_BUILD" == "100") ]]
+then
+    echo "Error - trying to archive with Sparkle testing turned on."
+    exit 1
+fi
