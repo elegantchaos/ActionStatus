@@ -79,6 +79,7 @@ class MobileApplication: Application {
             switch result {
                 case .success(let plugin):
                     sparkleBridge = plugin
+                    sparkleBridge?.checkForUpdates()
                 case .failure(let error):
                     print(error)
             }
