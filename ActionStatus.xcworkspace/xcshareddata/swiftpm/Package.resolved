@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "ApplicationExtensions",
-        "repositoryURL": "https://github.com/elegantchaos/ApplicationExtensions.git",
-        "state": {
-          "branch": null,
-          "revision": "75d5fde7133d0b4806e47e068512911e98955d10",
-          "version": "1.0.6"
-        }
-      },
-      {
         "package": "Arguments",
         "repositoryURL": "https://github.com/elegantchaos/Arguments.git",
         "state": {
@@ -74,6 +65,15 @@
         }
       },
       {
+        "package": "ReleaseTools",
+        "repositoryURL": "https://github.com/elegantchaos/ReleaseTools.git",
+        "state": {
+          "branch": null,
+          "revision": "955ab8ff23ae1e3c9c67d12dd99ebbb9da9275d0",
+          "version": "1.0.8"
+        }
+      },
+      {
         "package": "Runner",
         "repositoryURL": "https://github.com/elegantchaos/Runner.git",
         "state": {
@@ -96,8 +96,8 @@
         "repositoryURL": "https://github.com/elegantchaos/URLExtensions.git",
         "state": {
           "branch": null,
-          "revision": "f1e416bcaaff3b00974f2d1eb4f7f82a36a755d5",
-          "version": "1.0.1"
+          "revision": "86fcffb5f6ce429253c0bb5e179a885b42ef268e",
+          "version": "1.0.2"
         }
       },
       {

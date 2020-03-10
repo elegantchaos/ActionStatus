@@ -1332,7 +1332,7 @@
 			repositoryURL = "https://github.com/elegantchaos/ReleaseTools.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.7;
+				minimumVersion = 1.0.8;
 			};
 		};
 		8B3C0562240FBA0F00FB533B /* XCRemoteSwiftPackageReference "ActionStatusCore" */ = {
@@ -1348,7 +1348,7 @@
 			repositoryURL = "https://github.com/elegantchaos/URLExtensions.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.1;
+				minimumVersion = 1.0.2;
 			};
 		};
 		8B5B175A23FAEB8200DD2AF5 /* XCRemoteSwiftPackageReference "SwiftUIExtensions" */ = {

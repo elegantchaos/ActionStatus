@@ -14,13 +14,7 @@
          location = "group:../ApplicationExtensions">
       </FileRef>
       <FileRef
-         location = "group:../URLExtensions">
-      </FileRef>
-      <FileRef
          location = "group:../ActionStatusCore">
-      </FileRef>
-      <FileRef
-         location = "group:../ReleaseTools">
       </FileRef>
       <FileRef
          location = "group:../SwiftUI-Introspect">
