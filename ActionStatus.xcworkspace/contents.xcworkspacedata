@@ -8,6 +8,12 @@
       location = "group:"
       name = "Dependencies">
       <FileRef
+         location = "group:../CollectionExtensions">
+      </FileRef>
+      <FileRef
+         location = "group:../ApplicationExtensions">
+      </FileRef>
+      <FileRef
          location = "group:../URLExtensions">
       </FileRef>
       <FileRef

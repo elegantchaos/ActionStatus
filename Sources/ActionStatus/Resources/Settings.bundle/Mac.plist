@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>StringsTable</key>
+	<string>Root</string>
+	<key>Title</key>
+	<string>Display</string>
+	<key>PreferenceSpecifiers</key>
+	<array>
+		<dict>
+			<key>TrueValue</key>
+			<dict>
+				<key>Type</key>
+				<string>PSToggleSwitchSpecifier</string>
+				<key>Title</key>
+				<string>Enabled</string>
+				<key>Key</key>
+				<string>enabled_another_preference</string>
+				<key>DefaultValue</key>
+				<true/>
+			</dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Show In Menubar</string>
+			<key>Key</key>
+			<string>ShowInMenu</string>
+			<key>DefaultValue</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>TrueValue</key>
+			<dict>
+				<key>Type</key>
+				<string>PSToggleSwitchSpecifier</string>
+				<key>Title</key>
+				<string>Enabled</string>
+				<key>Key</key>
+				<string>enabled_another_preference</string>
+				<key>DefaultValue</key>
+				<true/>
+			</dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Show In Dock</string>
+			<key>Key</key>
+			<string>ShowInDock</string>
+			<key>DefaultValue</key>
+			<true/>
+		</dict>
+	</array>
+</dict>
+</plist>

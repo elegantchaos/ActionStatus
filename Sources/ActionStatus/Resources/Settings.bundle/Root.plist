@@ -4,13 +4,15 @@
 <dict>
 	<key>StringsTable</key>
 	<string>Root</string>
+	<key>Title</key>
+	<string>General</string>
 	<key>PreferenceSpecifiers</key>
 	<array>
 		<dict>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
-			<string>Refresh</string>
+			<string>Monitoring</string>
 		</dict>
 		<dict>
 			<key>Type</key>
@@ -40,6 +42,12 @@
 		</dict>
 		<dict>
 			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Creation</string>
+		</dict>
+		<dict>
+			<key>Type</key>
 			<string>PSTextFieldSpecifier</string>
 			<key>Title</key>
 			<string>Default Owner</string>
@@ -54,51 +62,13 @@
 		</dict>
 		<dict>
 			<key>Type</key>
-			<string>PSGroupSpecifier</string>
+			<string>PSChildPaneSpecifier</string>
 			<key>Title</key>
 			<string>Display</string>
-		</dict>
-		<dict>
-			<key>TrueValue</key>
-			<dict>
-				<key>Type</key>
-				<string>PSToggleSwitchSpecifier</string>
-				<key>Title</key>
-				<string>Enabled</string>
-				<key>Key</key>
-				<string>enabled_another_preference</string>
-				<key>DefaultValue</key>
-				<true/>
-			</dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>Show In Menubar</string>
-			<key>Key</key>
-			<string>ShowInMenu</string>
-			<key>DefaultValue</key>
-			<true/>
-		</dict>
-		<dict>
-			<key>TrueValue</key>
-			<dict>
-				<key>Type</key>
-				<string>PSToggleSwitchSpecifier</string>
-				<key>Title</key>
-				<string>Enabled</string>
-				<key>Key</key>
-				<string>enabled_another_preference</string>
-				<key>DefaultValue</key>
-				<true/>
-			</dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>Show In Dock</string>
-			<key>Key</key>
-			<string>ShowInDock</string>
-			<key>DefaultValue</key>
-			<true/>
+			<key>File</key>
+			<string>Mac</string>
+			<key>SupportedUserInterfaceIdions</key>
+			<string>Mac</string>
 		</dict>
 	</array>
 </dict>
