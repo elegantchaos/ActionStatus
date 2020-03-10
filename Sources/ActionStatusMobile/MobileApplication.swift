@@ -69,7 +69,7 @@ class MobileApplication: Application {
     fileprivate func updateBridge() {
         appKitBridge?.showInMenu = UserDefaults.standard.bool(forKey: .showInMenuKey)
         appKitBridge?.showInDock = UserDefaults.standard.bool(forKey: .showInDockKey)
-        appKitBridge?.passing = model.failingCount == 0
+        appKitBridge?.passing = (model.failing == 0)
     }
     
     fileprivate func loadSparkle() {
