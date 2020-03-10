@@ -67,8 +67,10 @@
 			<string>Display</string>
 			<key>File</key>
 			<string>Mac</string>
-			<key>SupportedUserInterfaceIdions</key>
-			<string>Mac</string>
+			<key>SupportedUserInterfaceIdioms</key>
+			<array>
+				<string>Mac</string>
+			</array>
 		</dict>
 	</array>
 </dict>
