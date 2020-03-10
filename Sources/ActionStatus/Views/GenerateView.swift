@@ -57,9 +57,10 @@ struct GenerateView: View {
         isPresented = false
     }
     func onGenerate() {
+        let app = Application.shared
         storeSettings()
-        Application.shared.saveState()
-        let source = generator.generateWorkflow(for: repo)
+        app.saveState()
+        let source = generator.generateWorkflow(for: repo, application: app.info)
         Application.shared.saveWorkflow(source, for: repo)
     }
     
