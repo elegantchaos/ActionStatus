@@ -1,12 +1,13 @@
 set -e
 rm -rf .build
-source make-tools 2> /dev/null
+source make-tools
 
 echo "***************"
 echo "Preparing macOS"
 echo "***************"
 
-rt archive --scheme=ActionStatus-macOS --set-default --show-output $@ | xcpretty
+rt set scheme ActionStatus-macOS --platform macOS
+rt archive --show-output 2> /dev/null | xcpretty
 rt export
 rt notarize
 rt wait

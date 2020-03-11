@@ -1,13 +1,13 @@
 set -e
 rm -rf .build
-source make-tools 2> /dev/null
+source make-tools
 
 echo "*************"
 echo "Uploading iOS  "
 echo "*************"
 
 rt set scheme ActionStatus-iOS --platform=iOS
-rt archive --platform=iOS --show-output | xcpretty
+rt archive --platform=iOS --show-output 2> /dev/null | xcpretty
 rt export --platform=iOS
 rt upload --platform=iOS
 
@@ -16,6 +16,6 @@ echo "Uploading tvOS"
 echo "**************"
 
 rt set scheme ActionStatus-tvOS --platform=tvOS
-rt archive --platform=tvOS --show-output | xcpretty
+rt archive --platform=tvOS --show-output 2> /dev/null | xcpretty
 rt export --platform=tvOS
 rt upload --platform=tvOS

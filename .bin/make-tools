@@ -2,4 +2,4 @@
 
 set -e
 xcodebuild build -workspace ActionStatus.xcworkspace -scheme Tools -configuration Release 2> /dev/null | xcpretty
-rt --version
+echo "Using release tools $(rt --version)"
