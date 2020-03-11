@@ -1,5 +1,5 @@
 #!/bin/sh
 
 set -e
-xcodebuild build -workspace ActionStatus.xcworkspace -scheme Tools -configuration Release | xcpretty
+xcodebuild build -workspace ActionStatus.xcworkspace -scheme Tools -configuration Release 2> /dev/null | xcpretty
 rt --version
