@@ -60,8 +60,9 @@ struct GenerateView: View {
         let app = Application.shared
         storeSettings()
         app.saveState()
-        let source = generator.generateWorkflow(for: repo, application: app.info)
-        Application.shared.saveWorkflow(source, for: repo)
+        if let workflow = generator.generateWorkflow(for: repo, application: app.info) {
+            Application.shared.save(workflow: workflow)
+        }
     }
     
     func fetchSettings() {

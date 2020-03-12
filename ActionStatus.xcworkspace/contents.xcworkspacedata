@@ -14,9 +14,6 @@
          location = "group:../CollectionExtensions">
       </FileRef>
       <FileRef
-         location = "group:../ApplicationExtensions">
-      </FileRef>
-      <FileRef
          location = "group:../ActionStatusCore">
       </FileRef>
       <FileRef

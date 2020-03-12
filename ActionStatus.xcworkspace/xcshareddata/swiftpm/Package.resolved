@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "ApplicationExtensions",
+        "repositoryURL": "https://github.com/elegantchaos/ApplicationExtensions.git",
+        "state": {
+          "branch": null,
+          "revision": "b8f48ff3f8d15ad15ab4077e17f92f3ae9e46381",
+          "version": "1.0.7"
+        }
+      },
+      {
         "package": "BindingsExtensions",
         "repositoryURL": "https://github.com/elegantchaos/BindingsExtensions.git",
         "state": {

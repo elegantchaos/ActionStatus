@@ -28,8 +28,7 @@ class Application: BasicApplication {
     
     var rootController: UIViewController?
     var settingsObserver: Any?
-    var exportData: Data? = nil
-    var exportRepo: UUID? = nil
+    var exportWorkflow: Workflow? = nil
     var viewState = ViewState()
     var filePicker: FilePicker?
     var filePickerClass: FilePicker.Type { return StubFilePicker.self }
@@ -102,55 +101,71 @@ class Application: BasicApplication {
     }
     
     func pickerForSavingWorkflow() -> FilePicker {
-        let data = exportData!
-        let repo = model.repo(withIdentifier: exportRepo!)!
+        let workflow = exportWorkflow!
         
         let defaultURL: URL?
         if let identifier = Device.main.identifier {
-            defaultURL = repo.url(forDevice: identifier)
+            defaultURL = workflow.repo.url(forDevice: identifier)
         } else {
             defaultURL = nil
         }
             
         let picker = filePickerClass.init(forOpeningFolderStartingIn: defaultURL) { urls in
-            self.saveWorkflow(data, for: repo, to: urls.first)
+            self.save(workflow: workflow, to: urls.first)
         }
         
         return picker
     }
     
-    func saveWorkflow(_ source: String, for repo: Repo) {
-        if let data = source.data(using: .utf8) {
-            exportData = data
-            exportRepo = repo.id
+    func save(workflow: Workflow) {
+        exportWorkflow = workflow
 
-            viewState.hideSheet()
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: .seconds(1))) {
-                #if targetEnvironment(macCatalyst)
-                Application.shared.presentPicker(self.pickerForSavingWorkflow()) // ugly hack - the SwiftUI sheet doesn't work properly on the mac
-                #else
-                self.viewState.showSaveSheet()
-                #endif
-            }
+        viewState.hideSheet()
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: .seconds(1))) {
+            #if targetEnvironment(macCatalyst)
+            Application.shared.presentPicker(self.pickerForSavingWorkflow()) // ugly hack - the SwiftUI sheet doesn't work properly on the mac
+            #else
+            self.viewState.showSaveSheet()
+            #endif
         }
     }
     
-    func saveWorkflow(_ data: Data, for repo: Repo, to rootURL: URL?) {
+    func save(workflow: Workflow, to rootURL: URL?) {
         if let rootURL = rootURL {
-            rootURL.accessSecurityScopedResource(withPathComponents: [".github", "workflows", "\(repo.workflow).yml"]) { url in
+            rootURL.accessSecurityScopedResource(withPathComponents: [".github", "workflows", "\(workflow.repo.workflow).yml"]) { url in
                 var error: NSError? = nil
-                NSFileCoordinator().coordinate(readingItemAt: url, error: &error) { (url) in
+                NSFileCoordinator().coordinate(writingItemAt: url, error: &error) { (url) in
                     do {
                         try? FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
-                        try data.write(to: url)
+                        try workflow.data.write(to: url)
                         if let identifier = Device.main.identifier {
-                            model.remember(url: rootURL, forDevice: identifier, inRepo: repo)
+                            model.remember(url: rootURL, forDevice: identifier, inRepo: workflow.repo)
                         }
                     } catch {
                         print(error)
                     }
                 }
             }
+
+            if !workflow.header.isEmpty {
+                rootURL.accessSecurityScopedResource(withPathComponents: ["README.md"]) { url in
+                    var error: NSError? = nil
+                    NSFileCoordinator().coordinate(writingItemAt: url, error: &error) { (url) in
+                        do {
+                            var readme = try String(contentsOf: url, encoding: .utf8)
+                            if let range = readme.range(of: workflow.delimiter) {
+                                readme.removeSubrange(readme.startIndex ..< range.upperBound)
+                            }
+                            readme.insert(contentsOf: workflow.header, at: readme.startIndex)
+                            let data = readme.data(using: .utf8)
+                            try data?.write(to: url)
+                        } catch {
+                            print(error)
+                        }
+                    }
+                }
+            }
+            
         }
     }
 }
