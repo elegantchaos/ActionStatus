@@ -8,9 +8,6 @@
       location = "group:"
       name = "Dependencies">
       <FileRef
-         location = "group:../ReleaseTools">
-      </FileRef>
-      <FileRef
          location = "group:../CollectionExtensions">
       </FileRef>
       <FileRef

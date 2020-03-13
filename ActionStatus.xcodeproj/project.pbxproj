@@ -768,7 +768,6 @@
 				8B5D864423FD3F720085A570 /* XCRemoteSwiftPackageReference "ApplicationExtensions" */,
 				8B880FE223FD7E000068C3FF /* XCRemoteSwiftPackageReference "BindingsExtensions" */,
 				8B69B68923FEDB6D00030A2B /* XCRemoteSwiftPackageReference "DictionaryCoding" */,
-				8B045A77240556E600EC21D6 /* XCRemoteSwiftPackageReference "ReleaseTools" */,
 				8B736FA0240E9B2D0025D583 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				8B3C0562240FBA0F00FB533B /* XCRemoteSwiftPackageReference "ActionStatusCore" */,
 				8B43A971241269D400A076AC /* XCRemoteSwiftPackageReference "URLExtensions" */,
@@ -1369,14 +1368,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		8B045A77240556E600EC21D6 /* XCRemoteSwiftPackageReference "ReleaseTools" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/elegantchaos/ReleaseTools.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.0;
-			};
-		};
 		8B3C0562240FBA0F00FB533B /* XCRemoteSwiftPackageReference "ActionStatusCore" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/elegantchaos/ActionStatusCore.git";
@@ -1436,11 +1427,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		8B045A8924055E4B00EC21D6 /* rt */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8B045A77240556E600EC21D6 /* XCRemoteSwiftPackageReference "ReleaseTools" */;
-			productName = rt;
-		};
 		8B3C0563240FBA0F00FB533B /* ActionStatusCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8B3C0562240FBA0F00FB533B /* XCRemoteSwiftPackageReference "ActionStatusCore" */;
