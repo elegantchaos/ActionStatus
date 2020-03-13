@@ -7,3 +7,6 @@
 [submodule "Dependencies/CatalystSparkle"]
 	path = Dependencies/CatalystSparkle
 	url = https://github.com/elegantchaos/CatalystSparkle
+[submodule "Dependencies/ReleaseTools"]
+	path = Dependencies/ReleaseTools
+	url = git@github.com:elegantchaos/ReleaseTools.git
