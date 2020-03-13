@@ -15,7 +15,7 @@ struct GenerateView: View {
     @Binding var isPresented: Bool
     
     @State var platforms: [Bool] = []
-    @State var swifts: [Bool] = []
+    @State var compilers: [Bool] = []
     @State var configurations: [Bool] = []
     @State var general: [Bool] = []
 
@@ -29,7 +29,7 @@ struct GenerateView: View {
             
             Form {
                 togglesSection(title: "Platforms", options: self.generator.platforms, toggles: $platforms)
-                togglesSection(title: "Swift", options: self.generator.swifts, toggles: $swifts)
+                togglesSection(title: "Swift", options: self.generator.compilers, toggles: $compilers)
                 togglesSection(title: "Configuration", options: self.generator.configurations, toggles: $configurations)
                 togglesSection(title: "Other Options", options: self.generator.general, toggles: $general)
             }.padding()
@@ -70,7 +70,7 @@ struct GenerateView: View {
     func fetchSettings() {
         let settings = repo.settings
         platforms = generator.toggleSet(for: generator.platforms, in: settings)
-        swifts = generator.toggleSet(for: generator.swifts, in: settings)
+        compilers = generator.toggleSet(for: generator.compilers, in: settings)
         configurations = generator.toggleSet(for: generator.configurations, in: settings)
         general = generator.toggleSet(for: generator.general, in: settings)
     }
@@ -78,7 +78,7 @@ struct GenerateView: View {
     func storeSettings() {
         var options: [String] = []
         options.append(contentsOf: generator.enabledIdentifiers(for: generator.platforms, toggleSet: platforms))
-        options.append(contentsOf: generator.enabledIdentifiers(for: generator.swifts, toggleSet: swifts))
+        options.append(contentsOf: generator.enabledIdentifiers(for: generator.compilers, toggleSet: compilers))
         options.append(contentsOf: generator.enabledIdentifiers(for: generator.configurations, toggleSet: configurations))
         options.append(contentsOf: generator.enabledIdentifiers(for: generator.general, toggleSet: general))
         var updated = repo
