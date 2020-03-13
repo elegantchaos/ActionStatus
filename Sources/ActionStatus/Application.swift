@@ -28,7 +28,7 @@ class Application: BasicApplication {
     
     var rootController: UIViewController?
     var settingsObserver: Any?
-    var exportWorkflow: Workflow? = nil
+    var exportWorkflow: Generator.Output? = nil
     var viewState = ViewState()
     var filePicker: FilePicker?
     var filePickerClass: FilePicker.Type { return StubFilePicker.self }
@@ -111,14 +111,14 @@ class Application: BasicApplication {
         }
             
         let picker = filePickerClass.init(forOpeningFolderStartingIn: defaultURL) { urls in
-            self.save(workflow: workflow, to: urls.first)
+            self.save(output: workflow, to: urls.first)
         }
         
         return picker
     }
     
-    func save(workflow: Workflow) {
-        exportWorkflow = workflow
+    func save(output: Generator.Output) {
+        exportWorkflow = output
 
         viewState.hideSheet()
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: .seconds(1))) {
@@ -130,16 +130,16 @@ class Application: BasicApplication {
         }
     }
     
-    func save(workflow: Workflow, to rootURL: URL?) {
+    func save(output: Generator.Output, to rootURL: URL?) {
         if let rootURL = rootURL {
-            rootURL.accessSecurityScopedResource(withPathComponents: [".github", "workflows", "\(workflow.repo.workflow).yml"]) { url in
+            rootURL.accessSecurityScopedResource(withPathComponents: [".github", "workflows", "\(output.repo.workflow).yml"]) { url in
                 var error: NSError? = nil
                 NSFileCoordinator().coordinate(writingItemAt: url, error: &error) { (url) in
                     do {
                         try? FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
-                        try workflow.data.write(to: url)
+                        try output.data.write(to: url)
                         if let identifier = Device.main.identifier {
-                            model.remember(url: rootURL, forDevice: identifier, inRepo: workflow.repo)
+                            model.remember(url: rootURL, forDevice: identifier, inRepo: output.repo)
                         }
                     } catch {
                         print(error)
@@ -147,16 +147,16 @@ class Application: BasicApplication {
                 }
             }
 
-            if !workflow.header.isEmpty {
+            if !output.header.isEmpty {
                 rootURL.accessSecurityScopedResource(withPathComponents: ["README.md"]) { url in
                     var error: NSError? = nil
                     NSFileCoordinator().coordinate(writingItemAt: url, error: &error) { (url) in
                         do {
                             var readme = try String(contentsOf: url, encoding: .utf8)
-                            if let range = readme.range(of: workflow.delimiter) {
+                            if let range = readme.range(of: output.delimiter) {
                                 readme.removeSubrange(readme.startIndex ..< range.upperBound)
                             }
-                            readme.insert(contentsOf: workflow.header, at: readme.startIndex)
+                            readme.insert(contentsOf: output.header, at: readme.startIndex)
                             let data = readme.data(using: .utf8)
                             try data?.write(to: url)
                         } catch {

@@ -8,7 +8,7 @@ import SwiftUI
 import BindingsExtensions
 
 struct GenerateView: View {
-    let generator = WorkflowGenerator()
+    let generator = Generator()
     let repoID: UUID
     
     @EnvironmentObject var model: Model
@@ -62,8 +62,8 @@ struct GenerateView: View {
         let app = Application.shared
         storeSettings()
         app.saveState()
-        if let workflow = generator.generateWorkflow(for: repo, application: app.info) {
-            Application.shared.save(workflow: workflow)
+        if let output = generator.generateWorkflow(for: repo, application: app.info) {
+            Application.shared.save(output: output)
         }
     }
     
