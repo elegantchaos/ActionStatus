@@ -1,5 +1,11 @@
 #!/bin/sh
 
-set -e
-xcodebuild build -workspace ActionStatus.xcworkspace -scheme Tools -configuration Release 2> /dev/null | xcpretty
-echo "Using release tools $(rt --version)"
+if [[ ! -e .bin/rt ]]
+then
+    echo "Rebuilding release tools."
+    set -e
+    swift build --package-path Dependencies/ReleaseTools --configuration release
+    cp Dependencies/ReleaseTools/.build/release/rt .bin/rt
+fi
+
+echo "Using release tools $(rt --version)."
