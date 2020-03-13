@@ -1,6 +1,6 @@
 set -e
 rm -rf .build
-#source make-tools
+source make-tools
 
 echo "*************"
 echo "Uploading iOS  "
