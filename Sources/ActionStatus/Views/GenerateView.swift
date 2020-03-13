@@ -106,7 +106,7 @@ struct GenerateView: View {
             VStack {
                 ForEach(0 ..< toggles.wrappedValue.count) { index in
                     Toggle(isOn: toggles[index]) {
-                        Text(options[index].name)
+                        Text(options[index].label)
                     }
                 }
             }
