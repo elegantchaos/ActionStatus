@@ -4,8 +4,10 @@ if [[ ! -e .bin/rt ]]
 then
     echo "Rebuilding release tools."
     set -e
-    swift build --package-path Dependencies/ReleaseTools --configuration release
-    cp Dependencies/ReleaseTools/.build/release/rt .bin/rt
+    pushd Dependencies/ReleaseTools > /dev/null
+    swift run builder build --configuration release
+    cp .build/release/rt ../../.bin/rt
+    popd > /dev/null
 fi
 
 echo "Using release tools $(rt --version)."
