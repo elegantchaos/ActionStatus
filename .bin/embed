@@ -3,7 +3,62 @@
 #  All code (c) 2020 - present day, Elegant Chaos Limited.
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+function resign_bundle {
+    local bundle=$1
+    local bundleName=$(basename "$bundle")
+    if [[ "$bundleName" != "Settings.bundle" ]]
+    then
+        echo "$2Re-signing $bundleName"
+        resign_frameworks "$bundle/Contents/Frameworks/" "$2    "
+
+        local out=$(codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$bundle" 2>&1)
+        if [[ $? != 0 ]]
+        then
+            echo $out
+        fi
+    fi
+}
+
+function resign_bundles {
+    if [[ -e "$1" ]]
+    then
+        pushd "$1" > /dev/null
+        for bundle in *.bundle
+        do
+            resign_bundle "$bundle" "$2"
+        done
+        popd > /dev/null
+    fi
+}
+
+function resign_framework {
+    local framework=$1
+    local frameworkName=$(basename "$framework")
+    echo "$2Re-signing $frameworkName"
+
+    resign_bundles "$framework/Versions/A/Resources/" "$2    "
+
+    local out=$(codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$framework/Versions/A" 2>&1)
+    if [[ $? != 0 ]]
+    then
+        echo $out
+    fi
+}
+
+function resign_frameworks {
+    if [[ -e "$1" ]]
+    then
+        pushd "$1" > /dev/null
+        for framework in *.framework
+        do
+            resign_framework "$framework" "$2"
+        done
+        popd > /dev/null
+    fi
+}
+
 set -e
+shopt -s nullglob
 
 if [[ "$PLATFORM_NAME" != "macosx" ]]
 then
@@ -19,7 +74,6 @@ do
     ditto "$RT_MAC_PRODUCTS_DIR/$name" "$RT_BUILT_XPCSERVICES_DIR/$name"
 done
 
-echo "Re-signing embedded frameworks."
 
 # By default, use the configured code signing identity for the project/target
 IDENTITY="${EXPANDED_CODE_SIGN_IDENTITY}"
@@ -29,11 +83,16 @@ then
     IDENTITY="-"
 fi
 
-#codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$RT_BUILT_RESOURCES_DIR/AppKitBridge.bundle/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/AutoUpdate.app"
-codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$RT_BUILT_RESOURCES_DIR/AppKitBridge.bundle/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Updater.app"
-codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$RT_BUILT_RESOURCES_DIR/AppKitBridge.bundle/Contents/Frameworks/Sparkle.framework/Versions/A"
-codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$RT_BUILT_RESOURCES_DIR/AppKitBridge.bundle"
+echo "Re-signing bundles."
+resign_bundles "$RT_BUILT_RESOURCES_DIR"
 
+echo "Re-signing frameworks."
+resign_frameworks "$RT_BUILT_FRAMEWORKS_DIR"
+    
+#codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$RT_BUILT_RESOURCES_DIR/AppKitBridge.bundle/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Updater.app"
+#codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$RT_BUILT_RESOURCES_DIR/AppKitBridge.bundle/Contents/Frameworks/Sparkle.framework/Versions/A"
+
+echo "Re-signing XPCs."
 for name in ${XPCS[@]}
 do
     echo "Re-signing $name"
