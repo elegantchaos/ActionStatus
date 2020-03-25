@@ -3,6 +3,14 @@
 #  All code (c) 2020 - present day, Elegant Chaos Limited.
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+function resign {
+    local out=$(codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$1" 2>&1)
+    if [[ $? != 0 ]]
+    then
+        echo $out
+    fi
+}
+
 function resign_bundle {
     local bundle=$1
     local bundleName=$(basename "$bundle")
@@ -10,12 +18,7 @@ function resign_bundle {
     then
         echo "$2Re-signing $bundleName"
         resign_frameworks "$bundle/Contents/Frameworks/" "$2    "
-
-        local out=$(codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$bundle" 2>&1)
-        if [[ $? != 0 ]]
-        then
-            echo $out
-        fi
+        resign "$bundle"
     fi
 }
 
@@ -37,12 +40,7 @@ function resign_framework {
     echo "$2Re-signing $frameworkName"
 
     resign_bundles "$framework/Versions/A/Resources/" "$2    "
-
-    local out=$(codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$framework/Versions/A" 2>&1)
-    if [[ $? != 0 ]]
-    then
-        echo $out
-    fi
+    resign "$framework/Versions/A"
 }
 
 function resign_frameworks {
@@ -52,6 +50,25 @@ function resign_frameworks {
         for framework in *.framework
         do
             resign_framework "$framework" "$2"
+        done
+        popd > /dev/null
+    fi
+}
+
+function resign_xpc {
+    local xpc=$1
+    local xpcName=$(basename "$xpc")
+    echo "$2Re-signing $xpcName"
+    resign "$xpc"
+}
+
+function resign_xpcs {
+    if [[ -e "$1" ]]
+    then
+        pushd "$1" > /dev/null
+        for xpc in *.xpc
+        do
+            resign_xpc "$xpc" "$2"
         done
         popd > /dev/null
     fi
@@ -83,18 +100,6 @@ then
     IDENTITY="-"
 fi
 
-echo "Re-signing bundles."
 resign_bundles "$RT_BUILT_RESOURCES_DIR"
-
-echo "Re-signing frameworks."
 resign_frameworks "$RT_BUILT_FRAMEWORKS_DIR"
-    
-#codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$RT_BUILT_RESOURCES_DIR/AppKitBridge.bundle/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Updater.app"
-#codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$RT_BUILT_RESOURCES_DIR/AppKitBridge.bundle/Contents/Frameworks/Sparkle.framework/Versions/A"
-
-echo "Re-signing XPCs."
-for name in ${XPCS[@]}
-do
-    echo "Re-signing $name"
-    codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$RT_BUILT_XPCSERVICES_DIR/$name"
-done
+resign_xpcs "$RT_BUILT_XPCSERVICES_DIR"
