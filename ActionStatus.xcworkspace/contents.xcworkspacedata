@@ -7,6 +7,16 @@
    <Group
       location = "group:"
       name = "Dependencies">
+      <Group
+         location = "container:"
+         name = "Release Tools">
+         <FileRef
+            location = "group:Dependencies/ReleaseTools/ReleaseTools.xcconfig">
+         </FileRef>
+         <FileRef
+            location = "group:Dependencies/ReleaseTools/Scripts">
+         </FileRef>
+      </Group>
       <FileRef
          location = "group:../CollectionExtensions">
       </FileRef>

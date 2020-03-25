@@ -167,7 +167,6 @@
 
 /* Begin PBXFileReference section */
 		8B03019F2417E3D0003A19A4 /* perform-checks */ = {isa = PBXFileReference; lastKnownFileType = text; path = "perform-checks"; sourceTree = "<group>"; };
-		8B045A7A2405591400EC21D6 /* make-tools */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = "make-tools"; sourceTree = "<group>"; };
 		8B045A7B2405591400EC21D6 /* prepare-mac */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = "prepare-mac"; sourceTree = "<group>"; };
 		8B045A7C2405591400EC21D6 /* release-mac */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = "release-mac"; sourceTree = "<group>"; };
 		8B045A7D2405591400EC21D6 /* rt */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = rt; sourceTree = "<group>"; };
@@ -317,7 +316,6 @@
 			children = (
 				8B045A7F2405591400EC21D6 /* downloads */,
 				8B5AEB5224080D720065524B /* embed */,
-				8B045A7A2405591400EC21D6 /* make-tools */,
 				8B03019F2417E3D0003A19A4 /* perform-checks */,
 				8B045A802405591400EC21D6 /* pre-archive */,
 				8B045A7E2405591400EC21D6 /* pre-build */,
@@ -851,7 +849,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$ACTION_STATUS_SCRIPTS_PATH/perform-checks\"\n";
+			shellScript = "\"$RT_SCRIPTS_PATH/perform-checks\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8B0301A02417E48A003A19A4 /* Perform Checks */ = {
@@ -906,7 +904,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "source \"${ACTION_STATUS_SCRIPTS_PATH}/embed\"\n";
+			shellScript = "source \"${RT_SCRIPTS_PATH}/embed\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -998,7 +996,6 @@
 		8B045A8A24055E4B00EC21D6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			platformFilter = maccatalyst;
-			productRef = 8B045A8924055E4B00EC21D6 /* rt */;
 		};
 		8B3E64BB23EAE62E00B28168 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

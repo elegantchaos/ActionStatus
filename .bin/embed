@@ -16,7 +16,7 @@ XPCS=(org.sparkle-project.InstallerStatus.xpc org.sparkle-project.InstallerLaunc
 for name in ${XPCS[@]}
 do
     echo "Copying $name"
-    ditto "$ACTION_STATUS_MAC_PRODUCTS_DIR/$name" "$ACTION_STATUS_BUILT_XPCSERVICES_DIR/$name"
+    ditto "$RT_MAC_PRODUCTS_DIR/$name" "$RT_BUILT_XPCSERVICES_DIR/$name"
 done
 
 echo "Re-signing embedded frameworks."
@@ -29,13 +29,13 @@ then
     IDENTITY="-"
 fi
 
-#codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$ACTION_STATUS_BUILT_RESOURCES_DIR/AppKitBridge.bundle/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/AutoUpdate.app"
-codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$ACTION_STATUS_BUILT_RESOURCES_DIR/AppKitBridge.bundle/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Updater.app"
-codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$ACTION_STATUS_BUILT_RESOURCES_DIR/AppKitBridge.bundle/Contents/Frameworks/Sparkle.framework/Versions/A"
-codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$ACTION_STATUS_BUILT_RESOURCES_DIR/AppKitBridge.bundle"
+#codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$RT_BUILT_RESOURCES_DIR/AppKitBridge.bundle/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/AutoUpdate.app"
+codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$RT_BUILT_RESOURCES_DIR/AppKitBridge.bundle/Contents/Frameworks/Sparkle.framework/Versions/A/Resources/Updater.app"
+codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$RT_BUILT_RESOURCES_DIR/AppKitBridge.bundle/Contents/Frameworks/Sparkle.framework/Versions/A"
+codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$RT_BUILT_RESOURCES_DIR/AppKitBridge.bundle"
 
 for name in ${XPCS[@]}
 do
     echo "Re-signing $name"
-    codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$ACTION_STATUS_BUILT_XPCSERVICES_DIR/$name"
+    codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$RT_BUILT_XPCSERVICES_DIR/$name"
 done
