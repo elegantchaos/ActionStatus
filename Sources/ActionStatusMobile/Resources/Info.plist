@@ -17,17 +17,17 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(ACTION_STATUS_VERSION)</string>
+	<string>$(RT_VERSION)</string>
 	<key>CFBundleVersion</key>
-	<string>$(ACTION_STATUS_BUILD)</string>
+	<string>$(RT_BUILD)</string>
 	<key>Commit</key>
-	<string>$(ACTION_STATUS_COMMIT)</string>
+	<string>$(RT_COMMIT)</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.developer-tools</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
-	<string>$(ACTION_STATUS_COPYRIGHT)</string>
+	<string>$(RT_COPYRIGHT)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>SUPublicDSAKeyFile</key>
