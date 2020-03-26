@@ -425,11 +425,11 @@
 		8B5B174F23FADA8500DD2AF5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8B5E7E6323F6A9C600087E15 /* Mobile.xcconfig */,
 				8B451E1623F446BA0056EF3E /* ActionStatus.entitlements */,
-				8B3E64B423EAE62E00B28168 /* Info.plist */,
 				8BBFAA8B2403F09F0091157A /* dsa_pub.pem */,
+				8B3E64B423EAE62E00B28168 /* Info.plist */,
 				8B3E64B123EAE62E00B28168 /* LaunchScreen.storyboard */,
+				8B5E7E6323F6A9C600087E15 /* Mobile.xcconfig */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -437,10 +437,10 @@
 		8B5B175123FADA9D00DD2AF5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8B5E7E6423F6A9C600087E15 /* TV.xcconfig */,
+				8B4893B4240D686200E3E112 /* ActionStatus.entitlements */,
 				8B430E7823F586110050BF2A /* Info.plist */,
 				8B430E7523F586110050BF2A /* LaunchScreen.storyboard */,
-				8B4893B4240D686200E3E112 /* ActionStatus.entitlements */,
+				8B5E7E6423F6A9C600087E15 /* TV.xcconfig */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -875,7 +875,7 @@
 		};
 		8B3BA5A5240541AD0071F0C1 /* Sign Embedded Stuff */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
@@ -890,7 +890,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "source \"${RT_SCRIPTS_PATH}/embed\"\n";
-			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
