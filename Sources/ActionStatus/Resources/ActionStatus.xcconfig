@@ -3,9 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-
 #include "BuildNumber.xcconfig"
-#include "Dependencies/ReleaseTools/ReleaseTools.xcconfig"
 
 RT_VERSION = 1.0.1
 RT_PRODUCT_NAME = Action Status
@@ -16,3 +14,4 @@ RT_TEAM = 2H48644JM2
 // uncomment the line below to force the build number to something old, in order to test Sparkle
 //RT_BUILD = 100
 
+ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon$(RT_TYPE)

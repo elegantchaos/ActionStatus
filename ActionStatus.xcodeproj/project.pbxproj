@@ -153,6 +153,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		226F6559242D2045000AEA1C /* upload-all */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-all"; sourceTree = "<group>"; };
+		226F655A242D2045000AEA1C /* upload-tvOS */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-tvOS"; sourceTree = "<group>"; };
 		8B03019F2417E3D0003A19A4 /* perform-checks */ = {isa = PBXFileReference; lastKnownFileType = text; path = "perform-checks"; sourceTree = "<group>"; };
 		8B045A7B2405591400EC21D6 /* prepare-mac */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = "prepare-mac"; sourceTree = "<group>"; };
 		8B045A7C2405591400EC21D6 /* release-mac */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = "release-mac"; sourceTree = "<group>"; };
@@ -171,7 +173,7 @@
 		8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		8B3BA5A4240540CC0071F0C1 /* AppKitBridge.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppKitBridge.entitlements; sourceTree = "<group>"; };
 		8B3C0576240FDAAD00FB533B /* ActionStatus.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ActionStatus.xctestplan; sourceTree = "<group>"; };
-		8B3E64A323EAE62D00B28168 /* Action Status.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Action Status.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B3E64A323EAE62D00B28168 /* .app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = .app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B3E64A623EAE62D00B28168 /* MobileApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileApplication.swift; sourceTree = "<group>"; };
 		8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		8B3E64AA23EAE62D00B28168 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -218,7 +220,7 @@
 		8B5E7E9323F6C0C200087E15 /* AppKitBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppKitBridge.h; sourceTree = "<group>"; };
 		8B6F181723F459570029F9CC /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
 		8BA5228D240573F400B82857 /* ExportOptions-macOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ExportOptions-macOS.plist"; sourceTree = "<group>"; };
-		8BA522A224057CAE00B82857 /* upload-mobile */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = "upload-mobile"; sourceTree = "<group>"; };
+		8BA522A224057CAE00B82857 /* upload-iOS */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = "upload-iOS"; sourceTree = "<group>"; };
 		8BA522A32405804500B82857 /* ExportOptions-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ExportOptions-iOS.plist"; sourceTree = "<group>"; };
 		8BBFAA8B2403F09F0091157A /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		8BBFAA942403F8E80091157A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sparkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -304,7 +306,9 @@
 				8B045A7B2405591400EC21D6 /* prepare-mac */,
 				8B045A7C2405591400EC21D6 /* release-mac */,
 				8B045A7D2405591400EC21D6 /* rt */,
-				8BA522A224057CAE00B82857 /* upload-mobile */,
+				226F6559242D2045000AEA1C /* upload-all */,
+				226F655A242D2045000AEA1C /* upload-tvOS */,
+				8BA522A224057CAE00B82857 /* upload-iOS */,
 			);
 			path = .bin;
 			sourceTree = "<group>";
@@ -334,7 +338,7 @@
 		8B3E64A423EAE62D00B28168 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8B3E64A323EAE62D00B28168 /* Action Status.app */,
+				8B3E64A323EAE62D00B28168 /* .app */,
 				8B3E64B923EAE62E00B28168 /* Action Status.xctest */,
 				8B3E64C423EAE62F00B28168 /* Action Status.xctest */,
 				8B430E6A23F586100050BF2A /* Action Status.app */,
@@ -611,7 +615,7 @@
 				8B43A972241269D400A076AC /* URLExtensions */,
 			);
 			productName = GithubStatus;
-			productReference = 8B3E64A323EAE62D00B28168 /* Action Status.app */;
+			productReference = 8B3E64A323EAE62D00B28168 /* .app */;
 			productType = "com.apple.product-type.application";
 		};
 		8B3E64B823EAE62E00B28168 /* ActionStatusTests */ = {
@@ -849,7 +853,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$ACTION_STATUS_SCRIPTS_PATH/perform-checks\"\n";
+			shellScript = "\"$RT_SCRIPTS_PATH/perform-checks\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8B045A8B24055E5900EC21D6 /* ShellScript */ = {

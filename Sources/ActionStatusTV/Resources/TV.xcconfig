@@ -3,12 +3,5 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+#include "Dependencies/ReleaseTools/Configs/TV.xcconfig"
 #include "Sources/ActionStatus/Resources/ActionStatus.xcconfig"
-
-ACTION_STATUS_TYPE = TV
-
-SDKROOT = appletvos
-TVOS_DEPLOYMENT_TARGET = 13.0
-LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks
-TARGETED_DEVICE_FAMILY = 3
-CODE_SIGN_ENTITLEMENTS =

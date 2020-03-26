@@ -3,9 +3,9 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-#include "Sources/ActionStatus/Resources/ActionStatus.xcconfig"
 
-ACTION_STATUS_TYPE = Bridge
+#include "Dependencies/ReleaseTools/Configs/Mac.xcconfig"
+#include "Sources/ActionStatus/Resources/ActionStatus.xcconfig"
 
 SDKROOT = macosx
 MACOSX_DEPLOYMENT_TARGET = 10.15

@@ -5,10 +5,7 @@
 #  All code (c) 2020 - present day, Elegant Chaos Limited.
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-
-set -e
-rm -rf .build
-source make-tools
+source Dependencies/ReleaseTools/Scripts/make-tools
 
 echo "***************"
 echo "Preparing macOS"

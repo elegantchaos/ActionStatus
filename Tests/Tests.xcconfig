@@ -3,10 +3,5 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+#include "Dependencies/ReleaseTools/Configs/Tests.xcconfig"
 #include "Sources/ActionStatus/Resources/ActionStatus.xcconfig"
-
-ACTION_STATUS_TYPE = Tests
-CODE_SIGN_ENTITLEMENTS =
-PRODUCT_MODULE_NAME = $(TARGET_NAME)
-SWIFT_OBJC_BRIDGING_HEADER =
-INFOPLIST_FILE = Tests/$(TARGET_NAME)/Info.plist

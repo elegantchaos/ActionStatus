@@ -11,21 +11,12 @@
          location = "container:"
          name = "Release Tools">
          <FileRef
-            location = "group:Dependencies/ReleaseTools/ReleaseTools.xcconfig">
+            location = "group:Dependencies/ReleaseTools/Configs">
          </FileRef>
          <FileRef
             location = "group:Dependencies/ReleaseTools/Scripts">
          </FileRef>
       </Group>
-      <FileRef
-         location = "group:../CollectionExtensions">
-      </FileRef>
-      <FileRef
-         location = "group:../ActionStatusCore">
-      </FileRef>
-      <FileRef
-         location = "group:../SwiftUI-Introspect">
-      </FileRef>
       <FileRef
          location = "group:Dependencies/CatalystSparkle/CatalystSparkle.xcodeproj">
       </FileRef>
