@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+#  Created by Sam Deane on 27/02/2020.
+#  All code (c) 2020 - present day, Elegant Chaos Limited.
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+export RT_REBUILD=true
+source Dependencies/ReleaseTools/Scripts/make-tools
+
+echo "***************"
+echo "Preparing macOS"
+echo "***************"
+
+rt set scheme ActionStatus-macOS --platform macOS
+rt archive --show-output 2> /dev/null | xcpretty
+#rt export
+#rt notarize
+#rt wait
+#rt compress
+#rt appcast --show-output | xcpretty

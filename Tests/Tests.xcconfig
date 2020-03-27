@@ -3,5 +3,5 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-#include "Dependencies/ReleaseTools/Configs/Tests.xcconfig"
+#include "Dependencies/ReleaseTools/Configs/RTTests.xcconfig"
 #include "Sources/ActionStatus/Resources/ActionStatus.xcconfig"

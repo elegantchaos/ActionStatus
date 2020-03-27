@@ -107,9 +107,11 @@ then
     IDENTITY="-"
 fi
 
-USE_SPARKLE=true
-if [[ $USE_SPARKLE ]]
+if [[ $SKIP_SPARKLE ]]
 then
+    echo "Skipping Sparkle."
+else
+    echo "Adding Sparkle."
     ditto "$BUILT_PRODUCTS_DIR/SparkleBridgeClient.framework" "$RT_BUILT_FRAMEWORKS_DIR/SparkleBridgeClient.framework"
     copy_xpcs "$BUILT_PRODUCTS_DIR"
 fi

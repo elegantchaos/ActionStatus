@@ -4,7 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 
-#include "Dependencies/ReleaseTools/Configs/Mac.xcconfig"
+#include "Dependencies/ReleaseTools/Configs/RTMac.xcconfig"
 #include "Sources/ActionStatus/Resources/ActionStatus.xcconfig"
 
 SDKROOT = macosx
