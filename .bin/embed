@@ -107,6 +107,7 @@ then
     IDENTITY="-"
 fi
 
+USE_SPARKLE=true
 if [[ $USE_SPARKLE ]]
 then
     ditto "$BUILT_PRODUCTS_DIR/SparkleBridgeClient.framework" "$RT_BUILT_FRAMEWORKS_DIR/SparkleBridgeClient.framework"
