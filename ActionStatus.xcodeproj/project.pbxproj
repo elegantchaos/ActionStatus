@@ -161,7 +161,7 @@
 		8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		8B3BA5A4240540CC0071F0C1 /* AppKitBridge.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppKitBridge.entitlements; sourceTree = "<group>"; };
 		8B3C0576240FDAAD00FB533B /* ActionStatus.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ActionStatus.xctestplan; sourceTree = "<group>"; };
-		8B3E64A323EAE62D00B28168 /* .app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = .app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B3E64A323EAE62D00B28168 /* Action Status.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Action Status.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B3E64A623EAE62D00B28168 /* MobileApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileApplication.swift; sourceTree = "<group>"; };
 		8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		8B3E64AA23EAE62D00B28168 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -326,7 +326,7 @@
 		8B3E64A423EAE62D00B28168 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8B3E64A323EAE62D00B28168 /* .app */,
+				8B3E64A323EAE62D00B28168 /* Action Status.app */,
 				8B3E64B923EAE62E00B28168 /* Action Status.xctest */,
 				8B3E64C423EAE62F00B28168 /* Action Status.xctest */,
 				8B430E6A23F586100050BF2A /* Action Status.app */,
@@ -602,7 +602,7 @@
 				8B43A972241269D400A076AC /* URLExtensions */,
 			);
 			productName = GithubStatus;
-			productReference = 8B3E64A323EAE62D00B28168 /* .app */;
+			productReference = 8B3E64A323EAE62D00B28168 /* Action Status.app */;
 			productType = "com.apple.product-type.application";
 		};
 		8B3E64B823EAE62E00B28168 /* ActionStatusTests */ = {

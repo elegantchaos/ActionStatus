@@ -3,5 +3,5 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-#include "Dependencies/ReleaseTools/Configs/TV.xcconfig"
+#include "Dependencies/ReleaseTools/Configs/RTTV.xcconfig"
 #include "Sources/ActionStatus/Resources/ActionStatus.xcconfig"

@@ -3,6 +3,6 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-#include "Dependencies/ReleaseTools/Configs/Catalyst.xcconfig"
+#include "Dependencies/ReleaseTools/Configs/RTCatalyst.xcconfig"
 #include "Sources/ActionStatus/Resources/ActionStatus.xcconfig"
 
