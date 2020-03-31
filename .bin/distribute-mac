@@ -1,16 +1,20 @@
 #!/bin/bash
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-#  Created by Sam Deane on 27/02/2020.
+#  Created by Sam Deane on 25/03/2020.
 #  All code (c) 2020 - present day, Elegant Chaos Limited.
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-#export RT_REBUILD=true
 source Dependencies/ReleaseTools/Scripts/make-tools
 
 echo "***************"
-echo "Preparing macOS"
+echo "Releasing macOS"
 echo "***************"
 
 rt set scheme ActionStatus-macOS --platform macOS
-rt archive --xcconfig Sources/ActionStatus/Resources/SkipSparkle.xcconfig --show-output  | xcpretty
+rt archive --show-output 2> /dev/null | xcpretty
+rt export --distribution
+rt notarize
+rt wait
+rt compress
+rt publish

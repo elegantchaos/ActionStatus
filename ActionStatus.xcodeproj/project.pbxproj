@@ -141,13 +141,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2246FB24242E5428009E1731 /* NoSparkle.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = NoSparkle.xcconfig; sourceTree = "<group>"; };
+		2246FB24242E5428009E1731 /* SkipSparkle.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = SkipSparkle.xcconfig; sourceTree = "<group>"; };
 		2246FB25242E54B6009E1731 /* archive */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = archive; sourceTree = "<group>"; };
 		226F6559242D2045000AEA1C /* upload-all */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-all"; sourceTree = "<group>"; };
 		226F655A242D2045000AEA1C /* upload-tvOS */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-tvOS"; sourceTree = "<group>"; };
+		229B32A5242E59EF005A4FF9 /* upload-macOS */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-macOS"; sourceTree = "<group>"; };
 		8B03019F2417E3D0003A19A4 /* perform-checks */ = {isa = PBXFileReference; lastKnownFileType = text; path = "perform-checks"; sourceTree = "<group>"; };
-		8B045A7B2405591400EC21D6 /* prepare-mac */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = "prepare-mac"; sourceTree = "<group>"; };
-		8B045A7C2405591400EC21D6 /* release-mac */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = "release-mac"; sourceTree = "<group>"; };
+		8B045A7C2405591400EC21D6 /* distribute-mac */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = "distribute-mac"; sourceTree = "<group>"; };
 		8B045A7D2405591400EC21D6 /* rt */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = rt; sourceTree = "<group>"; };
 		8B045A7F2405591400EC21D6 /* downloads */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = downloads; sourceTree = "<group>"; };
 		8B045A8424055A6200EC21D6 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Assets; path = Extras/Assets; sourceTree = "<group>"; };
@@ -293,11 +293,11 @@
 				8B045A7F2405591400EC21D6 /* downloads */,
 				8B5AEB5224080D720065524B /* embed */,
 				8B03019F2417E3D0003A19A4 /* perform-checks */,
-				8B045A7B2405591400EC21D6 /* prepare-mac */,
-				8B045A7C2405591400EC21D6 /* release-mac */,
+				8B045A7C2405591400EC21D6 /* distribute-mac */,
 				2246FB25242E54B6009E1731 /* archive */,
 				8B045A7D2405591400EC21D6 /* rt */,
 				226F6559242D2045000AEA1C /* upload-all */,
+				229B32A5242E59EF005A4FF9 /* upload-macOS */,
 				226F655A242D2045000AEA1C /* upload-tvOS */,
 				8BA522A224057CAE00B82857 /* upload-iOS */,
 			);
@@ -447,7 +447,7 @@
 				8B5E7E9123F6C0A100087E15 /* BridgingHeader.h */,
 				8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */,
 				8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */,
-				2246FB24242E5428009E1731 /* NoSparkle.xcconfig */,
+				2246FB24242E5428009E1731 /* SkipSparkle.xcconfig */,
 				8B3E64AC23EAE62E00B28168 /* Assets.xcassets */,
 				8B430E9023F58E060050BF2A /* PreviewContent */,
 			);

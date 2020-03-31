@@ -7,14 +7,12 @@
 
 source Dependencies/ReleaseTools/Scripts/make-tools
 
+echo " "
 echo "***************"
-echo "Preparing macOS"
+echo "Uploading macOS"
 echo "***************"
 
 rt set scheme ActionStatus-macOS --platform macOS
-rt archive --show-output 2> /dev/null | xcpretty
-rt export
-rt notarize
-rt wait
-rt compress
-rt appcast --show-output | xcpretty
+rt archive --xcconfig Sources/ActionStatus/Resources/SkipSparkle.xcconfig --show-output 2> /dev/null | xcpretty
+rt export --platform=macOS
+rt upload --platform=macOS

@@ -7,3 +7,4 @@
 
 source upload-iOS
 source upload-tvOS
+source upload-macOS

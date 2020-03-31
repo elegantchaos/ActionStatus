@@ -11,6 +11,9 @@
          location = "container:"
          name = "Release Tools">
          <FileRef
+            location = "group:Dependencies/ReleaseTools/Sources">
+         </FileRef>
+         <FileRef
             location = "group:Dependencies/ReleaseTools/Configs">
          </FileRef>
          <FileRef
