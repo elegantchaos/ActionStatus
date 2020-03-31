@@ -146,7 +146,6 @@
 		226F6559242D2045000AEA1C /* upload-all */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-all"; sourceTree = "<group>"; };
 		226F655A242D2045000AEA1C /* upload-tvOS */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-tvOS"; sourceTree = "<group>"; };
 		229B32A5242E59EF005A4FF9 /* upload-macOS */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-macOS"; sourceTree = "<group>"; };
-		22F574C824336FEF00519C18 /* Action Status.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Action Status.entitlements"; sourceTree = "<group>"; };
 		8B03019F2417E3D0003A19A4 /* perform-checks */ = {isa = PBXFileReference; lastKnownFileType = text; path = "perform-checks"; sourceTree = "<group>"; };
 		8B045A7C2405591400EC21D6 /* distribute-mac */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = "distribute-mac"; sourceTree = "<group>"; };
 		8B045A7D2405591400EC21D6 /* rt */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = rt; sourceTree = "<group>"; };
@@ -319,7 +318,6 @@
 		8B3E649A23EAE62D00B28168 = {
 			isa = PBXGroup;
 			children = (
-				22F574C824336FEF00519C18 /* Action Status.entitlements */,
 				8B3E64A523EAE62D00B28168 /* Sources */,
 				8B522FA223F6E7B40020AD36 /* Tests */,
 				8B045A8324055A3C00EC21D6 /* Extras */,
@@ -1232,7 +1230,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8B5E7E6423F6A9C600087E15 /* TV.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "Action Status.entitlements";
 			};
 			name = Debug;
 		};
@@ -1240,7 +1237,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8B5E7E6423F6A9C600087E15 /* TV.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "Action Status.entitlements";
 			};
 			name = Release;
 		};
