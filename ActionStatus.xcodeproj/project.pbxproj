@@ -209,9 +209,7 @@
 		8B5E7E9223F6C0B600087E15 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		8B5E7E9323F6C0C200087E15 /* AppKitBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppKitBridge.h; sourceTree = "<group>"; };
 		8B6F181723F459570029F9CC /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
-		8BA5228D240573F400B82857 /* ExportOptions-macOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ExportOptions-macOS.plist"; sourceTree = "<group>"; };
 		8BA522A224057CAE00B82857 /* upload-iOS */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = "upload-iOS"; sourceTree = "<group>"; };
-		8BA522A32405804500B82857 /* ExportOptions-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ExportOptions-iOS.plist"; sourceTree = "<group>"; };
 		8BBFAA8B2403F09F0091157A /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		8BBFAA942403F8E80091157A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sparkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BDBC692240EB630005CDA0D /* Tests.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = Tests.yml; sourceTree = "<group>"; };
@@ -229,7 +227,6 @@
 		8BDBC6A3240EB752005CDA0D /* Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.44.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.44.png"; sourceTree = "<group>"; };
 		8BDBC6A4240EB752005CDA0D /* Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.19.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.19.png"; sourceTree = "<group>"; };
 		8BDBC6A6240EB752005CDA0D /* Simulator Screen Shot - Apple TV 4K - 2020-03-02 at 18.38.36.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - Apple TV 4K - 2020-03-02 at 18.38.36.png"; sourceTree = "<group>"; };
-		8BE3D08F2405934C00AB6CAD /* ExportOptions-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ExportOptions-tvOS.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -439,9 +436,6 @@
 		8B5B175223FADAAE00DD2AF5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8BA522A32405804500B82857 /* ExportOptions-iOS.plist */,
-				8BA5228D240573F400B82857 /* ExportOptions-macOS.plist */,
-				8BE3D08F2405934C00AB6CAD /* ExportOptions-tvOS.plist */,
 				8B3C0576240FDAAD00FB533B /* ActionStatus.xctestplan */,
 				8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */,
 				8B5E7E9123F6C0A100087E15 /* BridgingHeader.h */,
