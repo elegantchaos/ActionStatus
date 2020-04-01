@@ -75,7 +75,7 @@
 		8B43A9882412CD0100A076AC /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B43A9872412CD0100A076AC /* ViewExtensions.swift */; };
 		8B43A98A2412CF5B00A076AC /* RepoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B43A9892412CF5B00A076AC /* RepoListView.swift */; };
 		8B48938F240D502000E3E112 /* SparkleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5AEB492407F8410065524B /* SparkleView.swift */; };
-		8B4893AD240D581300E3E112 /* SparkleBridgeClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4893AC240D581200E3E112 /* SparkleBridgeClient.framework */; platformFilter = maccatalyst; };
+		8B4893AD240D581300E3E112 /* SparkleBridgeClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4893AC240D581200E3E112 /* SparkleBridgeClient.framework */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (Weak, ); }; };
 		8B5AEB482407EE630065524B /* SparkleUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5AEB472407EE630065524B /* SparkleUpdater.swift */; };
 		8B5AEB4A2407F8410065524B /* SparkleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5AEB492407F8410065524B /* SparkleView.swift */; };
 		8B5B175C23FAEB8200DD2AF5 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5B175B23FAEB8200DD2AF5 /* SwiftUIExtensions */; };

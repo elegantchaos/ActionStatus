@@ -31,7 +31,12 @@ class MobileApplication: Application {
     var sparkleBridge: SparkleBridgePlugin? = nil
 
     override func makeUpdater() -> Updater {
-        return SparkleUpdater()
+        let url = Bundle.main.bundleURL.appendingPathComponents(["Contents", "Frameworks", "SparkleBridgeClient.framework"])
+        if FileManager.default.fileExists(atPath: url.path) {
+            return SparkleUpdater()
+        } else {
+            return super.makeUpdater()
+        }
     }
     #endif
     
@@ -82,6 +87,7 @@ class MobileApplication: Application {
                     sparkleBridge?.checkForUpdates()
                 case .failure(let error):
                     print(error)
+                    self.updater = Updater()
             }
         }
         #endif
