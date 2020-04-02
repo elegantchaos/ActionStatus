@@ -28,10 +28,11 @@ class MobileApplication: Application {
     var appKitBridge: AppKitBridge? = nil
 
     #if canImport(SparkleBridgeClient)
+    let sparkleEnabled = Bundle.main.hasFramework(named: "SparkleBridgeClient")
     var sparkleBridge: SparkleBridgePlugin? = nil
 
     override func makeUpdater() -> Updater {
-        if Bundle.main.hasFramework(named: "SparkleBridgeClient") {
+        if sparkleEnabled {
             return SparkleUpdater()
         } else {
             return super.makeUpdater()
@@ -96,7 +97,7 @@ class MobileApplication: Application {
         if let bridgeURL = Bundle.main.url(forResource: "AppKitBridge", withExtension: "bundle"), let bundle = Bundle(url: bridgeURL) {
             if let cls = bundle.principalClass as? NSObject.Type {
                 if let instance = cls.init() as? AppKitBridge {
-                    instance.showUpdates = self.updater is SparkleUpdater
+                    instance.showUpdates = sparkleEnabled
                     appKitBridge = instance
                 }
             }
@@ -111,6 +112,7 @@ class MobileApplication: Application {
             builder.remove(menu: .format)
             builder.remove(menu: .toolbar)
 
+            buildCheckForUpdates(with: builder)
             buildShowStatus(with: builder)
             buildAddLocal(with: builder)
         }
@@ -123,7 +125,17 @@ class MobileApplication: Application {
             UIApplication.shared.open(url)
         }
     }
-    
+
+    func buildCheckForUpdates(with builder: UIMenuBuilder) {
+        if sparkleEnabled {
+            let command = UIKeyCommand(title: "Check For Updates…", image: nil, action: #selector(checkForUpdates), input: "", modifierFlags: [], propertyList: nil)
+            let menu = UIMenu(title: "", image: nil, identifier: UIMenu.Identifier("\(info.id).checkForUpdates"), options: .displayInline, children: [command])
+            builder.replaceChildren(ofMenu: .about) { (children) -> [UIMenuElement] in
+                return children + [command]
+            }
+        }
+    }
+
     func buildShowStatus(with builder: UIMenuBuilder) {
         if let bridge = appKitBridge {
             let command = UIKeyCommand(title: "Show Status Window", image: nil, action: bridge.showWindowSelector, input: "0", modifierFlags: .command, propertyList: nil)
