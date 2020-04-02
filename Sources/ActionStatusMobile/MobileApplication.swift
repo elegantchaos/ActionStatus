@@ -31,7 +31,7 @@ class MobileApplication: Application {
     var sparkleBridge: SparkleBridgePlugin? = nil
 
     override func makeUpdater() -> Updater {
-        if Bundle.main.hasFramework(named: "SparkleBridgeClient.framework") {
+        if Bundle.main.hasFramework(named: "SparkleBridgeClient") {
             return SparkleUpdater()
         } else {
             return super.makeUpdater()
@@ -42,8 +42,8 @@ class MobileApplication: Application {
     override var filePickerClass: FilePicker.Type { return MobileFilePicker.self }
 
     override func setUp(withOptions options: LaunchOptions) {
-        loadBridge()
         loadSparkle()
+        loadBridge()
         model.block = { self.updateBridge() }
         
         UserDefaults.standard.register(defaults: [
@@ -96,6 +96,7 @@ class MobileApplication: Application {
         if let bridgeURL = Bundle.main.url(forResource: "AppKitBridge", withExtension: "bundle"), let bundle = Bundle(url: bridgeURL) {
             if let cls = bundle.principalClass as? NSObject.Type {
                 if let instance = cls.init() as? AppKitBridge {
+                    instance.showUpdates = self.updater is SparkleUpdater
                     appKitBridge = instance
                 }
             }

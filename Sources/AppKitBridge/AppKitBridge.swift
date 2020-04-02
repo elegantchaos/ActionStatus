@@ -48,6 +48,7 @@ extension ItemStatus: CaseIterable {
     var mainWindow: NSWindow?
     var item: NSStatusItem?
     var status: ItemStatus = .unknown
+    var showUpdates = false
     
     var passing: Bool {
         get { return status == .succeeded }
@@ -173,7 +174,9 @@ extension AppKitBridgeImp: NSMenuDelegate {
             menu.addItem(withTitle: "About \(appName)", action: #selector(handleAbout(_:)), keyEquivalent: "")
             menu.addItem(withTitle: "Open \(appName)", action: #selector(handleShow(_:)), keyEquivalent: "")
             menu.addItem(withTitle: "Preferences…", action: #selector(handlePreferences(_:)), keyEquivalent: "")
-            menu.addItem(withTitle: "Check For Updates…", action: #selector(handleCheckForUpdates(_:)), keyEquivalent: "")
+            if showUpdates {
+                menu.addItem(withTitle: "Check For Updates…", action: #selector(handleCheckForUpdates(_:)), keyEquivalent: "")
+            }
             menu.addItem(withTitle: "Quit \(appName)", action: #selector(handleQuit(_:)), keyEquivalent: "")
         }
     }

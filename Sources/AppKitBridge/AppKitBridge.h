@@ -29,6 +29,7 @@ typedef NS_CLOSED_ENUM(NSUInteger, ItemStatus) {
 @property (nonatomic)BOOL passing;
 @property (nonatomic)BOOL showInMenu;
 @property (nonatomic) BOOL showInDock;
+@property (nonatomic) BOOL showUpdates;
 @property (nonatomic, readonly) SEL showWindowSelector;
 
 - (void) setupCapturingWindowNamed: (NSString*) windowName dataSource: (id<MenuDataSource>) source;
