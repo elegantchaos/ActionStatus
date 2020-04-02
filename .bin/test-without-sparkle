@@ -13,4 +13,7 @@ echo "Preparing macOS"
 echo "***************"
 
 rt set scheme ActionStatus-macOS --platform macOS
-rt archive --xcconfig Sources/ActionStatus/Resources/SkipSparkle.xcconfig --show-output  | xcpretty
+rt archive --xcconfig Sources/ActionStatus/Resources/SkipSparkle.xcconfig  | xcpretty
+rm -rf ~/Desktop/ActionStatusNoSparkle.app
+ditto ".build/macOS/archive.xcarchive/Products/Applications/Action Status.app" ~/Desktop/ActionStatusNoSparkle.app
+open ~/Desktop/ActionStatusNoSparkle.app

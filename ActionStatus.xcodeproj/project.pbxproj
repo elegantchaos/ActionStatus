@@ -142,7 +142,7 @@
 
 /* Begin PBXFileReference section */
 		2246FB24242E5428009E1731 /* SkipSparkle.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = SkipSparkle.xcconfig; sourceTree = "<group>"; };
-		2246FB25242E54B6009E1731 /* archive-without-sparkle */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "archive-without-sparkle"; sourceTree = "<group>"; };
+		2246FB25242E54B6009E1731 /* test-without-sparkle */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "test-without-sparkle"; sourceTree = "<group>"; };
 		226F6559242D2045000AEA1C /* upload-all */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-all"; sourceTree = "<group>"; };
 		226F655A242D2045000AEA1C /* upload-tvOS */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-tvOS"; sourceTree = "<group>"; };
 		229B32A5242E59EF005A4FF9 /* upload-macOS */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-macOS"; sourceTree = "<group>"; };
@@ -291,7 +291,7 @@
 				8B5AEB5224080D720065524B /* embed */,
 				8B03019F2417E3D0003A19A4 /* perform-checks */,
 				8B045A7C2405591400EC21D6 /* distribute-mac */,
-				2246FB25242E54B6009E1731 /* archive-without-sparkle */,
+				2246FB25242E54B6009E1731 /* test-without-sparkle */,
 				8B045A7D2405591400EC21D6 /* rt */,
 				226F6559242D2045000AEA1C /* upload-all */,
 				229B32A5242E59EF005A4FF9 /* upload-macOS */,
