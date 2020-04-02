@@ -58,6 +58,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         Application.shared.saveState()
     }
     
-    
 }
 

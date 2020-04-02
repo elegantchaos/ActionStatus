@@ -30,6 +30,7 @@
 }
 
 - (void)forwardInvocation:(NSInvocation *)invocation {
+//    NSLog(@"%@", NSStringFromSelector(invocation.selector));
     id target = (invocation.selector == @selector(windowShouldClose:)) ? _replacement : _original;
     [invocation invokeWithTarget:target];
 }

@@ -31,8 +31,7 @@ class MobileApplication: Application {
     var sparkleBridge: SparkleBridgePlugin? = nil
 
     override func makeUpdater() -> Updater {
-        let url = Bundle.main.bundleURL.appendingPathComponents(["Contents", "Frameworks", "SparkleBridgeClient.framework"])
-        if FileManager.default.fileExists(atPath: url.path) {
+        if Bundle.main.hasFramework(named: "SparkleBridgeClient.framework") {
             return SparkleUpdater()
         } else {
             return super.makeUpdater()
@@ -104,12 +103,24 @@ class MobileApplication: Application {
     }
     
     override func buildMenu(with builder: UIMenuBuilder) {
+        super.buildMenu(with: builder)
+        
         if builder.system == .main {
+            builder.remove(menu: .services)
+            builder.remove(menu: .format)
+            builder.remove(menu: .toolbar)
+
             buildShowStatus(with: builder)
             buildAddLocal(with: builder)
         }
-        
+
         next?.buildMenu(with: builder)
+    }
+    
+    @objc func showHelp(_ sender: Any) {
+        if let url = URL(string: "https://actionstatus.elegantchaos.com/help") {
+            UIApplication.shared.open(url)
+        }
     }
     
     func buildShowStatus(with builder: UIMenuBuilder) {

@@ -200,12 +200,16 @@ extension AppKitBridgeImp: NSMenuDelegate {
     @IBAction func handleShow(_ sender: Any) {
         mainWindow?.setIsVisible(true)
         mainWindow?.makeKeyAndOrderFront(self)
+        NSApp.activate(ignoringOtherApps: true)
     }
 
     @IBAction func handleQuit(_ sender: Any) {
         NSApp.terminate(self)
     }
 
+    @IBAction func handleHelp(_ sender: Any) {
+        print("help")
+    }
 }
 
 extension AppKitBridgeImp: NSWindowDelegate {

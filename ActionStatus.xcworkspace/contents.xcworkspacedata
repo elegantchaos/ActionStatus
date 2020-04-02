@@ -7,6 +7,12 @@
    <Group
       location = "group:"
       name = "Dependencies">
+      <FileRef
+         location = "group:../Bundles">
+      </FileRef>
+      <FileRef
+         location = "group:../ActionStatusCore">
+      </FileRef>
       <Group
          location = "container:"
          name = "Release Tools">

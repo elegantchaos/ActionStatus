@@ -2,21 +2,12 @@
   "object": {
     "pins": [
       {
-        "package": "ActionStatusCore",
-        "repositoryURL": "https://github.com/elegantchaos/ActionStatusCore.git",
-        "state": {
-          "branch": "master",
-          "revision": "d1187ca8f4620ce6523e224d9e76294354677839",
-          "version": null
-        }
-      },
-      {
         "package": "ApplicationExtensions",
         "repositoryURL": "https://github.com/elegantchaos/ApplicationExtensions.git",
         "state": {
           "branch": null,
-          "revision": "b8f48ff3f8d15ad15ab4077e17f92f3ae9e46381",
-          "version": "1.0.7"
+          "revision": "1da95b17f235c6029a0d307fcc0a1abfcdd6aa4a",
+          "version": "1.1.0"
         }
       },
       {
@@ -25,6 +16,15 @@
         "state": {
           "branch": null,
           "revision": "7431f1c8e03d54f53ec4848818ee53bb0bf34411",
+          "version": "1.0.1"
+        }
+      },
+      {
+        "package": "Bundles",
+        "repositoryURL": "https://github.com/elegantchaos/Bundles.git",
+        "state": {
+          "branch": null,
+          "revision": "84eb63313e79fd6bbe19e2a972d96a881beb1ec4",
           "version": "1.0.1"
         }
       },
@@ -47,6 +47,15 @@
         }
       },
       {
+        "package": "Files",
+        "repositoryURL": "https://github.com/elegantchaos/Files",
+        "state": {
+          "branch": null,
+          "revision": "fab79dce95afdcc1b7c6983d6874176465bd210a",
+          "version": "1.0.4"
+        }
+      },
+      {
         "package": "Hardware",
         "repositoryURL": "https://github.com/elegantchaos/Hardware.git",
         "state": {
@@ -56,12 +65,30 @@
         }
       },
       {
+        "package": "Images",
+        "repositoryURL": "https://github.com/elegantchaos/Images",
+        "state": {
+          "branch": null,
+          "revision": "59a9088a3f83e4e074df55e6d74b38cf52ffe75d",
+          "version": "1.0.0"
+        }
+      },
+      {
         "package": "Logger",
         "repositoryURL": "https://github.com/elegantchaos/Logger.git",
         "state": {
           "branch": null,
-          "revision": "e4073d0427146d2884730d0cdcb62e4ce0f80938",
-          "version": "1.5.2"
+          "revision": "cd67757f696ce6c8353d874d867a49b8e2306e2f",
+          "version": "1.5.3"
+        }
+      },
+      {
+        "package": "SemanticVersion",
+        "repositoryURL": "https://github.com/elegantchaos/SemanticVersion",
+        "state": {
+          "branch": null,
+          "revision": "6bda5a45a2f687a82a0fbb002bee8ad31e44f478",
+          "version": "1.1.0"
         }
       },
       {

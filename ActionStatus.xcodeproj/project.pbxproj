@@ -1363,7 +1363,7 @@
 			repositoryURL = "https://github.com/elegantchaos/ApplicationExtensions.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.6;
+				minimumVersion = 1.1.0;
 			};
 		};
 		8B69B68923FEDB6D00030A2B /* XCRemoteSwiftPackageReference "DictionaryCoding" */ = {
