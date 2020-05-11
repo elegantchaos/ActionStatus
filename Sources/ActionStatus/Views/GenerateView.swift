@@ -87,7 +87,8 @@ struct GenerateView: View {
     }
     
     func togglesSection(title: String, options: [Option], toggles: Binding<[Bool]>) -> some View {
-        let allSet = toggles.wrappedValue.filter({ $0 }).count == toggles.wrappedValue.count
+        let count = toggles.wrappedValue.count
+        let allSet = toggles.wrappedValue.filter({ $0 }).count == count
         return Section(header:
             HStack {
                 Text(title).font(.headline)
@@ -102,9 +103,8 @@ struct GenerateView: View {
                 }
             }
         ) {
-                    
-            VStack {
-                ForEach(0 ..< toggles.wrappedValue.count) { index in
+            return VStack {
+                ForEach(0 ..< count, id: \.self) { index in
                     Toggle(isOn: toggles[index]) {
                         Text(options[index].label)
                     }
