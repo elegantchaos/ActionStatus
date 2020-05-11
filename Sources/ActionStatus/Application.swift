@@ -7,7 +7,6 @@ import ActionStatusCore
 import ApplicationExtensions
 import Logger
 import SwiftUI
-import URLExtensions
 import Hardware
 
 let settingsChannel = Channel("Settings")

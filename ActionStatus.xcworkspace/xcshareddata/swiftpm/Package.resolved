@@ -108,15 +108,6 @@
           "revision": "0eb8611b33230c83cc10142d0246cb3b9f58f5da",
           "version": "1.0.6"
         }
-      },
-      {
-        "package": "Files",
-        "repositoryURL": "https://github.com/elegantchaos/URLExtensions.git",
-        "state": {
-          "branch": null,
-          "revision": "fab79dce95afdcc1b7c6983d6874176465bd210a",
-          "version": "1.0.4"
-        }
       }
     ]
   },
