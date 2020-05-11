@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/elegantchaos/ApplicationExtensions.git",
         "state": {
           "branch": null,
-          "revision": "1da95b17f235c6029a0d307fcc0a1abfcdd6aa4a",
-          "version": "1.1.0"
+          "revision": "818495a0d1076b01fcad16b58b60b9130e8cb418",
+          "version": "1.1.2"
         }
       },
       {
@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/elegantchaos/Bundles.git",
         "state": {
           "branch": null,
-          "revision": "84eb63313e79fd6bbe19e2a972d96a881beb1ec4",
-          "version": "1.0.1"
+          "revision": "e21d9b688841404ed0bcc3921616364f494d1359",
+          "version": "1.0.4"
         }
       },
       {
@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/elegantchaos/CollectionExtensions.git",
         "state": {
           "branch": null,
-          "revision": "d38d95d1458f1ef877c72584895da51e1b2d5149",
-          "version": "1.0.1"
+          "revision": "002f744b085c162f37783b8a629ae6364c558c3a",
+          "version": "1.0.2"
         }
       },
       {
@@ -48,7 +48,7 @@
       },
       {
         "package": "Files",
-        "repositoryURL": "https://github.com/elegantchaos/Files",
+        "repositoryURL": "https://github.com/elegantchaos/Files.git",
         "state": {
           "branch": null,
           "revision": "fab79dce95afdcc1b7c6983d6874176465bd210a",
@@ -66,7 +66,7 @@
       },
       {
         "package": "Images",
-        "repositoryURL": "https://github.com/elegantchaos/Images",
+        "repositoryURL": "https://github.com/elegantchaos/Images.git",
         "state": {
           "branch": null,
           "revision": "59a9088a3f83e4e074df55e6d74b38cf52ffe75d",
@@ -78,13 +78,13 @@
         "repositoryURL": "https://github.com/elegantchaos/Logger.git",
         "state": {
           "branch": null,
-          "revision": "cd67757f696ce6c8353d874d867a49b8e2306e2f",
-          "version": "1.5.3"
+          "revision": "31d5b53ed8e91cadc1a6cdd4f6ddf1998bed841a",
+          "version": "1.5.4"
         }
       },
       {
         "package": "SemanticVersion",
-        "repositoryURL": "https://github.com/elegantchaos/SemanticVersion",
+        "repositoryURL": "https://github.com/elegantchaos/SemanticVersion.git",
         "state": {
           "branch": null,
           "revision": "6bda5a45a2f687a82a0fbb002bee8ad31e44f478",
@@ -105,17 +105,17 @@
         "repositoryURL": "https://github.com/elegantchaos/SwiftUIExtensions.git",
         "state": {
           "branch": null,
-          "revision": "73f97316000da554ebb899168399d23506aea29e",
-          "version": "1.0.4"
+          "revision": "0eb8611b33230c83cc10142d0246cb3b9f58f5da",
+          "version": "1.0.6"
         }
       },
       {
-        "package": "URLExtensions",
+        "package": "Files",
         "repositoryURL": "https://github.com/elegantchaos/URLExtensions.git",
         "state": {
           "branch": null,
-          "revision": "86fcffb5f6ce429253c0bb5e179a885b42ef268e",
-          "version": "1.0.2"
+          "revision": "fab79dce95afdcc1b7c6983d6874176465bd210a",
+          "version": "1.0.4"
         }
       }
     ]
