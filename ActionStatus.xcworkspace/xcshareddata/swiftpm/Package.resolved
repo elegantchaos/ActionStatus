@@ -74,15 +74,6 @@
         }
       },
       {
-        "package": "Logger",
-        "repositoryURL": "https://github.com/elegantchaos/Logger.git",
-        "state": {
-          "branch": null,
-          "revision": "31d5b53ed8e91cadc1a6cdd4f6ddf1998bed841a",
-          "version": "1.5.4"
-        }
-      },
-      {
         "package": "SemanticVersion",
         "repositoryURL": "https://github.com/elegantchaos/SemanticVersion.git",
         "state": {

@@ -16,7 +16,7 @@ internal extension View {
     // MARK: tvOS Overrides
     
     func rowPadding() -> some View {
-        return self.padding(.horizontal, 80.0) // TODO: remove this special case
+        return self.padding(.horizontal) // TODO: remove this special case
     }
     
     #elseif canImport(UIKit)

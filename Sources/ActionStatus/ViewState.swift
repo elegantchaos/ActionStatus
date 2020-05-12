@@ -12,11 +12,31 @@ class ViewState: ObservableObject {
         case save
     }
 
+    enum TextSize: Int {
+        case automatic = 0
+        case small = 1
+        case medium = 2
+        case large = 3
+        case huge = 4
+        
+        var font: Font {
+            switch self {
+                case .automatic, .large: return .title
+                case .huge: return .largeTitle
+                case .medium: return .headline
+                case .small: return .body
+            }
+        }
+        
+        var rowHeight: CGFloat { return 0 }
+    }
+    
     @Published var hasSheet = false
     @Published var sheetType: SheetType = .compose
     @Published var composingID: UUID? = nil
     @Published var isEditing: Bool = false
     @Published var selectedID: UUID? = nil
+    @Published var repoTextSize: TextSize = .automatic
     
     func showComposeSheet(forRepoId id: UUID) {
         composingID = id

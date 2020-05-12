@@ -8,11 +8,13 @@ import ApplicationExtensions
 import Logger
 import SwiftUI
 import Hardware
+import Files
 
 let settingsChannel = Channel("Settings")
 
 internal extension String {
     static let refreshIntervalKey = "RefreshInterval"
+    static let textSizeKey = "TextSize"
 }
 
 class Application: BasicApplication {
@@ -54,7 +56,8 @@ class Application: BasicApplication {
         super.setUp(withOptions: options)
         
         UserDefaults.standard.register(defaults: [
-            .refreshIntervalKey : 60
+            .refreshIntervalKey: 60,
+            .textSizeKey: ViewState.TextSize.automatic.rawValue
         ])
         
         restoreState()
@@ -74,11 +77,14 @@ class Application: BasicApplication {
     }
     
     func applySettings() {
-        let interval = UserDefaults.standard.integer(forKey: .refreshIntervalKey)
+        let defaults = UserDefaults.standard
+        let interval = defaults.integer(forKey: .refreshIntervalKey)
         if interval > 0 {
             model.refreshInterval = Double(interval)
         }
         
+        viewState.repoTextSize = ViewState.TextSize(rawValue: defaults.integer(forKey: .textSizeKey)) ?? .automatic
+
         settingsChannel.log("\(String.refreshIntervalKey) is \(interval)")
     }
     

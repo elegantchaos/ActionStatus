@@ -12,14 +12,14 @@ struct RepoListView: View {
     @EnvironmentObject var viewState: ViewState
 
     var body: some View {
-        VStack(alignment: .leading) {
             List {
                 ForEach(model.itemIdentifiers, id: \.self) { repoID in
                     self.rowView(for: repoID, selectable: false)
                 }
                 .onDelete(perform: delete)
             }
-        }.bindEditing(to: $viewState.isEditing)
+            .environment(\.defaultMinListRowHeight, viewState.repoTextSize.rowHeight)
+            .bindEditing(to: $viewState.isEditing)
     }
 
     func delete(at offsets: IndexSet) {
@@ -52,7 +52,7 @@ struct RepoListView: View {
                 .lineLimit(1)
         }
         .rowPadding()
-        .font(.title)
+        .font(viewState.repoTextSize.font)
         .onTapGestureShim() {
             if selectable {
                 self.viewState.selectedID = repo.id
