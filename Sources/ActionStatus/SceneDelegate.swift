@@ -17,6 +17,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .environmentObject(app.updater)
         
         if let windowScene = scene as? UIWindowScene {
+            if let titlebar = windowScene.titlebar {
+                titlebar.titleVisibility = .hidden
+                titlebar.toolbar = nil
+            }
+
             let window = UIWindow(windowScene: windowScene)
             window.rootViewController = UIHostingController(rootView: content)
             self.window = window

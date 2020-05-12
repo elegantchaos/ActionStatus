@@ -29,8 +29,9 @@ struct RepoListView: View {
 
     func rowView(for repoID: UUID, selectable: Bool) -> some View {
         if viewState.isEditing {
+            let repo = model.repo(withIdentifier: repoID)!
             return AnyView(NavigationLink(
-                destination: EditView(repoID: repoID),
+                destination: EditView(repoID: repoID, title: repo.name),
                 tag: repoID,
                 selection: $viewState.selectedID) {
                     self.basicRowView(for: repoID, selectable: true)
@@ -65,7 +66,7 @@ struct RepoListView: View {
         return view.contextMenu() {
             VStack {
                 NavigationLink(
-                    destination: EditView(repoID: repoID),
+                    destination: EditView(repoID: repoID, title: repo.name),
                     tag: repoID,
                     selection: $viewState.selectedID) {
                         Text("Edit…")

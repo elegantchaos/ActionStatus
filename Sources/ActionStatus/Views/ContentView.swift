@@ -84,8 +84,12 @@ fileprivate extension View {
     // MARK: iOS/tvOS
     
     func setupNavigation() -> some View {
-        return navigationBarHidden(false)
-        .navigationBarTitle("Action Status", displayMode: .inline)
+        let isMac = UIDevice.current.systemName == "Mac OS X"
+        
+        return
+            navigationBarHidden(false) // TODO: hide this here, when showing it works properly!
+            .navigationBarBackButtonHidden(false) // TODO: ditto here
+            .navigationBarTitle("Action Status", displayMode: .inline)
         .navigationBarItems(
             leading: AddButton(),
             trailing: EditButton())

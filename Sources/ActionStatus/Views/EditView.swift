@@ -36,12 +36,17 @@ struct EditView: View {
     #endif
 
     let repoID: UUID
+    let title: String
     
     @EnvironmentObject var model: Model
     
     var repo: Repo {
         model.repo(withIdentifier: repoID)!
     }
+    
+//    var title: String {
+//        return "\(trimmedOwner)/\(trimmedName)"
+//    }
     
     @State var name = ""
     @State var owner = ""
@@ -140,7 +145,7 @@ struct EditView: View {
         .onDisappear() {
             self.save()
         }
-        .configureNavigation(title: "\(trimmedOwner)/\(trimmedName)")
+        .configureNavigation(title: title)
     }
     
     var trimmedWorkflow: String {
@@ -183,15 +188,16 @@ struct EditView: View {
 
 struct RepoEditView_Previews: PreviewProvider {
     static var previews: some View {
-        EditView(repoID: Application.shared.testRepos[0].id)
+        EditView(repoID: Application.shared.testRepos[0].id, title: "Test")
     }
 }
 
 fileprivate extension View {
     #if canImport(UIKit)
     func configureNavigation(title: String) -> some View {
-        return navigationBarTitle(title)
+        return navigationBarTitle("Editing: \(title)", displayMode: .inline)
             .navigationBarHidden(false)
+            .navigationBarBackButtonHidden(false)
     }
     #else
     func configureNavigation(title: String) -> some View {
