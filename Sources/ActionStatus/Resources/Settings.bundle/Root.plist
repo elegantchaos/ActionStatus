@@ -44,7 +44,7 @@
 			<key>Type</key>
 			<string>PSMultiValueSpecifier</string>
 			<key>Title</key>
-			<string>Text Size</string>
+			<string>Label Size</string>
 			<key>Key</key>
 			<string>TextSize</string>
 			<key>DefaultValue</key>
