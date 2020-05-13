@@ -18,8 +18,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         if let windowScene = scene as? UIWindowScene {
             if let titlebar = windowScene.titlebar {
+                let toolbar = app.appKitBridge?.makeToolbar() as? NSToolbar
                 titlebar.titleVisibility = .hidden
-                titlebar.toolbar = nil
+                titlebar.toolbar = toolbar
             }
 
             let window = UIWindow(windowScene: windowScene)
@@ -64,4 +65,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
 }
-

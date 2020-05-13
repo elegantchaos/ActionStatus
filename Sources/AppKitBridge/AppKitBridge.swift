@@ -126,7 +126,7 @@ extension AppKitBridgeImp: AppKitBridge {
         }
 
     }
-    
+        
     var showInDock: Bool {
         get { return NSApp.activationPolicy() == .regular }
         set {
@@ -219,5 +219,58 @@ extension AppKitBridgeImp: NSWindowDelegate {
     func windowShouldClose(_ sender: NSWindow) -> Bool {
         sender.setIsVisible(false)
         return false;
+    }
+}
+
+
+extension NSToolbarItem.Identifier {
+    static var titleLabel = Self.init("title")
+    static var editButton = Self.init("edit")
+}
+
+extension AppKitBridgeImp: NSToolbarDelegate {
+    func makeToolbar() -> Any {
+        let toolbar = NSToolbar(identifier: "test")
+        toolbar.delegate = self
+        toolbar.displayMode = .iconAndLabel
+        toolbar.centeredItemIdentifier = .titleLabel
+        
+        return toolbar
+    }
+
+    func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
+        switch itemIdentifier {
+            case .titleLabel:
+                let item = NSToolbarItem(itemIdentifier: .titleLabel)
+                item.view = NSTextField(labelWithString: "Blah")
+                return item
+
+            case .editButton:
+                let item = NSToolbarItem(itemIdentifier: .editButton)
+                item.label = "edit"
+                item.image = NSImage(named: "NSListViewTemplate")
+                item.action = #selector(handleEdit(_:))
+                item.target = self
+                return item
+            
+            default:
+                return nil
+        }
+    }
+    
+    func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+        return [.flexibleSpace,.titleLabel,.flexibleSpace,.editButton]
+    }
+    
+    func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+        return [.titleLabel, .editButton]
+    }
+    
+    func toolbarSelectableItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+        return [.editButton]
+    }
+    
+    @IBAction func handleEdit(_ sender: Any) {
+        print("edit")
     }
 }

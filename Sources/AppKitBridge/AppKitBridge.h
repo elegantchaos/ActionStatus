@@ -33,6 +33,7 @@ typedef NS_CLOSED_ENUM(NSUInteger, ItemStatus) {
 @property (nonatomic, readonly) SEL showWindowSelector;
 
 - (void) setupCapturingWindowNamed: (NSString*) windowName dataSource: (id<MenuDataSource>) source;
+- (id) makeToolbar;
 @end
 
 @interface AppKitBridgeImp <AppKitBridge>
