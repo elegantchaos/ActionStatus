@@ -23,6 +23,7 @@ typedef NS_CLOSED_ENUM(NSUInteger, ItemStatus) {
 - (ItemStatus) statusForItem: (NSInteger) item;
 - (void) selectItem: (NSInteger) item;
 - (void) checkForUpdates;
+- (BOOL) toggleEditing;
 @end
 
 @protocol AppKitBridge <NSObject>

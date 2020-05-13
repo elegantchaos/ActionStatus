@@ -195,4 +195,9 @@ extension MobileApplication: MenuDataSource {
         sparkleBridge?.checkForUpdates()
         #endif
     }
+    
+    func toggleEditing() -> Bool {
+        viewState.isEditing = !viewState.isEditing
+        return viewState.isEditing
+    }
 }

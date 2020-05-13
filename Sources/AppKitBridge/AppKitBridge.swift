@@ -46,7 +46,8 @@ extension ItemStatus: CaseIterable {
     var menuSource: MenuDataSource?
     var windowInterceptor: InterceptingDelegate?
     var mainWindow: NSWindow?
-    var item: NSStatusItem?
+    var statusItem: NSStatusItem?
+    var editingItem: NSToolbarItem?
     var status: ItemStatus = .unknown
     var showUpdates = false
     
@@ -74,7 +75,7 @@ extension ItemStatus: CaseIterable {
     }
 
     func setupMenu() {
-        assert(item == nil)
+        assert(statusItem == nil)
         let status = NSStatusBar.system
         let newItem = status.statusItem(withLength: 22)
         if let button = newItem.button {
@@ -84,18 +85,18 @@ extension ItemStatus: CaseIterable {
         let menu = NSMenu(title: "Repos")
         menu.delegate = self
         newItem.menu = menu
-        item = newItem
+        statusItem = newItem
         updateImage()
     }
     
     func tearDownMenu() {
-        assert(item != nil)
-        NSStatusBar.system.removeStatusItem(item!)
-        item = nil
+        assert(statusItem != nil)
+        NSStatusBar.system.removeStatusItem(statusItem!)
+        statusItem = nil
     }
     
     func updateImage() {
-        if let button = item?.button {
+        if let button = statusItem?.button {
             let mode: ImageMode = NSApp.isActive ? .foreground : .background
             button.image = (images[mode])?[status]
         }
@@ -140,11 +141,11 @@ extension AppKitBridgeImp: AppKitBridge {
     }
     
     var showInMenu: Bool {
-        get { return item != nil }
+        get { return statusItem != nil }
         set {
-            if newValue && (item == nil) {
+            if newValue && (statusItem == nil) {
                 setupMenu()
-            } else if !newValue && (item != nil) {
+            } else if !newValue && (statusItem != nil) {
                 tearDownMenu()
             }
         }
@@ -158,7 +159,7 @@ extension AppKitBridgeImp: AppKitBridge {
 
 extension AppKitBridgeImp: NSMenuDelegate {
     func menuNeedsUpdate(_ menu: NSMenu) {
-        if menu == item?.menu {
+        if menu == statusItem?.menu {
             menu.removeAllItems()
             if let menuSource = menuSource {
                 for n in 0 ..< menuSource.itemCount() {
@@ -232,7 +233,8 @@ extension AppKitBridgeImp: NSToolbarDelegate {
     func makeToolbar() -> Any {
         let toolbar = NSToolbar(identifier: "test")
         toolbar.delegate = self
-        toolbar.displayMode = .iconAndLabel
+        toolbar.displayMode = .iconOnly
+        toolbar.sizeMode = .small
         toolbar.centeredItemIdentifier = .titleLabel
         
         return toolbar
@@ -242,15 +244,19 @@ extension AppKitBridgeImp: NSToolbarDelegate {
         switch itemIdentifier {
             case .titleLabel:
                 let item = NSToolbarItem(itemIdentifier: .titleLabel)
-                item.view = NSTextField(labelWithString: "Blah")
+                item.view = NSTextField(labelWithString: mainWindow?.title ?? "Action Status")
                 return item
 
             case .editButton:
+                let image = NSImage(named: "NSLockLockedTemplate")
+                let button = NSButton(image: image!, target: self, action: #selector(handleEdit(_:)))
+                button.isBordered = false
                 let item = NSToolbarItem(itemIdentifier: .editButton)
-                item.label = "edit"
-                item.image = NSImage(named: "NSListViewTemplate")
-                item.action = #selector(handleEdit(_:))
-                item.target = self
+                item.view = button
+//                item.action = #selector(handleEdit(_:))
+//                item.target = self
+//                item.isBordered = false
+                editingItem = item
                 return item
             
             default:
@@ -267,10 +273,15 @@ extension AppKitBridgeImp: NSToolbarDelegate {
     }
     
     func toolbarSelectableItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-        return [.editButton]
+        return []
     }
     
     @IBAction func handleEdit(_ sender: Any) {
-        print("edit")
+        if let isEditing = menuSource?.toggleEditing(), let item = editingItem, let button = item.view as? NSButton {
+            button.image = NSImage(named: isEditing ? "NSLockUnlockedTemplate" : "NSLockLockedTemplate")
+//            button.isBordered = isEditing
+            button.isHighlighted = isEditing
+//            item.isBordered = isEditing
+        }
     }
 }

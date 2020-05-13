@@ -14,21 +14,21 @@ struct ContentView: View {
     @EnvironmentObject var viewState: ViewState
     
     var body: some View {
-            NavigationView {
-                VStack(alignment: .center) {
-                    if model.itemIdentifiers.count == 0 {
-                        NoReposView()
-                    }
-
-                    RepoListView()
-                    Spacer()
-                    FooterView()
+        NavigationView {
+            VStack(alignment: .center) {
+                if model.itemIdentifiers.count == 0 {
+                    NoReposView()
                 }
-                .setupNavigation()
-                .sheet(isPresented: $viewState.hasSheet) { self.sheetView() }
+                
+                RepoListView()
+                Spacer()
+                FooterView()
             }
-            .setupNavigationStyle()
-            .onAppear(perform: onAppear)
+            .setupNavigation()
+            .sheet(isPresented: $viewState.hasSheet) { self.sheetView() }
+        }
+        .setupNavigationStyle()
+        .onAppear(perform: onAppear)
     }
     
     func onAppear()  {
@@ -42,22 +42,22 @@ struct ContentView: View {
     func sheetView() -> some View {
         switch viewState.sheetType {
             case .save:
-            #if !os(tvOS)
+                #if !os(tvOS)
                 return AnyView(DocumentPickerViewController(picker: Application.shared.pickerForSavingWorkflow()))
             #endif
-
+            
             case .compose:
                 if let id = viewState.composingID {
                     return AnyView(
                         GenerateView(repoID: id, isPresented: self.$viewState.hasSheet)
-                                                .environmentObject(self.model) // TODO: this should not be needed, but seems to be :(
+                            .environmentObject(self.model) // TODO: this should not be needed, but seems to be :(
                     )
-                }
+            }
         }
-
+        
         return AnyView(EmptyView())
     }
-
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
@@ -67,36 +67,32 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 fileprivate extension View {
+    #if os(tvOS) || targetEnvironment(macCatalyst)
     
-    #if os(tvOS)
-
-    // MARK: tvOS Overrides
+    // MARK: tvOS/macOS Don't show nav bar
     
     func setupNavigation() -> some View {
-        return navigationBarHidden(false)
+        return navigationBarHidden(true)
     }
+    
     func setupNavigationStyle() -> some View {
         return navigationViewStyle(StackNavigationViewStyle())
     }
     
     #elseif canImport(UIKit)
     
-    // MARK: iOS/tvOS
+    // MARK: iOS
     
     func setupNavigation() -> some View {
-        let isMac = UIDevice.current.systemName == "Mac OS X"
-        
         return
-            navigationBarHidden(false) // TODO: hide this here, when showing it works properly!
-            .navigationBarBackButtonHidden(false) // TODO: ditto here
-            .navigationBarTitle("Action Status", displayMode: .inline)
-        .navigationBarItems(
-            leading: AddButton(),
-            trailing: EditButton())
+            navigationBarTitle("Action Status", displayMode: .inline)
+                .navigationBarItems(
+                    leading: AddButton(),
+                    trailing: EditButton())
     }
     func setupNavigationStyle() -> some View {
         return navigationViewStyle(StackNavigationViewStyle())
     }
-
+    
     #endif
 }
