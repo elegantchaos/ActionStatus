@@ -195,7 +195,8 @@ struct RepoEditView_Previews: PreviewProvider {
 fileprivate extension View {
     #if canImport(UIKit)
     func configureNavigation(title: String) -> some View {
-        return navigationBarTitle("Editing: \(title)", displayMode: .inline)
+//        return navigationBarTitle("Editing: \(title)", displayMode: .large)
+            return navigationBarTitle("")
             .navigationBarHidden(false)
             .navigationBarBackButtonHidden(false)
     }

@@ -45,7 +45,15 @@ struct ContentView: View {
                 #if !os(tvOS)
                 return AnyView(DocumentPickerViewController(picker: Application.shared.pickerForSavingWorkflow()))
             #endif
-            
+
+            case .edit:
+                if let id = viewState.composingID {
+                    return AnyView(
+                        EditView(repoID: id, title: "Edit")
+                            .environmentObject(self.model) // TODO: this should not be needed, but seems to be :(
+                    )
+            }
+
             case .compose:
                 if let id = viewState.composingID {
                     return AnyView(
@@ -72,7 +80,9 @@ fileprivate extension View {
     // MARK: tvOS/macOS Don't show nav bar
     
     func setupNavigation() -> some View {
-        return navigationBarHidden(true)
+        return
+            navigationBarTitle("")
+                .navigationBarHidden(true)
     }
     
     func setupNavigationStyle() -> some View {
@@ -90,6 +100,7 @@ fileprivate extension View {
                     leading: AddButton(),
                     trailing: EditButton())
     }
+    
     func setupNavigationStyle() -> some View {
         return navigationViewStyle(StackNavigationViewStyle())
     }

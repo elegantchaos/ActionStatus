@@ -8,6 +8,7 @@ import ActionStatusCore
 
 class ViewState: ObservableObject {
     enum SheetType {
+        case edit
         case compose
         case save
     }
@@ -37,7 +38,13 @@ class ViewState: ObservableObject {
     @Published var isEditing: Bool = false
     @Published var selectedID: UUID? = nil
     @Published var repoTextSize: TextSize = .automatic
-    
+
+    func showEditSheet(forRepoId id: UUID) {
+        composingID = id
+        sheetType = .edit
+        hasSheet = true
+    }
+
     func showComposeSheet(forRepoId id: UUID) {
         composingID = id
         sheetType = .compose

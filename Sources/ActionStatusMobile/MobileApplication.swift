@@ -97,7 +97,9 @@ class MobileApplication: Application {
         if let bridgeURL = Bundle.main.url(forResource: "AppKitBridge", withExtension: "bundle"), let bundle = Bundle(url: bridgeURL) {
             if let cls = bundle.principalClass as? NSObject.Type {
                 if let instance = cls.init() as? AppKitBridge {
+                    #if canImport(SparkleBridgeClient)
                     instance.showUpdates = sparkleEnabled
+                    #endif
                     appKitBridge = instance
                 }
             }
@@ -127,6 +129,7 @@ class MobileApplication: Application {
     }
 
     func buildCheckForUpdates(with builder: UIMenuBuilder) {
+        #if canImport(SparkleBridgeClient)
         if sparkleEnabled {
             let command = UIKeyCommand(title: "Check For Updates…", image: nil, action: #selector(checkForUpdates), input: "", modifierFlags: [], propertyList: nil)
             let menu = UIMenu(title: "", image: nil, identifier: UIMenu.Identifier("\(info.id).checkForUpdates"), options: .displayInline, children: [command])
@@ -134,6 +137,7 @@ class MobileApplication: Application {
                 return children + [command]
             }
         }
+        #endif
     }
 
     func buildShowStatus(with builder: UIMenuBuilder) {

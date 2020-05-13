@@ -17,11 +17,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .environmentObject(app.updater)
         
         if let windowScene = scene as? UIWindowScene {
+            #if targetEnvironment(macCatalyst)
             if let titlebar = windowScene.titlebar {
                 let toolbar = app.appKitBridge?.makeToolbar() as? NSToolbar
                 titlebar.titleVisibility = .hidden
                 titlebar.toolbar = toolbar
             }
+            #endif
 
             let window = UIWindow(windowScene: windowScene)
             window.rootViewController = UIHostingController(rootView: content)

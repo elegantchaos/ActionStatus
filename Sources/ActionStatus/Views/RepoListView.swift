@@ -65,12 +65,17 @@ struct RepoListView: View {
         #else
         return view.contextMenu() {
             VStack {
-                NavigationLink(
-                    destination: EditView(repoID: repoID, title: repo.name),
-                    tag: repoID,
-                    selection: $viewState.selectedID) {
-                        Text("Edit…")
+                Button(action: {
+                    self.viewState.showEditSheet(forRepoId: repo.id)
+                }) {
+                    Text("Edit…")
                 }
+//                NavigationLink(
+//                    destination: EditView(repoID: repoID, title: repo.name),
+//                    tag: repoID,
+//                    selection: $viewState.selectedID) {
+//                        Text("Edit…")
+//                }
                 
                 Button(action: { self.model.remove(repos: [repoID]) }) {
                     Text("Delete")
