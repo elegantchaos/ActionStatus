@@ -130,7 +130,7 @@ struct EditView: View {
                         Spacer()
                         
                         Button(action: { Application.shared.openGithub(with: self.repo, at: .repo) }) {
-                            SystemImage("arrowshape.turn.up.right")
+                            SystemImage("arrowshape.turn.up.right.circle")
                         }
                     }
                     

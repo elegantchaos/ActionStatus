@@ -10,75 +10,83 @@ import ActionStatusCore
 struct RepoListView: View {
     @EnvironmentObject var model: Model
     @EnvironmentObject var viewState: ViewState
-
+    
     var body: some View {
-            List {
-                ForEach(model.itemIdentifiers, id: \.self) { repoID in
-                    self.rowView(for: repoID, selectable: false)
-                }
-                .onDelete(perform: delete)
+        List {
+            ForEach(model.itemIdentifiers, id: \.self) { repoID in
+                self.rowView(for: repoID)
             }
-            .environment(\.defaultMinListRowHeight, viewState.repoTextSize.rowHeight)
-            .bindEditing(to: $viewState.isEditing)
+            .onDelete(perform: delete)
+        }
+        .environment(\.defaultMinListRowHeight, viewState.repoTextSize.rowHeight)
+        .bindEditing(to: $viewState.isEditing)
     }
-
+    
     func delete(at offsets: IndexSet) {
         model.remove(atOffsets: offsets)
         Application.shared.saveState()
     }
-
-    func rowView(for repoID: UUID, selectable: Bool) -> some View {
-        if viewState.isEditing {
-            return AnyView(
-                HStack {
-                    self.basicRowView(for: repoID, selectable: true)
-                    Button(action: { self.viewState.showEditSheet(forRepoId: repoID) }) {
-                        SystemImage("pencil.and.ellipsis.rectangle")
-                    }
-                }
-                    .padding([.leading, .trailing], 10)
-                )
-        } else {
-            return AnyView(self.basicRowView(for: repoID, selectable: false))
-        }
+    
+    func edit(repoID: UUID) {
+        viewState.showEditSheet(forRepoId: repoID)
     }
     
-    func basicRowView(for repoID: UUID, selectable: Bool) -> some View {
+    func rowView(for repoID: UUID) -> some View {
+        let selectable = viewState.isEditing
         let repo = model.repo(withIdentifier: repoID)!
-        let view = HStack(alignment: .center, spacing: 20.0) {
+        let view = HStack(alignment: .center, spacing: viewState.padding) {
             SystemImage(repo.badgeName)
                 .foregroundColor(repo.statusColor)
             Text(repo.name)
                 .allowsTightening(true)
                 .truncationMode(.middle)
                 .lineLimit(1)
+            if selectable {
+                Spacer()
+                EditButton(repoID: repoID)
+            }
         }
         .rowPadding()
+        .padding([.leading, .trailing], viewState.padding)
         .font(viewState.repoTextSize.font)
+        .contextMenu(for: repo, model: model, viewState: viewState)
         .onTapGestureShim() {
             if selectable {
-                self.viewState.showEditSheet(forRepoId: repo.id)
+                self.edit(repoID: repoID)
             }
         }
         
-        #if os(tvOS)
         return view
-        #else
-        return view.contextMenu() {
+    }
+}
+
+fileprivate extension View {
+    #if os(tvOS)
+    
+    // MARK: tvOS Overrides
+    
+    func contextMenu(for repoID: UUID) -> some View {
+        return self
+    }
+    
+    func bindEditing(to binding: Binding<Bool>) -> some View {
+        return self
+    }
+    
+    #elseif canImport(UIKit)
+    
+    // MARK: iOS/macOS
+    
+    func contextMenu(for repo: Repo, model: Model, viewState: ViewState) -> some View {
+        return contextMenu {
             VStack {
                 Button(action: {
-                    self.viewState.showEditSheet(forRepoId: repo.id)
+                    viewState.showEditSheet(forRepoId: repo.id)
                 }) {
                     Text("Edit…")
                 }
-//                NavigationLink(
-//                    destination: EditView(repoID: repoID, title: repo.name),
-//                    tag: repoID,
-//                    selection: $viewState.selectedID) {
-//                        Text("Edit…")
-//                }
                 
-                Button(action: { self.model.remove(repos: [repoID]) }) {
+                Button(action: { model.remove(repos: [repo.id]) }) {
                     Text("Delete")
                 }
                 
@@ -91,32 +99,18 @@ struct RepoListView: View {
                 }
                 
                 Button(action: {
-                    self.viewState.showComposeSheet(forRepoId: repo.id)
+                    viewState.showComposeSheet(forRepoId: repo.id)
                 }) {
                     Text("Generate Workflow…")
                 }
             }
+            
         }
-        #endif
     }
-}
-
-fileprivate extension View {
-    #if os(tvOS)
-    
-    // MARK: tvOS Overrides
-    
-    func bindEditing(to binding: Binding<Bool>) -> some View {
-        return self
-    }
-    
-    #elseif canImport(UIKit)
-    
-    // MARK: iOS/tvOS
     
     func bindEditing(to binding: Binding<Bool>) -> some View {
         environment(\.editMode, .constant(binding.wrappedValue ? .active : .inactive))
     }
-
+    
     #endif
 }

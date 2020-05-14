@@ -15,10 +15,10 @@ struct AddButton: View {
     var body: some View {
         Button(action: addRepo ) {
             Text("Add")
-//            SystemImage("plus.circle")
         }
         .disabled(!viewState.isEditing)
         .opacity(viewState.isEditing ? 1.0 : 0.0)
+        .animation(.easeInOut)
     }
     
     func addRepo() {
@@ -26,3 +26,16 @@ struct AddButton: View {
     }
 }
 #endif
+
+struct AddButton_Previews: PreviewProvider {
+    static var previews: some View {
+        let repos = Application.shared.testRepos
+        let state = ViewState()
+        state.isEditing = true
+        
+        return AddButton()
+            .environmentObject(Model(repos))
+            .environmentObject(state)
+    }
+}
+

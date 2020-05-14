@@ -15,22 +15,15 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-        VStack(alignment: .center) {
-//            HStack(alignment: .center, spacing: 20) {
-//                AddButton()
-//                Spacer()
-//                Text("Action Status").font(.title)
-//                Spacer()
-//                EditButton()
-//            }
-            
-            if model.itemIdentifiers.count == 0 {
-                NoReposView()
-            }
-            
-            RepoListView()
-            Spacer()
-            FooterView()
+            VStack(alignment: .center) {
+                if model.itemIdentifiers.count == 0 {
+                    NoReposView()
+                }
+                
+                RepoListView().padding(viewState.padding)
+                
+                Spacer()
+                FooterView()
             }.setupNavigation()
         }
         .setupNavigationStyle()
@@ -52,22 +45,20 @@ struct ContentView: View {
                 #if !os(tvOS)
                 return AnyView(DocumentPickerViewController(picker: Application.shared.pickerForSavingWorkflow()))
             #endif
-
+            
             case .edit:
                 if let id = viewState.composingID {
                     return AnyView(
-//                        ActionSheet(title: "Edit", message: "Test", buttons: [.cancel { "cancelled" }, .default(Text("Save"), .destructive(Text("Delete")]) {
                         EditView(repoID: id)
-                                .environmentObject(self.model) // TODO: this should not be needed, but seems to be :(
-                                .environmentObject(self.viewState)
-//                            }
+                            .environmentObject(self.model) // TODO: this should not be needed, but seems to be :(
+                            .environmentObject(self.viewState)
                     )
             }
-
+            
             case .compose:
                 if let id = viewState.composingID {
                     return AnyView(
-                        GenerateView(repoID: id, isPresented: self.$viewState.hasSheet)
+                        GenerateView(repoID: id)
                             .environmentObject(self.model) // TODO: this should not be needed, but seems to be :(
                     )
             }
@@ -108,7 +99,7 @@ fileprivate extension View {
             navigationBarTitle("Action Status", displayMode: .inline)
                 .navigationBarItems(
                     leading: AddButton(),
-                    trailing: EditButton())
+                    trailing: ToggleEditingButton())
     }
     
     func setupNavigationStyle() -> some View {

@@ -12,7 +12,7 @@ struct GenerateView: View {
     let repoID: UUID
     
     @EnvironmentObject var model: Model
-    @Binding var isPresented: Bool
+    @Environment(\.presentationMode) var presentation
     
     @State var platforms: [Bool] = []
     @State var compilers: [Bool] = []
@@ -56,7 +56,7 @@ struct GenerateView: View {
     }
     
     func onCancel() {
-        isPresented = false
+        presentation.wrappedValue.dismiss()
     }
     func onGenerate() {
         let app = Application.shared
@@ -118,6 +118,6 @@ struct GenerateView: View {
 
 struct ComposeView_Previews: PreviewProvider {
     static var previews: some View {
-        GenerateView(repoID: Application.shared.testRepos[0].id, isPresented: .constant(false))
+        GenerateView(repoID: Application.shared.testRepos[0].id)
     }
 }
