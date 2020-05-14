@@ -36,17 +36,15 @@ struct EditView: View {
     #endif
 
     let repoID: UUID
-    let title: String
     
+    @Environment(\.presentationMode) var presentation
     @EnvironmentObject var model: Model
     
     var repo: Repo {
         model.repo(withIdentifier: repoID)!
     }
     
-//    var title: String {
-//        return "\(trimmedOwner)/\(trimmedName)"
-//    }
+    var title: String { return "\(trimmedName)" }
     
     @State var name = ""
     @State var owner = ""
@@ -54,86 +52,96 @@ struct EditView: View {
     @State var branches: String = ""
     
     var body: some View {
-        Form {
-            Section {
-                HStack {
-                    Text("Name")
-                        .font(.callout)
-                        .bold()
-                    TextField("github repo name", text: $name)
-                        .nameOrgStyle()
-                        .modifier(ClearButton(text: $name))
-//                        .introspectTextField { textField in
-//                            textField.becomeFirstResponder()
-//                        }
-                }
-                
-                HStack {
-                    Text("Owner")
-                        .font(.callout)
-                        .bold()
-                    
-                    TextField("github user or organisation", text: $owner)
-                        .nameOrgStyle()
-                        .modifier(ClearButton(text: $owner))
-                }
-                
-                HStack {
-                    Text("Workflow")
-                        .font(.callout)
-                        .bold()
-                    
-                    TextField("Tests.yml", text: $workflow)
-                        .nameOrgStyle()
-                        .modifier(ClearButton(text: $workflow))
-                }
+        VStack {
+            HStack(alignment: .center, spacing: 20) {
+                Button(action: dismiss) { Text("Cancel") }
+                Spacer()
+                Text(title).font(.title)
+                Spacer()
+                Button(action: done) { Text("Save") }
+            }.padding([.leading, .trailing], 10)
 
-                HStack {
-                    Text("Branches")
-                        .font(.callout)
-                        .bold()
-                    
-                    TextField("comma-separated list of branches (leave empty for default branch)", text: $branches)
-                        .branchListStyle()
-                        .modifier(ClearButton(text: $branches))
-                }
-
-            }
-            
-            Section {
-                HStack {
-                    Text("Workflow File")
-                        .font(.callout)
-                        .bold()
-                    
-                    Text("\(trimmedWorkflow).yml")
-                }
-
-                HStack {
-                    Text("Repo URL")
-                        .font(.callout)
-                        .bold()
-                    
-                    Text("https://github.com/\(trimmedOwner)/\(trimmedName)")
-                    
-                    Spacer()
-                    
-                    Button(action: { Application.shared.openGithub(with: self.repo, at: .repo) }) {
-                        SystemImage("arrowshape.turn.up.right")
+            Form {
+                Section {
+                    HStack {
+                        Text("Name")
+                            .font(.callout)
+                            .bold()
+                        TextField("github repo name", text: $name)
+                            .nameOrgStyle()
+                            .modifier(ClearButton(text: $name))
+                        //                        .introspectTextField { textField in
+                        //                            textField.becomeFirstResponder()
+                        //                        }
                     }
+                    
+                    HStack {
+                        Text("Owner")
+                            .font(.callout)
+                            .bold()
+                        
+                        TextField("github user or organisation", text: $owner)
+                            .nameOrgStyle()
+                            .modifier(ClearButton(text: $owner))
+                    }
+                    
+                    HStack {
+                        Text("Workflow")
+                            .font(.callout)
+                            .bold()
+                        
+                        TextField("Tests.yml", text: $workflow)
+                            .nameOrgStyle()
+                            .modifier(ClearButton(text: $workflow))
+                    }
+                    
+                    HStack {
+                        Text("Branches")
+                            .font(.callout)
+                            .bold()
+                        
+                        TextField("comma-separated list of branches (leave empty for default branch)", text: $branches)
+                            .branchListStyle()
+                            .modifier(ClearButton(text: $branches))
+                    }
+                    
                 }
                 
-                HStack{
-                    Text("Workflow URL")
-                        .font(.callout)
-                        .bold()
+                Section {
+                    HStack {
+                        Text("Workflow File")
+                            .font(.callout)
+                            .bold()
+                        
+                        Text("\(trimmedWorkflow).yml")
+                    }
                     
-                    Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions?query=workflow%3A\(trimmedWorkflow)")
+                    HStack {
+                        Text("Repo URL")
+                            .font(.callout)
+                            .bold()
+                        
+                        Text("https://github.com/\(trimmedOwner)/\(trimmedName)")
+                        
+                        Spacer()
+                        
+                        Button(action: { Application.shared.openGithub(with: self.repo, at: .repo) }) {
+                            SystemImage("arrowshape.turn.up.right")
+                        }
+                    }
                     
-                    Spacer()
-                    
-                    Button(action: { Application.shared.openGithub(with: self.repo, at: .workflow) }) {
-                        SystemImage("arrowshape.turn.up.right")
+                    HStack{
+                        Text("Workflow URL")
+                            .font(.callout)
+                            .bold()
+                        
+                        Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions?query=workflow%3A\(trimmedWorkflow)")
+                        
+                        Spacer()
+                        
+                        Button(action: { Application.shared.openGithub(with: self.repo, at: .workflow) }) {
+                            SystemImage("arrowshape.turn.up.right.circle")
+                        }
                     }
                 }
             }
@@ -141,9 +149,6 @@ struct EditView: View {
         .onAppear() {
             Application.shared.model.cancelRefresh()
             self.load()
-        }
-        .onDisappear() {
-            self.save()
         }
         .configureNavigation(title: title)
     }
@@ -168,6 +173,15 @@ struct EditView: View {
         return branches.split(separator: ",").map({ String($0.trimmingCharacters(in: .whitespaces)) })
     }
     
+    func dismiss() {
+        presentation.wrappedValue.dismiss()
+    }
+    
+    func done() {
+        save()
+        dismiss()
+    }
+    
     func load() {
         name = repo.name
         owner = repo.owner
@@ -188,7 +202,7 @@ struct EditView: View {
 
 struct RepoEditView_Previews: PreviewProvider {
     static var previews: some View {
-        EditView(repoID: Application.shared.testRepos[0].id, title: "Test")
+        EditView(repoID: Application.shared.testRepos[0].id)
     }
 }
 

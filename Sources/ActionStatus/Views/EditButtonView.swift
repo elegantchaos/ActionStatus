@@ -12,7 +12,7 @@ struct EditButton: View {
 
     var body: some View {
         Button(action: { self.viewState.isEditing.toggle() }) {
-            SystemImage(viewState.isEditing ? "ellipsis.circle.fill" : "ellipsis.circle")
+            SystemImage(viewState.isEditing ? "lock.open.fill" : "lock.fill").padding(20).font(.headline)
         }
     }
 }

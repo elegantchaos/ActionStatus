@@ -64,6 +64,7 @@ class ViewState: ObservableObject {
     func addRepo(to model: Model) {
         let newRepo = model.addRepo()
         Application.shared.saveState()
+        showEditSheet(forRepoId: newRepo.id)
         selectedID = newRepo.id
     }
 }

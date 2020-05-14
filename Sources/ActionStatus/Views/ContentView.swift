@@ -14,20 +14,24 @@ struct ContentView: View {
     @EnvironmentObject var viewState: ViewState
     
     var body: some View {
-        NavigationView {
-            VStack(alignment: .center) {
-                if model.itemIdentifiers.count == 0 {
-                    NoReposView()
-                }
-                
-                RepoListView()
+        VStack(alignment: .center) {
+            HStack(alignment: .center, spacing: 20) {
+                AddButton()
                 Spacer()
-                FooterView()
+                Text("Action Status").font(.title)
+                Spacer()
+                EditButton()
             }
-            .setupNavigation()
-            .sheet(isPresented: $viewState.hasSheet) { self.sheetView() }
+            
+            if model.itemIdentifiers.count == 0 {
+                NoReposView()
+            }
+            
+            RepoListView()
+            Spacer()
+            FooterView()
         }
-        .setupNavigationStyle()
+        .sheet(isPresented: $viewState.hasSheet) { self.sheetView() }
         .onAppear(perform: onAppear)
     }
     
@@ -49,8 +53,11 @@ struct ContentView: View {
             case .edit:
                 if let id = viewState.composingID {
                     return AnyView(
-                        EditView(repoID: id, title: "Edit")
-                            .environmentObject(self.model) // TODO: this should not be needed, but seems to be :(
+//                        ActionSheet(title: "Edit", message: "Test", buttons: [.cancel { "cancelled" }, .default(Text("Save"), .destructive(Text("Delete")]) {
+                        EditView(repoID: id)
+                                .environmentObject(self.model) // TODO: this should not be needed, but seems to be :(
+                                .environmentObject(self.viewState)
+//                            }
                     )
             }
 

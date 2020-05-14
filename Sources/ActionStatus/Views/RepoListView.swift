@@ -29,14 +29,15 @@ struct RepoListView: View {
 
     func rowView(for repoID: UUID, selectable: Bool) -> some View {
         if viewState.isEditing {
-            let repo = model.repo(withIdentifier: repoID)!
-            return AnyView(NavigationLink(
-                destination: EditView(repoID: repoID, title: repo.name),
-                tag: repoID,
-                selection: $viewState.selectedID) {
+            return AnyView(
+                HStack {
                     self.basicRowView(for: repoID, selectable: true)
-            }
-            .padding([.leading, .trailing], 10))
+                    Button(action: { self.viewState.showEditSheet(forRepoId: repoID) }) {
+                        SystemImage("pencil.and.ellipsis.rectangle")
+                    }
+                }
+                    .padding([.leading, .trailing], 10)
+                )
         } else {
             return AnyView(self.basicRowView(for: repoID, selectable: false))
         }
@@ -56,7 +57,7 @@ struct RepoListView: View {
         .font(viewState.repoTextSize.font)
         .onTapGestureShim() {
             if selectable {
-                self.viewState.selectedID = repo.id
+                self.viewState.showEditSheet(forRepoId: repo.id)
             }
         }
         
