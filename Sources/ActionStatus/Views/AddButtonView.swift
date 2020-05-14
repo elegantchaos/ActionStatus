@@ -14,7 +14,8 @@ struct AddButton: View {
     
     var body: some View {
         Button(action: addRepo ) {
-            SystemImage("plus.circle")
+            Text("Add")
+//            SystemImage("plus.circle")
         }
         .disabled(!viewState.isEditing)
         .opacity(viewState.isEditing ? 1.0 : 0.0)

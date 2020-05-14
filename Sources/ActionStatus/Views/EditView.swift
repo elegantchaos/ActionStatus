@@ -53,13 +53,17 @@ struct EditView: View {
     
     var body: some View {
         VStack {
-            HStack(alignment: .center, spacing: 20) {
-                Button(action: dismiss) { Text("Cancel") }
-                Spacer()
-                Text(title).font(.title)
-                Spacer()
-                Button(action: done) { Text("Save") }
-            }.padding([.leading, .trailing], 10)
+            HStack(alignment: .center) {
+                HStack {
+                    Button(action: dismiss) { Text("Cancel") }
+                    Spacer()
+                }
+                Text(title).font(.headline).fixedSize()
+                HStack {
+                    Spacer()
+                    Button(action: done) { Text("Done") }
+                }
+            }.padding([.leading, .trailing, .top], 20)
 
             Form {
                 Section {
