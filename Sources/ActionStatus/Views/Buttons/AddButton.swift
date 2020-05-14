@@ -29,13 +29,7 @@ struct AddButton: View {
 
 struct AddButton_Previews: PreviewProvider {
     static var previews: some View {
-        let repos = Application.shared.testRepos
-        let state = ViewState()
-        state.isEditing = true
-        
-        return AddButton()
-            .environmentObject(Model(repos))
-            .environmentObject(state)
+        PreviewContext().inject(into: AddButton())
     }
 }
 

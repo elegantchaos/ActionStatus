@@ -10,23 +10,4 @@ internal extension View {
     func statusStyle() -> some View {
         return font(.footnote)
     }
-    
-    #if os(tvOS)
-    
-    // MARK: tvOS Overrides
-    
-    func rowPadding() -> some View {
-        return self.padding(.horizontal) // TODO: remove this special case
-    }
-    
-    #elseif canImport(UIKit)
-    
-    // MARK: iOS/tvOS
-    
-    func rowPadding() -> some View {
-//        return self.padding(.horizontal)
-        return self
-    }
-
-    #endif
 }

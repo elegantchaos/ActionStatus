@@ -204,12 +204,6 @@ struct EditView: View {
     }
 }
 
-struct RepoEditView_Previews: PreviewProvider {
-    static var previews: some View {
-        EditView(repoID: Application.shared.testRepos[0].id)
-    }
-}
-
 fileprivate extension View {
     #if canImport(UIKit)
     func configureNavigation(title: String) -> some View {
@@ -223,4 +217,12 @@ fileprivate extension View {
         return self
     }
     #endif
+}
+
+
+struct RepoEditView_Previews: PreviewProvider {
+    static var previews: some View {
+        let context = PreviewContext()
+        return context.inject(into: EditView(repoID: context.repos.first!.id))
+    }
 }

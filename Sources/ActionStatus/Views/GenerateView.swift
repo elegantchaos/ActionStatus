@@ -118,6 +118,7 @@ struct GenerateView: View {
 
 struct ComposeView_Previews: PreviewProvider {
     static var previews: some View {
-        GenerateView(repoID: Application.shared.testRepos[0].id)
+        let context = PreviewContext()
+        return context.inject(into: GenerateView(repoID: context.repos.first!.id))
     }
 }

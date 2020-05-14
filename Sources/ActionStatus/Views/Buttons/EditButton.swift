@@ -25,10 +25,7 @@ struct EditButton: View {
 
 struct EditButton_Previews: PreviewProvider {
     static var previews: some View {
-        let repos = Application.shared.testRepos
-        
-        return EditButton(repoID: repos.first!.id)
-        .environmentObject(Model(repos))
-        .environmentObject(ViewState())
+        let context = PreviewContext()
+        return context.inject(into: EditButton(repoID: context.repos.first!.id))
     }
 }

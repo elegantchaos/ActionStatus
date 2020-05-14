@@ -18,6 +18,7 @@ struct RepoListView: View {
             }
             .onDelete(perform: delete)
         }
+//        .padding([.leading, .trailing], viewState.padding)
         .environment(\.defaultMinListRowHeight, viewState.repoTextSize.rowHeight)
         .bindEditing(to: $viewState.isEditing)
     }
@@ -46,8 +47,6 @@ struct RepoListView: View {
                 EditButton(repoID: repoID)
             }
         }
-        .rowPadding()
-        .padding([.leading, .trailing], viewState.padding)
         .font(viewState.repoTextSize.font)
         .contextMenu(for: repo, model: model, viewState: viewState)
         .onTapGestureShim() {
@@ -113,4 +112,10 @@ fileprivate extension View {
     }
     
     #endif
+}
+
+struct RepoListView_Previews: PreviewProvider {
+    static var previews: some View {
+        return PreviewContext().inject(into: RepoListView())
+    }
 }

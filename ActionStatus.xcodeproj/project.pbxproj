@@ -24,6 +24,8 @@
 /* Begin PBXBuildFile section */
 		22625E2C246D9AF800C12210 /* EditButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22625E2B246D9AF800C12210 /* EditButton.swift */; };
 		22625E2D246D9AF800C12210 /* EditButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22625E2B246D9AF800C12210 /* EditButton.swift */; };
+		22625E2F246DA61300C12210 /* PreviewContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22625E2E246DA61300C12210 /* PreviewContext.swift */; };
+		22625E30246DA61300C12210 /* PreviewContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22625E2E246DA61300C12210 /* PreviewContext.swift */; };
 		8B12FD2624167314006BFEE0 /* ClearButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD2524167314006BFEE0 /* ClearButton.swift */; };
 		8B12FD2724167314006BFEE0 /* ClearButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD2524167314006BFEE0 /* ClearButton.swift */; };
 		8B12FD292416746D006BFEE0 /* ToggleEditingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD282416746D006BFEE0 /* ToggleEditingButton.swift */; };
@@ -144,6 +146,7 @@
 		2246FB24242E5428009E1731 /* SkipSparkle.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = SkipSparkle.xcconfig; sourceTree = "<group>"; };
 		2246FB25242E54B6009E1731 /* test-without-sparkle */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "test-without-sparkle"; sourceTree = "<group>"; };
 		22625E2B246D9AF800C12210 /* EditButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditButton.swift; sourceTree = "<group>"; };
+		22625E2E246DA61300C12210 /* PreviewContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContext.swift; sourceTree = "<group>"; };
 		226F6559242D2045000AEA1C /* upload-all */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-all"; sourceTree = "<group>"; };
 		226F655A242D2045000AEA1C /* upload-tvOS */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-tvOS"; sourceTree = "<group>"; };
 		228D838C246AC10700943918 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -484,6 +487,7 @@
 			isa = PBXGroup;
 			children = (
 				8B430E8623F587E30050BF2A /* Application.swift */,
+				22625E2E246DA61300C12210 /* PreviewContext.swift */,
 				8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */,
 				8B4336EB23FFE53700598A04 /* PickerViewController.swift */,
 				8B12FD3124167DA1006BFEE0 /* ViewState.swift */,
@@ -912,6 +916,7 @@
 				8B12FD3624168192006BFEE0 /* Updater.swift in Sources */,
 				8B5AEB4A2407F8410065524B /* SparkleView.swift in Sources */,
 				8B3E64AB23EAE62D00B28168 /* ContentView.swift in Sources */,
+				22625E2F246DA61300C12210 /* PreviewContext.swift in Sources */,
 				8B12FD2F2416772A006BFEE0 /* NoReposView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -940,6 +945,7 @@
 				8B12FD2A2416746D006BFEE0 /* ToggleEditingButton.swift in Sources */,
 				8B12FD3324167DA1006BFEE0 /* ViewState.swift in Sources */,
 				8B430E7E23F586830050BF2A /* ContentView.swift in Sources */,
+				22625E30246DA61300C12210 /* PreviewContext.swift in Sources */,
 				8B430E8823F587E60050BF2A /* Application.swift in Sources */,
 				22625E2D246D9AF800C12210 /* EditButton.swift in Sources */,
 				8B43A97C24127EAE00A076AC /* PickerViewController.swift in Sources */,

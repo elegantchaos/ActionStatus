@@ -24,16 +24,13 @@ struct ToggleEditingButton: View {
 
 struct ToggleEditingButton_Previews: PreviewProvider {
     static var previews: some View {
-        let repos = Application.shared.testRepos
-        let state = ViewState()
-        state.isEditing = true
-        
-        return VStack {
-            Text(state.isEditing ? "Editing Enabled" : "Editing Disabled")
-            ToggleEditingButton()
-        }
-        .environmentObject(Model(repos))
-        .environmentObject(state)
+        let context = PreviewContext()
+        return context.inject(into:
+            VStack {
+                Text(context.state.isEditing ? "Editing Enabled" : "Editing Disabled")
+                ToggleEditingButton()
+            }
+        )
     }
 }
 

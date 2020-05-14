@@ -33,16 +33,7 @@ class Application: BasicApplication {
     var viewState = ViewState()
     var filePicker: FilePicker?
     var filePickerClass: FilePicker.Type { return StubFilePicker.self }
-
-    @State var model = Model([])
-    
-    @State var testRepos = [
-        Repo("ApplicationExtensions", owner: "elegantchaos", workflow: "Tests", state: .failing),
-        Repo("Datastore", owner: "elegantchaos", workflow: "Swift", state: .passing),
-        Repo("DatastoreViewer", owner: "elegantchaos", workflow: "Build", state: .failing),
-        Repo("Logger", owner: "elegantchaos", workflow: "tests", state: .unknown),
-        Repo("ViewExtensions", owner: "elegantchaos", workflow: "Tests", state: .passing),
-    ]
+    var model = Model([])
     
     func makeUpdater() -> Updater {
         return Updater()
