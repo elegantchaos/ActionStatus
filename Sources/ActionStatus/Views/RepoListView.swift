@@ -48,14 +48,38 @@ struct RepoListView: View {
             }
         }
         .font(viewState.repoTextSize.font)
-        .contextMenu(for: repo, model: model, viewState: viewState)
-        .onTapGestureShim() {
-            if selectable {
-                self.edit(repoID: repoID)
-            }
-        }
+        .shim.contextMenu() { makeContentMenu(for: repo) }
+        .shim.onTapGesture() { if selectable { self.edit(repoID: repoID) } }
         
         return view
+    }
+    
+    func makeContentMenu(for repo: Repo) -> some View {
+        VStack {
+            Button(action: {
+                self.viewState.showEditSheet(forRepoId: repo.id)
+            }) {
+                Text("Edit…")
+            }
+            
+            Button(action: { self.model.remove(repos: [repo.id]) }) {
+                Text("Delete")
+            }
+            
+            Button(action: { Application.shared.openGithub(with: repo, at: .repo) }) {
+                Text("Show Repository In Github…")
+            }
+            
+            Button(action: { Application.shared.openGithub(with: repo, at: .workflow) }) {
+                Text("Show Workflow In Github…")
+            }
+            
+            Button(action: {
+                self.viewState.showComposeSheet(forRepoId: repo.id)
+            }) {
+                Text("Generate Workflow…")
+            }
+        }
     }
 }
 
@@ -63,11 +87,7 @@ fileprivate extension View {
     #if os(tvOS)
     
     // MARK: tvOS Overrides
-    
-    func contextMenu(for repo: Repo, model: Model, viewState: ViewState) -> some View {
-        return self
-    }
-    
+        
     func bindEditing(to binding: Binding<Bool>) -> some View {
         return self
     }
@@ -75,37 +95,6 @@ fileprivate extension View {
     #elseif canImport(UIKit)
     
     // MARK: iOS/macOS
-    
-    func contextMenu(for repo: Repo, model: Model, viewState: ViewState) -> some View {
-        return contextMenu {
-            VStack {
-                Button(action: {
-                    viewState.showEditSheet(forRepoId: repo.id)
-                }) {
-                    Text("Edit…")
-                }
-                
-                Button(action: { model.remove(repos: [repo.id]) }) {
-                    Text("Delete")
-                }
-                
-                Button(action: { Application.shared.openGithub(with: repo, at: .repo) }) {
-                    Text("Show Repository In Github…")
-                }
-                
-                Button(action: { Application.shared.openGithub(with: repo, at: .workflow) }) {
-                    Text("Show Workflow In Github…")
-                }
-                
-                Button(action: {
-                    viewState.showComposeSheet(forRepoId: repo.id)
-                }) {
-                    Text("Generate Workflow…")
-                }
-            }
-            
-        }
-    }
     
     func bindEditing(to binding: Binding<Bool>) -> some View {
         environment(\.editMode, .constant(binding.wrappedValue ? .active : .inactive))
