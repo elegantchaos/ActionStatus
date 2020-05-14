@@ -14,14 +14,15 @@ struct ContentView: View {
     @EnvironmentObject var viewState: ViewState
     
     var body: some View {
+        NavigationView {
         VStack(alignment: .center) {
-            HStack(alignment: .center, spacing: 20) {
-                AddButton()
-                Spacer()
-                Text("Action Status").font(.title)
-                Spacer()
-                EditButton()
-            }
+//            HStack(alignment: .center, spacing: 20) {
+//                AddButton()
+//                Spacer()
+//                Text("Action Status").font(.title)
+//                Spacer()
+//                EditButton()
+//            }
             
             if model.itemIdentifiers.count == 0 {
                 NoReposView()
@@ -30,7 +31,9 @@ struct ContentView: View {
             RepoListView()
             Spacer()
             FooterView()
+            }.setupNavigation()
         }
+        .setupNavigationStyle()
         .sheet(isPresented: $viewState.hasSheet) { self.sheetView() }
         .onAppear(perform: onAppear)
     }

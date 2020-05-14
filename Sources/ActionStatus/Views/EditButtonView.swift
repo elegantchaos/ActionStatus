@@ -11,9 +11,13 @@ struct EditButton: View {
     @EnvironmentObject var viewState: ViewState
 
     var body: some View {
-        Button(action: { self.viewState.isEditing.toggle() }) {
-            SystemImage(viewState.isEditing ? "lock.open.fill" : "lock.fill").padding(20).font(.headline)
+        Button(action: toggleEditing) {
+            SystemImage(viewState.isEditing ? "lock.open.fill" : "lock.fill")
         }
+    }
+    
+    func toggleEditing() {
+        viewState.isEditing.toggle()
     }
 }
 #endif
