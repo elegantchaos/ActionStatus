@@ -65,7 +65,7 @@ fileprivate extension View {
     
     // MARK: tvOS Overrides
     
-    func contextMenu(for repoID: UUID) -> some View {
+    func contextMenu(for repo: Repo, model: Model, viewState: ViewState) -> some View {
         return self
     }
     
