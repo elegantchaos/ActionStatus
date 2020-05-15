@@ -24,12 +24,14 @@ typedef NS_CLOSED_ENUM(NSUInteger, ItemStatus) {
 - (void) selectItem: (NSInteger) item;
 - (void) checkForUpdates;
 - (BOOL) toggleEditing;
+- (void) addItem;
 @end
 
 @protocol AppKitBridge <NSObject>
 @property (nonatomic)BOOL passing;
 @property (nonatomic)BOOL showInMenu;
 @property (nonatomic) BOOL showInDock;
+@property (nonatomic) BOOL showAddButton;
 @property (nonatomic) BOOL showUpdates;
 @property (nonatomic, readonly) SEL showWindowSelector;
 

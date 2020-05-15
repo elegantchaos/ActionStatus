@@ -7,6 +7,7 @@
 import UIKit
 import SwiftUI
 import Logger
+import Combine
 
 #if canImport(SparkleBridgeClient)
 import SparkleBridgeClient
@@ -26,7 +27,8 @@ extension Application {
 @UIApplicationMain
 class MobileApplication: Application {
     var appKitBridge: AppKitBridge? = nil
-
+    var editingSubscriber: AnyCancellable?
+    
     #if canImport(SparkleBridgeClient)
     let sparkleEnabled = Bundle.main.hasFramework(named: "SparkleBridgeClient")
     var sparkleBridge: SparkleBridgePlugin? = nil
@@ -53,6 +55,12 @@ class MobileApplication: Application {
             ]
         )
 
+        editingSubscriber = viewState.$isEditing.sink() { _ in
+            DispatchQueue.main.async {
+                self.updateBridge()
+            }
+        }
+        
         super.setUp(withOptions: options)
     }
     
@@ -74,6 +82,7 @@ class MobileApplication: Application {
     fileprivate func updateBridge() {
         appKitBridge?.showInMenu = UserDefaults.standard.bool(forKey: .showInMenuKey)
         appKitBridge?.showInDock = UserDefaults.standard.bool(forKey: .showInDockKey)
+        appKitBridge?.showAddButton = viewState.isEditing
         appKitBridge?.passing = (model.failing == 0)
     }
     
@@ -132,7 +141,6 @@ class MobileApplication: Application {
         #if canImport(SparkleBridgeClient)
         if sparkleEnabled {
             let command = UIKeyCommand(title: "Check For Updates…", image: nil, action: #selector(checkForUpdates), input: "", modifierFlags: [], propertyList: nil)
-            let menu = UIMenu(title: "", image: nil, identifier: UIMenu.Identifier("\(info.id).checkForUpdates"), options: .displayInline, children: [command])
             builder.replaceChildren(ofMenu: .about) { (children) -> [UIMenuElement] in
                 return children + [command]
             }
@@ -191,6 +199,12 @@ extension MobileApplication: MenuDataSource {
         let id = model.itemIdentifiers[item]
         if let repo = model.repo(withIdentifier: id) {
             Application.shared.openGithub(with: repo)
+        }
+    }
+    
+    func addItem() {
+        sheetController.show() {
+            EditView(repoID: nil)
         }
     }
     

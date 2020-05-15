@@ -47,6 +47,7 @@ extension ItemStatus: CaseIterable {
     var windowInterceptor: InterceptingDelegate?
     var mainWindow: NSWindow?
     var statusItem: NSStatusItem?
+    var toolbar: NSToolbar?
     var editingItem: NSToolbarItem?
     var status: ItemStatus = .unknown
     var showUpdates = false
@@ -151,6 +152,17 @@ extension AppKitBridgeImp: AppKitBridge {
         }
     }
     
+    var showAddButton: Bool {
+        get { return addButtonVisible }
+        set {
+            if newValue && !addButtonVisible, let index = index(ofToolbarItemIdentifier: .editButton) {
+                toolbar?.insertItem(withItemIdentifier: .addButton, at: index)
+            } else if !newValue, let index = index(ofToolbarItemIdentifier: .addButton) {
+                toolbar?.removeItem(at: index)
+            }
+        }
+    }
+    
     var showWindowSelector: Selector {
         return #selector(handleShow(_:))
     }
@@ -226,42 +238,54 @@ extension AppKitBridgeImp: NSWindowDelegate {
 
 extension NSToolbarItem.Identifier {
     static var titleLabel = Self.init("title")
+    static var addButton = Self.init("add")
     static var editButton = Self.init("edit")
 }
 
 extension AppKitBridgeImp: NSToolbarDelegate {
+    var addButtonVisible: Bool {
+        return index(ofToolbarItemIdentifier: .addButton) != nil
+    }
+    
+    func index(ofToolbarItemIdentifier itemIdentifier: NSToolbarItem.Identifier) -> Int? {
+        return toolbar?.items.firstIndex(where: { $0.itemIdentifier == itemIdentifier })
+    }
+    
     func makeToolbar() -> Any {
         let toolbar = NSToolbar(identifier: "test")
         toolbar.delegate = self
         toolbar.displayMode = .iconOnly
         toolbar.sizeMode = .small
         toolbar.centeredItemIdentifier = .titleLabel
+        self.toolbar = toolbar
         
         return toolbar
     }
 
     func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
+        let item = NSToolbarItem(itemIdentifier: itemIdentifier)
         switch itemIdentifier {
             case .titleLabel:
-                let item = NSToolbarItem(itemIdentifier: .titleLabel)
                 item.view = NSTextField(labelWithString: mainWindow?.title ?? "Action Status")
-                return item
+
+            case .addButton:
+                let image = NSImage(named: "NSAddTemplate")
+                let button = NSButton(image: image!, target: self, action: #selector(handleAdd(_:)))
+                button.isBordered = false
+                item.view = button
 
             case .editButton:
                 let image = NSImage(named: "NSLockLockedTemplate")
                 let button = NSButton(image: image!, target: self, action: #selector(handleEdit(_:)))
                 button.isBordered = false
-                let item = NSToolbarItem(itemIdentifier: .editButton)
                 item.view = button
-//                item.action = #selector(handleEdit(_:))
-//                item.target = self
-//                item.isBordered = false
                 editingItem = item
-                return item
             
             default:
                 return nil
         }
+
+        return item
     }
     
     func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
@@ -279,9 +303,11 @@ extension AppKitBridgeImp: NSToolbarDelegate {
     @IBAction func handleEdit(_ sender: Any) {
         if let isEditing = menuSource?.toggleEditing(), let item = editingItem, let button = item.view as? NSButton {
             button.image = NSImage(named: isEditing ? "NSLockUnlockedTemplate" : "NSLockLockedTemplate")
-//            button.isBordered = isEditing
             button.isHighlighted = isEditing
-//            item.isBordered = isEditing
         }
+    }
+    
+    @IBAction func handleAdd(_ sender: Any) {
+        menuSource?.addItem()
     }
 }
