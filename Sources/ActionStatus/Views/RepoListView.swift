@@ -10,6 +10,7 @@ import ActionStatusCore
 struct RepoListView: View {
     @EnvironmentObject var model: Model
     @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var sheetController: SheetController
     
     var body: some View {
         List {
@@ -18,7 +19,6 @@ struct RepoListView: View {
             }
             .onDelete(perform: delete)
         }
-//        .padding([.leading, .trailing], viewState.padding)
         .environment(\.defaultMinListRowHeight, viewState.repoTextSize.rowHeight)
         .bindEditing(to: $viewState.isEditing)
     }
@@ -29,7 +29,9 @@ struct RepoListView: View {
     }
     
     func edit(repoID: UUID) {
-        viewState.showEditSheet(forRepoId: repoID)
+        sheetController.show() {
+            EditView(repoID: repoID)
+        }
     }
     
     func rowView(for repoID: UUID) -> some View {
@@ -57,7 +59,9 @@ struct RepoListView: View {
     func makeContentMenu(for repo: Repo) -> some View {
         VStack {
             Button(action: {
-                self.viewState.showEditSheet(forRepoId: repo.id)
+                self.sheetController.show() {
+                    EditView(repoID: repo.id)
+                }
             }) {
                 Text("Edit…")
             }
@@ -75,32 +79,14 @@ struct RepoListView: View {
             }
             
             Button(action: {
-                self.viewState.showComposeSheet(forRepoId: repo.id)
+                self.sheetController.show() {
+                    GenerateView(repoID: repo.id)
+                }
             }) {
                 Text("Generate Workflow…")
             }
         }
     }
-}
-
-fileprivate extension View {
-    #if os(tvOS)
-    
-    // MARK: tvOS Overrides
-        
-    func bindEditing(to binding: Binding<Bool>) -> some View {
-        return self
-    }
-    
-    #elseif canImport(UIKit)
-    
-    // MARK: iOS/macOS
-    
-    func bindEditing(to binding: Binding<Bool>) -> some View {
-        environment(\.editMode, .constant(binding.wrappedValue ? .active : .inactive))
-    }
-    
-    #endif
 }
 
 struct RepoListView_Previews: PreviewProvider {

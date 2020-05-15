@@ -11,6 +11,7 @@ import ActionStatusCore
 struct AddButton: View {
     @EnvironmentObject var viewState: ViewState
     @EnvironmentObject var model: Model
+    @EnvironmentObject var sheetController: SheetController
     
     var body: some View {
         Button(action: addRepo ) {
@@ -22,7 +23,10 @@ struct AddButton: View {
     }
     
     func addRepo() {
-        viewState.addRepo(to: model)
+        let repo = viewState.addRepo(to: model)
+        sheetController.show() {
+            EditView(repoID: repo.id)
+        }
     }
 }
 #endif

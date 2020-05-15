@@ -7,6 +7,7 @@ import ActionStatusCore
 import ApplicationExtensions
 import Logger
 import SwiftUI
+import SwiftUIExtensions
 import Hardware
 import Files
 
@@ -34,6 +35,7 @@ class Application: BasicApplication {
     var filePicker: FilePicker?
     var filePickerClass: FilePicker.Type { return StubFilePicker.self }
     var model = Model([])
+    let sheetController = SheetController()
     
     func makeUpdater() -> Updater {
         return Updater()
@@ -45,6 +47,8 @@ class Application: BasicApplication {
     
     override func setUp(withOptions options: BasicApplication.LaunchOptions) {
         super.setUp(withOptions: options)
+        
+        sheetController.environmentSetter = { view in AnyView(self.applyEnvironment(to: view)) }
         
         UserDefaults.standard.register(defaults: [
             .refreshIntervalKey: 60,
@@ -78,7 +82,15 @@ class Application: BasicApplication {
 
         settingsChannel.log("\(String.refreshIntervalKey) is \(interval)")
     }
-    
+  
+    func applyEnvironment<T>(to view: T) -> some View where T: View {
+        return view
+            .environmentObject(viewState)
+            .environmentObject(model)
+            .environmentObject(updater)
+            .environmentObject(sheetController)
+    }
+
     func stateWasEdited() {
         saveState()
         model.refresh()
@@ -116,7 +128,7 @@ class Application: BasicApplication {
     func save(output: Generator.Output) {
         exportWorkflow = output
 
-        viewState.hideSheet()
+        sheetController.dismiss()
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: .seconds(1))) {
             #if targetEnvironment(macCatalyst)
             Application.shared.presentPicker(self.pickerForSavingWorkflow()) // ugly hack - the SwiftUI sheet doesn't work properly on the mac

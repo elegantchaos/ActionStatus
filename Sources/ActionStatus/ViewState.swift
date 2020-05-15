@@ -7,12 +7,6 @@ import SwiftUI
 import ActionStatusCore
 
 class ViewState: ObservableObject {
-    enum SheetType {
-        case edit
-        case compose
-        case save
-    }
-
     enum TextSize: Int {
         case automatic = 0
         case small = 1
@@ -32,8 +26,6 @@ class ViewState: ObservableObject {
         var rowHeight: CGFloat { return 0 }
     }
     
-    @Published var hasSheet = false
-    @Published var sheetType: SheetType = .compose
     @Published var composingID: UUID? = nil
     @Published var isEditing: Bool = false
     @Published var selectedID: UUID? = nil
@@ -44,32 +36,10 @@ class ViewState: ObservableObject {
     let startEditingIcon = "lock.fill"
     let stopEditingIcon = "lock.open.fill"
     
-    func showEditSheet(forRepoId id: UUID) {
-        composingID = id
-        sheetType = .edit
-        hasSheet = true
-    }
-
-    func showComposeSheet(forRepoId id: UUID) {
-        composingID = id
-        sheetType = .compose
-        hasSheet = true
-    }
-    
-    func showSaveSheet() {
-        sheetType = .save
-        hasSheet = true
-    }
-    
-    func hideSheet() {
-        hasSheet = false
-        composingID = nil
-    }
-    
-    func addRepo(to model: Model) {
+    @discardableResult func addRepo(to model: Model) -> Repo {
         let newRepo = model.addRepo()
         Application.shared.saveState()
-        showEditSheet(forRepoId: newRepo.id)
         selectedID = newRepo.id
+        return newRepo
     }
 }

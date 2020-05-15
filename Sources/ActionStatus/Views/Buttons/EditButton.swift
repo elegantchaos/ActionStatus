@@ -9,6 +9,8 @@ import ActionStatusCore
 
 struct EditButton: View {
     @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var sheetController: SheetController
+    
     let repoID: UUID
     
     var body: some View {
@@ -19,7 +21,9 @@ struct EditButton: View {
     }
 
     func edit() {
-        viewState.showEditSheet(forRepoId: repoID)
+        sheetController.show() {
+            EditView(repoID: self.repoID)
+        }
     }
 }
 

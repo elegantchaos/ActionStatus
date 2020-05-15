@@ -11,10 +11,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         let app = Application.shared
-        let content = ContentView()
-            .environmentObject(app.viewState)
-            .environmentObject(app.model)
-            .environmentObject(app.updater)
+        let content = app.applyEnvironment(to: ContentView())
         
         if let windowScene = scene as? UIWindowScene {
             #if targetEnvironment(macCatalyst)
@@ -35,7 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
         }
     }
-    
+
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.

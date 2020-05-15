@@ -12,7 +12,8 @@ struct ContentView: View {
     
     @EnvironmentObject var model: Model
     @EnvironmentObject var viewState: ViewState
-    
+    @EnvironmentObject var sheetController: SheetController
+
     var body: some View {
         NavigationView {
             VStack(alignment: .center) {
@@ -27,7 +28,7 @@ struct ContentView: View {
             }.setupNavigation()
         }
         .setupNavigationStyle()
-        .sheet(isPresented: $viewState.hasSheet) { self.sheetView() }
+        .sheet(controlledBy: _sheetController)
         .onAppear(perform: onAppear)
     }
     
@@ -38,35 +39,6 @@ struct ContentView: View {
         
         self.model.refresh()
     }
-    
-    func sheetView() -> some View {
-        switch viewState.sheetType {
-            case .save:
-                #if !os(tvOS)
-                return AnyView(DocumentPickerViewController(picker: Application.shared.pickerForSavingWorkflow()))
-            #endif
-            
-            case .edit:
-                if let id = viewState.composingID {
-                    return AnyView(
-                        EditView(repoID: id)
-                            .environmentObject(self.model) // TODO: this should not be needed, but seems to be :(
-                            .environmentObject(self.viewState)
-                    )
-            }
-            
-            case .compose:
-                if let id = viewState.composingID {
-                    return AnyView(
-                        GenerateView(repoID: id)
-                            .environmentObject(self.model) // TODO: this should not be needed, but seems to be :(
-                    )
-            }
-        }
-        
-        return AnyView(EmptyView())
-    }
-    
 }
 
 struct ContentView_Previews: PreviewProvider {
