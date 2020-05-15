@@ -66,7 +66,7 @@ class MobileApplication: Application {
     
     override func didSetUp(_ window: UIWindow) {
         if let bridge = appKitBridge {
-            bridge.setupCapturingWindowNamed(info.name, dataSource: self)
+            bridge.setup(with: self)
         }
         super.didSetUp(window)
     }
@@ -176,7 +176,11 @@ class MobileApplication: Application {
     }
 }
 
-extension MobileApplication: MenuDataSource {
+extension MobileApplication: AppKitBridgeDelegate {
+    func windowToIntercept() -> String {
+        return info.name
+    }
+    
     func itemCount() -> Int {
         return model.itemIdentifiers.count
     }

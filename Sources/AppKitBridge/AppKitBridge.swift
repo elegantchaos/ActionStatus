@@ -34,7 +34,7 @@ extension ItemStatus: CaseIterable {
     public typealias AllCases = [ItemStatus]
 }
 
-@objc class AppKitBridgeImp: NSResponder {
+@objc class AppKitBridgeSingleton: NSResponder {
     static let imageSize = NSSize(width: 16.0, height: 16.0)
     
     typealias StatusImages = [ItemStatus:NSImage]
@@ -43,7 +43,7 @@ extension ItemStatus: CaseIterable {
     let images = setupImages()
     let appName = Bundle.main.infoDictionary?["CFBundleName"] as! String
     
-    var menuSource: MenuDataSource?
+    var delegate: AppKitBridgeDelegate?
     var windowInterceptor: InterceptingDelegate?
     var mainWindow: NSWindow?
     var statusItem: NSStatusItem?
@@ -105,10 +105,9 @@ extension ItemStatus: CaseIterable {
 }
 
 
-extension AppKitBridgeImp: AppKitBridge {
-    func setupCapturingWindowNamed(_ windowName: String, dataSource source: MenuDataSource) {
-        menuSource = source
-
+extension AppKitBridgeSingleton: AppKitBridge {
+    func setup(with delegate: AppKitBridgeDelegate) {
+        self.delegate = delegate
         self.nextResponder = NSApp.nextResponder
         NSApp.nextResponder = self
 
@@ -120,8 +119,9 @@ extension AppKitBridgeImp: AppKitBridge {
             self.updateImage()
         }
 
+        let windowToIntercept = delegate.windowToIntercept()
         for window in NSApp.windows {
-            if window.title == windowName {
+            if window.title == windowToIntercept {
                 windowInterceptor = InterceptingDelegate(window: window, interceptor: self)
                 mainWindow = window
             }
@@ -169,11 +169,11 @@ extension AppKitBridgeImp: AppKitBridge {
 
 }
 
-extension AppKitBridgeImp: NSMenuDelegate {
+extension AppKitBridgeSingleton: NSMenuDelegate {
     func menuNeedsUpdate(_ menu: NSMenu) {
         if menu == statusItem?.menu {
             menu.removeAllItems()
-            if let menuSource = menuSource {
+            if let menuSource = delegate {
                 for n in 0 ..< menuSource.itemCount() {
                     let name = menuSource.name(forItem: n)
                     let item = menu.addItem(withTitle: name, action: #selector(handleItem(_:)), keyEquivalent: "")
@@ -185,7 +185,7 @@ extension AppKitBridgeImp: NSMenuDelegate {
             
             menu.addItem(NSMenuItem.separator())
             menu.addItem(withTitle: "About \(appName)", action: #selector(handleAbout(_:)), keyEquivalent: "")
-            menu.addItem(withTitle: "Open \(appName)", action: #selector(handleShow(_:)), keyEquivalent: "")
+            menu.addItem(withTitle: "Show \(appName)", action: #selector(handleShow(_:)), keyEquivalent: "")
             menu.addItem(withTitle: "Preferences…", action: #selector(handlePreferences(_:)), keyEquivalent: "")
             if showUpdates {
                 menu.addItem(withTitle: "Check For Updates…", action: #selector(handleCheckForUpdates(_:)), keyEquivalent: "")
@@ -196,7 +196,7 @@ extension AppKitBridgeImp: NSMenuDelegate {
 
     @IBAction func handleItem(_ sender: Any) {
         if let item = sender as? NSMenuItem {
-            menuSource?.selectItem(item.tag)
+            delegate?.selectItem(item.tag)
         }
     }
 
@@ -210,7 +210,7 @@ extension AppKitBridgeImp: NSMenuDelegate {
     }
 
     @IBAction func handleCheckForUpdates(_ sender: Any) {
-        menuSource?.checkForUpdates()
+        delegate?.checkForUpdates()
     }
     
     @IBAction func handleShow(_ sender: Any) {
@@ -228,7 +228,7 @@ extension AppKitBridgeImp: NSMenuDelegate {
     }
 }
 
-extension AppKitBridgeImp: NSWindowDelegate {
+extension AppKitBridgeSingleton: NSWindowDelegate {
     func windowShouldClose(_ sender: NSWindow) -> Bool {
         sender.setIsVisible(false)
         return false;
@@ -242,7 +242,7 @@ extension NSToolbarItem.Identifier {
     static var editButton = Self.init("edit")
 }
 
-extension AppKitBridgeImp: NSToolbarDelegate {
+extension AppKitBridgeSingleton: NSToolbarDelegate {
     var addButtonVisible: Bool {
         return index(ofToolbarItemIdentifier: .addButton) != nil
     }
@@ -301,13 +301,13 @@ extension AppKitBridgeImp: NSToolbarDelegate {
     }
     
     @IBAction func handleEdit(_ sender: Any) {
-        if let isEditing = menuSource?.toggleEditing(), let item = editingItem, let button = item.view as? NSButton {
+        if let isEditing = delegate?.toggleEditing(), let item = editingItem, let button = item.view as? NSButton {
             button.image = NSImage(named: isEditing ? "NSLockUnlockedTemplate" : "NSLockLockedTemplate")
             button.isHighlighted = isEditing
         }
     }
     
     @IBAction func handleAdd(_ sender: Any) {
-        menuSource?.addItem()
+        delegate?.addItem()
     }
 }

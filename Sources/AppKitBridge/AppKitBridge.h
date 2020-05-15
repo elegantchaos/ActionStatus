@@ -17,7 +17,10 @@ typedef NS_CLOSED_ENUM(NSUInteger, ItemStatus) {
     ItemStatusSucceeded,
 };
 
-@protocol MenuDataSource <NSObject>
+/// Protocol implemented by the UIKit side of the bridge.
+/// Provides information and callbacks to the AppKit side.
+@protocol AppKitBridgeDelegate <NSObject>
+- (NSString*)windowToIntercept;
 - (NSInteger) itemCount;
 - (NSString*) nameForItem: (NSInteger) item;
 - (ItemStatus) statusForItem: (NSInteger) item;
@@ -27,6 +30,7 @@ typedef NS_CLOSED_ENUM(NSUInteger, ItemStatus) {
 - (void) addItem;
 @end
 
+/// Protocol implemented by the AppKit side of the bridge.
 @protocol AppKitBridge <NSObject>
 @property (nonatomic)BOOL passing;
 @property (nonatomic)BOOL showInMenu;
@@ -35,7 +39,7 @@ typedef NS_CLOSED_ENUM(NSUInteger, ItemStatus) {
 @property (nonatomic) BOOL showUpdates;
 @property (nonatomic, readonly) SEL showWindowSelector;
 
-- (void) setupCapturingWindowNamed: (NSString*) windowName dataSource: (id<MenuDataSource>) source;
+- (void) setupWithDelegate: (id<AppKitBridgeDelegate>) delegate;
 - (id) makeToolbar;
 @end
 
