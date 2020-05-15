@@ -23,9 +23,8 @@ struct AddButton: View {
     }
     
     func addRepo() {
-        let repo = viewState.addRepo(to: model)
         sheetController.show() {
-            EditView(repoID: repo.id)
+            EditView(repoID: nil)
         }
     }
 }

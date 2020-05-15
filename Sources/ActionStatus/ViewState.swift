@@ -26,7 +26,6 @@ class ViewState: ObservableObject {
         var rowHeight: CGFloat { return 0 }
     }
     
-    @Published var composingID: UUID? = nil
     @Published var isEditing: Bool = false
     @Published var selectedID: UUID? = nil
     @Published var repoTextSize: TextSize = .automatic

@@ -133,7 +133,9 @@ class Application: BasicApplication {
             #if targetEnvironment(macCatalyst)
             Application.shared.presentPicker(self.pickerForSavingWorkflow()) // ugly hack - the SwiftUI sheet doesn't work properly on the mac
             #else
-            self.viewState.showSaveSheet()
+            self.sheetController.show() {
+                DocumentPickerViewController(picker: self.pickerForSavingWorkflow())
+            }
             #endif
         }
     }

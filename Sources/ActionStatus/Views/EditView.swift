@@ -35,16 +35,16 @@ struct EditView: View {
     static let fieldStyle = RoundedBorderTextFieldStyle()
     #endif
 
-    let repoID: UUID
+    let repoID: UUID?
     
     @Environment(\.presentationMode) var presentation
     @EnvironmentObject var model: Model
     
-    var repo: Repo {
-        model.repo(withIdentifier: repoID)!
-    }
-    
     var title: String { return "\(trimmedName)" }
+    var repo: Repo? {
+        guard let repoID = repoID, let repo = model.repo(withIdentifier: repoID) else { return nil }
+        return repo
+    }
     
     @State var name = ""
     @State var owner = ""
@@ -129,7 +129,7 @@ struct EditView: View {
                         
                         Spacer()
                         
-                        Button(action: { Application.shared.openGithub(with: self.repo, at: .repo) }) {
+                        Button(action: openRepo) {
                             SystemImage("arrowshape.turn.up.right.circle")
                         }
                     }
@@ -143,7 +143,7 @@ struct EditView: View {
                         
                         Spacer()
                         
-                        Button(action: { Application.shared.openGithub(with: self.repo, at: .workflow) }) {
+                        Button(action: openWorkflow) {
                             SystemImage("arrowshape.turn.up.right.circle")
                         }
                     }
@@ -154,9 +154,16 @@ struct EditView: View {
             Application.shared.model.cancelRefresh()
             self.load()
         }
-        .configureNavigation(title: title)
     }
     
+    func openRepo() {
+        Application.shared.openGithub(with: update(repo: Repo()), at: .repo)
+    }
+    
+    func openWorkflow() {
+        Application.shared.openGithub(with: update(repo: Repo()), at: .workflow)
+    }
+
     var trimmedWorkflow: String {
         var stripped = workflow.trimmingCharacters(in: .whitespaces)
         if let range = stripped.range(of: ".yml") {
@@ -187,36 +194,29 @@ struct EditView: View {
     }
     
     func load() {
-        name = repo.name
-        owner = repo.owner
-        workflow = repo.workflow
-        branches = repo.branches.joined(separator: ", ")
+        if let repoID = repoID, let repo = model.repo(withIdentifier: repoID) {
+            name = repo.name
+            owner = repo.owner
+            workflow = repo.workflow
+            branches = repo.branches.joined(separator: ", ")
+        }
     }
     
     func save() {
+        let repo = self.repo ?? Repo()
+        let updated = update(repo: repo)
+        model.update(repo: updated)
+        Application.shared.stateWasEdited()
+    }
+    
+    func update(repo: Repo) -> Repo {
         var updated = repo
         updated.name = trimmedName
         updated.owner = trimmedOwner
         updated.workflow = trimmedWorkflow
         updated.branches = trimmedBranches
-        model.update(repo: updated)
-        Application.shared.stateWasEdited()
+        return updated
     }
-}
-
-fileprivate extension View {
-    #if canImport(UIKit)
-    func configureNavigation(title: String) -> some View {
-//        return navigationBarTitle("Editing: \(title)", displayMode: .large)
-            return navigationBarTitle("")
-            .navigationBarHidden(false)
-            .navigationBarBackButtonHidden(false)
-    }
-    #else
-    func configureNavigation(title: String) -> some View {
-        return self
-    }
-    #endif
 }
 
 
