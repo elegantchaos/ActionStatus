@@ -11,8 +11,10 @@ echo "***************"
 echo "Releasing macOS"
 echo "***************"
 
+set -o pipefail
+
 rt set scheme ActionStatus-macOS --platform macOS
-rt archive --show-output 2> /dev/null | xcpretty
+rt archive 2>/dev/null | xcpretty
 rt export --distribution true
 rt notarize
 rt wait
