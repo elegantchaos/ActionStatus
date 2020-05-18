@@ -7,6 +7,6 @@
 
 if [[ ("$ACTION" == "install") && ("$RT_BUILD" == "100") ]]
 then
-    echo "Error - trying to archive with Sparkle testing turned on."
+    echo "error: trying to archive with Sparkle testing turned on."
     exit 1
 fi
