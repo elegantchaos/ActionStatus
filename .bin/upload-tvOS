@@ -12,6 +12,8 @@ echo "**************"
 echo "Uploading tvOS"
 echo "**************"
 
+set -o pipefail
+
 rt set scheme ActionStatus-tvOS --platform=tvOS
 rt archive --platform=tvOS --show-output 2> /dev/null | xcpretty
 rt export --platform=tvOS
