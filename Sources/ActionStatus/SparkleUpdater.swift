@@ -107,7 +107,11 @@ class SparkleUpdater: Updater {
         
         override func showUpdaterError(_ error: Error, acknowledgement: @escaping () -> Void) {
             sparkleChannel.debug("showUpdaterError \(error)")
+            #if DEBUG
+            updater?.status = String(describing: error)
+            #else
             updater?.status = "Failed to launch installer."
+            #endif
         }
         
         override func showDownloadInitiated(completion downloadUpdateStatusCompletion: @escaping DownloadStatusCallback) {
