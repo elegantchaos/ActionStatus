@@ -35,6 +35,23 @@ struct CenteringView: View {
     }
 }
 
+struct Label: View {
+    let name: String
+    let width: Binding<CGFloat?>
+    var body: some View {
+        Text(name)
+            .font(.callout)
+            .bold()
+            .frame(width: width.wrappedValue, alignment: .leading)
+            .lineLimit(1)
+            .background(CenteringView())
+    }
+    
+    init(_ name: String, width: Binding<CGFloat?>) {
+        self.name = name
+        self.width = width
+    }
+}
 
 struct EditView: View {
     #if os(tvOS)
@@ -76,14 +93,9 @@ struct EditView: View {
             }.padding([.leading, .trailing, .top], 20)
 
             Form {
-                Section {
+                Section(header: Text("Settings")) {
                     HStack {
-                        Text("Name")
-                            .font(.callout)
-                            .bold()
-                        .frame(width: width, alignment: .leading)
-                        .lineLimit(1)
-                        .background(CenteringView())
+                        Label("Name", width: $width)
                         TextField("github repo name", text: $name)
                             .nameOrgStyle()
                             .modifier(ClearButton(text: $name))
@@ -93,39 +105,21 @@ struct EditView: View {
                     }
                     
                     HStack {
-                        Text("Owner")
-                            .font(.callout)
-                            .bold()
-                        .frame(width: width, alignment: .leading)
-                        .lineLimit(1)
-                        .background(CenteringView())
-
+                        Label("Owner", width: $width)
                         TextField("github user or organisation", text: $owner)
                             .nameOrgStyle()
                             .modifier(ClearButton(text: $owner))
                     }
                     
                     HStack {
-                        Text("Workflow")
-                            .font(.callout)
-                            .bold()
-                        .frame(width: width, alignment: .leading)
-                        .lineLimit(1)
-                        .background(CenteringView())
-
+                        Label("Workflow", width: $width)
                         TextField("Tests.yml", text: $workflow)
                             .nameOrgStyle()
                             .modifier(ClearButton(text: $workflow))
                     }
                     
                     HStack {
-                        Text("Branches")
-                            .font(.callout)
-                            .bold()
-                        .frame(width: width, alignment: .leading)
-                        .lineLimit(1)
-                        .background(CenteringView())
-
+                        Label("Branches", width: $width)
                         TextField("comma-separated list of branches (leave empty for default branch)", text: $branches)
                             .branchListStyle()
                             .modifier(ClearButton(text: $branches))
@@ -133,26 +127,14 @@ struct EditView: View {
                     
                 }
                 
-                Section {
+                Section(header: Text("Details")) {
                     HStack {
-                        Text("File")
-                            .font(.callout)
-                            .bold()
-                        .frame(width: width, alignment: .leading)
-                        .lineLimit(1)
-                        .background(CenteringView())
-
+                        Label("File", width: $width)
                         Text("\(trimmedWorkflow).yml")
                     }
                     
                     HStack {
-                        Text("Repo")
-                            .font(.callout)
-                            .bold()
-                        .frame(width: width, alignment: .leading)
-                        .lineLimit(1)
-                        .background(CenteringView())
-
+                        Label("Repo", width: $width)
                         Text("https://github.com/\(trimmedOwner)/\(trimmedName)")
 
                         Spacer()
@@ -163,13 +145,7 @@ struct EditView: View {
                     }
                     
                     HStack{
-                        Text("Status")
-                            .font(.callout)
-                            .bold()
-                        .frame(width: width, alignment: .leading)
-                        .lineLimit(1)
-                        .background(CenteringView())
-
+                        Label("Status", width: $width)
                         Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions?query=workflow%3A\(trimmedWorkflow)")
 
                         Spacer()
