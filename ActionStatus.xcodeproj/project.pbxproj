@@ -26,6 +26,8 @@
 		22625E2D246D9AF800C12210 /* EditButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22625E2B246D9AF800C12210 /* EditButton.swift */; };
 		22625E2F246DA61300C12210 /* PreviewContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22625E2E246DA61300C12210 /* PreviewContext.swift */; };
 		22625E30246DA61300C12210 /* PreviewContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22625E2E246DA61300C12210 /* PreviewContext.swift */; };
+		226D6C792474345500B54967 /* FormHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226D6C782474345500B54967 /* FormHeaderView.swift */; };
+		226D6C7A2474345500B54967 /* FormHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226D6C782474345500B54967 /* FormHeaderView.swift */; };
 		8B12FD2624167314006BFEE0 /* ClearButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD2524167314006BFEE0 /* ClearButton.swift */; };
 		8B12FD2724167314006BFEE0 /* ClearButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD2524167314006BFEE0 /* ClearButton.swift */; };
 		8B12FD292416746D006BFEE0 /* ToggleEditingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD282416746D006BFEE0 /* ToggleEditingButton.swift */; };
@@ -147,6 +149,7 @@
 		2246FB25242E54B6009E1731 /* test-without-sparkle */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "test-without-sparkle"; sourceTree = "<group>"; };
 		22625E2B246D9AF800C12210 /* EditButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditButton.swift; sourceTree = "<group>"; };
 		22625E2E246DA61300C12210 /* PreviewContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContext.swift; sourceTree = "<group>"; };
+		226D6C782474345500B54967 /* FormHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormHeaderView.swift; sourceTree = "<group>"; };
 		226F6559242D2045000AEA1C /* upload-all */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-all"; sourceTree = "<group>"; };
 		226F655A242D2045000AEA1C /* upload-tvOS */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-tvOS"; sourceTree = "<group>"; };
 		228D838C246AC10700943918 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -402,6 +405,7 @@
 				22625E2A246D9ACC00C12210 /* Buttons */,
 				8B3E64AA23EAE62D00B28168 /* ContentView.swift */,
 				8B6F181723F459570029F9CC /* EditView.swift */,
+				226D6C782474345500B54967 /* FormHeaderView.swift */,
 				8B12FD2B24167722006BFEE0 /* FooterView.swift */,
 				8B5D864723FD52550085A570 /* GenerateView.swift */,
 				8B12FD2E2416772A006BFEE0 /* NoReposView.swift */,
@@ -909,6 +913,7 @@
 				8B4336EC23FFE53700598A04 /* PickerViewController.swift in Sources */,
 				8B5AEB482407EE630065524B /* SparkleUpdater.swift in Sources */,
 				8B43A9882412CD0100A076AC /* ViewExtensions.swift in Sources */,
+				226D6C792474345500B54967 /* FormHeaderView.swift in Sources */,
 				8B12FD292416746D006BFEE0 /* ToggleEditingButton.swift in Sources */,
 				8B43A97E24128DF200A076AC /* StubFilePicker.swift in Sources */,
 				8B5D864823FD52550085A570 /* GenerateView.swift in Sources */,
@@ -948,6 +953,7 @@
 				22625E30246DA61300C12210 /* PreviewContext.swift in Sources */,
 				8B430E8823F587E60050BF2A /* Application.swift in Sources */,
 				22625E2D246D9AF800C12210 /* EditButton.swift in Sources */,
+				226D6C7A2474345500B54967 /* FormHeaderView.swift in Sources */,
 				8B43A97C24127EAE00A076AC /* PickerViewController.swift in Sources */,
 				8B48938F240D502000E3E112 /* SparkleView.swift in Sources */,
 				8B12FD3A241681D7006BFEE0 /* SparkleProgressView.swift in Sources */,
