@@ -21,6 +21,7 @@ struct EditView: View {
 
     @Environment(\.presentationMode) var presentation
     @EnvironmentObject var model: Model
+    @EnvironmentObject var viewState: ViewState
     
     var title: String { return "\(trimmedName)" }
     var repo: Repo? {
@@ -35,20 +36,10 @@ struct EditView: View {
     
     var body: some View {
         VStack() {
-            HStack(alignment: .center) {
-                HStack {
-                    Button(action: dismiss) { Text("Cancel") }
-                    Spacer()
-                }
-                Text(title).font(.headline).fixedSize()
-                HStack {
-                    Spacer()
-                    Button(action: done) { Text("Done") }
-                }
-            }.padding([.leading, .trailing, .top], 20)
+            FormHeaderView(title, cancelAction: dismiss, doneAction: done)
 
             Form {
-                Section(header: Text("Settings").font(.title)) {
+                Section(header: Text("Settings").font(viewState.formHeaderFont)) {
                     HStack {
                         Label("Name", width: $labelWidth)
                         TextField("github repo name", text: $name)
@@ -82,7 +73,7 @@ struct EditView: View {
                     
                 }
                 
-                Section(header: Text("Details").font(.title)) {
+                Section(header: Text("Details").font(viewState.formHeaderFont)) {
                     HStack {
                         Label("File", width: $labelWidth)
                         Text("\(trimmedWorkflow).yml")

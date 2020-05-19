@@ -12,6 +12,7 @@ struct GenerateView: View {
     let repoID: UUID
     
     @EnvironmentObject var model: Model
+    @EnvironmentObject var viewState: ViewState
     @Environment(\.presentationMode) var presentation
     
     @State var platforms: [Bool] = []
@@ -25,7 +26,7 @@ struct GenerateView: View {
     
     var body: some View {
         VStack {
-            Text("\(repo.name)/\(repo.owner)").multilineTextAlignment(.center)
+            FormHeaderView("Generate Workflow for \(repo.name)", cancelAction: onCancel, doneLabel: "Generate", doneAction: onGenerate)
             
             Form {
                 togglesSection(title: "Platforms", options: self.generator.platforms, toggles: $platforms)
@@ -33,14 +34,6 @@ struct GenerateView: View {
                 togglesSection(title: "Configuration", options: self.generator.configurations, toggles: $configurations)
                 togglesSection(title: "Other Options", options: self.generator.general, toggles: $general)
             }.padding()
-            
-            Spacer()
-            
-            HStack() {
-                Button(action: onCancel) { Text("Cancel") }
-                Spacer()
-                Button(action: onGenerate) { Text("Generate \(repo.workflow).yml") }
-            }
         }
         .padding()
         .onAppear(perform: onAppear)
@@ -91,7 +84,7 @@ struct GenerateView: View {
         let allSet = toggles.wrappedValue.filter({ $0 }).count == count
         return Section(header:
             HStack {
-                Text(title).font(.headline)
+                Text(title).font(viewState.formHeaderFont)
                 Spacer()
                 Button(action: {
                     for n in 0 ..< toggles.wrappedValue.count {

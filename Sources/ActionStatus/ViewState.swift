@@ -35,6 +35,8 @@ class ViewState: ObservableObject {
     let startEditingIcon = "lock.fill"
     let stopEditingIcon = "lock.open.fill"
     
+    let formHeaderFont = Font.headline
+    
     @discardableResult func addRepo(to model: Model) -> Repo {
         let newRepo = model.addRepo()
         Application.shared.saveState()
