@@ -8,23 +8,31 @@ import SwiftUI
 import SwiftUIExtensions
 import Introspect
 
-extension View {
-    func nameOrgStyle() -> some View {
+struct CenteringColumnPreferenceKey: PreferenceKey {
+    typealias Value = [CenteringColumnPreference]
 
-        return textFieldStyle(EditView.fieldStyle)
-            .keyboardType(.namePhonePad)
-            .textContentType(.name)
-            .disableAutocorrection(true)
-            .autocapitalization(.none)
+    static var defaultValue: [CenteringColumnPreference] = []
+
+    static func reduce(value: inout [CenteringColumnPreference], nextValue: () -> [CenteringColumnPreference]) {
+        value.append(contentsOf: nextValue())
     }
+}
 
-    func branchListStyle() -> some View {
-        return textFieldStyle(EditView.fieldStyle)
-            .keyboardType(.alphabet)
-            .disableAutocorrection(true)
-            .autocapitalization(.none)
+struct CenteringColumnPreference: Equatable {
+    let width: CGFloat
+}
+
+struct CenteringView: View {
+    var body: some View {
+        GeometryReader { geometry in
+            Rectangle()
+                .fill(Color.clear)
+                .preference(
+                    key: CenteringColumnPreferenceKey.self,
+                    value: [CenteringColumnPreference(width: geometry.frame(in: CoordinateSpace.global).width)]
+                )
+        }
     }
-
 }
 
 
@@ -37,6 +45,8 @@ struct EditView: View {
 
     let repoID: UUID?
     
+    @State private var width: CGFloat? = nil
+
     @Environment(\.presentationMode) var presentation
     @EnvironmentObject var model: Model
     
@@ -52,7 +62,7 @@ struct EditView: View {
     @State var branches: String = ""
     
     var body: some View {
-        VStack {
+        VStack() {
             HStack(alignment: .center) {
                 HStack {
                     Button(action: dismiss) { Text("Cancel") }
@@ -71,6 +81,9 @@ struct EditView: View {
                         Text("Name")
                             .font(.callout)
                             .bold()
+                        .frame(width: width, alignment: .leading)
+                        .lineLimit(1)
+                        .background(CenteringView())
                         TextField("github repo name", text: $name)
                             .nameOrgStyle()
                             .modifier(ClearButton(text: $name))
@@ -83,7 +96,10 @@ struct EditView: View {
                         Text("Owner")
                             .font(.callout)
                             .bold()
-                        
+                        .frame(width: width, alignment: .leading)
+                        .lineLimit(1)
+                        .background(CenteringView())
+
                         TextField("github user or organisation", text: $owner)
                             .nameOrgStyle()
                             .modifier(ClearButton(text: $owner))
@@ -93,7 +109,10 @@ struct EditView: View {
                         Text("Workflow")
                             .font(.callout)
                             .bold()
-                        
+                        .frame(width: width, alignment: .leading)
+                        .lineLimit(1)
+                        .background(CenteringView())
+
                         TextField("Tests.yml", text: $workflow)
                             .nameOrgStyle()
                             .modifier(ClearButton(text: $workflow))
@@ -103,7 +122,10 @@ struct EditView: View {
                         Text("Branches")
                             .font(.callout)
                             .bold()
-                        
+                        .frame(width: width, alignment: .leading)
+                        .lineLimit(1)
+                        .background(CenteringView())
+
                         TextField("comma-separated list of branches (leave empty for default branch)", text: $branches)
                             .branchListStyle()
                             .modifier(ClearButton(text: $branches))
@@ -113,20 +135,26 @@ struct EditView: View {
                 
                 Section {
                     HStack {
-                        Text("Workflow File")
+                        Text("File")
                             .font(.callout)
                             .bold()
-                        
+                        .frame(width: width, alignment: .leading)
+                        .lineLimit(1)
+                        .background(CenteringView())
+
                         Text("\(trimmedWorkflow).yml")
                     }
                     
                     HStack {
-                        Text("Repo URL")
+                        Text("Repo")
                             .font(.callout)
                             .bold()
-                        
+                        .frame(width: width, alignment: .leading)
+                        .lineLimit(1)
+                        .background(CenteringView())
+
                         Text("https://github.com/\(trimmedOwner)/\(trimmedName)")
-                        
+
                         Spacer()
                         
                         Button(action: openRepo) {
@@ -135,12 +163,15 @@ struct EditView: View {
                     }
                     
                     HStack{
-                        Text("Workflow URL")
+                        Text("Status")
                             .font(.callout)
                             .bold()
-                        
+                        .frame(width: width, alignment: .leading)
+                        .lineLimit(1)
+                        .background(CenteringView())
+
                         Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions?query=workflow%3A\(trimmedWorkflow)")
-                        
+
                         Spacer()
                         
                         Button(action: openWorkflow) {
@@ -154,6 +185,15 @@ struct EditView: View {
             Application.shared.model.cancelRefresh()
             self.load()
         }
+        .onPreferenceChange(CenteringColumnPreferenceKey.self) { preferences in
+            for p in preferences {
+                let oldWidth = self.width ?? CGFloat.zero
+                if p.width > oldWidth {
+                    self.width = p.width
+                }
+            }
+        }
+        
     }
     
     func openRepo() {
@@ -225,4 +265,23 @@ struct RepoEditView_Previews: PreviewProvider {
         let context = PreviewContext()
         return context.inject(into: EditView(repoID: context.repos.first!.id))
     }
+}
+
+extension View {
+    func nameOrgStyle() -> some View {
+
+        return textFieldStyle(EditView.fieldStyle)
+            .keyboardType(.namePhonePad)
+            .textContentType(.name)
+            .disableAutocorrection(true)
+            .autocapitalization(.none)
+    }
+
+    func branchListStyle() -> some View {
+        return textFieldStyle(EditView.fieldStyle)
+            .keyboardType(.alphabet)
+            .disableAutocorrection(true)
+            .autocapitalization(.none)
+    }
+
 }
