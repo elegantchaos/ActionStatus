@@ -119,3 +119,5 @@ fi
 resign_bundles "$RT_BUILT_RESOURCES_DIR"
 resign_frameworks "$RT_BUILT_FRAMEWORKS_DIR"
 resign_xpcs "$RT_BUILT_XPCSERVICES_DIR"
+
+#/usr/bin/codesign -vvvv --deep "$RT_BUILT_FRAMEWORKS_DIR/SparkleBridgeClient.framework"
