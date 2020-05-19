@@ -266,7 +266,8 @@ extension AppKitBridgeSingleton: NSToolbarDelegate {
         let item = NSToolbarItem(itemIdentifier: itemIdentifier)
         switch itemIdentifier {
             case .titleLabel:
-                item.view = NSTextField(labelWithString: mainWindow?.title ?? "Action Status")
+                guard let title = mainWindow?.title else { return nil }
+                item.view = NSTextField(labelWithString: title)
 
             case .addButton:
                 let image = NSImage(named: "NSAddTemplate")
