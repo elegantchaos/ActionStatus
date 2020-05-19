@@ -67,8 +67,9 @@ fileprivate extension View {
     // MARK: iOS
     
     func setupNavigation() -> some View {
+        let name = Application.shared.info.name
         return
-            navigationBarTitle("Action Status", displayMode: .inline)
+            navigationBarTitle(Text(name), displayMode: .inline)
                 .navigationBarItems(
                     leading: AddButton(),
                     trailing: ToggleEditingButton())
