@@ -8,51 +8,6 @@ import SwiftUI
 import SwiftUIExtensions
 import Introspect
 
-struct CenteringColumnPreferenceKey: PreferenceKey {
-    typealias Value = [CenteringColumnPreference]
-
-    static var defaultValue: [CenteringColumnPreference] = []
-
-    static func reduce(value: inout [CenteringColumnPreference], nextValue: () -> [CenteringColumnPreference]) {
-        value.append(contentsOf: nextValue())
-    }
-}
-
-struct CenteringColumnPreference: Equatable {
-    let width: CGFloat
-}
-
-struct CenteringView: View {
-    var body: some View {
-        GeometryReader { geometry in
-            Rectangle()
-                .fill(Color.clear)
-                .preference(
-                    key: CenteringColumnPreferenceKey.self,
-                    value: [CenteringColumnPreference(width: geometry.frame(in: CoordinateSpace.global).width)]
-                )
-        }
-    }
-}
-
-struct Label: View {
-    let name: String
-    let width: Binding<CGFloat?>
-    var body: some View {
-        Text(name)
-            .font(.callout)
-            .bold()
-            .frame(width: width.wrappedValue, alignment: .leading)
-            .lineLimit(1)
-            .background(CenteringView())
-    }
-    
-    init(_ name: String, width: Binding<CGFloat?>) {
-        self.name = name
-        self.width = width
-    }
-}
-
 struct EditView: View {
     #if os(tvOS)
     static let fieldStyle = DefaultTextFieldStyle()
@@ -62,7 +17,7 @@ struct EditView: View {
 
     let repoID: UUID?
     
-    @State private var width: CGFloat? = nil
+    @State private var labelWidth: CGFloat = 0
 
     @Environment(\.presentationMode) var presentation
     @EnvironmentObject var model: Model
@@ -73,10 +28,10 @@ struct EditView: View {
         return repo
     }
     
-    @State var name = ""
-    @State var owner = ""
-    @State var workflow = ""
-    @State var branches: String = ""
+    @State var name = Repo.defaultName
+    @State var owner = Repo.defaultOwner
+    @State var workflow = Repo.defaultWorkflow
+    @State var branches: String = Repo.defaultBranches.joined(separator: ", ")
     
     var body: some View {
         VStack() {
@@ -93,9 +48,9 @@ struct EditView: View {
             }.padding([.leading, .trailing, .top], 20)
 
             Form {
-                Section(header: Text("Settings")) {
+                Section(header: Text("Settings").font(.title)) {
                     HStack {
-                        Label("Name", width: $width)
+                        Label("Name", width: $labelWidth)
                         TextField("github repo name", text: $name)
                             .nameOrgStyle()
                             .modifier(ClearButton(text: $name))
@@ -105,21 +60,21 @@ struct EditView: View {
                     }
                     
                     HStack {
-                        Label("Owner", width: $width)
+                        Label("Owner", width: $labelWidth)
                         TextField("github user or organisation", text: $owner)
                             .nameOrgStyle()
                             .modifier(ClearButton(text: $owner))
                     }
                     
                     HStack {
-                        Label("Workflow", width: $width)
+                        Label("Workflow", width: $labelWidth)
                         TextField("Tests.yml", text: $workflow)
                             .nameOrgStyle()
                             .modifier(ClearButton(text: $workflow))
                     }
                     
                     HStack {
-                        Label("Branches", width: $width)
+                        Label("Branches", width: $labelWidth)
                         TextField("comma-separated list of branches (leave empty for default branch)", text: $branches)
                             .branchListStyle()
                             .modifier(ClearButton(text: $branches))
@@ -127,14 +82,14 @@ struct EditView: View {
                     
                 }
                 
-                Section(header: Text("Details")) {
+                Section(header: Text("Details").font(.title)) {
                     HStack {
-                        Label("File", width: $width)
+                        Label("File", width: $labelWidth)
                         Text("\(trimmedWorkflow).yml")
                     }
                     
                     HStack {
-                        Label("Repo", width: $width)
+                        Label("Repo", width: $labelWidth)
                         Text("https://github.com/\(trimmedOwner)/\(trimmedName)")
 
                         Spacer()
@@ -145,7 +100,7 @@ struct EditView: View {
                     }
                     
                     HStack{
-                        Label("Status", width: $width)
+                        Label("Status", width: $labelWidth)
                         Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions?query=workflow%3A\(trimmedWorkflow)")
 
                         Spacer()
@@ -161,14 +116,7 @@ struct EditView: View {
             Application.shared.model.cancelRefresh()
             self.load()
         }
-        .onPreferenceChange(CenteringColumnPreferenceKey.self) { preferences in
-            for p in preferences {
-                let oldWidth = self.width ?? CGFloat.zero
-                if p.width > oldWidth {
-                    self.width = p.width
-                }
-            }
-        }
+        .alignLabels(width: $labelWidth)
         
     }
     
