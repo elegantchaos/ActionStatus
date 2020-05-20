@@ -154,18 +154,11 @@
 
 /* Begin PBXFileReference section */
 		2246FB24242E5428009E1731 /* SkipSparkle.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = SkipSparkle.xcconfig; sourceTree = "<group>"; };
-		2246FB25242E54B6009E1731 /* test-without-sparkle */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "test-without-sparkle"; sourceTree = "<group>"; };
 		22625E2B246D9AF800C12210 /* EditButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditButton.swift; sourceTree = "<group>"; };
 		22625E2E246DA61300C12210 /* PreviewContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContext.swift; sourceTree = "<group>"; };
 		226D6C782474345500B54967 /* FormHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormHeaderView.swift; sourceTree = "<group>"; };
-		226F6559242D2045000AEA1C /* upload-all */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-all"; sourceTree = "<group>"; };
-		226F655A242D2045000AEA1C /* upload-tvOS */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-tvOS"; sourceTree = "<group>"; };
+		226D6C8424755D1D00B54967 /* Scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Scripts; path = Extras/Scripts; sourceTree = "<group>"; };
 		228D838C246AC10700943918 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		229B32A5242E59EF005A4FF9 /* upload-macOS */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-macOS"; sourceTree = "<group>"; };
-		8B03019F2417E3D0003A19A4 /* perform-checks */ = {isa = PBXFileReference; lastKnownFileType = text; path = "perform-checks"; sourceTree = "<group>"; };
-		8B045A7C2405591400EC21D6 /* distribute-mac */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = "distribute-mac"; sourceTree = "<group>"; };
-		8B045A7D2405591400EC21D6 /* rt */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = rt; sourceTree = "<group>"; };
-		8B045A7F2405591400EC21D6 /* downloads */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = downloads; sourceTree = "<group>"; };
 		8B045A8424055A6200EC21D6 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Assets; path = Extras/Assets; sourceTree = "<group>"; };
 		8B12FD2524167314006BFEE0 /* ClearButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearButton.swift; sourceTree = "<group>"; };
 		8B12FD282416746D006BFEE0 /* ToggleEditingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleEditingButton.swift; sourceTree = "<group>"; };
@@ -213,7 +206,6 @@
 		8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppKitBridge.xcconfig; sourceTree = "<group>"; };
 		8B5AEB472407EE630065524B /* SparkleUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SparkleUpdater.swift; path = Sources/ActionStatus/SparkleUpdater.swift; sourceTree = SOURCE_ROOT; };
 		8B5AEB492407F8410065524B /* SparkleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleView.swift; sourceTree = "<group>"; };
-		8B5AEB5224080D720065524B /* embed */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = embed; sourceTree = "<group>"; wrapsLines = 0; };
 		8B5D864723FD52550085A570 /* GenerateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateView.swift; sourceTree = "<group>"; };
 		8B5E7E6223F6A97D00087E15 /* Tests.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Tests.xcconfig; sourceTree = "<group>"; };
 		8B5E7E6323F6A9C600087E15 /* Mobile.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Mobile.xcconfig; sourceTree = "<group>"; };
@@ -225,7 +217,6 @@
 		8B5E7E9223F6C0B600087E15 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		8B5E7E9323F6C0C200087E15 /* AppKitBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppKitBridge.h; sourceTree = "<group>"; };
 		8B6F181723F459570029F9CC /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
-		8BA522A224057CAE00B82857 /* upload-iOS */ = {isa = PBXFileReference; explicitFileType = text.script.sh; path = "upload-iOS"; sourceTree = "<group>"; };
 		8BBFAA8B2403F09F0091157A /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		8BBFAA942403F8E80091157A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sparkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BDBC692240EB630005CDA0D /* Tests.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = Tests.yml; sourceTree = "<group>"; };
@@ -310,30 +301,13 @@
 			path = Buttons;
 			sourceTree = "<group>";
 		};
-		8B045A792405591400EC21D6 /* .bin */ = {
-			isa = PBXGroup;
-			children = (
-				8B045A7F2405591400EC21D6 /* downloads */,
-				8B5AEB5224080D720065524B /* embed */,
-				8B03019F2417E3D0003A19A4 /* perform-checks */,
-				8B045A7C2405591400EC21D6 /* distribute-mac */,
-				2246FB25242E54B6009E1731 /* test-without-sparkle */,
-				8B045A7D2405591400EC21D6 /* rt */,
-				226F6559242D2045000AEA1C /* upload-all */,
-				229B32A5242E59EF005A4FF9 /* upload-macOS */,
-				226F655A242D2045000AEA1C /* upload-tvOS */,
-				8BA522A224057CAE00B82857 /* upload-iOS */,
-			);
-			path = .bin;
-			sourceTree = "<group>";
-		};
 		8B045A8324055A3C00EC21D6 /* Extras */ = {
 			isa = PBXGroup;
 			children = (
 				8BDBC694240EB752005CDA0D /* Screenshots */,
 				8BDBC691240EB630005CDA0D /* workflows */,
 				8B045A8424055A6200EC21D6 /* Assets */,
-				8B045A792405591400EC21D6 /* .bin */,
+				226D6C8424755D1D00B54967 /* Scripts */,
 			);
 			name = Extras;
 			sourceTree = "<group>";

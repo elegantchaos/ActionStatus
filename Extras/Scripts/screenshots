@@ -5,8 +5,8 @@
 #  All code (c) 2020 - present day, Elegant Chaos Limited.
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-rm -rf results.xcresult
-rm -rf screenshots
-xcodebuild -workspace ActionStatus.xcworkspace -scheme ActionStatus-macOS test -resultBundlePath ./results.xcresult -includeScreenshots | xcpretty
-xcparse screenshots --os results.xcresult/ screenshots/
-open screenshots
+rm -rf .build/tests/results.xcresult
+rm -rf .build/tests/screenshots
+xcodebuild -workspace ActionStatus.xcworkspace -scheme ActionStatus-macOS test -resultBundlePath .build/tests/results.xcresult -includeScreenshots | xcpretty
+xcparse screenshots --os .build/tests/results.xcresult/ .build/tests/screenshots/
+open .build/tests/screenshots
