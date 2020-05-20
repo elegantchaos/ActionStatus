@@ -29,9 +29,9 @@ class ScreenshotUITests: XCTestCase {
         Thread.sleep(forTimeInterval: 1)
         makeScreenShot("main")
 
-        let item = app.buttons["toggleEditing"]
-        XCTAssert(item.exists)
-        item.tap()
+        let toggleEditing = app.buttons["toggleEditing"]
+        XCTAssert(toggleEditing.exists)
+        toggleEditing.tap()
         makeScreenShot("editing mode")
 
         let edit = app.buttons["editButton"].firstMatch
@@ -40,5 +40,22 @@ class ScreenshotUITests: XCTestCase {
         let header = app.staticTexts["formHeader"]
         XCTAssert(header.waitForExistence(timeout: 1))
         makeScreenShot("editor")
+        
+        let cancel = app.buttons["cancel"].firstMatch
+        XCTAssert(cancel.exists)
+        cancel.tap()
+        toggleEditing.tap()
+
+        let firstRow = app.staticTexts["Datastore"]
+        XCTAssertTrue(firstRow.exists)
+        firstRow.press(forDuration: 1.0)
+        makeScreenShot("contextual")
+        
+        let generate = app.buttons["Generate Workflow…"].firstMatch
+        XCTAssertTrue(generate.waitForExistence(timeout: 5))
+        generate.tap()
+ 
+        header.waitForExistence(timeout: 1)
+        makeScreenShot("generate")
     }
 }

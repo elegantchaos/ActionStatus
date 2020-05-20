@@ -26,9 +26,14 @@ struct GenerateView: View {
     
     var body: some View {
         VStack {
-            FormHeaderView("Generate Workflow for \(repo.name)", cancelAction: onCancel, doneLabel: "Generate", doneAction: onGenerate)
+            FormHeaderView(repo.name, cancelAction: onCancel, doneLabel: "Save", doneAction: onGenerate)
             
-            Form {
+            Text("Settings for workflow '\(repo.workflow).yml' in repo \(repo.owner)/\(repo.name).")
+                .font(.caption)
+                .padding(.top, viewState.padding)
+
+            Form() {
+                
                 togglesSection(title: "Platforms", options: self.generator.platforms, toggles: $platforms)
                 togglesSection(title: "Swift", options: self.generator.compilers, toggles: $compilers)
                 togglesSection(title: "Configuration", options: self.generator.configurations, toggles: $configurations)

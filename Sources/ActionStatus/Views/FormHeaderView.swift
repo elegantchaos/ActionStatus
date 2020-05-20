@@ -24,6 +24,7 @@ struct FormHeaderView: View {
         HStack(alignment: .center) {
             HStack {
                 Button(action: cancelAction) { Text(cancelLabel) }
+                    .accessibility(identifier: "cancel")
                 Spacer()
             }
             Text(title)
@@ -33,6 +34,7 @@ struct FormHeaderView: View {
             HStack {
                 Spacer()
                 Button(action: doneAction) { Text(doneLabel) }
+                    .accessibility(identifier: "done")
             }
         }.padding([.leading, .trailing, .top], 20)
     }

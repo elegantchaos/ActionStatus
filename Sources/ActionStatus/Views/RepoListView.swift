@@ -85,8 +85,8 @@ struct RepoListView: View {
                     GenerateView(repoID: repo.id)
                 }
             }) {
-                Text("Generate Workflow…")
-            }
+                Text("Generate Workflow…").accessibility(identifier: "generateLabel")
+            }.accessibility(identifier: "generate")
         }
     }
 }
