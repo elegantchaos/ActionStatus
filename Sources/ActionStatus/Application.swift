@@ -34,7 +34,7 @@ class Application: BasicApplication {
     var viewState = ViewState()
     var filePicker: FilePicker?
     var filePickerClass: FilePicker.Type { return StubFilePicker.self }
-    var model = Model([])
+    var model = makeModel()
     let sheetController = SheetController()
     
     func makeUpdater() -> Updater {
@@ -43,6 +43,10 @@ class Application: BasicApplication {
     
     @objc func changed() {
         restoreState()
+    }
+    
+    class func makeModel() -> Model {
+        return ProcessInfo.processInfo.environment.isTestingUI ? TestModel() : Model([])
     }
     
     override func setUp(withOptions options: BasicApplication.LaunchOptions) {

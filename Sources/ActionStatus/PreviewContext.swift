@@ -8,23 +8,15 @@ import ActionStatusCore
 
 struct PreviewContext {
 
-    var repos: [Repo]
-    @State var model: Model
+    @State var model = TestModel()
     @State var state = ViewState()
     
     init(isEditing: Bool = true) {
-        let repos = [
-            Repo("ApplicationExtensions", owner: "elegantchaos", workflow: "Tests", state: .failing),
-            Repo("Datastore", owner: "elegantchaos", workflow: "Swift", state: .passing),
-            Repo("DatastoreViewer", owner: "elegantchaos", workflow: "Build", state: .failing),
-            Repo("Logger", owner: "elegantchaos", workflow: "tests", state: .unknown),
-            Repo("ViewExtensions", owner: "elegantchaos", workflow: "Tests", state: .passing),
-        ]
-        
-        self.repos = repos
-        _model = State(initialValue: Model(repos))
-
         state.isEditing = isEditing
+    }
+    
+    var testRepo: Repo {
+        model.repos.first!
     }
     
     func inject<Content>(into view: Content) -> some View where Content: View {

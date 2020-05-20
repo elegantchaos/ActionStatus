@@ -190,7 +190,7 @@ struct EditView: View {
 struct RepoEditView_Previews: PreviewProvider {
     static var previews: some View {
         let context = PreviewContext()
-        return context.inject(into: EditView(repoID: context.repos.first!.id))
+        return context.inject(into: EditView(repoID: context.testRepo.id))
     }
 }
 

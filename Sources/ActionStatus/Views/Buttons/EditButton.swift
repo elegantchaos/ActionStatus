@@ -30,6 +30,6 @@ struct EditButton: View {
 struct EditButton_Previews: PreviewProvider {
     static var previews: some View {
         let context = PreviewContext()
-        return context.inject(into: EditButton(repoID: context.repos.first!.id))
+        return context.inject(into: EditButton(repoID: context.testRepo.id))
     }
 }

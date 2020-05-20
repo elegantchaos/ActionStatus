@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import ActionStatusCore
 
 class ActionStatusUITests: XCTestCase {
 
@@ -34,22 +35,18 @@ class ActionStatusUITests: XCTestCase {
     func testExample() {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
-        app.launchEnvironment["UITesting"] = "YES"
+        app.launchEnvironment.isTestingUI = true
         app.launch()
         
         Thread.sleep(forTimeInterval: 1)
         
         makeScreenShot()
-        
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-                                
     }
     
     func testAnother() {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
-        app.launchEnvironment["UITesting"] = "YES"
+        app.launchEnvironment.isTestingUI = true
         app.launch()
 
         let item = app.buttons["toggleEditing"]
