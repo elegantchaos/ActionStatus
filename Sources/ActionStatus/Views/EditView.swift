@@ -43,8 +43,10 @@ struct EditView: View {
             FormHeaderView(title, cancelAction: dismiss, doneAction: done)
 
             Form {
+                EmptyView()
+                
                 Section(
-                    header: Text("Repository Details").font(viewState.formHeaderFont),
+                    header: Text("Details").font(viewState.formHeaderFont),
                     footer: Text("Enter the name and owner of the repository, and the name of the workflow file to test. Enter a list of specific branches to test, or leave blank to just test the default branch.")
                 ) {
                     HStack {
@@ -73,7 +75,7 @@ struct EditView: View {
                     
                     HStack {
                         Label("branches", width: $labelWidth)
-                        TextField("comma-separated list of branches (leave empty for default branch)", text: $branches)
+                        TextField("branch1, branch2, …", text: $branches)
                             .branchListStyle()
                             .modifier(ClearButton(text: $branches))
                     }
@@ -82,32 +84,28 @@ struct EditView: View {
                 
                 Section(
                     header: Text("Locations").font(viewState.formHeaderFont),
-                    footer: Text("Corresponding locations on Github.").multilineTextAlignment(.center)
+                    footer: Text("Corresponding locations on Github.")
                 ) {
-                    HStack {
+                    HStack(alignment: .firstTextBaseline) {
                         Label("repo", width: $labelWidth)
                         Text("https://github.com/\(trimmedOwner)/\(trimmedName)").bold()
-
                         Spacer()
-                        
                         Button(action: openRepo) {
                             SystemImage("arrowshape.turn.up.right.circle")
                         }
                     }
                     
-                    HStack{
+                    HStack(alignment: .firstTextBaseline) {
                         Label("status", width: $labelWidth)
                         Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions?query=workflow%3A\(trimmedWorkflow)").bold()
-
                         Spacer()
-                        
                         Button(action: openWorkflow) {
                             SystemImage("arrowshape.turn.up.right.circle")
                         }
                     }
 
                     if !localPath.isEmpty {
-                        HStack{
+                        HStack(alignment: .firstTextBaseline) {
                             Label("local", width: $labelWidth)
                             Text(localPath)
                         }

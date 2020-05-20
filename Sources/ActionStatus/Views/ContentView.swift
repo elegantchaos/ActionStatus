@@ -21,7 +21,7 @@ struct ContentView: View {
                     NoReposView()
                 }
                 
-                RepoListView().padding(viewState.padding)
+                RepoListView().padding(.top, viewState.padding)
                 
                 Spacer()
                 FooterView()

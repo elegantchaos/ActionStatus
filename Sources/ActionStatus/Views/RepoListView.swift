@@ -38,8 +38,10 @@ struct RepoListView: View {
         let selectable = viewState.isEditing
         let repo = model.repo(withIdentifier: repoID)!
         let view = HStack(alignment: .center, spacing: viewState.padding) {
-            SystemImage(repo.badgeName)
-                .foregroundColor(repo.statusColor)
+            if !selectable {
+                SystemImage(repo.badgeName)
+                    .foregroundColor(repo.statusColor)
+            }
             Text(repo.name)
                 .allowsTightening(true)
                 .truncationMode(.middle)
@@ -53,7 +55,7 @@ struct RepoListView: View {
         .shim.contextMenu() { makeContentMenu(for: repo) }
         .shim.onTapGesture() { if selectable { self.edit(repoID: repoID) } }
         
-        return view
+        return view.padding(0)
     }
     
     func makeContentMenu(for repo: Repo) -> some View {
