@@ -8,15 +8,6 @@
       location = "group:"
       name = "Dependencies">
       <FileRef
-         location = "group:../SwiftUIExtensions">
-      </FileRef>
-      <FileRef
-         location = "group:../Files">
-      </FileRef>
-      <FileRef
-         location = "group:../Logger">
-      </FileRef>
-      <FileRef
          location = "group:../ActionStatusCore">
       </FileRef>
       <Group

@@ -28,6 +28,7 @@
 		22625E30246DA61300C12210 /* PreviewContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22625E2E246DA61300C12210 /* PreviewContext.swift */; };
 		226D6C792474345500B54967 /* FormHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226D6C782474345500B54967 /* FormHeaderView.swift */; };
 		226D6C7A2474345500B54967 /* FormHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226D6C782474345500B54967 /* FormHeaderView.swift */; };
+		226D6C81247549D100B54967 /* Files in Frameworks */ = {isa = PBXBuildFile; productRef = 226D6C80247549D100B54967 /* Files */; };
 		8B12FD2624167314006BFEE0 /* ClearButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD2524167314006BFEE0 /* ClearButton.swift */; };
 		8B12FD2724167314006BFEE0 /* ClearButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD2524167314006BFEE0 /* ClearButton.swift */; };
 		8B12FD292416746D006BFEE0 /* ToggleEditingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD282416746D006BFEE0 /* ToggleEditingButton.swift */; };
@@ -100,6 +101,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		226D6C8224754E4500B54967 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8B3E649B23EAE62D00B28168 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8B430E6923F586100050BF2A;
+			remoteInfo = ActionStatusTV;
+		};
 		8B3E64BA23EAE62E00B28168 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8B3E649B23EAE62D00B28168 /* Project object */;
@@ -242,6 +250,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				226D6C81247549D100B54967 /* Files in Frameworks */,
 				8B4893AD240D581300E3E112 /* SparkleBridgeClient.framework in Frameworks */,
 				8B736FA2240E9B2D0025D583 /* Introspect in Frameworks */,
 				8B5B175C23FAEB8200DD2AF5 /* SwiftUIExtensions in Frameworks */,
@@ -615,6 +624,7 @@
 				8B69B68A23FEDB6D00030A2B /* DictionaryCoding */,
 				8B736FA1240E9B2D0025D583 /* Introspect */,
 				8B3C0563240FBA0F00FB533B /* ActionStatusCore */,
+				226D6C80247549D100B54967 /* Files */,
 			);
 			productName = GithubStatus;
 			productReference = 8B3E64A323EAE62D00B28168 /* Action Status.app */;
@@ -653,6 +663,7 @@
 			);
 			dependencies = (
 				8B3E64C623EAE62F00B28168 /* PBXTargetDependency */,
+				226D6C8324754E4500B54967 /* PBXTargetDependency */,
 			);
 			name = ActionStatusUITests;
 			productName = GithubStatusUITests;
@@ -754,6 +765,7 @@
 				8B69B68923FEDB6D00030A2B /* XCRemoteSwiftPackageReference "DictionaryCoding" */,
 				8B736FA0240E9B2D0025D583 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				8B3C0562240FBA0F00FB533B /* XCRemoteSwiftPackageReference "ActionStatusCore" */,
+				226D6C7F247549D100B54967 /* XCRemoteSwiftPackageReference "Files" */,
 			);
 			productRefGroup = 8B3E64A423EAE62D00B28168 /* Products */;
 			projectDirPath = "";
@@ -983,6 +995,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		226D6C8324754E4500B54967 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8B430E6923F586100050BF2A /* ActionStatusTV */;
+			targetProxy = 226D6C8224754E4500B54967 /* PBXContainerItemProxy */;
+		};
 		8B045A8A24055E4B00EC21D6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			platformFilter = maccatalyst;
@@ -1222,7 +1239,7 @@
 					"@loader_path/Frameworks",
 				);
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Mobile;
+				TEST_TARGET_NAME = ActionStatusMobile;
 			};
 			name = Debug;
 		};
@@ -1237,7 +1254,7 @@
 					"@loader_path/Frameworks",
 				);
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Mobile;
+				TEST_TARGET_NAME = ActionStatusMobile;
 			};
 			name = Release;
 		};
@@ -1355,6 +1372,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		226D6C7F247549D100B54967 /* XCRemoteSwiftPackageReference "Files" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elegantchaos/Files.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.5;
+			};
+		};
 		8B3C0562240FBA0F00FB533B /* XCRemoteSwiftPackageReference "ActionStatusCore" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/elegantchaos/ActionStatusCore.git";
@@ -1368,7 +1393,7 @@
 			repositoryURL = "https://github.com/elegantchaos/SwiftUIExtensions.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.4;
+				minimumVersion = 1.1.0;
 			};
 		};
 		8B5D864423FD3F720085A570 /* XCRemoteSwiftPackageReference "ApplicationExtensions" */ = {
@@ -1406,6 +1431,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		226D6C80247549D100B54967 /* Files */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 226D6C7F247549D100B54967 /* XCRemoteSwiftPackageReference "Files" */;
+			productName = Files;
+		};
 		8B3C0563240FBA0F00FB533B /* ActionStatusCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8B3C0562240FBA0F00FB533B /* XCRemoteSwiftPackageReference "ActionStatusCore" */;

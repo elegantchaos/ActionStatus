@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/elegantchaos/Files.git",
         "state": {
           "branch": null,
-          "revision": "fab79dce95afdcc1b7c6983d6874176465bd210a",
-          "version": "1.0.4"
+          "revision": "fb3252dc942744566af0e63c1a1e8697f821dda6",
+          "version": "1.0.5"
         }
       },
       {
@@ -71,6 +71,15 @@
           "branch": null,
           "revision": "59a9088a3f83e4e074df55e6d74b38cf52ffe75d",
           "version": "1.0.0"
+        }
+      },
+      {
+        "package": "Logger",
+        "repositoryURL": "https://github.com/elegantchaos/Logger.git",
+        "state": {
+          "branch": null,
+          "revision": "e8a0dea5e826a6b3f7d020bd113247274991fb97",
+          "version": "1.5.5"
         }
       },
       {
@@ -96,8 +105,8 @@
         "repositoryURL": "https://github.com/elegantchaos/SwiftUIExtensions.git",
         "state": {
           "branch": null,
-          "revision": "0eb8611b33230c83cc10142d0246cb3b9f58f5da",
-          "version": "1.0.6"
+          "revision": "b093d2709967774368c5187b960f7f9e010ab583",
+          "version": "1.1.0"
         }
       }
     ]
