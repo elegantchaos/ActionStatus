@@ -26,7 +26,10 @@ struct FormHeaderView: View {
                 Button(action: cancelAction) { Text(cancelLabel) }
                 Spacer()
             }
-            Text(title).font(.headline).fixedSize()
+            Text(title)
+                .font(.headline)
+                .fixedSize()
+                .accessibility(identifier: "formHeader")
             HStack {
                 Spacer()
                 Button(action: doneAction) { Text(doneLabel) }

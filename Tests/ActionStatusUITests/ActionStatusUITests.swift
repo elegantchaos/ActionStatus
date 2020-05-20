@@ -40,13 +40,30 @@ class ActionStatusUITests: XCTestCase {
         Thread.sleep(forTimeInterval: 1)
         
         makeScreenShot()
+        
         // Use recording to get started writing UI tests.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
                                 
     }
     
-    func anotherTest() {
+    func testAnother() {
+        // UI tests must launch the application that they test.
+        let app = XCUIApplication()
+        app.launchEnvironment["UITesting"] = "YES"
+        app.launch()
+
+        let item = app.buttons["toggleEditing"]
+        XCTAssert(item.exists)
+        item.tap()
+        makeScreenShot()
+
+        let edit = app.buttons["editButton"].firstMatch
+        XCTAssert(edit.exists)
+        edit.tap()
         
+        let header = app.staticTexts["formHeader"]
+        XCTAssert(header.waitForExistence(timeout: 1))
+        makeScreenShot()
     }
 //
 //    func testLaunchPerformance() {

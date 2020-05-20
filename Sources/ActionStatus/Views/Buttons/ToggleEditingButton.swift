@@ -13,7 +13,7 @@ struct ToggleEditingButton: View {
     var body: some View {
         Button(action: toggleEditing) {
             SystemImage(viewState.isEditing ? viewState.stopEditingIcon : viewState.startEditingIcon).frame(width: 32, height: 32, alignment: .center)
-        }
+        }.accessibility(identifier: "toggleEditing")
     }
     
     func toggleEditing() {

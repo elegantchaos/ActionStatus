@@ -17,7 +17,7 @@ struct EditButton: View {
         Button(action: edit) {
             SystemImage(viewState.editIcon)
                 .foregroundColor(Color.accentColor)
-        }
+        }.accessibility(identifier: "editButton")
     }
 
     func edit() {
