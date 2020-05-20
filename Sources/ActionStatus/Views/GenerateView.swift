@@ -51,13 +51,14 @@ struct GenerateView: View {
     func onCancel() {
         presentation.wrappedValue.dismiss()
     }
+
     func onGenerate() {
-        let app = Application.shared
         storeSettings()
-        app.saveState()
+        let app = Application.shared
         if let output = generator.generateWorkflow(for: repo, application: app.info) {
-            Application.shared.save(output: output)
+            app.save(output: output)
         }
+        app.saveState()
     }
     
     func fetchSettings() {
