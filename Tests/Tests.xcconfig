@@ -5,3 +5,5 @@
 
 #include "Dependencies/ReleaseTools/Configs/RTTests.xcconfig"
 #include "Sources/ActionStatus/Resources/ActionStatus.xcconfig"
+
+TEST_TARGET_NAME = ActionStatusMobile

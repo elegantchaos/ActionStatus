@@ -26,7 +26,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:ActionStatus.xcodeproj",
         "identifier" : "8B3E64C323EAE62F00B28168",
@@ -34,6 +33,7 @@
       }
     },
     {
+      "enabled" : false,
       "target" : {
         "containerPath" : "container:..\/ActionStatusCore",
         "identifier" : "ActionStatusCoreTests",
