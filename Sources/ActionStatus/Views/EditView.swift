@@ -7,6 +7,8 @@ import ActionStatusCore
 import SwiftUI
 import SwiftUIExtensions
 import Introspect
+import Hardware
+
 
 struct EditView: View {
     #if os(tvOS)
@@ -23,7 +25,7 @@ struct EditView: View {
     @EnvironmentObject var model: Model
     @EnvironmentObject var viewState: ViewState
     
-    var title: String { return "\(trimmedName)" }
+    var title: String { return repoID == nil ? "Add Repository" : "Edit Repository" }
     var repo: Repo? {
         guard let repoID = repoID, let repo = model.repo(withIdentifier: repoID) else { return nil }
         return repo
@@ -35,7 +37,9 @@ struct EditView: View {
     @State var branches: String = Repo.defaultBranches.joined(separator: ", ")
     
     var body: some View {
-        VStack() {
+        let localPath = repo?.url(forDevice: Device.main.identifier)?.path ?? ""
+        
+        return VStack() {
             FormHeaderView(title, cancelAction: dismiss, doneAction: done)
 
             Form {
@@ -77,7 +81,7 @@ struct EditView: View {
                 }.padding([.bottom])
                 
                 Section(
-                    header: Text("Github Links").font(viewState.formHeaderFont),
+                    header: Text("Locations").font(viewState.formHeaderFont),
                     footer: Text("Corresponding locations on Github.").multilineTextAlignment(.center)
                 ) {
                     HStack {
@@ -102,10 +106,10 @@ struct EditView: View {
                         }
                     }
 
-                    if self.repo != nil {
+                    if !localPath.isEmpty {
                         HStack{
                             Label("local", width: $labelWidth)
-                            Text(String(describing: self.repo?.paths))
+                            Text(localPath)
                         }
                     }
 
