@@ -39,9 +39,12 @@ struct EditView: View {
             FormHeaderView(title, cancelAction: dismiss, doneAction: done)
 
             Form {
-                Section(header: Text("Settings").font(viewState.formHeaderFont)) {
+                Section(
+                    header: Text("Repository Details").font(viewState.formHeaderFont),
+                    footer: Text("Enter the name and owner of the repository, and the name of the workflow file to test. Enter a list of specific branches to test, or leave blank to just test the default branch.")
+                ) {
                     HStack {
-                        Label("Name", width: $labelWidth)
+                        Label("name", width: $labelWidth)
                         TextField("github repo name", text: $name)
                             .nameOrgStyle()
                             .modifier(ClearButton(text: $name))
@@ -51,37 +54,35 @@ struct EditView: View {
                     }
                     
                     HStack {
-                        Label("Owner", width: $labelWidth)
+                        Label("owner", width: $labelWidth)
                         TextField("github user or organisation", text: $owner)
                             .nameOrgStyle()
                             .modifier(ClearButton(text: $owner))
                     }
                     
                     HStack {
-                        Label("Workflow", width: $labelWidth)
+                        Label("workflow", width: $labelWidth)
                         TextField("Tests.yml", text: $workflow)
                             .nameOrgStyle()
                             .modifier(ClearButton(text: $workflow))
                     }
                     
                     HStack {
-                        Label("Branches", width: $labelWidth)
+                        Label("branches", width: $labelWidth)
                         TextField("comma-separated list of branches (leave empty for default branch)", text: $branches)
                             .branchListStyle()
                             .modifier(ClearButton(text: $branches))
                     }
                     
-                }
+                }.padding([.bottom])
                 
-                Section(header: Text("Details").font(viewState.formHeaderFont)) {
+                Section(
+                    header: Text("Github Links").font(viewState.formHeaderFont),
+                    footer: Text("Corresponding locations on Github.").multilineTextAlignment(.center)
+                ) {
                     HStack {
-                        Label("File", width: $labelWidth)
-                        Text("\(trimmedWorkflow).yml")
-                    }
-                    
-                    HStack {
-                        Label("Repo", width: $labelWidth)
-                        Text("https://github.com/\(trimmedOwner)/\(trimmedName)")
+                        Label("repo", width: $labelWidth)
+                        Text("https://github.com/\(trimmedOwner)/\(trimmedName)").bold()
 
                         Spacer()
                         
@@ -91,8 +92,8 @@ struct EditView: View {
                     }
                     
                     HStack{
-                        Label("Status", width: $labelWidth)
-                        Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions?query=workflow%3A\(trimmedWorkflow)")
+                        Label("status", width: $labelWidth)
+                        Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions?query=workflow%3A\(trimmedWorkflow)").bold()
 
                         Spacer()
                         
@@ -100,6 +101,14 @@ struct EditView: View {
                             SystemImage("arrowshape.turn.up.right.circle")
                         }
                     }
+
+                    if self.repo != nil {
+                        HStack{
+                            Label("local", width: $labelWidth)
+                            Text(String(describing: self.repo?.paths))
+                        }
+                    }
+
                 }
             }
         }
@@ -123,6 +132,9 @@ struct EditView: View {
         var stripped = workflow.trimmingCharacters(in: .whitespaces)
         if let range = stripped.range(of: ".yml") {
             stripped.removeSubrange(range)
+        }
+        if stripped.isEmpty {
+            stripped = "Tests"
         }
         return stripped
     }
