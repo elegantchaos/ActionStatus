@@ -46,7 +46,9 @@ class Application: BasicApplication {
     }
     
     class func makeModel() -> Model {
-        return ProcessInfo.processInfo.environment.isTestingUI ? TestModel() : Model([])
+        let isSimulator = Device.main.system.platform.isSimulator
+        let isUITesting = ProcessInfo.processInfo.environment.isTestingUI
+        return isSimulator || isUITesting ? TestModel() : Model([])
     }
     
     override func setUp(withOptions options: BasicApplication.LaunchOptions) {
