@@ -106,6 +106,9 @@
             reference = "container:Sources/ActionStatus/Resources/ActionStatus.xctestplan"
             default = "YES">
          </TestPlanReference>
+         <TestPlanReference
+            reference = "container:Sources/ActionStatus/Resources/Screenshots.xctestplan">
+         </TestPlanReference>
       </TestPlans>
       <Testables>
          <TestableReference

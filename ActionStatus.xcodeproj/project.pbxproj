@@ -29,6 +29,8 @@
 		226D6C792474345500B54967 /* FormHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226D6C782474345500B54967 /* FormHeaderView.swift */; };
 		226D6C7A2474345500B54967 /* FormHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226D6C782474345500B54967 /* FormHeaderView.swift */; };
 		226D6C81247549D100B54967 /* Files in Frameworks */ = {isa = PBXBuildFile; productRef = 226D6C80247549D100B54967 /* Files */; };
+		226D6C89247590AE00B54967 /* ScreenshotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */; };
+		226D6C8B2475913200B54967 /* ActionStatusCore in Frameworks */ = {isa = PBXBuildFile; productRef = 226D6C8A2475913200B54967 /* ActionStatusCore */; };
 		8B12FD2624167314006BFEE0 /* ClearButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD2524167314006BFEE0 /* ClearButton.swift */; };
 		8B12FD2724167314006BFEE0 /* ClearButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD2524167314006BFEE0 /* ClearButton.swift */; };
 		8B12FD292416746D006BFEE0 /* ToggleEditingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B12FD282416746D006BFEE0 /* ToggleEditingButton.swift */; };
@@ -158,6 +160,8 @@
 		22625E2E246DA61300C12210 /* PreviewContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContext.swift; sourceTree = "<group>"; };
 		226D6C782474345500B54967 /* FormHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormHeaderView.swift; sourceTree = "<group>"; };
 		226D6C8424755D1D00B54967 /* Scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Scripts; path = Extras/Scripts; sourceTree = "<group>"; };
+		226D6C8524758F1500B54967 /* Screenshots.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Screenshots.xctestplan; sourceTree = "<group>"; };
+		226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotUITests.swift; sourceTree = "<group>"; };
 		228D838C246AC10700943918 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		8B045A8424055A6200EC21D6 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Assets; path = Extras/Assets; sourceTree = "<group>"; };
 		8B12FD2524167314006BFEE0 /* ClearButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearButton.swift; sourceTree = "<group>"; };
@@ -264,6 +268,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				226D6C8B2475913200B54967 /* ActionStatusCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -360,6 +365,7 @@
 			isa = PBXGroup;
 			children = (
 				8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */,
+				226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */,
 				8B3E64CA23EAE62F00B28168 /* Info.plist */,
 			);
 			path = ActionStatusUITests;
@@ -437,6 +443,7 @@
 			isa = PBXGroup;
 			children = (
 				8B3C0576240FDAAD00FB533B /* ActionStatus.xctestplan */,
+				226D6C8524758F1500B54967 /* Screenshots.xctestplan */,
 				8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */,
 				8B5E7E9123F6C0A100087E15 /* BridgingHeader.h */,
 				8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */,
@@ -640,6 +647,9 @@
 				226D6C8324754E4500B54967 /* PBXTargetDependency */,
 			);
 			name = ActionStatusUITests;
+			packageProductDependencies = (
+				226D6C8A2475913200B54967 /* ActionStatusCore */,
+			);
 			productName = GithubStatusUITests;
 			productReference = 8B3E64C423EAE62F00B28168 /* Action Status.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -925,6 +935,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B3E64C923EAE62F00B28168 /* ActionStatusUITests.swift in Sources */,
+				226D6C89247590AE00B54967 /* ScreenshotUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1409,6 +1420,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 226D6C7F247549D100B54967 /* XCRemoteSwiftPackageReference "Files" */;
 			productName = Files;
+		};
+		226D6C8A2475913200B54967 /* ActionStatusCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ActionStatusCore;
 		};
 		8B3C0563240FBA0F00FB533B /* ActionStatusCore */ = {
 			isa = XCSwiftPackageProductDependency;

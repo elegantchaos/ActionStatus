@@ -1,0 +1,27 @@
+{
+  "configurations" : [
+    {
+      "id" : "3DE71446-E9E3-4470-8857-9A9213AFFB77",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "skippedTests" : [
+        "ActionStatusUITests"
+      ],
+      "target" : {
+        "containerPath" : "container:ActionStatus.xcodeproj",
+        "identifier" : "8B3E64C323EAE62F00B28168",
+        "name" : "ActionStatusUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

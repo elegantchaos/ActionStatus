@@ -5,8 +5,29 @@
 #  All code (c) 2020 - present day, Elegant Chaos Limited.
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-rm -rf .build/tests/results.xcresult
+function make_screenshots {
+    local destination=$1
+
+    echo "Making screenshots for $destination."
+    rm -rf .build/tests/results.xcresult
+    xcodebuild test \
+        -workspace ActionStatus.xcworkspace \
+        -scheme ActionStatus-iOS \
+        -destination "$destination" \
+        -testPlan Screenshots \
+        -resultBundlePath .build/tests/results.xcresult \
+        -includeScreenshots \
+        -xcconfig Sources/ActionStatus/Resources/SkipSparkle.xcconfig | xcpretty
+
+    echo "Extracting Screenshots."
+    xcparse screenshots --model .build/tests/results.xcresult/ .build/tests/screenshots/
+}
+
 rm -rf .build/tests/screenshots
-xcodebuild -workspace ActionStatus.xcworkspace -scheme ActionStatus-macOS test -resultBundlePath .build/tests/results.xcresult -includeScreenshots | xcpretty
-xcparse screenshots --os .build/tests/results.xcresult/ .build/tests/screenshots/
+
+make_screenshots 'platform=iOS Simulator,name=iPhone 8 Plus'
+make_screenshots 'platform=iOS Simulator,name=iPhone 11 Pro Max'
+make_screenshots 'platform=iOS Simulator,name=iPad Pro (12.9-inch) (4th generation)'
+
 open .build/tests/screenshots
+echo "Done."

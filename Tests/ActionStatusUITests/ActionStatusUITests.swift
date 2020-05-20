@@ -24,51 +24,14 @@ class ActionStatusUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func makeScreenShot() {
-        let screenshot = XCUIScreen.main.screenshot()
-        let fullScreenshotAttachment = XCTAttachment(screenshot: screenshot)
-        fullScreenshotAttachment.lifetime = .keepAlways
-
-        add(fullScreenshotAttachment)
-    }
-    
     func testExample() {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launchEnvironment.isTestingUI = true
-        app.launch()
-        
-        Thread.sleep(forTimeInterval: 1)
-        
-        makeScreenShot()
-    }
-    
-    func testAnother() {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launchEnvironment.isTestingUI = true
-        app.launch()
-
-        let item = app.buttons["toggleEditing"]
-        XCTAssert(item.exists)
-        item.tap()
-        makeScreenShot()
-
-        let edit = app.buttons["editButton"].firstMatch
-        XCTAssert(edit.exists)
-        edit.tap()
-        
-        let header = app.staticTexts["formHeader"]
-        XCTAssert(header.waitForExistence(timeout: 1))
-        makeScreenShot()
-    }
+//        // UI tests must launch the application that they test.
+//        let app = XCUIApplication()
+//        app.launchEnvironment.isTestingUI = true
+//        app.launch()
 //
-//    func testLaunchPerformance() {
-//        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, *) {
-//            // This measures how long it takes to launch your application.
-//            measure(metrics: [XCTOSSignpostMetric.applicationLaunch]) {
-//                XCUIApplication().launch()
-//            }
-//        }
-//    }
+//        Thread.sleep(forTimeInterval: 1)
+//
+//        makeScreenShot()
+    }
 }
