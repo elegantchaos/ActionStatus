@@ -3,8 +3,8 @@
    LastUpgradeVersion = "1140"
    version = "1.7">
    <BuildAction
-      parallelizeBuildables = "YES"
-      buildImplicitDependencies = "YES">
+      parallelizeBuildables = "NO"
+      buildImplicitDependencies = "NO">
       <PreActions>
          <ExecutionAction
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
@@ -32,10 +32,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8B48939F240D579600E3E112"
-               BuildableName = "SparkleBridgeClient.framework"
-               BlueprintName = "SparkleBridgeClient"
-               ReferencedContainer = "container:Dependencies/CatalystSparkle/CatalystSparkle.xcodeproj">
+               BlueprintIdentifier = "8DC2EF4F0486A6940098B216"
+               BuildableName = "Sparkle.framework"
+               BlueprintName = "Sparkle"
+               ReferencedContainer = "container:Dependencies/Sparkle/Sparkle.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -88,6 +88,20 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "8B48939F240D579600E3E112"
+               BuildableName = "SparkleBridgeClient.framework"
+               BlueprintName = "SparkleBridgeClient"
+               ReferencedContainer = "container:Dependencies/CatalystSparkle/CatalystSparkle.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "NO"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "8B3E64A223EAE62D00B28168"
                BuildableName = "Action Status.app"
                BlueprintName = "ActionStatusMobile"
@@ -116,7 +130,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8B3E64B823EAE62E00B28168"
-               BuildableName = "Action Status.xctest"
+               BuildableName = "ActionStatusTests.xctest"
                BlueprintName = "ActionStatusTests"
                ReferencedContainer = "container:ActionStatus.xcodeproj">
             </BuildableReference>
@@ -126,8 +140,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8B3E64C323EAE62F00B28168"
-               BuildableName = "Action Status.xctest"
-               BlueprintName = "ActionStatusUITests"
+               BuildableName = "ActionStatusUITestsMobile.xctest"
+               BlueprintName = "ActionStatusUITestsMobile"
                ReferencedContainer = "container:ActionStatus.xcodeproj">
             </BuildableReference>
          </TestableReference>

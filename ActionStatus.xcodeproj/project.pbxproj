@@ -14,7 +14,6 @@
 				8B045A8B24055E5900EC21D6 /* ShellScript */,
 			);
 			dependencies = (
-				8B045A8A24055E4B00EC21D6 /* PBXTargetDependency */,
 			);
 			name = Tools;
 			productName = Tools;
@@ -82,7 +81,6 @@
 		8B43A9882412CD0100A076AC /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B43A9872412CD0100A076AC /* ViewExtensions.swift */; };
 		8B43A98A2412CF5B00A076AC /* RepoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B43A9892412CF5B00A076AC /* RepoListView.swift */; };
 		8B48938F240D502000E3E112 /* SparkleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5AEB492407F8410065524B /* SparkleView.swift */; };
-		8B4893AD240D581300E3E112 /* SparkleBridgeClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4893AC240D581200E3E112 /* SparkleBridgeClient.framework */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (Weak, ); }; };
 		8B5AEB482407EE630065524B /* SparkleUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5AEB472407EE630065524B /* SparkleUpdater.swift */; };
 		8B5AEB4A2407F8410065524B /* SparkleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5AEB492407F8410065524B /* SparkleView.swift */; };
 		8B5B175C23FAEB8200DD2AF5 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5B175B23FAEB8200DD2AF5 /* SwiftUIExtensions */; };
@@ -103,7 +101,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		226D6C8224754E4500B54967 /* PBXContainerItemProxy */ = {
+		22E778462476BCA2009ED66A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8B3E649B23EAE62D00B28168 /* Project object */;
 			proxyType = 1;
@@ -155,7 +153,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2246FB24242E5428009E1731 /* SkipSparkle.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = SkipSparkle.xcconfig; sourceTree = "<group>"; };
+		2246FB24242E5428009E1731 /* IncludeSparkle.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = IncludeSparkle.xcconfig; sourceTree = "<group>"; };
 		22625E2B246D9AF800C12210 /* EditButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditButton.swift; sourceTree = "<group>"; };
 		22625E2E246DA61300C12210 /* PreviewContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContext.swift; sourceTree = "<group>"; };
 		226D6C782474345500B54967 /* FormHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormHeaderView.swift; sourceTree = "<group>"; };
@@ -249,7 +247,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				226D6C81247549D100B54967 /* Files in Frameworks */,
-				8B4893AD240D581300E3E112 /* SparkleBridgeClient.framework in Frameworks */,
 				8B736FA2240E9B2D0025D583 /* Introspect in Frameworks */,
 				8B5B175C23FAEB8200DD2AF5 /* SwiftUIExtensions in Frameworks */,
 				8B3C0564240FBA0F00FB533B /* ActionStatusCore in Frameworks */,
@@ -454,7 +451,7 @@
 				8B5E7E9123F6C0A100087E15 /* BridgingHeader.h */,
 				8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */,
 				8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */,
-				2246FB24242E5428009E1731 /* SkipSparkle.xcconfig */,
+				2246FB24242E5428009E1731 /* IncludeSparkle.xcconfig */,
 				8B3E64AC23EAE62E00B28168 /* Assets.xcassets */,
 				8B430E9023F58E060050BF2A /* PreviewContent */,
 			);
@@ -592,7 +589,6 @@
 			buildConfigurationList = 22E778422476A606009ED66A /* Build configuration list for PBXNativeTarget "ActionStatusUITestsTV" */;
 			buildPhases = (
 				22E778372476A606009ED66A /* Sources */,
-				22E778382476A606009ED66A /* Frameworks */,
 				22E778392476A606009ED66A /* Resources */,
 			);
 			buildRules = (
@@ -1025,7 +1021,7 @@
 		22E778412476A606009ED66A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8B430E6923F586100050BF2A /* ActionStatusTV */;
-			targetProxy = 22E778402476A606009ED66A /* PBXContainerItemProxy */;
+			targetProxy = 22E778462476BCA2009ED66A /* PBXContainerItemProxy */;
 		};
 		8B3E64BB23EAE62E00B28168 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

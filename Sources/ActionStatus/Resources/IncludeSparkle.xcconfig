@@ -3,4 +3,5 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-SKIP_SPARKLE = true
+INCLUDE_SPARKLE = true
+ACTION_STATUS_ADDITIONAL_FRAMEWORKS = -weak_framework SparkleBridgeClient

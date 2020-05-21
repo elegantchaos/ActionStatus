@@ -107,13 +107,13 @@ then
     IDENTITY="-"
 fi
 
-if [[ $SKIP_SPARKLE ]]
+if [[ $INCLUDE_SPARKLE ]]
 then
-    echo "Skipping Sparkle."
-else
     echo "Adding Sparkle."
     ditto "$BUILT_PRODUCTS_DIR/SparkleBridgeClient.framework" "$RT_BUILT_FRAMEWORKS_DIR/SparkleBridgeClient.framework"
     copy_xpcs "$BUILT_PRODUCTS_DIR"
+else
+    echo "Skipping Sparkle."
 fi
 
 resign_bundles "$RT_BUILT_RESOURCES_DIR"

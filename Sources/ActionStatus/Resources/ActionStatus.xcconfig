@@ -11,7 +11,7 @@ RT_SHORT_NAME = ActionStatus
 RT_BUNDLE_IDENTIFIER = com.elegantchaos.actionstatus
 RT_TEAM = 2H48644JM2
 
-// uncomment the line below to force the build number to something old, in order to test Sparkle
-//RT_BUILD = 100
+ACTION_STATUS_ADDITIONAL_FRAMEWORKS = 
 
 ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon$(RT_TYPE)
+OTHER_LDFLAGS = $ACTION_STATUS_ADDITIONAL_FRAMEWORKS
