@@ -29,6 +29,7 @@ class ScreenshotUITests: XCTestCase {
         Thread.sleep(forTimeInterval: 1)
         makeScreenShot("01-main")
 
+        #if !os(tvOS)
 //        let toggleEditing = app.buttons["toggleEditing"]
 //        XCTAssert(toggleEditing.exists)
 //        toggleEditing.tap()
@@ -61,5 +62,6 @@ class ScreenshotUITests: XCTestCase {
  
         XCTAssertTrue(header.waitForExistence(timeout: 1))
         makeScreenShot("04-generate")
+        #endif
     }
 }

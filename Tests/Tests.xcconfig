@@ -5,7 +5,7 @@
 
 #include "Dependencies/ReleaseTools/Configs/RTTests.xcconfig"
 #include "Sources/ActionStatus/Resources/ActionStatus.xcconfig"
-#include "Sources/ActionStatus/Resources/SkipSparkle.xcconfig"
 
 TEST_TARGET_NAME = ActionStatusMobile
 PRODUCT_NAME = $(TARGET_NAME)
+INFOPLIST_FILE = Tests/ActionStatusUITests/Info.plist
