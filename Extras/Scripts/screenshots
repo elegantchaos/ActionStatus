@@ -8,19 +8,18 @@
 screenshots=Extras/Screenshots
 
 function make_screenshots {
-    local scheme=$1
+    local modifier=$1
     local destination=$2
 
     echo "Making screenshots for $destination."
     rm -rf .build/tests/results.xcresult
     xcodebuild test \
         -workspace ActionStatus.xcworkspace \
-        -scheme "$scheme" \
+        -scheme "ActionStatus$modifier" \
         -destination "$destination" \
-        -testPlan Screenshots \
+        -testPlan "Screenshots$modifier" \
         -resultBundlePath .build/tests/results.xcresult \
-        -includeScreenshots \
-        -xcconfig Sources/ActionStatus/Resources/SkipSparkle.xcconfig | xcpretty
+        -includeScreenshots
 
     echo "Extracting Screenshots."
     xcparse screenshots --model .build/tests/results.xcresult/ "$screenshots"
@@ -28,10 +27,11 @@ function make_screenshots {
 
 rm -rf "$screenshots"
 
-make_screenshots 'ActionStatus-tvOS' 'platform=tvOS Simulator,name=Apple TV 4K (at 1080p)'
-make_screenshots 'ActionStatus-iOS' 'platform=iOS Simulator,name=iPhone 8 Plus'
-make_screenshots 'ActionStatus-iOS' 'platform=iOS Simulator,name=iPhone 11 Pro Max'
-make_screenshots 'ActionStatus-iOS' 'platform=iOS Simulator,name=iPad Pro (12.9-inch) (4th generation)'
+make_screenshots '' 'platform=macOS'
+#make_screenshots '-tvOS' 'platform=tvOS Simulator,name=Apple TV 4K (at 1080p)'
+#make_screenshots '' 'platform=iOS Simulator,name=iPhone 8 Plus'
+#make_screenshots '' 'platform=iOS Simulator,name=iPhone 11 Pro Max'
+#make_screenshots '' 'platform=iOS Simulator,name=iPad Pro (12.9-inch) (4th generation)'
 
 open "$screenshots"
 echo "Done."

@@ -127,7 +127,7 @@ extension AppKitBridgeSingleton: AppKitBridge {
                 
                 // if UI testing, force the window to a known position
                 if let testingFlag = ProcessInfo.processInfo.environment["UITesting"], testingFlag == "YES" {
-                    let screen = NSScreen.screens[0].frame
+                    let screen = NSScreen.screens.last!.frame
                     window.setFrameTopLeftPoint(CGPoint(x: screen.minX + 64.0, y: screen.maxY - 64.0))
                     NSWorkspace.shared.hideOtherApplications()
                 }

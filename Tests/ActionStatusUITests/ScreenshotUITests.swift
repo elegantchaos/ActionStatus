@@ -14,10 +14,14 @@ class ScreenshotUITests: XCTestCase {
     }
 
     func makeScreenShot(_ name: String) {
-        let screenshot = XCUIScreen.main.screenshot()
-        let attachment = XCTAttachment(uniformTypeIdentifier: kUTTypePNG as String, name: name, payload: screenshot.pngRepresentation, userInfo: [:])
-        attachment.lifetime = .keepAlways
-        add(attachment)
+        var n = 1
+        for screen in XCUIScreen.screens {
+            let screenshot = screen.screenshot()
+            let attachment = XCTAttachment(uniformTypeIdentifier: kUTTypePNG as String, name: "\(name)-\(n)", payload: screenshot.pngRepresentation, userInfo: [:])
+            attachment.lifetime = .keepAlways
+            add(attachment)
+            n += 1
+        }
     }
     
     func testMakeScreenshots() {
@@ -26,7 +30,8 @@ class ScreenshotUITests: XCTestCase {
         app.launchEnvironment.isTestingUI = true
         app.launch()
         
-        Thread.sleep(forTimeInterval: 1)
+        let firstRow = app.staticTexts["Datastore"]
+        XCTAssertTrue(firstRow.waitForExistence(timeout: 5))
         makeScreenShot("01-main")
 
         #if !os(tvOS)
@@ -35,9 +40,6 @@ class ScreenshotUITests: XCTestCase {
 //        toggleEditing.tap()
 //        makeScreenShot("editing mode")
 //        toggleEditing.tap()
-
-        let firstRow = app.staticTexts["Datastore"]
-        XCTAssertTrue(firstRow.exists)
 
         firstRow.press(forDuration: 1.0)
         makeScreenShot("02-contextual")

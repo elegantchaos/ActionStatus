@@ -171,7 +171,7 @@
 		226D6C8524758F1500B54967 /* Screenshots.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Screenshots.xctestplan; sourceTree = "<group>"; };
 		226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotUITests.swift; sourceTree = "<group>"; };
 		228D838C246AC10700943918 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		22E778362476A5A5009ED66A /* ScreenshotsTV.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ScreenshotsTV.xctestplan; sourceTree = "<group>"; };
+		22E778362476A5A5009ED66A /* Screenshots-tvOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Screenshots-tvOS.xctestplan"; sourceTree = "<group>"; };
 		22E7783B2476A606009ED66A /* ActionStatusUITestsTV.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ActionStatusUITestsTV.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22E778452476A6C9009ED66A /* TestsTV.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TestsTV.xcconfig; sourceTree = "<group>"; };
 		8B045A8424055A6200EC21D6 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Assets; path = Extras/Assets; sourceTree = "<group>"; };
@@ -428,6 +428,9 @@
 		8B522FA223F6E7B40020AD36 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				8B3C0576240FDAAD00FB533B /* ActionStatus.xctestplan */,
+				226D6C8524758F1500B54967 /* Screenshots.xctestplan */,
+				22E778362476A5A5009ED66A /* Screenshots-tvOS.xctestplan */,
 				8B5E7E6223F6A97D00087E15 /* Tests.xcconfig */,
 				22E778452476A6C9009ED66A /* TestsTV.xcconfig */,
 				8B3E64BC23EAE62E00B28168 /* ActionStatusTests */,
@@ -462,9 +465,6 @@
 		8B5B175223FADAAE00DD2AF5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8B3C0576240FDAAD00FB533B /* ActionStatus.xctestplan */,
-				226D6C8524758F1500B54967 /* Screenshots.xctestplan */,
-				22E778362476A5A5009ED66A /* ScreenshotsTV.xctestplan */,
 				8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */,
 				8B5E7E9123F6C0A100087E15 /* BridgingHeader.h */,
 				8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */,
