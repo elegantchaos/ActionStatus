@@ -14,7 +14,7 @@ echo "*************"
 
 set -o pipefail
 
-rt set scheme ActionStatus-iOS --platform=iOS
+rt set scheme ActionStatus --platform=iOS
 rt archive --platform=iOS --show-output 2> /dev/null | xcpretty
 rt export --platform=iOS
 rt upload --platform=iOS

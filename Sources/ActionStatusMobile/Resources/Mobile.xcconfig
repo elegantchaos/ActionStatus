@@ -6,6 +6,7 @@
 #include "Dependencies/ReleaseTools/Configs/RTCatalyst.xcconfig"
 #include "Sources/ActionStatus/Resources/ActionStatus.xcconfig"
 
+OTHER_LDFLAGS = $ACTION_STATUS_ADDITIONAL_FRAMEWORKS
 
 // Uncomment the lines below to test Sparkle
 //RT_BUILD = 100

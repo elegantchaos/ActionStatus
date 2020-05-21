@@ -13,8 +13,8 @@ echo "***************"
 
 set -o pipefail
 
-rt set scheme ActionStatus-macOS --platform macOS
-rt archive 2>/dev/null | xcpretty
+rt set scheme ActionStatus-Sparkle --platform macOS
+rt archive --xcconfig Sources/ActionStatus/Resources/IncludeSparkle.xcconfig 2>/dev/null | xcpretty
 rt export --distribution true
 rt notarize
 rt wait

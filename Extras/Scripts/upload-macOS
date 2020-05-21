@@ -14,7 +14,7 @@ echo "***************"
 
 set -o pipefail
 
-rt set scheme ActionStatus-macOS --platform macOS
-rt archive --xcconfig Sources/ActionStatus/Resources/SkipSparkle.xcconfig --show-output 2> /dev/null | xcpretty
+rt set scheme ActionStatus --platform macOS
+rt archive --show-output 2> /dev/null | xcpretty
 rt export --platform=macOS
 rt upload --platform=macOS
