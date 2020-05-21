@@ -27,19 +27,19 @@ class ScreenshotUITests: XCTestCase {
         app.launch()
         
         Thread.sleep(forTimeInterval: 1)
-        makeScreenShot("main")
+        makeScreenShot("01-main")
 
-        let toggleEditing = app.buttons["toggleEditing"]
-        XCTAssert(toggleEditing.exists)
-        toggleEditing.tap()
-        makeScreenShot("editing mode")
-        toggleEditing.tap()
+//        let toggleEditing = app.buttons["toggleEditing"]
+//        XCTAssert(toggleEditing.exists)
+//        toggleEditing.tap()
+//        makeScreenShot("editing mode")
+//        toggleEditing.tap()
 
         let firstRow = app.staticTexts["Datastore"]
         XCTAssertTrue(firstRow.exists)
 
         firstRow.press(forDuration: 1.0)
-        makeScreenShot("contextual")
+        makeScreenShot("02-contextual")
 
         let edit = app.buttons["Edit…"].firstMatch
         XCTAssertTrue(edit.waitForExistence(timeout: 5))
@@ -47,7 +47,7 @@ class ScreenshotUITests: XCTestCase {
 
         let header = app.staticTexts["formHeader"]
         XCTAssert(header.waitForExistence(timeout: 1))
-        makeScreenShot("editor")
+        makeScreenShot("03-editor")
         
         let cancel = app.buttons["cancel"].firstMatch
         XCTAssert(cancel.exists)
@@ -59,7 +59,7 @@ class ScreenshotUITests: XCTestCase {
         XCTAssertTrue(generate.waitForExistence(timeout: 5))
         generate.tap()
  
-        header.waitForExistence(timeout: 1)
-        makeScreenShot("generate")
+        XCTAssertTrue(header.waitForExistence(timeout: 1))
+        makeScreenShot("04-generate")
     }
 }
