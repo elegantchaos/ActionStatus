@@ -8,3 +8,4 @@
 #include "Sources/ActionStatus/Resources/SkipSparkle.xcconfig"
 
 TEST_TARGET_NAME = ActionStatusMobile
+PRODUCT_NAME = $(TARGET_NAME)
