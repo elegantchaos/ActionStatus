@@ -15,12 +15,15 @@ class ScreenshotUITests: XCTestCase {
 
     func makeScreenShot(_ name: String) {
         var n = 1
+        let main = XCUIScreen.main
         for screen in XCUIScreen.screens {
+            if screen != main {
             let screenshot = screen.screenshot()
             let attachment = XCTAttachment(uniformTypeIdentifier: kUTTypePNG as String, name: "\(name)-\(n)", payload: screenshot.pngRepresentation, userInfo: [:])
             attachment.lifetime = .keepAlways
             add(attachment)
             n += 1
+            }
         }
     }
     
@@ -29,7 +32,8 @@ class ScreenshotUITests: XCTestCase {
         let app = XCUIApplication()
         app.launchEnvironment.isTestingUI = true
         app.launch()
-        
+        app.hideOtherApplications()
+
         let firstRow = app.staticTexts["Datastore"]
         XCTAssertTrue(firstRow.waitForExistence(timeout: 5))
         makeScreenShot("01-main")
@@ -59,6 +63,18 @@ class ScreenshotUITests: XCTestCase {
         XCTAssertTrue(header.waitForExistence(timeout: 1))
         makeScreenShot("04-generate")
         #endif
+
+        app.unhideApplications()
+    }
+    
+    func testElements() {
+        let app = XCUIApplication()
+        app.launchEnvironment.isTestingUI = true
+        app.launch()
+        for element in app.menuItems.allElementsBoundByAccessibilityElement {
+            print(element.identifier)
+        }
+
     }
 }
 
@@ -81,6 +97,18 @@ extension XCUIApplication {
         let item = buttons[name].firstMatch
         #endif
         XCTAssertTrue(item.waitForExistence(timeout: 5))
+        item.tap()
+    }
+    
+    func hideOtherApplications() {
+        let item = menuItems["hideOtherApplications:"].firstMatch
+        XCTAssertTrue(item.exists)
+        item.tap()
+    }
+    
+    func unhideApplications() {
+        let item = menuItems["unhideAllApplications:"].firstMatch
+        XCTAssertTrue(item.exists)
         item.tap()
     }
 }
