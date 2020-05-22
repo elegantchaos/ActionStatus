@@ -41,13 +41,10 @@ class ScreenshotUITests: XCTestCase {
 //        makeScreenShot("editing mode")
 //        toggleEditing.tap()
 
-        firstRow.press(forDuration: 1.0)
+        firstRow.showContextMenu()
         makeScreenShot("02-contextual")
 
-        let edit = app.buttons["Edit…"].firstMatch
-        XCTAssertTrue(edit.waitForExistence(timeout: 5))
-        edit.tap()
-
+        app.selectContextMenuItem("Edit…")
         let header = app.staticTexts["formHeader"]
         XCTAssert(header.waitForExistence(timeout: 1))
         makeScreenShot("03-editor")
@@ -56,14 +53,34 @@ class ScreenshotUITests: XCTestCase {
         XCTAssert(cancel.exists)
         cancel.tap()
 
-        firstRow.press(forDuration: 1.0)
-        
-        let generate = app.buttons["Generate Workflow…"].firstMatch
-        XCTAssertTrue(generate.waitForExistence(timeout: 5))
-        generate.tap()
+        firstRow.showContextMenu()
+        app.selectContextMenuItem("Generate Workflow…")
  
         XCTAssertTrue(header.waitForExistence(timeout: 1))
         makeScreenShot("04-generate")
         #endif
+    }
+}
+
+extension XCUIElement {
+    func showContextMenu() {
+        #if targetEnvironment(macCatalyst)
+        rightClick()
+        #else
+        press(forDuration: 1.0)
+        #endif
+    }
+    
+}
+
+extension XCUIApplication {
+    func selectContextMenuItem(_ name: String) {
+        #if targetEnvironment(macCatalyst)
+        let item = menuItems[name].firstMatch
+        #else
+        let item = buttons[name].firstMatch
+        #endif
+        XCTAssertTrue(item.waitForExistence(timeout: 5))
+        item.tap()
     }
 }
