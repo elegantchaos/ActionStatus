@@ -25,13 +25,27 @@ function make_screenshots {
     xcparse screenshots --model .build/tests/results.xcresult/ "$screenshots"
 }
 
-rm -rf "$screenshots"
+if [[ "$1" == "" ]]
+then
+    rm -rf "$screenshots"
+fi
 
-make_screenshots '' 'platform=macOS'
-make_screenshots '-tvOS' 'platform=tvOS Simulator,name=Apple TV 4K (at 1080p)'
-make_screenshots '' 'platform=iOS Simulator,name=iPhone 8 Plus'
-make_screenshots '' 'platform=iOS Simulator,name=iPhone 11 Pro Max'
-make_screenshots '' 'platform=iOS Simulator,name=iPad Pro (12.9-inch) (4th generation)'
+if [[ ("$1" == "") || ("$1" == "macOS") ]]
+then
+    make_screenshots '' 'platform=macOS'
+fi
+
+if [[ ("$1" == "") || ("$1" == "tvOS") ]]
+then
+    make_screenshots '-tvOS' 'platform=tvOS Simulator,name=Apple TV 4K (at 1080p)'
+fi
+
+if [[ ("$1" == "") || ("$1" == "iOS") ]]
+then
+    make_screenshots '' 'platform=iOS Simulator,name=iPhone 8 Plus'
+    make_screenshots '' 'platform=iOS Simulator,name=iPhone 11 Pro Max'
+    make_screenshots '' 'platform=iOS Simulator,name=iPad Pro (12.9-inch) (4th generation)'
+fi
 
 open "$screenshots"
 echo "Done."
