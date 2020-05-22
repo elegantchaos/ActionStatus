@@ -106,6 +106,7 @@ class ScreenshotUITests: XCTestCase {
 
 extension XCUIApplication {
     func showContextMenu(for row: XCUIElement, highlighting: String? = nil) {
+        #if !os(tvOS)
         #if targetEnvironment(macCatalyst)
         row.rightClick()
         if let name = highlighting {
@@ -116,9 +117,11 @@ extension XCUIApplication {
         #else
         row.press(forDuration: 1.0)
         #endif
+        #endif
     }
 
     func selectContextMenuItem(_ name: String) {
+        #if !os(tvOS)
         #if targetEnvironment(macCatalyst)
         let item = menuItems[name].firstMatch
         #else
@@ -126,19 +129,37 @@ extension XCUIApplication {
         #endif
         XCTAssertTrue(item.waitForExistence(timeout: 5))
         item.tap()
+        #endif
     }
     
     func hideOtherApplications() {
+        #if os(macOS) || targetEnvironment(macCatalyst)
         let item = menuItems["hideOtherApplications:"]
         if item.exists {
             item.tap()
         }
+        #endif
     }
     
     func unhideApplications() {
+        #if os(macOS) || targetEnvironment(macCatalyst)
         let item = menuItems["unhideAllApplications:"]
         if item.exists {
             item.tap()
         }
+        #endif
     }
 }
+
+/*
+ hide finder icons
+ 
+ defaults write com.apple.finder CreateDesktop false
+ killall Finder
+ 
+ mac screenshot sizes
+ 
+ 1280 x 800, 1440 x 900, 2560 x 1600, and 2880 x 1800
+ 
+ 
+ */
