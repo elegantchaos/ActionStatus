@@ -19,7 +19,7 @@ function make_screenshots {
         -destination "$destination" \
         -testPlan "Screenshots$modifier" \
         -resultBundlePath .build/tests/results.xcresult \
-        -includeScreenshots
+        -includeScreenshots | xcpretty
 
     echo "Extracting Screenshots."
     xcparse screenshots --model .build/tests/results.xcresult/ "$screenshots"
@@ -28,10 +28,10 @@ function make_screenshots {
 rm -rf "$screenshots"
 
 make_screenshots '' 'platform=macOS'
-#make_screenshots '-tvOS' 'platform=tvOS Simulator,name=Apple TV 4K (at 1080p)'
-#make_screenshots '' 'platform=iOS Simulator,name=iPhone 8 Plus'
-#make_screenshots '' 'platform=iOS Simulator,name=iPhone 11 Pro Max'
-#make_screenshots '' 'platform=iOS Simulator,name=iPad Pro (12.9-inch) (4th generation)'
+make_screenshots '-tvOS' 'platform=tvOS Simulator,name=Apple TV 4K (at 1080p)'
+make_screenshots '' 'platform=iOS Simulator,name=iPhone 8 Plus'
+make_screenshots '' 'platform=iOS Simulator,name=iPhone 11 Pro Max'
+make_screenshots '' 'platform=iOS Simulator,name=iPad Pro (12.9-inch) (4th generation)'
 
 open "$screenshots"
 echo "Done."

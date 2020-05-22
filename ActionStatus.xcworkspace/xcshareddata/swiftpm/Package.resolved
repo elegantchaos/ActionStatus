@@ -47,21 +47,21 @@
         }
       },
       {
+        "package": "Displays",
+        "repositoryURL": "https://github.com/elegantchaos/Displays.git",
+        "state": {
+          "branch": null,
+          "revision": "75919792835b8a9369dece43275aeab9af765452",
+          "version": "1.0.0"
+        }
+      },
+      {
         "package": "Files",
         "repositoryURL": "https://github.com/elegantchaos/Files.git",
         "state": {
           "branch": null,
           "revision": "fb3252dc942744566af0e63c1a1e8697f821dda6",
           "version": "1.0.5"
-        }
-      },
-      {
-        "package": "Hardware",
-        "repositoryURL": "https://github.com/elegantchaos/Hardware.git",
-        "state": {
-          "branch": null,
-          "revision": "a9f223b6aa675c37b6090e3d431346f5c73a1f3d",
-          "version": "1.0.0"
         }
       },
       {

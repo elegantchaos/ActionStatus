@@ -7,24 +7,34 @@ import XCTest
 import ActionStatusCore
 import CoreServices
 
+#if targetEnvironment(macCatalyst)
+import Displays
+#endif
+
 class ScreenshotUITests: XCTestCase {
 
     override func setUp() {
         continueAfterFailure = false
     }
 
-    func makeScreenShot(_ name: String) {
-        var n = 1
+    func cleanScreenshot() -> XCUIScreenshot {
+        #if targetEnvironment(macCatalyst)
         let main = XCUIScreen.main
         for screen in XCUIScreen.screens {
             if screen != main {
-            let screenshot = screen.screenshot()
-            let attachment = XCTAttachment(uniformTypeIdentifier: kUTTypePNG as String, name: "\(name)-\(n)", payload: screenshot.pngRepresentation, userInfo: [:])
-            attachment.lifetime = .keepAlways
-            add(attachment)
-            n += 1
+                return screen.screenshot()
             }
         }
+        #endif
+        
+        return XCUIScreen.main.screenshot()
+    }
+    
+    func makeScreenShot(_ name: String) {
+        let screenshot = cleanScreenshot()
+        let attachment = XCTAttachment(uniformTypeIdentifier: kUTTypePNG as String, name: name, payload: screenshot.pngRepresentation, userInfo: [:])
+        attachment.lifetime = .keepAlways
+        add(attachment)
     }
     
     func testMakeScreenshots() {
@@ -34,6 +44,17 @@ class ScreenshotUITests: XCTestCase {
         app.launch()
         app.hideOtherApplications()
 
+        #if targetEnvironment(macCatalyst)
+        for display in Display.active {
+            if !display.isMain {
+                let move = app.menuItems["Move to \(display.name)"]
+                if move.exists {
+                    move.tap()
+                }
+            }
+        }
+        #endif
+        
         let firstRow = app.staticTexts["Datastore"]
         XCTAssertTrue(firstRow.waitForExistence(timeout: 5))
         makeScreenShot("01-main")
@@ -45,25 +66,30 @@ class ScreenshotUITests: XCTestCase {
 //        makeScreenShot("editing mode")
 //        toggleEditing.tap()
 
-        firstRow.showContextMenu()
+        app.showContextMenu(for: firstRow, highlighting: "Edit…")
         makeScreenShot("02-contextual")
 
         app.selectContextMenuItem("Edit…")
-        let header = app.staticTexts["formHeader"]
-        XCTAssert(header.waitForExistence(timeout: 1))
-        makeScreenShot("03-editor")
-        
         let cancel = app.buttons["cancel"].firstMatch
-        XCTAssert(cancel.exists)
+        XCTAssert(cancel.waitForExistence(timeout: 1))
+        makeScreenShot("03-editor")
         cancel.tap()
 
-        firstRow.showContextMenu()
+        app.showContextMenu(for: firstRow)
         app.selectContextMenuItem("Generate Workflow…")
  
-        XCTAssertTrue(header.waitForExistence(timeout: 1))
+        XCTAssert(cancel.waitForExistence(timeout: 1))
         makeScreenShot("04-generate")
+        cancel.tap()
         #endif
 
+        #if targetEnvironment(macCatalyst)
+        let status = app.statusItems["ActionStatusStatusMenu"]
+        XCTAssert(status.exists)
+        status.tap()
+        makeScreenShot("05-status")
+        #endif
+        
         app.unhideApplications()
     }
     
@@ -71,25 +97,27 @@ class ScreenshotUITests: XCTestCase {
         let app = XCUIApplication()
         app.launchEnvironment.isTestingUI = true
         app.launch()
-        for element in app.menuItems.allElementsBoundByAccessibilityElement {
+        for element in app.statusItems.allElementsBoundByAccessibilityElement {
             print(element.identifier)
         }
 
     }
 }
 
-extension XCUIElement {
-    func showContextMenu() {
+extension XCUIApplication {
+    func showContextMenu(for row: XCUIElement, highlighting: String? = nil) {
         #if targetEnvironment(macCatalyst)
-        rightClick()
+        row.rightClick()
+        if let name = highlighting {
+            let item = menuItems[name].firstMatch
+            XCTAssertTrue(item.waitForExistence(timeout: 5))
+            item.hover()
+        }
         #else
-        press(forDuration: 1.0)
+        row.press(forDuration: 1.0)
         #endif
     }
-    
-}
 
-extension XCUIApplication {
     func selectContextMenuItem(_ name: String) {
         #if targetEnvironment(macCatalyst)
         let item = menuItems[name].firstMatch
@@ -101,14 +129,16 @@ extension XCUIApplication {
     }
     
     func hideOtherApplications() {
-        let item = menuItems["hideOtherApplications:"].firstMatch
-        XCTAssertTrue(item.exists)
-        item.tap()
+        let item = menuItems["hideOtherApplications:"]
+        if item.exists {
+            item.tap()
+        }
     }
     
     func unhideApplications() {
-        let item = menuItems["unhideAllApplications:"].firstMatch
-        XCTAssertTrue(item.exists)
-        item.tap()
+        let item = menuItems["unhideAllApplications:"]
+        if item.exists {
+            item.tap()
+        }
     }
 }

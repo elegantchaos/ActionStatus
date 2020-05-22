@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		2260212424781A11002F889D /* Displays in Frameworks */ = {isa = PBXBuildFile; platformFilter = maccatalyst; productRef = 2260212324781A11002F889D /* Displays */; settings = {ATTRIBUTES = (Required, ); }; };
 		22625E2C246D9AF800C12210 /* EditButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22625E2B246D9AF800C12210 /* EditButton.swift */; };
 		22625E2D246D9AF800C12210 /* EditButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22625E2B246D9AF800C12210 /* EditButton.swift */; };
 		22625E2F246DA61300C12210 /* PreviewContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22625E2E246DA61300C12210 /* PreviewContext.swift */; };
@@ -287,6 +288,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				226D6C8B2475913200B54967 /* ActionStatusCore in Frameworks */,
+				2260212424781A11002F889D /* Displays in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -691,6 +693,7 @@
 			name = ActionStatusUITestsMobile;
 			packageProductDependencies = (
 				226D6C8A2475913200B54967 /* ActionStatusCore */,
+				2260212324781A11002F889D /* Displays */,
 			);
 			productName = GithubStatusUITests;
 			productReference = 8B3E64C423EAE62F00B28168 /* ActionStatusUITestsMobile.xctest */;
@@ -796,6 +799,7 @@
 				8B736FA0240E9B2D0025D583 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				8B3C0562240FBA0F00FB533B /* XCRemoteSwiftPackageReference "ActionStatusCore" */,
 				226D6C7F247549D100B54967 /* XCRemoteSwiftPackageReference "Files" */,
+				226021202478010D002F889D /* XCRemoteSwiftPackageReference "Displays" */,
 			);
 			productRefGroup = 8B3E64A423EAE62D00B28168 /* Products */;
 			projectDirPath = "";
@@ -1434,6 +1438,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		226021202478010D002F889D /* XCRemoteSwiftPackageReference "Displays" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elegantchaos/Displays.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		226D6C7F247549D100B54967 /* XCRemoteSwiftPackageReference "Files" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/elegantchaos/Files.git";
@@ -1493,6 +1505,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2260212324781A11002F889D /* Displays */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Displays;
+		};
 		226D6C80247549D100B54967 /* Files */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 226D6C7F247549D100B54967 /* XCRemoteSwiftPackageReference "Files" */;

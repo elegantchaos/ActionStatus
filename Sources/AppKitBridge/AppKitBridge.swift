@@ -80,6 +80,7 @@ extension ItemStatus: CaseIterable {
         let status = NSStatusBar.system
         let newItem = status.statusItem(withLength: 22)
         if let button = newItem.button {
+            button.setAccessibilityIdentifier("ActionStatusStatusMenu")
             button.title = "ActionStatus"
         }
         

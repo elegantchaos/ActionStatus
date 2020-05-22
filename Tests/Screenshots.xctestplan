@@ -14,7 +14,8 @@
   "testTargets" : [
     {
       "skippedTests" : [
-        "ActionStatusUITests"
+        "ActionStatusUITests",
+        "ScreenshotUITests\/testElements()"
       ],
       "target" : {
         "containerPath" : "container:ActionStatus.xcodeproj",

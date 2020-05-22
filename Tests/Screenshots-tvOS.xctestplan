@@ -13,6 +13,9 @@
   },
   "testTargets" : [
     {
+      "skippedTests" : [
+        "ScreenshotUITests\/testElements()"
+      ],
       "target" : {
         "containerPath" : "container:ActionStatus.xcodeproj",
         "identifier" : "22E7783A2476A606009ED66A",
