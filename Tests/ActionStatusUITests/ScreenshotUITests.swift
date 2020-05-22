@@ -55,6 +55,12 @@ class ScreenshotUITests: XCTestCase {
         }
         #endif
         
+        #if os(tvOS)
+        if app.keys.element(boundBy: 0).exists {
+            app.typeText("")
+        }
+        #endif
+        
         let firstRow = app.staticTexts["Datastore"]
         XCTAssertTrue(firstRow.waitForExistence(timeout: 5))
         makeScreenShot("01-main")
