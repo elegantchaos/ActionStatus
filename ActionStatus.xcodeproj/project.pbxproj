@@ -1443,7 +1443,7 @@
 			repositoryURL = "https://github.com/elegantchaos/Displays.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 1.1.0;
 			};
 		};
 		226D6C7F247549D100B54967 /* XCRemoteSwiftPackageReference "Files" */ = {
