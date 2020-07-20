@@ -77,13 +77,8 @@
 		8B5E7E8923F6BB5100087E15 /* AppKitBridge.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8323F6BB3500087E15 /* AppKitBridge.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8B5E7E8D23F6BB8900087E15 /* AppKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8C23F6BB8900087E15 /* AppKitBridge.swift */; };
 		8B6F181823F459570029F9CC /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F181723F459570029F9CC /* EditView.swift */; };
-		8B73DA9B24C5F33A00E74CB3 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B73DA9A24C5F33A00E74CB3 /* SwiftUIExtensions */; };
-		8B73DA9F24C5F7F300E74CB3 /* ActionStatusCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8B73DA9E24C5F7F300E74CB3 /* ActionStatusCore */; };
-		8B73DAA124C5F81500E74CB3 /* BindingsExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B73DAA024C5F81500E74CB3 /* BindingsExtensions */; };
-		8B73DAA324C5F81500E74CB3 /* Bundles in Frameworks */ = {isa = PBXBuildFile; productRef = 8B73DAA224C5F81500E74CB3 /* Bundles */; };
-		8B73DAA524C5F81500E74CB3 /* DictionaryCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 8B73DAA424C5F81500E74CB3 /* DictionaryCoding */; };
-		8B73DAA724C5F81500E74CB3 /* Displays in Frameworks */ = {isa = PBXBuildFile; productRef = 8B73DAA624C5F81500E74CB3 /* Displays */; };
-		8B73DAA924C5F81500E74CB3 /* Files in Frameworks */ = {isa = PBXBuildFile; productRef = 8B73DAA824C5F81500E74CB3 /* Files */; };
+		8B73DAAB24C5FAF000E74CB3 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B73DAAA24C5FAF000E74CB3 /* SwiftUIExtensions */; };
+		8B73DAAD24C5FB1600E74CB3 /* ActionStatusCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8B73DAAC24C5FB1600E74CB3 /* ActionStatusCore */; };
 		8BBFAA99240401C30091157A /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 8BBFAA8B2403F09F0091157A /* dsa_pub.pem */; };
 		8BD6749C24C5E1E000289A08 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD6749B24C5E1E000289A08 /* main.swift */; };
 		8BD674AB24C5EA4500289A08 /* Resources in Frameworks */ = {isa = PBXBuildFile; productRef = 8BD674AA24C5EA4500289A08 /* Resources */; };
@@ -271,13 +266,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B73DAA324C5F81500E74CB3 /* Bundles in Frameworks */,
-				8B73DAA724C5F81500E74CB3 /* Displays in Frameworks */,
-				8B73DA9B24C5F33A00E74CB3 /* SwiftUIExtensions in Frameworks */,
-				8B73DAA124C5F81500E74CB3 /* BindingsExtensions in Frameworks */,
-				8B73DAA524C5F81500E74CB3 /* DictionaryCoding in Frameworks */,
-				8B73DAA924C5F81500E74CB3 /* Files in Frameworks */,
-				8B73DA9F24C5F7F300E74CB3 /* ActionStatusCore in Frameworks */,
+				8B73DAAB24C5FAF000E74CB3 /* SwiftUIExtensions in Frameworks */,
+				8B73DAAD24C5FB1600E74CB3 /* ActionStatusCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -669,13 +659,8 @@
 			);
 			name = ActionStatusMobile;
 			packageProductDependencies = (
-				8B73DA9A24C5F33A00E74CB3 /* SwiftUIExtensions */,
-				8B73DA9E24C5F7F300E74CB3 /* ActionStatusCore */,
-				8B73DAA024C5F81500E74CB3 /* BindingsExtensions */,
-				8B73DAA224C5F81500E74CB3 /* Bundles */,
-				8B73DAA424C5F81500E74CB3 /* DictionaryCoding */,
-				8B73DAA624C5F81500E74CB3 /* Displays */,
-				8B73DAA824C5F81500E74CB3 /* Files */,
+				8B73DAAA24C5FAF000E74CB3 /* SwiftUIExtensions */,
+				8B73DAAC24C5FB1600E74CB3 /* ActionStatusCore */,
 			);
 			productName = GithubStatus;
 			productReference = 8B3E64A323EAE62D00B28168 /* Action Status.app */;
@@ -1616,40 +1601,15 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftUIExtensions;
 		};
-		8B73DA9A24C5F33A00E74CB3 /* SwiftUIExtensions */ = {
+		8B73DAAA24C5FAF000E74CB3 /* SwiftUIExtensions */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8BD674BF24C5EABC00289A08 /* XCRemoteSwiftPackageReference "SwiftUIExtensions" */;
 			productName = SwiftUIExtensions;
 		};
-		8B73DA9E24C5F7F300E74CB3 /* ActionStatusCore */ = {
+		8B73DAAC24C5FB1600E74CB3 /* ActionStatusCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8BD674AC24C5EA6100289A08 /* XCRemoteSwiftPackageReference "ActionStatusCore" */;
 			productName = ActionStatusCore;
-		};
-		8B73DAA024C5F81500E74CB3 /* BindingsExtensions */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8BD674AF24C5EA6F00289A08 /* XCRemoteSwiftPackageReference "BindingsExtensions" */;
-			productName = BindingsExtensions;
-		};
-		8B73DAA224C5F81500E74CB3 /* Bundles */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8BD674B224C5EA7C00289A08 /* XCRemoteSwiftPackageReference "Bundles" */;
-			productName = Bundles;
-		};
-		8B73DAA424C5F81500E74CB3 /* DictionaryCoding */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8BD674B524C5EA8A00289A08 /* XCRemoteSwiftPackageReference "DictionaryCoding" */;
-			productName = DictionaryCoding;
-		};
-		8B73DAA624C5F81500E74CB3 /* Displays */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8BD674B824C5EA9600289A08 /* XCRemoteSwiftPackageReference "Displays" */;
-			productName = Displays;
-		};
-		8B73DAA824C5F81500E74CB3 /* Files */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8BD674BB24C5EAA100289A08 /* XCRemoteSwiftPackageReference "Files" */;
-			productName = Files;
 		};
 		8BD674AA24C5EA4500289A08 /* Resources */ = {
 			isa = XCSwiftPackageProductDependency;
