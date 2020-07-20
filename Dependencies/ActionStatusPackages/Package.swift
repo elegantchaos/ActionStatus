@@ -1,6 +1,9 @@
 // swift-tools-version:5.3
-// The swift-tools-version declares the minimum version of Swift required to build this package.
 
+/*
+ Stub package which pulls the other packages that ActionCore needs into Xcode.
+ Frankly this is easier and more reliable than relying on Xcode to do it.
+ */
 import PackageDescription
 
 let package = Package(
@@ -9,21 +12,36 @@ let package = Package(
         .macOS(.v10_15), .iOS(.v13), .tvOS(.v13), .watchOS(.v5)
     ],
     products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "ActionStatusPackages",
-            targets: ["ActionStatusPackages"]),
+            targets: ["ActionStatusPackages"])
     ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
-         .package(url: "https://github.com/elegantchaos/Octoid.git", from: "1.0.0"),
+        .package(url: "https://github.com/elegantchaos/ApplicationExtensions.git", from: "1.1.0"),
+        .package(url: "https://github.com/elegantchaos/ActionStatusCore.git", .branch("master")),
+        .package(url: "https://github.com/elegantchaos/BindingsExtensions.git", from: "1.0.1"),
+        .package(url: "https://github.com/elegantchaos/Bundles.git", from: "1.0.5"),
+        .package(url: "https://github.com/elegantchaos/DictionaryCoding.git", from: "1.0.9"),
+        .package(url: "https://github.com/elegantchaos/Displays.git", from: "1.1.0"),
+        .package(url: "https://github.com/elegantchaos/Files.git", from: "1.0.5"),
+        .package(url: "https://github.com/elegantchaos/Octoid.git", from: "1.0.0"),
+        .package(url: "https://github.com/elegantchaos/ReleaseTools.git", .branch("resources")),
+        .package(url: "https://github.com/elegantchaos/SwiftUIExtensions.git", from: "1.1.0"),
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "ActionStatusPackages",
-            dependencies: ["Octoid"]),
+            dependencies: [
+                "ApplicationExtensions",
+                "ActionStatusCore",
+                "BindingsExtensions",
+                "DictionaryCoding",
+                "Displays",
+                "Files",
+                "Octoid",
+                "SwiftUIExtensions",
+                .product(name: "rt", package: "ReleaseTools")
+            ]),
         .testTarget(
             name: "ActionStatusPackagesTests",
             dependencies: ["ActionStatusPackages"]),
