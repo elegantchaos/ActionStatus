@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8B045A8524055E3C00EC21D6"
+               BlueprintIdentifier = "8BD6749824C5E1E000289A08"
                BuildableName = "Tools"
                BlueprintName = "Tools"
                ReferencedContainer = "container:ActionStatus.xcodeproj">
@@ -50,7 +50,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8B045A8524055E3C00EC21D6"
+            BlueprintIdentifier = "8BD6749824C5E1E000289A08"
             BuildableName = "Tools"
             BlueprintName = "Tools"
             ReferencedContainer = "container:ActionStatus.xcodeproj">
