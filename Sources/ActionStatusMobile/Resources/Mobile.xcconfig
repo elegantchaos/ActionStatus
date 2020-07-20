@@ -3,7 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-#include "Dependencies/ReleaseTools/Configs/RTCatalyst.xcconfig"
+#include ".rt/RTCatalyst.xcconfig"
 #include "Sources/ActionStatus/Resources/ActionStatus.xcconfig"
 
 OTHER_LDFLAGS = $ACTION_STATUS_ADDITIONAL_FRAMEWORKS
