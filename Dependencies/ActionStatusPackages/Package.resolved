@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Logger",
+        "repositoryURL": "https://github.com/elegantchaos/Logger.git",
+        "state": {
+          "branch": null,
+          "revision": "e8a0dea5e826a6b3f7d020bd113247274991fb97",
+          "version": "1.5.5"
+        }
+      },
+      {
+        "package": "Octoid",
+        "repositoryURL": "https://github.com/elegantchaos/Octoid.git",
+        "state": {
+          "branch": null,
+          "revision": "87d0d13d92db35dc02b19a8b6e244354b8a233e2",
+          "version": "1.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
