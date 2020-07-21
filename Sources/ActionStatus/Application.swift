@@ -31,7 +31,7 @@ class Application: BasicApplication {
     var rootController: UIViewController?
     var settingsObserver: Any?
     var exportWorkflow: Generator.Output? = nil
-    var viewState = ViewState()
+    lazy var viewState = { ViewState(host: self) }()
     var filePicker: FilePicker?
     var filePickerClass: FilePicker.Type { return StubFilePicker.self }
     var model = makeModel()
@@ -184,4 +184,8 @@ class Application: BasicApplication {
             
         }
     }
+}
+
+extension Application: ApplicationHost {
+    
 }

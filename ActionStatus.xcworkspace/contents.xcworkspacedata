@@ -8,6 +8,12 @@
       location = "group:"
       name = "Dependencies">
       <FileRef
+         location = "group:../ActionStatusCore">
+      </FileRef>
+      <FileRef
+         location = "group:../SwiftUIExtensions">
+      </FileRef>
+      <FileRef
          location = "group:Dependencies/CatalystSparkle/CatalystSparkle.xcodeproj">
       </FileRef>
       <FileRef

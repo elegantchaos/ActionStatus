@@ -6,7 +6,7 @@
         "repositoryURL": "https://github.com/elegantchaos/ActionStatusCore.git",
         "state": {
           "branch": "master",
-          "revision": "7c5a07250c1f3200007db99a9df303f7bfe4bd57",
+          "revision": "5c5f46fd595f412cfe1395661c787d2bd0a851e4",
           "version": null
         }
       },
@@ -143,24 +143,6 @@
           "branch": null,
           "revision": "eb51f949cdd0c9d88abba9ce79d37eb7ea1231d0",
           "version": "0.2.0"
-        }
-      },
-      {
-        "package": "SwiftUIExtensions",
-        "repositoryURL": "https://github.com/elegantchaos/SwiftUIExtensions.git",
-        "state": {
-          "branch": null,
-          "revision": "b093d2709967774368c5187b960f7f9e010ab583",
-          "version": "1.1.0"
-        }
-      },
-      {
-        "package": "XCTestExtensions",
-        "repositoryURL": "https://github.com/elegantchaos/XCTestExtensions",
-        "state": {
-          "branch": null,
-          "revision": "15991478b5c9bda527a0a59567ad0fa26940f74c",
-          "version": "1.1.2"
         }
       }
     ]

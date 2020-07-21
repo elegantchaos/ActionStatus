@@ -4,9 +4,9 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import ActionStatusCore
+import BindingsExtensions
 import SwiftUI
 import SwiftUIExtensions
-import BindingsExtensions
 
 struct ContentView: View {
     
@@ -14,6 +14,9 @@ struct ContentView: View {
     @EnvironmentObject var viewState: ViewState
     @EnvironmentObject var sheetController: SheetController
 
+    public init() {
+    }
+    
     var body: some View {
         NavigationView {
             VStack(alignment: .center) {
