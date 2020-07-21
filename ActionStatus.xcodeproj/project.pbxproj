@@ -85,6 +85,7 @@
 		8B73DAB524C7008300E74CB3 /* Displays in Frameworks */ = {isa = PBXBuildFile; productRef = 8B73DAB424C7008300E74CB3 /* Displays */; };
 		8B73DAB724C7008300E74CB3 /* Files in Frameworks */ = {isa = PBXBuildFile; productRef = 8B73DAB624C7008300E74CB3 /* Files */; };
 		8B73DAB924C7008300E74CB3 /* Octoid in Frameworks */ = {isa = PBXBuildFile; productRef = 8B73DAB824C7008300E74CB3 /* Octoid */; };
+		8B73DABC24C7092800E74CB3 /* ApplicationExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B73DABB24C7092800E74CB3 /* ApplicationExtensions */; };
 		8BBFAA99240401C30091157A /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 8BBFAA8B2403F09F0091157A /* dsa_pub.pem */; };
 		8BD6749C24C5E1E000289A08 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD6749B24C5E1E000289A08 /* main.swift */; };
 		8BD674AB24C5EA4500289A08 /* Resources in Frameworks */ = {isa = PBXBuildFile; productRef = 8BD674AA24C5EA4500289A08 /* Resources */; };
@@ -127,13 +128,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 8B5E7E8223F6BB3500087E15;
 			remoteInfo = AppKitBridge;
-		};
-		8BD674A324C5E36600289A08 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8B3E649B23EAE62D00B28168 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8BD6749824C5E1E000289A08;
-			remoteInfo = Tools;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -278,6 +272,7 @@
 				8B73DAAF24C7008300E74CB3 /* BindingsExtensions in Frameworks */,
 				8B73DAB324C7008300E74CB3 /* DictionaryCoding in Frameworks */,
 				8B73DAB724C7008300E74CB3 /* Files in Frameworks */,
+				8B73DABC24C7092800E74CB3 /* ApplicationExtensions in Frameworks */,
 				8B73DAAD24C5FB1600E74CB3 /* ActionStatusCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -664,7 +659,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				8BD674A424C5E36600289A08 /* PBXTargetDependency */,
 				8B5E7E8B23F6BB6100087E15 /* PBXTargetDependency */,
 			);
 			name = ActionStatusMobile;
@@ -677,6 +671,7 @@
 				8B73DAB424C7008300E74CB3 /* Displays */,
 				8B73DAB624C7008300E74CB3 /* Files */,
 				8B73DAB824C7008300E74CB3 /* Octoid */,
+				8B73DABB24C7092800E74CB3 /* ApplicationExtensions */,
 			);
 			productName = GithubStatus;
 			productReference = 8B3E64A323EAE62D00B28168 /* Action Status.app */;
@@ -847,6 +842,7 @@
 				8BD674BB24C5EAA100289A08 /* XCRemoteSwiftPackageReference "Files" */,
 				8BD674BC24C5EAAC00289A08 /* XCRemoteSwiftPackageReference "Octoid" */,
 				8BD674BF24C5EABC00289A08 /* XCRemoteSwiftPackageReference "SwiftUIExtensions" */,
+				8B73DABA24C7092800E74CB3 /* XCRemoteSwiftPackageReference "ApplicationExtensions" */,
 			);
 			productRefGroup = 8B3E64A423EAE62D00B28168 /* Products */;
 			projectDirPath = "";
@@ -935,7 +931,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"Extras/Scripts/perform-checks\"\n";
+			shellScript = "\"Extras/Scripts/perform-checks\"\n\n# TEMP - generate RTInfo here; this should be done automatically by the Tools target\n\"$SOURCE_ROOT/.bin/rt\" update-build --header \"$INFOPLIST_PREFIX_HEADER\" --repo \"$SOURCE_ROOT\"\n#open \"$BUILT_PRODUCTS_DIR\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8B0301A02417E48A003A19A4 /* Perform Checks */ = {
@@ -973,7 +969,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "source \"${RT_SCRIPTS_PATH}/embed\"\n";
+			shellScript = "#source \"${RT_SCRIPTS_PATH}/embed\"\nsource \"Extras/Scripts/embed\"\n";
 		};
 		8BD674A224C5E26500289A08 /* Install Release Tools */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -991,7 +987,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$BUILT_PRODUCTS_DIR/ReleaseTools_Resources.bundle/Contents/Resources/Scripts/copy-to-client\"\n";
+			shellScript = "\"$BUILT_PRODUCTS_DIR/ReleaseTools_Resources.bundle/Contents/Resources/Scripts/copy-to-client\"\ncp \"$BUILT_PRODUCTS_DIR/rt\" \"$SOURCE_ROOT/.bin/\"\ncp -rf \"$BUILT_PRODUCTS_DIR/ReleaseTools_Resources.bundle/Contents/Resources/Scripts/\" \"$SOURCE_ROOT/.bin/rt-temp\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1129,11 +1125,6 @@
 			platformFilter = maccatalyst;
 			target = 8B5E7E8223F6BB3500087E15 /* AppKitBridge */;
 			targetProxy = 8B5E7E8A23F6BB6100087E15 /* PBXContainerItemProxy */;
-		};
-		8BD674A424C5E36600289A08 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8BD6749824C5E1E000289A08 /* Tools */;
-			targetProxy = 8BD674A324C5E36600289A08 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1514,6 +1505,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		8B73DABA24C7092800E74CB3 /* XCRemoteSwiftPackageReference "ApplicationExtensions" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elegantchaos/ApplicationExtensions.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.2;
+			};
+		};
 		8BD674A924C5EA4500289A08 /* XCRemoteSwiftPackageReference "ReleaseTools" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/elegantchaos/ReleaseTools.git";
@@ -1656,6 +1655,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8BD674BC24C5EAAC00289A08 /* XCRemoteSwiftPackageReference "Octoid" */;
 			productName = Octoid;
+		};
+		8B73DABB24C7092800E74CB3 /* ApplicationExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8B73DABA24C7092800E74CB3 /* XCRemoteSwiftPackageReference "ApplicationExtensions" */;
+			productName = ApplicationExtensions;
 		};
 		8BD674AA24C5EA4500289A08 /* Resources */ = {
 			isa = XCSwiftPackageProductDependency;

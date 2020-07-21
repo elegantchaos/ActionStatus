@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "ApplicationExtensions",
+        "repositoryURL": "https://github.com/elegantchaos/ApplicationExtensions.git",
+        "state": {
+          "branch": null,
+          "revision": "818495a0d1076b01fcad16b58b60b9130e8cb418",
+          "version": "1.1.2"
+        }
+      },
+      {
         "package": "BindingsExtensions",
         "repositoryURL": "https://github.com/elegantchaos/BindingsExtensions.git",
         "state": {
