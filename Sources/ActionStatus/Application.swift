@@ -6,6 +6,7 @@
 import ActionStatusCore
 import ApplicationExtensions
 import Combine
+import Keychain
 import Logger
 import SwiftUI
 import SwiftUIExtensions
@@ -55,7 +56,16 @@ class Application: BasicApplication, ApplicationHost {
     }
     
     func makeRefreshController() -> RefreshController {
-        return SimpleRefreshController(model: model)
+        let user = "sam@elegantchaos.com" // TODO: expose token settings in preferences
+        let server = "api.github.com"
+        do {
+//            try Keychain.default.addToken("<token>", user: user, server: server)
+            let token = try Keychain.default.getToken(user: user, server: server)
+            return OctoidRefreshController(model: model, token: token)
+        } catch {
+            modelChannel.log("Couldn't get token: \(error). Defaulting to simple refresh.")
+            return SimpleRefreshController(model: model)
+        }
     }
     
     class func makeModel() -> Model {

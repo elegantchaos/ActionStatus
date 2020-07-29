@@ -128,15 +128,6 @@
         }
       },
       {
-        "package": "Octoid",
-        "repositoryURL": "https://github.com/elegantchaos/Octoid.git",
-        "state": {
-          "branch": null,
-          "revision": "2e4cc3c27d53961f9b25f695d5dafcce3d262bb5",
-          "version": "1.0.1"
-        }
-      },
-      {
         "package": "ReleaseTools",
         "repositoryURL": "https://github.com/elegantchaos/ReleaseTools.git",
         "state": {
