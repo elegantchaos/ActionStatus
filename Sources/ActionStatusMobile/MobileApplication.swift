@@ -45,10 +45,14 @@ class MobileApplication: Application {
     
     override var filePickerClass: FilePicker.Type { return MobileFilePicker.self }
 
+    override func didRefresh() {
+        super.didRefresh()
+        updateBridge()
+    }
+    
     override func setUp(withOptions options: LaunchOptions) {
         loadSparkle()
         loadBridge()
-        model.block = { self.updateBridge() }
         
         UserDefaults.standard.register(defaults: [
             .showInMenuKey: true,

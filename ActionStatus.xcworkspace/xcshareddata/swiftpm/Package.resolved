@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "ActionStatusCore",
-        "repositoryURL": "https://github.com/elegantchaos/ActionStatusCore.git",
-        "state": {
-          "branch": "master",
-          "revision": "5c5f46fd595f412cfe1395661c787d2bd0a851e4",
-          "version": null
-        }
-      },
-      {
         "package": "ApplicationExtensions",
         "repositoryURL": "https://github.com/elegantchaos/ApplicationExtensions.git",
         "state": {
@@ -33,8 +24,17 @@
         "repositoryURL": "https://github.com/elegantchaos/Bundles.git",
         "state": {
           "branch": null,
-          "revision": "cd522f28625871c429b69c59899fcb615dd6d341",
-          "version": "1.0.5"
+          "revision": "4abb622ec7d6dcfdcf057bccf3a1414809829693",
+          "version": "1.0.6"
+        }
+      },
+      {
+        "package": "Coercion",
+        "repositoryURL": "https://github.com/elegantchaos/Coercion.git",
+        "state": {
+          "branch": null,
+          "revision": "6872c101780abbe62bfe6e2498a2a3b14813ccd6",
+          "version": "1.0.3"
         }
       },
       {
@@ -42,7 +42,16 @@
         "repositoryURL": "https://github.com/elegantchaos/CollectionExtensions.git",
         "state": {
           "branch": null,
-          "revision": "002f744b085c162f37783b8a629ae6364c558c3a",
+          "revision": "c91aac2e3652834ee7b63c371242607fb4663d59",
+          "version": "1.1.0"
+        }
+      },
+      {
+        "package": "DataFetcher",
+        "repositoryURL": "https://github.com/elegantchaos/DataFetcher.git",
+        "state": {
+          "branch": null,
+          "revision": "88550e5207654ad19237a578188e4757c919970b",
           "version": "1.0.2"
         }
       },
@@ -92,6 +101,24 @@
         }
       },
       {
+        "package": "JSONSession",
+        "repositoryURL": "https://github.com/elegantchaos/JSONSession.git",
+        "state": {
+          "branch": null,
+          "revision": "058771089532177c106273785c9e8792d5c9c740",
+          "version": "1.0.3"
+        }
+      },
+      {
+        "package": "Keychain",
+        "repositoryURL": "https://github.com/elegantchaos/Keychain.git",
+        "state": {
+          "branch": null,
+          "revision": "96b170eca8df078f913c517c2bb732629f088fd9",
+          "version": "0.0.1"
+        }
+      },
+      {
         "package": "Logger",
         "repositoryURL": "https://github.com/elegantchaos/Logger.git",
         "state": {
@@ -105,8 +132,8 @@
         "repositoryURL": "https://github.com/elegantchaos/Octoid.git",
         "state": {
           "branch": null,
-          "revision": "87d0d13d92db35dc02b19a8b6e244354b8a233e2",
-          "version": "1.0.0"
+          "revision": "2e4cc3c27d53961f9b25f695d5dafcce3d262bb5",
+          "version": "1.0.1"
         }
       },
       {

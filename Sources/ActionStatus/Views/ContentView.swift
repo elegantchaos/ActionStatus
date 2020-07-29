@@ -40,7 +40,7 @@ struct ContentView: View {
         UITableView.appearance().separatorStyle = .none
         #endif
         
-        self.model.refresh()
+        viewState.host.resumeRefresh()
     }
 }
 

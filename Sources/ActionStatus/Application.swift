@@ -5,6 +5,7 @@
 
 import ActionStatusCore
 import ApplicationExtensions
+import Combine
 import Logger
 import SwiftUI
 import SwiftUIExtensions
@@ -18,7 +19,7 @@ internal extension String {
     static let textSizeKey = "TextSize"
 }
 
-class Application: BasicApplication {
+class Application: BasicApplication, ApplicationHost {
     
     #if DEBUG
     let stateKey = "StateDebug"
@@ -35,14 +36,22 @@ class Application: BasicApplication {
     var filePicker: FilePicker?
     var filePickerClass: FilePicker.Type { return StubFilePicker.self }
     var model = makeModel()
-    let sheetController = SheetController()
+    var modelWatcher: AnyCancellable?
     
+    let sheetController = SheetController()
+    lazy var refreshController = makeRefreshController()
     func makeUpdater() -> Updater {
         return Updater()
     }
     
     @objc func changed() {
         restoreState()
+    }
+    
+    func makeRefreshController() -> RefreshController {
+        return SimpleRefreshController(model: model, block: {
+            self.didRefresh()
+        })
     }
     
     class func makeModel() -> Model {
@@ -75,6 +84,10 @@ class Application: BasicApplication {
         settingsObserver = NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: nil) { notification in
             self.applySettings()
         }
+        
+        modelWatcher = model.objectWillChange.sink {
+            print("model changed")
+        }
     }
     
     func applySettings() {
@@ -99,7 +112,6 @@ class Application: BasicApplication {
 
     func stateWasEdited() {
         saveState()
-        model.refresh()
     }
     
     func saveState() {
@@ -110,6 +122,18 @@ class Application: BasicApplication {
         model.load(fromDefaultsKey: stateKey)
     }
     
+    func pauseRefresh() {
+//        refreshController.pause()
+    }
+    
+    func resumeRefresh() {
+//        refreshController.resume()
+    }
+    
+    func didRefresh() {
+        
+    }
+
     func openGithub(with repo: Repo, at location: Repo.GithubLocation = .workflow) {
         UIApplication.shared.open(repo.githubURL(for: location))
     }
@@ -184,8 +208,4 @@ class Application: BasicApplication {
             
         }
     }
-}
-
-extension Application: ApplicationHost {
-    
 }
