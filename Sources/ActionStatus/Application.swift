@@ -28,18 +28,24 @@ class Application: BasicApplication, ApplicationHost {
     #endif
     
     lazy var updater: Updater = makeUpdater()
-    
+    lazy var refreshController = makeRefreshController()
+    lazy var viewState = makeViewState()
+
     var rootController: UIViewController?
     var settingsObserver: Any?
     var exportWorkflow: Generator.Output? = nil
-    lazy var viewState = { ViewState(host: self) }()
     var filePicker: FilePicker?
     var filePickerClass: FilePicker.Type { return StubFilePicker.self }
     var model = makeModel()
+    var modelDirty = false
     var modelWatcher: AnyCancellable?
     
     let sheetController = SheetController()
-    lazy var refreshController = makeRefreshController()
+    
+    func makeViewState() -> ViewState {
+        return ViewState(host: self)
+    }
+    
     func makeUpdater() -> Updater {
         return Updater()
     }
@@ -49,9 +55,7 @@ class Application: BasicApplication, ApplicationHost {
     }
     
     func makeRefreshController() -> RefreshController {
-        return SimpleRefreshController(model: model, block: {
-            self.didRefresh()
-        })
+        return SimpleRefreshController(model: model)
     }
     
     class func makeModel() -> Model {
@@ -86,7 +90,7 @@ class Application: BasicApplication, ApplicationHost {
         }
         
         modelWatcher = model.objectWillChange.sink {
-            print("model changed")
+            self.stateWasEdited()
         }
     }
     
@@ -111,11 +115,20 @@ class Application: BasicApplication, ApplicationHost {
     }
 
     func stateWasEdited() {
-        saveState()
+        DispatchQueue.main.async {
+            modelChannel.log("State Changed")
+            self.modelDirty = true
+            self.saveState()
+        }
     }
     
     func saveState() {
-        model.save(toDefaultsKey: stateKey)
+        DispatchQueue.main.async { [self] in
+            if modelDirty {
+                model.save(toDefaultsKey: stateKey)
+                modelDirty = false
+            }
+        }
     }
     
     func restoreState() {
@@ -123,11 +136,11 @@ class Application: BasicApplication, ApplicationHost {
     }
     
     func pauseRefresh() {
-//        refreshController.pause()
+        refreshController.pause()
     }
     
     func resumeRefresh() {
-//        refreshController.resume()
+        refreshController.resume()
     }
     
     func didRefresh() {
