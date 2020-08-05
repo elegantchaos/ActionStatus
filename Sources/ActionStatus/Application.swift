@@ -38,7 +38,7 @@ class Application: BasicApplication, ApplicationHost {
     var filePicker: FilePicker?
     var filePickerClass: FilePicker.Type { return StubFilePicker.self }
     var model = makeModel()
-    var modelDirty = false
+    var stateChanged = false
     var modelWatcher: AnyCancellable?
     
     let sheetController = SheetController()
@@ -126,19 +126,20 @@ class Application: BasicApplication, ApplicationHost {
 
     func stateWasEdited() {
         DispatchQueue.main.async {
-            if !self.modelDirty {
-                modelChannel.log("Needs Saving")
+            if !self.stateChanged {
+                modelChannel.log("Model Changed") // TODO: should be app channel
             }
-            self.modelDirty = true
+            self.stateChanged = true
             self.saveState()
         }
     }
     
     func saveState() {
         DispatchQueue.main.async { [self] in
-            if modelDirty {
+            if stateChanged {
+                didRefresh()
                 model.save(toDefaultsKey: stateKey)
-                modelDirty = false
+                stateChanged = false
             }
         }
     }
