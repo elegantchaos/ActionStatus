@@ -126,7 +126,9 @@ class Application: BasicApplication, ApplicationHost {
 
     func stateWasEdited() {
         DispatchQueue.main.async {
-            modelChannel.log("State Changed")
+            if !self.modelDirty {
+                modelChannel.log("State Changed")
+            }
             self.modelDirty = true
             self.saveState()
         }
