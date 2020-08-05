@@ -197,11 +197,11 @@ extension MobileApplication: AppKitBridgeDelegate {
     
     func status(forItem item: Int) -> ItemStatus {
         let id = model.itemIdentifiers[item]
-        switch model.repo(withIdentifier: id)?.state ?? .unknown {
-            case .unknown: return .unknown
-            case .failing: return .failed
-            case .passing: return .succeeded
+        if let state = model.repo(withIdentifier: id)?.state, let status = ItemStatus(rawValue: state.rawValue) {
+            return status
         }
+        
+        return .unknown
     }
     
     func selectItem(_ item: Int) {

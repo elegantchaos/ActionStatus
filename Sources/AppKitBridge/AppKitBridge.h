@@ -15,6 +15,8 @@ typedef NS_CLOSED_ENUM(NSUInteger, ItemStatus) {
     ItemStatusUnknown,
     ItemStatusFailed,
     ItemStatusSucceeded,
+    ItemStatusRunning,
+    ItemStatusQueued
 };
 
 /// Protocol implemented by the UIKit side of the bridge.

@@ -21,6 +21,8 @@ extension ItemStatus: CaseIterable {
             case .unknown: return "StatusUnknown"
             case .succeeded: return "StatusPassing"
             case .failed: return "StatusFailing"
+            case .running: return "StatusRunning"
+            case .queued: return "StatusQueued"
         }
     }
     
