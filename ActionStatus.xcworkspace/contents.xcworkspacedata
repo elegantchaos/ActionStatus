@@ -8,10 +8,10 @@
       location = "group:"
       name = "Dependencies">
       <FileRef
-         location = "group:../Octoid">
+         location = "group:../ActionStatusCore">
       </FileRef>
       <FileRef
-         location = "group:../ActionStatusCore">
+         location = "group:../Octoid">
       </FileRef>
       <FileRef
          location = "group:../SwiftUIExtensions">
