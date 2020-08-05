@@ -13,7 +13,7 @@ enum ImageMode: CaseIterable {
 
 extension ItemStatus: CaseIterable {
     public static var allCases: [ItemStatus] {
-        return [.failed, .succeeded, .unknown]
+        return [.unknown, .succeeded, .failed, .queued, .running]
     }
 
     var asString: String {
@@ -37,7 +37,7 @@ extension ItemStatus: CaseIterable {
 }
 
 @objc class AppKitBridgeSingleton: NSResponder {
-    static let imageSize = NSSize(width: 16.0, height: 16.0)
+    static let imageSize = NSSize(width: 20.0, height: 20.0)
     
     typealias StatusImages = [ItemStatus:NSImage]
     typealias ImageTable = [ImageMode:StatusImages]
@@ -51,16 +51,19 @@ extension ItemStatus: CaseIterable {
     var statusItem: NSStatusItem?
     var toolbar: NSToolbar?
     var editingItem: NSToolbarItem?
-    var status: ItemStatus = .unknown
-    var showUpdates = false
+    private var _status: ItemStatus = .unknown
     
-    var passing: Bool {
-        get { return status == .succeeded }
+    var status: ItemStatus {
+        get {
+            _status
+        }
         set {
-            status = newValue ? .succeeded : .failed
+            _status = newValue
             updateImage()
         }
     }
+    
+    var showUpdates = false
 
     class func setupImages() -> ImageTable {
         var images: ImageTable = [:]

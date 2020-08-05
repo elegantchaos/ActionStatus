@@ -11,12 +11,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_CLOSED_ENUM(NSUInteger, ItemStatus) {
+typedef NS_CLOSED_ENUM(NSUInteger, ItemStatus) { // NB: order should match the constants in Repo.State
     ItemStatusUnknown,
-    ItemStatusFailed,
     ItemStatusSucceeded,
+    ItemStatusFailed,
+    ItemStatusQueued,
     ItemStatusRunning,
-    ItemStatusQueued
 };
 
 /// Protocol implemented by the UIKit side of the bridge.
@@ -34,8 +34,8 @@ typedef NS_CLOSED_ENUM(NSUInteger, ItemStatus) {
 
 /// Protocol implemented by the AppKit side of the bridge.
 @protocol AppKitBridge <NSObject>
-@property (nonatomic)BOOL passing;
-@property (nonatomic)BOOL showInMenu;
+@property (nonatomic) ItemStatus status;
+@property (nonatomic) BOOL showInMenu;
 @property (nonatomic) BOOL showInDock;
 @property (nonatomic) BOOL showAddButton;
 @property (nonatomic) BOOL showUpdates;

@@ -84,11 +84,15 @@ class MobileApplication: Application {
         settingsChannel.log("\(String.showInDockKey) is \(appKitBridge?.showInDock ?? false)")
     }
 
+    fileprivate func status(for state: Repo.State) -> ItemStatus {
+        return ItemStatus(rawValue: state.rawValue) ?? .unknown
+    }
+
     fileprivate func updateBridge() {
         appKitBridge?.showInMenu = UserDefaults.standard.bool(forKey: .showInMenuKey)
         appKitBridge?.showInDock = UserDefaults.standard.bool(forKey: .showInDockKey)
         appKitBridge?.showAddButton = viewState.isEditing
-        appKitBridge?.passing = (model.failing == 0)
+        appKitBridge?.status = status(for: model.combinedState)
     }
     
     fileprivate func loadSparkle() {
@@ -197,11 +201,8 @@ extension MobileApplication: AppKitBridgeDelegate {
     
     func status(forItem item: Int) -> ItemStatus {
         let id = model.itemIdentifiers[item]
-        if let state = model.repo(withIdentifier: id)?.state, let status = ItemStatus(rawValue: state.rawValue) {
-            return status
-        }
-        
-        return .unknown
+        guard let state = model.repo(withIdentifier: id)?.state else { return .unknown }
+        return status(for: state)
     }
     
     func selectItem(_ item: Int) {

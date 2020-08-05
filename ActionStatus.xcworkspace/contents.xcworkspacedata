@@ -11,6 +11,9 @@
          location = "group:../ActionStatusCore">
       </FileRef>
       <FileRef
+         location = "group:../JSONSession">
+      </FileRef>
+      <FileRef
          location = "group:../Octoid">
       </FileRef>
       <FileRef
