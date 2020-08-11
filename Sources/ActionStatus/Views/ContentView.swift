@@ -39,8 +39,6 @@ struct ContentView: View {
         #if !os(tvOS)
         UITableView.appearance().separatorStyle = .none
         #endif
-        
-        viewState.host.resumeRefresh()
     }
 }
 
@@ -75,7 +73,8 @@ fileprivate extension View {
             navigationBarTitle(Text(name), displayMode: .inline)
                 .navigationBarItems(
                     leading: AddButton(),
-                    trailing: ToggleEditingButton())
+                    trailing: ToggleEditingButton()
+                )
     }
     
     func setupNavigationStyle() -> some View {

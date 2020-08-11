@@ -37,7 +37,8 @@ extension ItemStatus: CaseIterable {
 }
 
 @objc class AppKitBridgeSingleton: NSResponder {
-    static let imageSize = NSSize(width: 20.0, height: 20.0)
+    static let imageWidth = 18.0
+    static let imageSize = NSSize(width: imageWidth, height: imageWidth)
     
     typealias StatusImages = [ItemStatus:NSImage]
     typealias ImageTable = [ImageMode:StatusImages]
@@ -218,8 +219,8 @@ extension AppKitBridgeSingleton: NSMenuDelegate {
     }
 
     @IBAction func handlePreferences(_ sender: Any) {
-        let command = NSSelectorFromString("orderFrontPreferencesPanel:")
-        NSApp.perform(command)
+        handleShow(sender)
+        delegate?.showPreferences()
     }
 
     @IBAction func handleCheckForUpdates(_ sender: Any) {
@@ -253,6 +254,7 @@ extension NSToolbarItem.Identifier {
     static var titleLabel = Self.init("title")
     static var addButton = Self.init("add")
     static var editButton = Self.init("edit")
+    static var padding = Self.init("padding")
 }
 
 extension AppKitBridgeSingleton: NSToolbarDelegate {
@@ -295,6 +297,10 @@ extension AppKitBridgeSingleton: NSToolbarDelegate {
                 item.view = button
                 editingItem = item
             
+            case .padding:
+                let view = NSView(frame: .zero)
+                item.view = view
+
             default:
                 return nil
         }
@@ -303,7 +309,7 @@ extension AppKitBridgeSingleton: NSToolbarDelegate {
     }
     
     func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-        return [.flexibleSpace,.titleLabel,.flexibleSpace,.editButton]
+        return [.flexibleSpace,.titleLabel,.flexibleSpace,.editButton, .padding]
     }
     
     func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {

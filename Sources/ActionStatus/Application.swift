@@ -15,11 +15,6 @@ import Files
 
 let settingsChannel = Channel("Settings")
 
-internal extension String {
-    static let refreshIntervalKey = "RefreshInterval"
-    static let textSizeKey = "TextSize"
-}
-
 class Application: BasicApplication, ApplicationHost {
     
     #if DEBUG
@@ -29,9 +24,9 @@ class Application: BasicApplication, ApplicationHost {
     #endif
     
     lazy var updater: Updater = makeUpdater()
-    lazy var refreshController = makeRefreshController()
     lazy var viewState = makeViewState()
 
+    var refreshController: RefreshController? = nil
     var rootController: UIViewController?
     var settingsObserver: Any?
     var exportWorkflow: Generator.Output? = nil
@@ -40,6 +35,9 @@ class Application: BasicApplication, ApplicationHost {
     var model = makeModel()
     var stateChanged = false
     var modelWatcher: AnyCancellable?
+    var stateWatcher: AnyCancellable?
+    var applyingSettings = false
+    var savingSettings = false
     
     let sheetController = SheetController()
     
@@ -56,15 +54,14 @@ class Application: BasicApplication, ApplicationHost {
     }
     
     func makeRefreshController() -> RefreshController {
-        let user = "sam@elegantchaos.com" // TODO: expose token settings in preferences
-        let server = "api.github.com"
         do {
-//            try Keychain.default.addToken("<token>", user: user, server: server)
-            let token = try Keychain.default.getToken(user: user, server: server)
-            return OctoidRefreshController(model: model, token: token)
+            let token = try Keychain.default.getToken(user: viewState.githubUser, server: viewState.githubServer)
+            let controller = OctoidRefreshController(model: model, viewState: viewState, token: token)
+            refreshChannel.log("Using github refresh controller for \(viewState.githubUser)/\(viewState.githubServer)")
+            return controller
         } catch {
-            modelChannel.log("Couldn't get token: \(error). Defaulting to simple refresh.")
-            return SimpleRefreshController(model: model)
+            refreshChannel.log("Couldn't get token: \(error). Defaulting to simple refresh controller.")
+            return SimpleRefreshController(model: model, viewState: viewState)
         }
     }
     
@@ -80,8 +77,8 @@ class Application: BasicApplication, ApplicationHost {
         sheetController.environmentSetter = { view in AnyView(self.applyEnvironment(to: view)) }
         
         UserDefaults.standard.register(defaults: [
-            .refreshIntervalKey: 60,
-            .textSizeKey: ViewState.TextSize.automatic.rawValue
+            .refreshIntervalKey: RefreshRate.automatic.rawValue,
+            .displaySizeKey: DisplaySize.automatic.rawValue
         ])
         
         restoreState()
@@ -95,27 +92,71 @@ class Application: BasicApplication, ApplicationHost {
     
     func didSetUp(_ window: UIWindow) {
         applySettings()
+
         settingsObserver = NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: nil) { notification in
-            self.applySettings()
+            if !self.savingSettings {
+                self.applySettings()
+            }
         }
         
-        modelWatcher = model.objectWillChange.sink {
+        modelWatcher = model
+            .objectWillChange
+            .debounce(for: 1.0, scheduler: RunLoop.main)
+            .sink {
             self.stateWasEdited()
+        }
+        
+        stateWatcher = viewState
+            .objectWillChange
+            .debounce(for: 1.0, scheduler: RunLoop.main)
+            .sink() { value in
+            if !self.applyingSettings {
+                self.saveSettings()
+            }
         }
     }
     
     func applySettings() {
+        refreshController?.pause()
+        let oldToken = try? Keychain.default.getToken(user: viewState.githubUser, server: viewState.githubServer)
+        applyingSettings = true
         let defaults = UserDefaults.standard
-        let interval = defaults.integer(forKey: .refreshIntervalKey)
-        if interval > 0 {
-            model.refreshInterval = Double(interval)
+        if let rate = RefreshRate(rawValue: defaults.integer(forKey: .refreshIntervalKey)) {
+            viewState.refreshRate = rate
         }
         
-        viewState.repoTextSize = ViewState.TextSize(rawValue: defaults.integer(forKey: .textSizeKey)) ?? .automatic
+        if let size = DisplaySize(rawValue: defaults.integer(forKey: .displaySizeKey)) {
+            viewState.displaySize = size
+        }
 
-        settingsChannel.log("\(String.refreshIntervalKey) is \(interval)")
+        viewState.githubUser = defaults.string(forKey: .githubUserKey) ?? ""
+        viewState.githubServer = defaults.string(forKey: .githubServerKey) ?? "api.github.com"
+        
+        settingsChannel.log("\(String.refreshIntervalKey) is \(viewState.refreshRate)")
+        settingsChannel.log("\(String.displaySizeKey) is \(viewState.displaySize)")
+        applyingSettings = false
+        
+        let newToken = try? Keychain.default.getToken(user: viewState.githubUser, server: viewState.githubServer)
+
+        if oldToken != newToken {
+            // we've changed the github settings, so we need to rebuild the refresh controller
+            refreshController = makeRefreshController()
+        }
+        
+        refreshController?.resume()
     }
   
+    func saveSettings() {
+        savingSettings = true
+        let defaults = UserDefaults.standard
+        defaults.set(viewState.refreshRate.rawValue, forKey: .refreshIntervalKey)
+        defaults.set(viewState.displaySize.rawValue, forKey: .displaySizeKey)
+        defaults.set(viewState.githubUser, forKey: .githubUserKey)
+        defaults.set(viewState.githubServer, forKey: .githubServerKey)
+        // NB: github token is stored in the keychain
+        savingSettings = false
+    }
+    
     func applyEnvironment<T>(to view: T) -> some View where T: View {
         return view
             .environmentObject(viewState)
@@ -149,11 +190,11 @@ class Application: BasicApplication, ApplicationHost {
     }
     
     func pauseRefresh() {
-        refreshController.pause()
+        refreshController?.pause()
     }
     
     func resumeRefresh() {
-        refreshController.resume()
+        refreshController?.resume()
     }
     
     func didRefresh() {

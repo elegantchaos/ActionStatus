@@ -27,6 +27,7 @@ typedef NS_CLOSED_ENUM(NSUInteger, ItemStatus) { // NB: order should match the c
 - (NSString*) nameForItem: (NSInteger) item;
 - (ItemStatus) statusForItem: (NSInteger) item;
 - (void) selectItem: (NSInteger) item;
+- (void) showPreferences;
 - (void) checkForUpdates;
 - (BOOL) toggleEditing;
 - (void) addItem;

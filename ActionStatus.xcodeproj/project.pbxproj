@@ -14,7 +14,6 @@
 		22E778482476D234009ED66A /* ScreenshotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */; };
 		22E7784D2476D3E9009ED66A /* ActionStatusCore in Frameworks */ = {isa = PBXBuildFile; productRef = 22E7784C2476D3E9009ED66A /* ActionStatusCore */; };
 		8B2F0ABB23FC195800B2E62A /* InterceptingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */; };
-		8B2F0ABD23FC2FA400B2E62A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */; };
 		8B3C0573240FD82F00FB533B /* ActionStatusCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8B3C0572240FD82F00FB533B /* ActionStatusCore */; };
 		8B3C0575240FD84A00FB533B /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 8B3C0574240FD84A00FB533B /* Introspect */; };
 		8B3E64A723EAE62D00B28168 /* MobileApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64A623EAE62D00B28168 /* MobileApplication.swift */; };
@@ -34,7 +33,6 @@
 		8B430E9123F5947E0050BF2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64AC23EAE62E00B28168 /* Assets.xcassets */; };
 		8B4336EC23FFE53700598A04 /* PickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4336EB23FFE53700598A04 /* PickerViewController.swift */; };
 		8B4336EE23FFE7C700598A04 /* DictionaryCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 8B4336ED23FFE7C700598A04 /* DictionaryCoding */; };
-		8B4336F323FFEBAA00598A04 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */; };
 		8B4336F423FFED8000598A04 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64A823EAE62D00B28168 /* SceneDelegate.swift */; };
 		8B43A9702412612C00A076AC /* MobileFilePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B43A96F2412612C00A076AC /* MobileFilePicker.swift */; };
 		8B43A97924127D4200A076AC /* FilePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B43A97824127D4200A076AC /* FilePicker.swift */; };
@@ -57,6 +55,7 @@
 		8B73DABC24C7092800E74CB3 /* ApplicationExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B73DABB24C7092800E74CB3 /* ApplicationExtensions */; };
 		8B99A11C24D1CEF300BBFB1F /* Keychain in Frameworks */ = {isa = PBXBuildFile; productRef = 8B99A11B24D1CEF300BBFB1F /* Keychain */; };
 		8BBFAA99240401C30091157A /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 8BBFAA8B2403F09F0091157A /* dsa_pub.pem */; };
+		8BD6110424E2A5A400385F29 /* JSONSession in Frameworks */ = {isa = PBXBuildFile; productRef = 8BD6110324E2A5A400385F29 /* JSONSession */; };
 		8BD6749C24C5E1E000289A08 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD6749B24C5E1E000289A08 /* main.swift */; };
 		8BD674AB24C5EA4500289A08 /* Resources in Frameworks */ = {isa = PBXBuildFile; productRef = 8BD674AA24C5EA4500289A08 /* Resources */; };
 		8BDAC2C223FE8A64004154A1 /* BindingsExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C123FE8A64004154A1 /* BindingsExtensions */; };
@@ -143,7 +142,6 @@
 		8B045A8424055A6200EC21D6 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Assets; path = Extras/Assets; sourceTree = "<group>"; };
 		8B2F0AB923FC195700B2E62A /* InterceptingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterceptingDelegate.h; sourceTree = "<group>"; };
 		8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterceptingDelegate.m; sourceTree = "<group>"; };
-		8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		8B3C0576240FDAAD00FB533B /* ActionStatus.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ActionStatus.xctestplan; sourceTree = "<group>"; };
 		8B3E64A323EAE62D00B28168 /* Action Status.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Action Status.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B3E64A623EAE62D00B28168 /* MobileApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileApplication.swift; sourceTree = "<group>"; };
@@ -221,6 +219,7 @@
 			files = (
 				8B73DAB924C7008300E74CB3 /* Octoid in Frameworks */,
 				8B73DAB124C7008300E74CB3 /* Bundles in Frameworks */,
+				8BD6110424E2A5A400385F29 /* JSONSession in Frameworks */,
 				8B73DAB524C7008300E74CB3 /* Displays in Frameworks */,
 				8B73DAAB24C5FAF000E74CB3 /* SwiftUIExtensions in Frameworks */,
 				8B99A11C24D1CEF300BBFB1F /* Keychain in Frameworks */,
@@ -412,7 +411,6 @@
 		8B5B175223FADAAE00DD2AF5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8B2F0ABC23FC2FA400B2E62A /* Settings.bundle */,
 				8B5E7E9123F6C0A100087E15 /* BridgingHeader.h */,
 				8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */,
 				8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */,
@@ -604,6 +602,7 @@
 				8B73DAB824C7008300E74CB3 /* Octoid */,
 				8B73DABB24C7092800E74CB3 /* ApplicationExtensions */,
 				8B99A11B24D1CEF300BBFB1F /* Keychain */,
+				8BD6110324E2A5A400385F29 /* JSONSession */,
 			);
 			productName = GithubStatus;
 			productReference = 8B3E64A323EAE62D00B28168 /* Action Status.app */;
@@ -809,7 +808,6 @@
 				8B3E64B323EAE62E00B28168 /* LaunchScreen.storyboard in Resources */,
 				8B430E9123F5947E0050BF2A /* Assets.xcassets in Resources */,
 				8B3E64B023EAE62E00B28168 /* Preview Assets.xcassets in Resources */,
-				8B2F0ABD23FC2FA400B2E62A /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -833,7 +831,6 @@
 			files = (
 				8B430E8E23F58AE10050BF2A /* Assets.xcassets in Resources */,
 				8B430E8F23F58CEE0050BF2A /* Preview Assets.xcassets in Resources */,
-				8B4336F323FFEBAA00598A04 /* Settings.bundle in Resources */,
 				8B430E8423F5877D0050BF2A /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1581,6 +1578,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8B99A11824D1CD4900BBFB1F /* XCRemoteSwiftPackageReference "Keychain" */;
 			productName = Keychain;
+		};
+		8BD6110324E2A5A400385F29 /* JSONSession */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JSONSession;
 		};
 		8BD674AA24C5EA4500289A08 /* Resources */ = {
 			isa = XCSwiftPackageProductDependency;

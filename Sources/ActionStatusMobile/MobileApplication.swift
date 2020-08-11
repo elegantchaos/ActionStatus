@@ -14,11 +14,6 @@ import UIKit
 import SparkleBridgeClient
 #endif
 
-fileprivate extension String {
-    static let showInMenuKey = "ShowInMenu"
-    static let showInDockKey = "ShowInDock"
-}
-
 extension Application {
     class var shared: MobileApplication {
         UIApplication.shared.delegate as! MobileApplication
@@ -132,6 +127,7 @@ class MobileApplication: Application {
             builder.remove(menu: .format)
             builder.remove(menu: .toolbar)
 
+            replacePreferences(with: builder)
             buildCheckForUpdates(with: builder)
             buildShowStatus(with: builder)
             buildAddLocal(with: builder)
@@ -171,6 +167,19 @@ class MobileApplication: Application {
         builder.insertChild(menu, atStartOfMenu: .file)
     }
 
+    func replacePreferences(with builder: UIMenuBuilder) {
+        let command = UIKeyCommand(title: "Preferences…", image: nil, action: #selector(showPreferences), input: ",", modifierFlags: .command, propertyList: nil)
+        let menu = UIMenu(title: "", image: nil, identifier: UIMenu.Identifier("\(info.id).showPreferences"), options: .displayInline, children: [command])
+        builder.insertSibling(menu, afterMenu: .preferences)
+        builder.replace(menu: .preferences, with: menu)
+    }
+    
+    @IBAction func showPreferences() {
+        sheetController.show() {
+            PreferencesView()
+        }
+    }
+    
     @IBAction func addLocalRepos() {
         let picker = filePickerClass.init(forOpeningFolderStartingIn: nil) { urls in
             self.model.add(fromFolders: urls)
