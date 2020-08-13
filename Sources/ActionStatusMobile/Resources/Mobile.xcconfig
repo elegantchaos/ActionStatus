@@ -8,9 +8,6 @@
 
 OTHER_LDFLAGS = $ACTION_STATUS_ADDITIONAL_FRAMEWORKS
 
-// TEMP - disable including the generated build number // TODO: fix this
-INFOPLIST_PREPROCESS = NO
-
 // Uncomment the lines below to test Sparkle
 //RT_BUILD = 100
 //#include "Sources/ActionStatus/Resources/IncludeSparkle.xcconfig"

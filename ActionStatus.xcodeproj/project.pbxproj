@@ -13,6 +13,7 @@
 		22E778472476D230009ED66A /* ActionStatusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */; };
 		22E778482476D234009ED66A /* ScreenshotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */; };
 		22E7784D2476D3E9009ED66A /* ActionStatusCore in Frameworks */ = {isa = PBXBuildFile; productRef = 22E7784C2476D3E9009ED66A /* ActionStatusCore */; };
+		8B19171024E56E010072CD85 /* Tools.xcconfig in Sources */ = {isa = PBXBuildFile; fileRef = 8B19170F24E56E010072CD85 /* Tools.xcconfig */; };
 		8B2F0ABB23FC195800B2E62A /* InterceptingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */; };
 		8B3C0573240FD82F00FB533B /* ActionStatusCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8B3C0572240FD82F00FB533B /* ActionStatusCore */; };
 		8B3C0575240FD84A00FB533B /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 8B3C0574240FD84A00FB533B /* Introspect */; };
@@ -77,6 +78,13 @@
 			remoteGlobalIDString = 8B3E64A223EAE62D00B28168;
 			remoteInfo = ActionStatusMobile;
 		};
+		8B19170D24E554920072CD85 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8B3E649B23EAE62D00B28168 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8BD6749824C5E1E000289A08;
+			remoteInfo = Tools;
+		};
 		8B3E64BA23EAE62E00B28168 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8B3E649B23EAE62D00B28168 /* Project object */;
@@ -140,6 +148,7 @@
 		22E7783B2476A606009ED66A /* ActionStatusUITestsTV.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ActionStatusUITestsTV.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22E778452476A6C9009ED66A /* TestsTV.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TestsTV.xcconfig; sourceTree = "<group>"; };
 		8B045A8424055A6200EC21D6 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Assets; path = Extras/Assets; sourceTree = "<group>"; };
+		8B19170F24E56E010072CD85 /* Tools.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Tools.xcconfig; sourceTree = "<group>"; };
 		8B2F0AB923FC195700B2E62A /* InterceptingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterceptingDelegate.h; sourceTree = "<group>"; };
 		8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterceptingDelegate.m; sourceTree = "<group>"; };
 		8B3C0576240FDAAD00FB533B /* ActionStatus.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ActionStatus.xctestplan; sourceTree = "<group>"; };
@@ -187,7 +196,6 @@
 		8BD6749924C5E1E000289A08 /* Tools */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Tools; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BD6749B24C5E1E000289A08 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		8BD674A724C5E89700289A08 /* ActionStatusTools */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = ActionStatusTools; path = "../../Library/Developer/Xcode/DerivedData/ActionStatus-eyxiiohnmopaeecoqfsepoodpvxl/Build/Products/Debug/ActionStatusTools"; sourceTree = "<group>"; };
-		8BDBC692240EB630005CDA0D /* Tests.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = Tests.yml; sourceTree = "<group>"; };
 		8BDBC696240EB752005CDA0D /* Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.58.49.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.58.49.png"; sourceTree = "<group>"; };
 		8BDBC697240EB752005CDA0D /* Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.58.37.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.58.37.png"; sourceTree = "<group>"; };
 		8BDBC698240EB752005CDA0D /* Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.58.42.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.58.42.png"; sourceTree = "<group>"; };
@@ -282,7 +290,6 @@
 			isa = PBXGroup;
 			children = (
 				8BDBC694240EB752005CDA0D /* Screenshots */,
-				8BDBC691240EB630005CDA0D /* workflows */,
 				8B045A8424055A6200EC21D6 /* Assets */,
 				226D6C8424755D1D00B54967 /* Scripts */,
 			);
@@ -482,17 +489,9 @@
 			isa = PBXGroup;
 			children = (
 				8BD6749B24C5E1E000289A08 /* main.swift */,
+				8B19170F24E56E010072CD85 /* Tools.xcconfig */,
 			);
 			path = Tools;
-			sourceTree = "<group>";
-		};
-		8BDBC691240EB630005CDA0D /* workflows */ = {
-			isa = PBXGroup;
-			children = (
-				8BDBC692240EB630005CDA0D /* Tests.yml */,
-			);
-			name = workflows;
-			path = .github/workflows;
 			sourceTree = "<group>";
 		};
 		8BDBC694240EB752005CDA0D /* Screenshots */ = {
@@ -688,6 +687,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				8B19170E24E554920072CD85 /* PBXTargetDependency */,
 			);
 			name = AppKitBridge;
 			packageProductDependencies = (
@@ -861,7 +861,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"Extras/Scripts/perform-checks\"\n\n# TEMP - generate RTInfo here; this should be done automatically by the Tools target\n\"$SOURCE_ROOT/.bin/rt\" update-build --header \"$INFOPLIST_PREFIX_HEADER\" --repo \"$SOURCE_ROOT\"\n#open \"$BUILT_PRODUCTS_DIR\"\n";
+			shellScript = "\"Extras/Scripts/perform-checks\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8B0301A02417E48A003A19A4 /* Perform Checks */ = {
@@ -917,7 +917,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"$BUILT_PRODUCTS_DIR/ReleaseTools_Resources.bundle/Contents/Resources/Scripts/copy-to-client\"\n\n# TEMP - copy built rt into .bin/\ncp \"$BUILT_PRODUCTS_DIR/rt\" \"$SOURCE_ROOT/.bin/\"\n";
+			shellScript = "\"$BUILT_PRODUCTS_DIR/ReleaseTools_Resources.bundle/Contents/Resources/Scripts/copy-to-client\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -993,6 +993,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8BD6749C24C5E1E000289A08 /* main.swift in Sources */,
+				8B19171024E56E010072CD85 /* Tools.xcconfig in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1008,6 +1009,11 @@
 			isa = PBXTargetDependency;
 			target = 8B3E64A223EAE62D00B28168 /* ActionStatusMobile */;
 			targetProxy = 22E778492476D2F8009ED66A /* PBXContainerItemProxy */;
+		};
+		8B19170E24E554920072CD85 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8BD6749824C5E1E000289A08 /* Tools */;
+			targetProxy = 8B19170D24E554920072CD85 /* PBXContainerItemProxy */;
 		};
 		8B3E64BB23EAE62E00B28168 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1256,6 +1262,7 @@
 			baseConfigurationReference = 8B5E7E6423F6A9C600087E15 /* TV.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
+				CURRENT_PROJECT_VERSION = BUILD;
 			};
 			name = Debug;
 		};
@@ -1264,6 +1271,7 @@
 			baseConfigurationReference = 8B5E7E6423F6A9C600087E15 /* TV.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
+				CURRENT_PROJECT_VERSION = BUILD;
 			};
 			name = Release;
 		};
@@ -1300,6 +1308,7 @@
 		};
 		8BD6749D24C5E1E000289A08 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8B19170F24E56E010072CD85 /* Tools.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_IDENTITY = "-";
@@ -1317,6 +1326,7 @@
 		};
 		8BD6749E24C5E1E000289A08 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8B19170F24E56E010072CD85 /* Tools.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_IDENTITY = "-";

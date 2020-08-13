@@ -20,6 +20,24 @@
         }
       },
       {
+        "package": "Builder",
+        "repositoryURL": "https://github.com/elegantchaos/Builder.git",
+        "state": {
+          "branch": null,
+          "revision": "34cd0fdd17f5022cbddc85b7676b2d255a6b7ee1",
+          "version": "1.2.1"
+        }
+      },
+      {
+        "package": "BuilderConfiguration",
+        "repositoryURL": "https://github.com/elegantchaos/BuilderConfiguration.git",
+        "state": {
+          "branch": null,
+          "revision": "bf3ab85857d022ef38aec98188f2e01738bd606f",
+          "version": "1.1.4"
+        }
+      },
+      {
         "package": "Bundles",
         "repositoryURL": "https://github.com/elegantchaos/Bundles.git",
         "state": {
@@ -119,15 +137,6 @@
         }
       },
       {
-        "package": "ReleaseTools",
-        "repositoryURL": "https://github.com/elegantchaos/ReleaseTools.git",
-        "state": {
-          "branch": "resources",
-          "revision": "3277143f7784dab50107481012b53f0555f08e35",
-          "version": null
-        }
-      },
-      {
         "package": "Runner",
         "repositoryURL": "https://github.com/elegantchaos/Runner.git",
         "state": {
@@ -152,6 +161,15 @@
           "branch": null,
           "revision": "eb51f949cdd0c9d88abba9ce79d37eb7ea1231d0",
           "version": "0.2.0"
+        }
+      },
+      {
+        "package": "XCTestExtensions",
+        "repositoryURL": "https://github.com/elegantchaos/XCTestExtensions.git",
+        "state": {
+          "branch": null,
+          "revision": "15991478b5c9bda527a0a59567ad0fa26940f74c",
+          "version": "1.1.2"
         }
       }
     ]

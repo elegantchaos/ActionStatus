@@ -8,6 +8,12 @@
       location = "group:"
       name = "Dependencies">
       <FileRef
+         location = "group:../Runner">
+      </FileRef>
+      <FileRef
+         location = "group:../ReleaseTools">
+      </FileRef>
+      <FileRef
          location = "group:../ActionStatusCore">
       </FileRef>
       <FileRef
