@@ -96,7 +96,11 @@ public struct PreferencesView: View {
         UserDefaults.standard.set(showInMenu, forKey: .showInMenuKey)
         
         // save token...
-        ////            try Keychain.default.addToken("<token>", user: user, server: server)
+        do {
+            try Keychain.default.addToken(githubToken, user: githubUser, server: githubServer)
+        } catch {
+            print("Failed to save token \(error)")
+        }
         
         presentation.wrappedValue.dismiss()
     }
