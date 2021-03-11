@@ -100,11 +100,15 @@ open class Application: BasicApplication, ApplicationHost {
     open func didSetUp(_ window: UIWindow) {
         applySettings()
 
-        settingsObserver = NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: nil) { notification in
-            if !self.savingSettings {
-                self.applySettings()
-            }
-        }
+//        settingsObserver = NotificationCenter.default
+//            .publisher(for: UserDefaults.didChangeNotification, object: nil)
+//            .debounce(for: .seconds(1.0), scheduler: RunLoop.main)
+//            .sink { value in
+//                print(value)
+//                if !self.savingSettings {
+//                    self.applySettings()
+//                }
+//            }
         
         modelWatcher = model
             .objectWillChange
