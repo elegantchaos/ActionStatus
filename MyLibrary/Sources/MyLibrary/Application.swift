@@ -14,10 +14,13 @@ import SwiftUIExtensions
 import Hardware
 import Files
 
-let settingsChannel = Channel("Settings")
+public let settingsChannel = Channel("Settings")
 
-class Application: BasicApplication, ApplicationHost {
-    
+open class Application: BasicApplication, ApplicationHost {
+    public static var instance: Application {
+        UIApplication.shared.delegate as! Application
+    }
+
     #if DEBUG
     let stateKey = "StateDebug"
     #else
@@ -25,22 +28,22 @@ class Application: BasicApplication, ApplicationHost {
     #endif
     
     lazy var updater: Updater = makeUpdater()
-    lazy var viewState = makeViewState()
+    public lazy var viewState = makeViewState()
 
-    var refreshController: RefreshController? = nil
-    var rootController: UIViewController?
+    public var refreshController: RefreshController? = nil
+    public var rootController: UIViewController?
     var settingsObserver: Any?
     var exportWorkflow: Generator.Output? = nil
-    var filePicker: FilePicker?
-    var filePickerClass: FilePicker.Type { return StubFilePicker.self }
-    var model = makeModel()
+    public var filePicker: FilePicker?
+    open var filePickerClass: FilePicker.Type { return StubFilePicker.self }
+    public var model = makeModel()
     var stateChanged = false
     var modelWatcher: AnyCancellable?
     var stateWatcher: AnyCancellable?
     var applyingSettings = false
     var savingSettings = false
     
-    let sheetController = SheetController()
+    public let sheetController = SheetController()
     
     func makeViewState() -> ViewState {
         return ViewState(host: self)
@@ -72,7 +75,7 @@ class Application: BasicApplication, ApplicationHost {
         return isSimulator || isUITesting ? TestModel() : Model([])
     }
     
-    override func setUp(withOptions options: BasicApplication.LaunchOptions, completion: @escaping BasicApplication.SetupCompletion) {
+    open override func setUp(withOptions options: BasicApplication.LaunchOptions, completion: @escaping BasicApplication.SetupCompletion) {
         super.setUp(withOptions: options) { [self] options in
             DispatchQueue.main.async {
                 sheetController.environmentSetter = { view in AnyView(self.applyEnvironment(to: view)) }
@@ -89,13 +92,13 @@ class Application: BasicApplication, ApplicationHost {
         
     }
     
-    override func tearDown() {
+    public override func tearDown() {
         if let observer = settingsObserver {
             NotificationCenter.default.removeObserver(observer, name: UserDefaults.didChangeNotification, object: nil)
         }
     }
     
-    func didSetUp(_ window: UIWindow) {
+    open func didSetUp(_ window: UIWindow) {
         applySettings()
 
         settingsObserver = NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: nil) { notification in
@@ -121,7 +124,7 @@ class Application: BasicApplication, ApplicationHost {
         }
     }
     
-    func applySettings() {
+    open func applySettings() {
         refreshController?.pause()
         let oldToken = try? Keychain.default.getToken(user: viewState.githubUser, server: viewState.githubServer)
         applyingSettings = true
@@ -162,7 +165,7 @@ class Application: BasicApplication, ApplicationHost {
         savingSettings = false
     }
     
-    func applyEnvironment<T>(to view: T) -> some View where T: View {
+    public func applyEnvironment<T>(to view: T) -> some View where T: View {
         return view
             .environmentObject(viewState)
             .environmentObject(model)
@@ -170,7 +173,7 @@ class Application: BasicApplication, ApplicationHost {
             .environmentObject(sheetController)
     }
 
-    func stateWasEdited() {
+    public func stateWasEdited() {
         DispatchQueue.main.async {
             if !self.stateChanged {
                 modelChannel.log("Model Changed") // TODO: should be app channel
@@ -180,7 +183,7 @@ class Application: BasicApplication, ApplicationHost {
         }
     }
     
-    func saveState() {
+    public func saveState() {
         DispatchQueue.main.async { [self] in
             if stateChanged {
                 didRefresh()
@@ -202,11 +205,11 @@ class Application: BasicApplication, ApplicationHost {
         refreshController?.resume()
     }
     
-    func didRefresh() {
+    open func didRefresh() {
         
     }
 
-    func openGithub(with repo: Repo, at location: Repo.GithubLocation = .workflow) {
+    public func openGithub(with repo: Repo, at location: Repo.GithubLocation = .workflow) {
         UIApplication.shared.open(repo.githubURL(for: location))
     }
     
@@ -227,19 +230,25 @@ class Application: BasicApplication, ApplicationHost {
         return picker
     }
     
-    func save(output: Generator.Output) {
+    public func save(output: Generator.Output) {
         exportWorkflow = output
 
         sheetController.dismiss()
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: .seconds(1))) {
             #if targetEnvironment(macCatalyst)
-            Application.native.presentPicker(self.pickerForSavingWorkflow()) // ugly hack - the SwiftUI sheet doesn't work properly on the mac
+            Application.instance.presentPicker(self.pickerForSavingWorkflow()) // ugly hack - the SwiftUI sheet doesn't work properly on the mac
             #else
             self.sheetController.show() {
                 DocumentPickerViewController(picker: self.pickerForSavingWorkflow())
             }
             #endif
         }
+    }
+    
+    public func presentPicker(_ picker: FilePicker) {
+        rootController?.present(picker, animated: true) {
+        }
+        filePicker = picker
     }
     
     func save(output: Generator.Output, to rootURL: URL?) {

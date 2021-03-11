@@ -9,7 +9,7 @@ import SheetController
 import SwiftUI
 import SwiftUIExtensions
 
-struct ContentView: View {
+public struct ContentView: View {
     
     @EnvironmentObject var model: Model
     @EnvironmentObject var viewState: ViewState
@@ -18,7 +18,7 @@ struct ContentView: View {
     public init() {
     }
     
-    var body: some View {
+    public var body: some View {
         SheetControllerHost {
             NavigationView {
                 VStack(alignment: .center) {

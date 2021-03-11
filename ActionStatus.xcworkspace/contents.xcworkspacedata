@@ -8,19 +8,25 @@
       location = "group:"
       name = "Dependencies">
       <FileRef
+         location = "group:../Bundles">
+      </FileRef>
+      <FileRef
+         location = "group:../Images">
+      </FileRef>
+      <FileRef
+         location = "group:../ThreadExtensions">
+      </FileRef>
+      <FileRef
+         location = "group:../SheetController">
+      </FileRef>
+      <FileRef
+         location = "group:../SwiftUIExtensions">
+      </FileRef>
+      <FileRef
          location = "group:../ApplicationExtensions">
       </FileRef>
       <FileRef
-         location = "group:../Runner">
-      </FileRef>
-      <FileRef
          location = "group:../ActionStatusCore">
-      </FileRef>
-      <FileRef
-         location = "group:../JSONSession">
-      </FileRef>
-      <FileRef
-         location = "group:../Octoid">
       </FileRef>
       <FileRef
          location = "group:Dependencies/CatalystSparkle/CatalystSparkle.xcodeproj">

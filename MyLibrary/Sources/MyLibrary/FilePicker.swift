@@ -5,13 +5,13 @@
 
 import UIKit
 
-typealias FilePickerCompletion = ([URL]) -> Void
+public typealias FilePickerCompletion = ([URL]) -> Void
 
-protocol FilePicker: UIViewController {
+public protocol FilePicker: UIViewController {
     init(forOpeningDocumentTypes: [String], startingIn: URL?, completion: FilePickerCompletion?)
 }
 
-extension FilePicker {
+public extension FilePicker {
     init(forOpeningFolderStartingIn startURL: URL?, completion: FilePickerCompletion?) {
         self.init(forOpeningDocumentTypes: ["public.folder"], startingIn: startURL, completion: completion)
     }

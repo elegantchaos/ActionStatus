@@ -4,6 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 
+import MyLibrary
 import ActionStatusCore
 import Combine
 import Logger
@@ -189,12 +190,7 @@ class MobileApplication: Application {
         }
         presentPicker(picker)
     }
-    
-    func presentPicker(_ picker: FilePicker) {
-        rootController?.present(picker, animated: true) {
-        }
-        filePicker = picker
-    }
+  
 }
 
 extension MobileApplication: AppKitBridgeDelegate {
