@@ -16,7 +16,6 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/elegantchaos/ActionStatusCore.git", .branch("main")),
         .package(url: "https://github.com/elegantchaos/ApplicationExtensions.git", from: "2.1.2"),
         .package(url: "https://github.com/elegantchaos/BindingsExtensions.git", from: "1.0.1"),
         .package(url: "https://github.com/elegantchaos/Bundles.git", from: "1.0.8"),
@@ -37,7 +36,6 @@ let package = Package(
         .target(
             name: "MyLibrary",
             dependencies: [
-                "ActionStatusCore",
                 "ApplicationExtensions",
                 "BindingsExtensions",
                 "Bundles",
@@ -46,6 +44,7 @@ let package = Package(
                 "Hardware",
                 "Logger",
                 "Keychain",
+                "Octoid",
                 "SheetController",
                 "SwiftUIExtensions"
             ]),

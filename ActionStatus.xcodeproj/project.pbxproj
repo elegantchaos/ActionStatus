@@ -15,7 +15,6 @@
 		22E7784D2476D3E9009ED66A /* ActionStatusCore in Frameworks */ = {isa = PBXBuildFile; productRef = 22E7784C2476D3E9009ED66A /* ActionStatusCore */; };
 		8B2F0ABB23FC195800B2E62A /* InterceptingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */; };
 		8B3C0573240FD82F00FB533B /* ActionStatusCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8B3C0572240FD82F00FB533B /* ActionStatusCore */; };
-		8B3C0575240FD84A00FB533B /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 8B3C0574240FD84A00FB533B /* Introspect */; };
 		8B3E64B023EAE62E00B28168 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64AF23EAE62E00B28168 /* Preview Assets.xcassets */; };
 		8B3E64B323EAE62E00B28168 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64B123EAE62E00B28168 /* LaunchScreen.storyboard */; };
 		8B3E64BE23EAE62E00B28168 /* ActionStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64BD23EAE62E00B28168 /* ActionStatusTests.swift */; };
@@ -30,12 +29,10 @@
 		8B5B175E23FAEBD300DD2AF5 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5B175D23FAEBD300DD2AF5 /* SwiftUIExtensions */; };
 		8B5E7E8923F6BB5100087E15 /* AppKitBridge.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8323F6BB3500087E15 /* AppKitBridge.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8B5E7E8D23F6BB8900087E15 /* AppKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8C23F6BB8900087E15 /* AppKitBridge.swift */; };
-		8B73DAAD24C5FB1600E74CB3 /* ActionStatusCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8B73DAAC24C5FB1600E74CB3 /* ActionStatusCore */; };
 		8B9A813125FA391300F44800 /* MyLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 8B9A813025FA391300F44800 /* MyLibrary */; };
 		8B9A813325FA49F600F44800 /* MobileApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A813225FA49F600F44800 /* MobileApplication.swift */; };
 		8B9A813525FA4B1200F44800 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A813425FA4B1200F44800 /* SceneDelegate.swift */; };
 		8BBFAA99240401C30091157A /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 8BBFAA8B2403F09F0091157A /* dsa_pub.pem */; };
-		8BD6110424E2A5A400385F29 /* JSONSession in Frameworks */ = {isa = PBXBuildFile; productRef = 8BD6110324E2A5A400385F29 /* JSONSession */; };
 		8BDAC2C223FE8A64004154A1 /* BindingsExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C123FE8A64004154A1 /* BindingsExtensions */; };
 		8BDAC2C423FE8A6E004154A1 /* ApplicationExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C323FE8A6E004154A1 /* ApplicationExtensions */; };
 /* End PBXBuildFile section */
@@ -196,8 +193,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B9A813125FA391300F44800 /* MyLibrary in Frameworks */,
-				8BD6110424E2A5A400385F29 /* JSONSession in Frameworks */,
-				8B73DAAD24C5FB1600E74CB3 /* ActionStatusCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,7 +217,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8BDAC2C223FE8A64004154A1 /* BindingsExtensions in Frameworks */,
-				8B3C0575240FD84A00FB533B /* Introspect in Frameworks */,
 				8BDAC2C423FE8A6E004154A1 /* ApplicationExtensions in Frameworks */,
 				8B4336EE23FFE7C700598A04 /* DictionaryCoding in Frameworks */,
 				8B5B175E23FAEBD300DD2AF5 /* SwiftUIExtensions in Frameworks */,
@@ -541,8 +535,6 @@
 			);
 			name = ActionStatusMobile;
 			packageProductDependencies = (
-				8B73DAAC24C5FB1600E74CB3 /* ActionStatusCore */,
-				8BD6110324E2A5A400385F29 /* JSONSession */,
 				8B9A813025FA391300F44800 /* MyLibrary */,
 			);
 			productName = GithubStatus;
@@ -611,7 +603,6 @@
 				8BDAC2C323FE8A6E004154A1 /* ApplicationExtensions */,
 				8B4336ED23FFE7C700598A04 /* DictionaryCoding */,
 				8B3C0572240FD82F00FB533B /* ActionStatusCore */,
-				8B3C0574240FD84A00FB533B /* Introspect */,
 			);
 			productName = ActionStatusTV;
 			productReference = 8B430E6A23F586100050BF2A /* Action Status.app */;
@@ -702,7 +693,6 @@
 			);
 			mainGroup = 8B3E649A23EAE62D00B28168;
 			packageReferences = (
-				8BD674AC24C5EA6100289A08 /* XCRemoteSwiftPackageReference "ActionStatusCore" */,
 			);
 			productRefGroup = 8B3E64A423EAE62D00B28168 /* Products */;
 			projectDirPath = "";
@@ -1331,17 +1321,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		8BD674AC24C5EA6100289A08 /* XCRemoteSwiftPackageReference "ActionStatusCore" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/elegantchaos/ActionStatusCore.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
 		2260212324781A11002F889D /* Displays */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1359,10 +1338,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = ActionStatusCore;
 		};
-		8B3C0574240FD84A00FB533B /* Introspect */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Introspect;
-		};
 		8B4336ED23FFE7C700598A04 /* DictionaryCoding */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DictionaryCoding;
@@ -1371,18 +1346,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftUIExtensions;
 		};
-		8B73DAAC24C5FB1600E74CB3 /* ActionStatusCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8BD674AC24C5EA6100289A08 /* XCRemoteSwiftPackageReference "ActionStatusCore" */;
-			productName = ActionStatusCore;
-		};
 		8B9A813025FA391300F44800 /* MyLibrary */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MyLibrary;
-		};
-		8BD6110324E2A5A400385F29 /* JSONSession */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = JSONSession;
 		};
 		8BDAC2C123FE8A64004154A1 /* BindingsExtensions */ = {
 			isa = XCSwiftPackageProductDependency;

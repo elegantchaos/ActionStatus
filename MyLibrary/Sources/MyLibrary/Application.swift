@@ -3,7 +3,6 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import ActionStatusCore
 import ApplicationExtensions
 import Combine
 import Keychain
@@ -27,7 +26,7 @@ open class Application: BasicApplication, ApplicationHost {
     let stateKey = "State"
     #endif
     
-    lazy var updater: Updater = makeUpdater()
+    public lazy var updater: Updater = makeUpdater()
     public lazy var viewState = makeViewState()
 
     public var refreshController: RefreshController? = nil
@@ -49,7 +48,7 @@ open class Application: BasicApplication, ApplicationHost {
         return ViewState(host: self)
     }
     
-    func makeUpdater() -> Updater {
+    open func makeUpdater() -> Updater {
         return Updater()
     }
     

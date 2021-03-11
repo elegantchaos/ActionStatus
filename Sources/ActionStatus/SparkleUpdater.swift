@@ -4,6 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Logger
+import MyLibrary
 
 #if canImport(SparkleBridgeClient)
 import SparkleBridgeClient

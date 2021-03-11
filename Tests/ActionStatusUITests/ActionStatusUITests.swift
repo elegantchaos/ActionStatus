@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import ActionStatusCore
 
 class ActionStatusUITests: XCTestCase {
 

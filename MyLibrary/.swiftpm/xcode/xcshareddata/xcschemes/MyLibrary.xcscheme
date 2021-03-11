@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8B5E7E8223F6BB3500087E15"
-               BuildableName = "AppKitBridge.bundle"
-               BlueprintName = "AppKitBridge"
-               ReferencedContainer = "container:ActionStatus.xcodeproj">
+               BlueprintIdentifier = "MyLibrary"
+               BuildableName = "MyLibrary"
+               BlueprintName = "MyLibrary"
+               ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -28,6 +28,16 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "MyLibraryTests"
+               BuildableName = "MyLibraryTests"
+               BlueprintName = "MyLibraryTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -50,10 +60,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8B5E7E8223F6BB3500087E15"
-            BuildableName = "AppKitBridge.bundle"
-            BlueprintName = "AppKitBridge"
-            ReferencedContainer = "container:ActionStatus.xcodeproj">
+            BlueprintIdentifier = "MyLibrary"
+            BuildableName = "MyLibrary"
+            BlueprintName = "MyLibrary"
+            ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
