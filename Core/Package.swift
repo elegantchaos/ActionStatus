@@ -4,15 +4,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "MyLibrary",
+    name: "Core",
     platforms: [
         .macOS(.v11), .iOS(.v13), .tvOS(.v13)
     ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "MyLibrary",
-            targets: ["MyLibrary"]),
+            name: "Core",
+            targets: ["Core"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -21,8 +21,8 @@ let package = Package(
         .package(url: "https://github.com/elegantchaos/Bundles.git", from: "1.0.8"),
         .package(url: "https://github.com/elegantchaos/CollectionExtensions.git", from: "1.1.2"),
         .package(url: "https://github.com/elegantchaos/DictionaryCoding.git", from: "1.0.9"),
-        .package(url: "https://github.com/elegantchaos/Displays.git", from: "1.1.0"),
-        .package(url: "https://github.com/elegantchaos/Files.git", from: "1.1.3"),
+//        .package(url: "https://github.com/elegantchaos/Displays.git", from: "1.1.0"),
+//        .package(url: "https://github.com/elegantchaos/Files.git", from: "1.1.3"),
         .package(url: "https://github.com/elegantchaos/Hardware.git", from: "1.0.1"),
         .package(url: "https://github.com/elegantchaos/Keychain.git", from: "0.0.1"),
         .package(url: "https://github.com/elegantchaos/Logger.git", from: "1.5.5"),
@@ -34,7 +34,7 @@ let package = Package(
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
-            name: "MyLibrary",
+            name: "Core",
             dependencies: [
                 "ApplicationExtensions",
                 "BindingsExtensions",
@@ -49,7 +49,7 @@ let package = Package(
                 "SwiftUIExtensions"
             ]),
         .testTarget(
-            name: "MyLibraryTests",
-            dependencies: ["MyLibrary"]),
+            name: "CoreTests",
+            dependencies: ["Core"]),
     ]
 )

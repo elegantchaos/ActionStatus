@@ -26,9 +26,6 @@
          location = "group:../ApplicationExtensions">
       </FileRef>
       <FileRef
-         location = "group:../ActionStatusCore">
-      </FileRef>
-      <FileRef
          location = "group:Dependencies/CatalystSparkle/CatalystSparkle.xcodeproj">
       </FileRef>
       <FileRef

@@ -29,9 +29,9 @@
 		8B5B175E23FAEBD300DD2AF5 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5B175D23FAEBD300DD2AF5 /* SwiftUIExtensions */; };
 		8B5E7E8923F6BB5100087E15 /* AppKitBridge.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8323F6BB3500087E15 /* AppKitBridge.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8B5E7E8D23F6BB8900087E15 /* AppKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8C23F6BB8900087E15 /* AppKitBridge.swift */; };
-		8B9A813125FA391300F44800 /* MyLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 8B9A813025FA391300F44800 /* MyLibrary */; };
 		8B9A813325FA49F600F44800 /* MobileApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A813225FA49F600F44800 /* MobileApplication.swift */; };
 		8B9A813525FA4B1200F44800 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A813425FA4B1200F44800 /* SceneDelegate.swift */; };
+		8B9A813725FA508F00F44800 /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = 8B9A813625FA508F00F44800 /* Core */; };
 		8BBFAA99240401C30091157A /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 8BBFAA8B2403F09F0091157A /* dsa_pub.pem */; };
 		8BDAC2C223FE8A64004154A1 /* BindingsExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C123FE8A64004154A1 /* BindingsExtensions */; };
 		8BDAC2C423FE8A6E004154A1 /* ApplicationExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C323FE8A6E004154A1 /* ApplicationExtensions */; };
@@ -155,7 +155,7 @@
 		8B5E7E9123F6C0A100087E15 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		8B5E7E9223F6C0B600087E15 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		8B5E7E9323F6C0C200087E15 /* AppKitBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppKitBridge.h; sourceTree = "<group>"; };
-		8B9A812D25FA389900F44800 /* MyLibrary */ = {isa = PBXFileReference; lastKnownFileType = folder; path = MyLibrary; sourceTree = "<group>"; };
+		8B9A812D25FA389900F44800 /* Core */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Core; sourceTree = "<group>"; };
 		8B9A813225FA49F600F44800 /* MobileApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileApplication.swift; sourceTree = "<group>"; };
 		8B9A813425FA4B1200F44800 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		8BBFAA8B2403F09F0091157A /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
@@ -192,7 +192,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B9A813125FA391300F44800 /* MyLibrary in Frameworks */,
+				8B9A813725FA508F00F44800 /* Core in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,7 +247,7 @@
 		8B3E649A23EAE62D00B28168 = {
 			isa = PBXGroup;
 			children = (
-				8B9A812D25FA389900F44800 /* MyLibrary */,
+				8B9A812D25FA389900F44800 /* Core */,
 				228D838C246AC10700943918 /* README.md */,
 				8B3E64A523EAE62D00B28168 /* Sources */,
 				8B522FA223F6E7B40020AD36 /* Tests */,
@@ -535,7 +535,7 @@
 			);
 			name = ActionStatusMobile;
 			packageProductDependencies = (
-				8B9A813025FA391300F44800 /* MyLibrary */,
+				8B9A813625FA508F00F44800 /* Core */,
 			);
 			productName = GithubStatus;
 			productReference = 8B3E64A323EAE62D00B28168 /* Action Status.app */;
@@ -1346,9 +1346,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftUIExtensions;
 		};
-		8B9A813025FA391300F44800 /* MyLibrary */ = {
+		8B9A813625FA508F00F44800 /* Core */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = MyLibrary;
+			productName = Core;
 		};
 		8BDAC2C123FE8A64004154A1 /* BindingsExtensions */ = {
 			isa = XCSwiftPackageProductDependency;

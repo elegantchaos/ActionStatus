@@ -3,8 +3,8 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Core
 import Logger
-import MyLibrary
 
 #if canImport(SparkleBridgeClient)
 import SparkleBridgeClient
