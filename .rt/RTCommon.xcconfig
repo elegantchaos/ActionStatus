@@ -3,6 +3,8 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+#include "RTBaseline.xcconfig"
+
 RT_CONFIG_ROOT = $(SOURCE_ROOT)/Configs
 
 // Individual project should set these
@@ -20,9 +22,9 @@ RT_COPYRIGHT = Copyright © 2020 Elegant Chaos Limited. All rights reserved.
 RT_COMMON_NAME = $(RT_SHORT_NAME)
 
 // RT's own directories
-RT_ROOT = $(RT_MAC_PRODUCTS_DIR)/ReleaseTools_ReleaseToolsResources.bundle/Contents/Resources
-RT_SCRIPTS_PATH = $(RT_ROOT)/Scripts
-RELEASE_TOOLS = $(RT_MAC_PRODUCTS_DIR)/rt
+RT_ROOT = $PROJECT_DIR/.build/tools
+RT_SCRIPTS_PATH = $RT_ROOT/ReleaseTools_Resources.bundle/Scripts
+RELEASE_TOOLS = $RT_ROOT/rt
 
 // source directories
 RT_SOURCE_ROOT = $(SOURCE_ROOT)/Sources
@@ -63,14 +65,15 @@ PRODUCT_NAME = $(RT_PRODUCT_NAME)
 PRODUCT_BUNDLE_IDENTIFIER = $(RT_BUNDLE_IDENTIFIER)
 CODE_SIGN_STYLE = Automatic
 DEVELOPMENT_TEAM = $(RT_TEAM)
-SWIFT_VERSION = 5.1
+SWIFT_VERSION = 5.3
 ENABLE_PREVIEWS = YES
 CODE_SIGN_ENTITLEMENTS = $(RT_RESOURCE_PATH)/$(RT_SHORT_NAME).entitlements
 ASSETCATALOG_COMPILER_APPICON_NAME = $(RT_ICON_NAME)
 PRODUCT_MODULE_NAME = $(TARGET_NAME)
 SWIFT_OBJC_BRIDGING_HEADER = $(RT_COMMON_RESOURCE_PATH)/BridgingHeader.h
 LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks
-TARGETED_DEVICE_FAMILY = 1,2
+TARGETED_DEVICE_FAMILY = 1,2,6
+
 
 // Build debugging
 RT_LOG = echo

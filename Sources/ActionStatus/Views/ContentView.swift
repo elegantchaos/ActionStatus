@@ -5,6 +5,7 @@
 
 import ActionStatusCore
 import BindingsExtensions
+import SheetController
 import SwiftUI
 import SwiftUIExtensions
 
@@ -18,20 +19,21 @@ struct ContentView: View {
     }
     
     var body: some View {
-        NavigationView {
-            VStack(alignment: .center) {
-                if model.itemIdentifiers.count == 0 {
-                    NoReposView()
-                }
-                
-                RepoListView().padding(.top, viewState.padding)
-                
-                Spacer()
-                FooterView()
-            }.setupNavigation()
+        SheetControllerHost {
+            NavigationView {
+                VStack(alignment: .center) {
+                    if model.itemIdentifiers.count == 0 {
+                        NoReposView()
+                    }
+                    
+                    RepoListView().padding(.top, viewState.padding)
+                    
+                    Spacer()
+                    FooterView()
+                }.setupNavigation()
+            }
+            .setupNavigationStyle()
         }
-        .setupNavigationStyle()
-        .sheet(controlledBy: _sheetController)
         .onAppear(perform: onAppear)
     }
     

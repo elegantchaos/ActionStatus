@@ -8,6 +8,7 @@ import ApplicationExtensions
 import Combine
 import Keychain
 import Logger
+import SheetController
 import SwiftUI
 import SwiftUIExtensions
 import Hardware
@@ -71,17 +72,21 @@ class Application: BasicApplication, ApplicationHost {
         return isSimulator || isUITesting ? TestModel() : Model([])
     }
     
-    override func setUp(withOptions options: BasicApplication.LaunchOptions) {
-        super.setUp(withOptions: options)
+    override func setUp(withOptions options: BasicApplication.LaunchOptions, completion: @escaping BasicApplication.SetupCompletion) {
+        super.setUp(withOptions: options) { [self] options in
+            DispatchQueue.main.async {
+                sheetController.environmentSetter = { view in AnyView(self.applyEnvironment(to: view)) }
+                
+                UserDefaults.standard.register(defaults: [
+                    .refreshIntervalKey: RefreshRate.automatic.rawValue,
+                    .displaySizeKey: DisplaySize.automatic.rawValue
+                ])
+                
+                restoreState()
+                completion(options)
+            }
+        }
         
-        sheetController.environmentSetter = { view in AnyView(self.applyEnvironment(to: view)) }
-        
-        UserDefaults.standard.register(defaults: [
-            .refreshIntervalKey: RefreshRate.automatic.rawValue,
-            .displaySizeKey: DisplaySize.automatic.rawValue
-        ])
-        
-        restoreState()
     }
     
     override func tearDown() {
@@ -228,7 +233,7 @@ class Application: BasicApplication, ApplicationHost {
         sheetController.dismiss()
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: .seconds(1))) {
             #if targetEnvironment(macCatalyst)
-            Application.shared.presentPicker(self.pickerForSavingWorkflow()) // ugly hack - the SwiftUI sheet doesn't work properly on the mac
+            Application.native.presentPicker(self.pickerForSavingWorkflow()) // ugly hack - the SwiftUI sheet doesn't work properly on the mac
             #else
             self.sheetController.show() {
                 DocumentPickerViewController(picker: self.pickerForSavingWorkflow())

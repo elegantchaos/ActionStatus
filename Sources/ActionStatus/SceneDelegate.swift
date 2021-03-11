@@ -10,7 +10,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        let app = Application.shared
+        let app = Application.native
         let content = app.applyEnvironment(to: ContentView())
         
         if let windowScene = scene as? UIWindowScene {

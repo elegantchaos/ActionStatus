@@ -15,7 +15,7 @@ import SparkleBridgeClient
 #endif
 
 extension Application {
-    class var shared: MobileApplication {
+    class var native: MobileApplication {
         UIApplication.shared.delegate as! MobileApplication
     }
 }
@@ -45,23 +45,26 @@ class MobileApplication: Application {
         updateBridge()
     }
     
-    override func setUp(withOptions options: LaunchOptions) {
-        loadSparkle()
-        loadBridge()
-        
-        UserDefaults.standard.register(defaults: [
-            .showInMenuKey: true,
-            .showInDockKey: true
-            ]
-        )
+    override func setUp(withOptions options: LaunchOptions, completion: @escaping SetupCompletion) {
+        super.setUp(withOptions: options) { [self] options in
+            loadSparkle()
+            loadBridge()
+            
+            UserDefaults.standard.register(defaults: [
+                .showInMenuKey: true,
+                .showInDockKey: true
+                ]
+            )
 
-        editingSubscriber = viewState.$isEditing.sink() { _ in
-            DispatchQueue.main.async {
-                self.updateBridge()
+            editingSubscriber = viewState.$isEditing.sink() { _ in
+                DispatchQueue.main.async {
+                    self.updateBridge()
+                }
             }
+            
+            completion(options)
         }
         
-        super.setUp(withOptions: options)
     }
     
     override func didSetUp(_ window: UIWindow) {
@@ -217,7 +220,7 @@ extension MobileApplication: AppKitBridgeDelegate {
     func selectItem(_ item: Int) {
         let id = model.itemIdentifiers[item]
         if let repo = model.repo(withIdentifier: id) {
-            Application.shared.openGithub(with: repo)
+            Application.native.openGithub(with: repo)
         }
     }
     
