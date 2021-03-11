@@ -319,13 +319,6 @@
 			path = PreviewContent;
 			sourceTree = "<group>";
 		};
-		8B4336F6240052DC00598A04 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		8B522FA223F6E7B40020AD36 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -400,7 +393,6 @@
 		8B5E7E5823F6A79900087E15 /* ActionStatus */ = {
 			isa = PBXGroup;
 			children = (
-				8B4336F6240052DC00598A04 /* Views */,
 				8B5B175223FADAAE00DD2AF5 /* Resources */,
 			);
 			path = ActionStatus;
