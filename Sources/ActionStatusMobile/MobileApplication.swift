@@ -22,7 +22,7 @@ extension Application {
 
 @UIApplicationMain
 class MobileApplication: Application {
-    var appKitBridge: AppKitBridge? = nil
+    lazy var appKitBridge: AppKitBridge? = loadBridge()
     var editingSubscriber: AnyCancellable?
     
     #if canImport(SparkleBridgeClient)
@@ -48,7 +48,6 @@ class MobileApplication: Application {
     override func setUp(withOptions options: LaunchOptions, completion: @escaping SetupCompletion) {
         super.setUp(withOptions: options) { [self] options in
             loadSparkle()
-            loadBridge()
             
             UserDefaults.standard.register(defaults: [
                 .showInMenuKey: true,
@@ -102,18 +101,20 @@ class MobileApplication: Application {
         #endif
     }
     
-    fileprivate func loadBridge() {
+    fileprivate func loadBridge() -> AppKitBridge? {
         if let bridgeURL = Bundle.main.url(forResource: "AppKitBridge", withExtension: "bundle"), let bundle = Bundle(url: bridgeURL) {
             if let cls = bundle.principalClass as? NSObject.Type {
                 if let instance = cls.init() as? AppKitBridge {
                     #if canImport(SparkleBridgeClient)
                     instance.showUpdates = sparkleEnabled
                     #endif
-                    appKitBridge = instance
                     instance.setup(with: self)
+                    return instance
                 }
             }
         }
+        
+        return nil
     }
     
     override func buildMenu(with builder: UIMenuBuilder) {

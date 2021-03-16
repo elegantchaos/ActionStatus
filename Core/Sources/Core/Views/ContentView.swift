@@ -29,9 +29,10 @@ public struct ContentView: View {
                     
                     Spacer()
                     FooterView()
-                }.setupNavigation()
+                }
+                .setupNavigation()
             }
-            .setupNavigationStyle()
+            .navigationViewStyle(StackNavigationViewStyle())
         }
         .onAppear(perform: onAppear)
     }
