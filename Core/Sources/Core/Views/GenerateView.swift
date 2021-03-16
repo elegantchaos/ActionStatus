@@ -30,10 +30,10 @@ struct GenerateView: View {
                 .padding(.top, viewState.padding)
 
             Form {
-                togglesSection(title: "Platforms", options: self.generator.platforms, toggles: $platforms)
-                togglesSection(title: "Swift", options: self.generator.compilers, toggles: $compilers)
-                togglesSection(title: "Configuration", options: self.generator.configurations, toggles: $configurations)
-                togglesSection(title: "Other Options", options: self.generator.general, toggles: $general)
+                TogglesView(title: "Platforms", options: self.generator.platforms, toggles: $platforms)
+                TogglesView(title: "Swift", options: self.generator.compilers, toggles: $compilers)
+                TogglesView(title: "Configuration", options: self.generator.configurations, toggles: $configurations)
+                TogglesView(title: "Other Options", options: self.generator.general, toggles: $general)
             }
             .padding()
         }
@@ -82,36 +82,46 @@ struct GenerateView: View {
         model.update(repo: updated)
     }
     
-    func togglesSection(title: String, options: [Option], toggles: Binding<[Bool]>) -> some View {
+}
+
+struct TogglesView: View {
+    @EnvironmentObject var viewState: ViewState
+
+    let title: String
+    let options: [Option]
+    let toggles: Binding<[Bool]>
+    
+    var body: some View {
         let count = toggles.wrappedValue.count
-        let allSet = toggles.wrappedValue.filter({ $0 }).count == count
+        let allSet = Binding<Bool> {
+            toggles.wrappedValue.filter({ $0 }).count == count
+        } set: { newValue in
+            for n in 0 ..< toggles.wrappedValue.count {
+                toggles[n].wrappedValue = newValue
+            }
+        }
+
         return Section(header:
             HStack {
                 Text(title).font(viewState.formStyle.headerFont)
                 Spacer()
-                Button(action: {
-                    for n in 0 ..< toggles.wrappedValue.count {
-                        toggles[n].wrappedValue = !allSet
-                    }
-                }) {
-                    Text(allSet ? "disable all" : "enable all")
-                        
-                }
+                Toggle("Enable All", isOn: allSet)
             }
         ) {
             return VStack {
                 ForEach(0 ..< count, id: \.self) { index in
-                    Toggle(isOn: toggles[index]) {
-                        Text(options[index].label)
+                    HStack {
+                        Toggle(isOn: toggles[index]) {
+                            Text(options[index].label)
+                        }
+                        Spacer()
                     }
                 }
             }
         }
+
     }
- 
 }
-
-
 struct ComposeView_Previews: PreviewProvider {
     static var previews: some View {
         let context = PreviewContext()

@@ -29,24 +29,30 @@ public struct SheetView<Content>: View where Content: View {
     public var body: some View {
         AlignedLabelContainer {
             VStack {
-                
-                #if targetEnvironment(macCatalyst)
-                
                 HStack(alignment: .center) {
-                    Spacer()
+                    HStack {
+                        #if !targetEnvironment(macCatalyst)
+                        if cancelAction != nil {
+                            Button(action: cancelAction!) { Text(cancelLabel) }
+                                .accessibility(identifier: "cancel")
+                        }
+                        #endif
+                        Spacer()
+                    }
+
                     Text(title)
-                        .font(.title)
+                        .font(.headline)
                         .fixedSize()
                         .accessibility(identifier: "formHeader")
-                    Spacer()
-                }
-                .padding([.leading, .trailing, .top], 20)
-                
-                #else
-                
-                FormHeaderView(title, cancelAction: cancelAction, cancelLabel: cancelLabel, doneLabel: doneLabel, doneAction: doneAction)
-                
-                #endif
+
+                    HStack {
+                        Spacer()
+                        #if !targetEnvironment(macCatalyst)
+                        Button(action: doneAction) { Text(doneLabel) }
+                            .accessibility(identifier: "done")
+                        #endif
+                    }
+                }.padding([.leading, .trailing, .top], 20)
                 
                 content()
                 
