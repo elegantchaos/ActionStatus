@@ -19,7 +19,8 @@ public class Generator {
         Compiler("swift-50", name: "Swift 5.0", short: "5.0", linux: "swift:5.0", mac: .xcode(version: "11.2.1")),
         Compiler("swift-51", name: "Swift 5.1", short: "5.1", linux: "swift:5.1", mac: .xcode(version: "11.3.1")),
         Compiler("swift-52", name: "Swift 5.2", short: "5.2", linux: "swift:5.2.3-bionic", mac: .xcode(version: "11.4")),
-        Compiler("swift-53", name: "Swift 5.3 Nightly", short: "5.3", linux: "swiftlang/swift:nightly-5.3-bionic", mac: .toolchain(version: "12_beta", branch: "swift-5.3-branch")),
+        Compiler("swift-53", name: "Swift 5.3", short: "5.3", linux: "swift:5.3.3-bionic", mac: .xcode(version: "12.3")),
+        Compiler("swift-54", name: "Swift 5.4 Nightly", short: "5.4", linux: "swiftlang/swift:nightly-5.4-bionic", mac: .toolchain(version: "12_beta", branch: "swift-5.4-branch")),
         Compiler("swift-nightly", name: "Swift Development Nightly", short: "dev", linux: "swiftlang/swift:nightly", mac: .toolchain(version: "12_beta", branch: "development")),
     ]
     
