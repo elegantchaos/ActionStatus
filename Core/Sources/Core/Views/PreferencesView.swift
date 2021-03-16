@@ -29,7 +29,7 @@ public struct PreferencesView: View {
         
         return AlignedLabelContainer {
         VStack {
-            FormHeaderView("Preferences", cancelAction: handleCancel, doneAction: handleSave)
+            FormHeaderView("ActionStatus Preferences", cancelAction: handleCancel, doneAction: handleSave)
             
             Form {
                 FormSection(
@@ -40,7 +40,7 @@ public struct PreferencesView: View {
                     FormPickerRow(label: "Refresh Every", variable: $refreshRate, cases: RefreshRate.allCases, style: rowStyle)
                     FormFieldRow(label: "Github User", variable: $githubUser, style: DefaultFormFieldStyle(contentType: .username, clearButton: true))
                     FormFieldRow(label: "Github Server", variable: $githubServer, style: DefaultFormFieldStyle(contentType: .URL, clearButton: true))
-                    FormFieldRow(label: "Github Token Long Long", variable: $githubToken, style: DefaultFormFieldStyle(contentType: .password, clearButton: true))
+                    FormFieldRow(label: "Github Token", variable: $githubToken, style: DefaultFormFieldStyle(contentType: .password, clearButton: true))
                 }
                 
                 FormSection(
