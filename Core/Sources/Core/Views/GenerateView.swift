@@ -24,9 +24,7 @@ struct GenerateView: View {
     }
     
     var body: some View {
-        VStack {
-            FormHeaderView(repo.name, cancelAction: onCancel, doneLabel: "Save", doneAction: onGenerate)
-            
+        return SheetView(repo.name, cancelAction: onCancel, doneAction: onGenerate, doneLabel: "Save") {
             Text("Settings for workflow '\(repo.workflow).yml' in repo \(repo.owner)/\(repo.name).")
                 .font(.caption)
                 .padding(.top, viewState.padding)
@@ -36,7 +34,8 @@ struct GenerateView: View {
                 togglesSection(title: "Swift", options: self.generator.compilers, toggles: $compilers)
                 togglesSection(title: "Configuration", options: self.generator.configurations, toggles: $configurations)
                 togglesSection(title: "Other Options", options: self.generator.general, toggles: $general)
-            }.padding()
+            }
+            .padding()
         }
         .padding()
         .onAppear(perform: onAppear)

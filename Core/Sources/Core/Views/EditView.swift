@@ -7,7 +7,6 @@ import SwiftUI
 import SwiftUIExtensions
 import Hardware
 
-
 public struct EditView: View {
     #if os(tvOS)
     static let fieldStyle = DefaultTextFieldStyle()
@@ -40,59 +39,55 @@ public struct EditView: View {
         let localPath = repo?.url(forDevice: Device.main.identifier)?.path ?? ""
         let detailStyle = NameOrgStyle()
         
-        return VStack() {
-            AlignedLabelContainer {
-                FormHeaderView(title, cancelAction: dismiss, doneAction: done)
-                
-                Form {
-                    FormSection(
-                        header: "Details",
-                        footer: "Enter the name and owner of the repository, and the name of the workflow file to test. Enter a list of specific branches to test, or leave blank to just test the default branch."
-                    ) {
-                        FormFieldRow(label: "name", placeholder: "github repo name", variable: $name, style: detailStyle, clearButton: true)
-                        FormFieldRow(label: "owner", placeholder: "github user or organisation", variable: $owner, style: detailStyle, clearButton: true)
-                        FormFieldRow(label: "workflow", placeholder: "Tests.yml", variable: $workflow, style: detailStyle, clearButton: true)
-                        FormFieldRow(label: "branches", placeholder: "branch1, branch2, …", variable: $branches, style: BranchListStyle(), clearButton: true)
-                    }
-                    
-                    FormSection(
-                        header: "Locations",
-                        footer: "Corresponding locations on Github."
-                    ) {
-                        FormRow(label: "repo") {
-                            HStack(alignment: .firstTextBaseline) {
-                                Text("https://github.com/\(trimmedOwner)/\(trimmedName)").bold()
-                                Spacer()
-                                Button(action: openRepo) {
-                                    SystemImage("arrowshape.turn.up.right.circle")
-                                }
-                            }
-                        }
-                        
-                        FormRow(label: "status") {
-                            HStack(alignment: .firstTextBaseline) {
-                            Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions?query=workflow%3A\(trimmedWorkflow)").bold()
-                            Spacer()
-                            Button(action: openWorkflow) {
-                                SystemImage("arrowshape.turn.up.right.circle")
-                            }
-                            }
-                        }
-                        
-                        if !localPath.isEmpty {
-                            FormRow(label: "local") {
-                                Text(localPath)
-                            }
+        return SheetView(title, cancelAction: dismiss, doneAction: done) {
+        Form {
+            FormSection(
+                header: "Details",
+                footer: "Enter the name and owner of the repository, and the name of the workflow file to test. Enter a list of specific branches to test, or leave blank to just test the default branch."
+            ) {
+                FormFieldRow(label: "name", placeholder: "github repo name", variable: $name, style: detailStyle, clearButton: true)
+                FormFieldRow(label: "owner", placeholder: "github user or organisation", variable: $owner, style: detailStyle, clearButton: true)
+                FormFieldRow(label: "workflow", placeholder: "Tests.yml", variable: $workflow, style: detailStyle, clearButton: true)
+                FormFieldRow(label: "branches", placeholder: "branch1, branch2, …", variable: $branches, style: BranchListStyle(), clearButton: true)
+            }
+            
+            FormSection(
+                header: "Locations",
+                footer: "Corresponding locations on Github."
+            ) {
+                FormRow(label: "repo") {
+                    HStack(alignment: .firstTextBaseline) {
+                        Text("https://github.com/\(trimmedOwner)/\(trimmedName)").bold()
+                        Spacer()
+                        Button(action: openRepo) {
+                            SystemImage("arrowshape.turn.up.right.circle")
                         }
                     }
                 }
+                
+                FormRow(label: "status") {
+                    HStack(alignment: .firstTextBaseline) {
+                        Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions?query=workflow%3A\(trimmedWorkflow)").bold()
+                        Spacer()
+                        Button(action: openWorkflow) {
+                            SystemImage("arrowshape.turn.up.right.circle")
+                        }
+                    }
+                }
+                
+                if !localPath.isEmpty {
+                    FormRow(label: "local") {
+                        Text(localPath)
+                    }
+                }
             }
-            .padding()
-            .environmentObject(viewState.formStyle)
-            .onAppear() {
-                viewState.host.refreshController?.pause()
-                self.load()
             }
+        }
+        .padding()
+        .environmentObject(viewState.formStyle)
+        .onAppear() {
+            viewState.host.refreshController?.pause()
+            self.load()
         }
     }
     
@@ -175,7 +170,7 @@ struct NameOrgStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
             .keyboardType(.namePhonePad)
-            .shim.textContentType(.name)
+            .textContentType(.name)
             .disableAutocorrection(true)
             .autocapitalization(.none)
             .modifier(DefaultFormFieldStyle())

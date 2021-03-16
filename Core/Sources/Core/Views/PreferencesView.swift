@@ -27,10 +27,7 @@ public struct PreferencesView: View {
     public var body: some View {
         let rowStyle = ClearFormRowStyle()
         
-        return AlignedLabelContainer {
-        VStack {
-            FormHeaderView("ActionStatus Preferences", cancelAction: handleCancel, doneAction: handleSave)
-            
+        SheetView("ActionStatus Preferences", cancelAction: handleCancel, doneAction: handleSave) {
             Form {
                 FormSection(
                     header: "Connection",
@@ -64,7 +61,6 @@ public struct PreferencesView: View {
         .padding()
         .onAppear(perform: handleAppear)
         .environmentObject(viewState.formStyle)
-        }
     }
     
     

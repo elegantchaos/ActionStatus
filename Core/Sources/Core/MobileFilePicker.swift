@@ -3,6 +3,8 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+#if !os(tvOS)
+
 import UIKit
 import Foundation
 
@@ -51,3 +53,4 @@ extension MobileFilePicker: UIDocumentPickerDelegate {
     }
 }
 
+#endif
