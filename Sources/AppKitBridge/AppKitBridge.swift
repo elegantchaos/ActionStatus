@@ -52,7 +52,16 @@ extension ItemStatus: CaseIterable {
     var statusItem: NSStatusItem?
     var toolbar: NSToolbar?
     var editingItem: NSToolbarItem?
+    lazy var unlockedImage = systemImage("lock.open.fill", label: "Done Editing")
+    lazy var lockedImage = systemImage("lock.fill", label: "Edit Repos")
+    lazy var addImage = systemImage("plus", label: "Add Repo")
+    
     private var _status: ItemStatus = .unknown
+    
+    func systemImage(_ name: String, label: String) -> NSImage {
+        let image = NSImage(systemSymbolName: name, accessibilityDescription: label)!
+        return image
+    }
     
     var status: ItemStatus {
         get {
@@ -269,7 +278,7 @@ extension AppKitBridgeSingleton: NSToolbarDelegate {
     func makeToolbar() -> Any {
         let toolbar = NSToolbar(identifier: "test")
         toolbar.delegate = self
-        toolbar.displayMode = .iconOnly
+        toolbar.displayMode = .iconAndLabel
         toolbar.sizeMode = .small
         toolbar.centeredItemIdentifier = .titleLabel
         self.toolbar = toolbar
@@ -285,14 +294,12 @@ extension AppKitBridgeSingleton: NSToolbarDelegate {
                 item.view = NSTextField(labelWithString: title)
 
             case .addButton:
-                let image = NSImage(named: "NSAddTemplate")
-                let button = NSButton(image: image!, target: self, action: #selector(handleAdd(_:)))
+                let button = NSButton(image: addImage, target: self, action: #selector(handleAdd(_:)))
                 button.isBordered = false
                 item.view = button
 
             case .editButton:
-                let image = NSImage(named: "NSLockLockedTemplate")
-                let button = NSButton(image: image!, target: self, action: #selector(handleEdit(_:)))
+                let button = NSButton(image: lockedImage, target: self, action: #selector(handleEdit(_:)))
                 button.isBordered = false
                 item.view = button
                 editingItem = item
@@ -322,7 +329,7 @@ extension AppKitBridgeSingleton: NSToolbarDelegate {
     
     @IBAction func handleEdit(_ sender: Any) {
         if let isEditing = delegate?.toggleEditing(), let item = editingItem, let button = item.view as? NSButton {
-            button.image = NSImage(named: isEditing ? "NSLockUnlockedTemplate" : "NSLockLockedTemplate")
+            button.image = isEditing ? unlockedImage : lockedImage
             button.isHighlighted = isEditing
         }
     }
