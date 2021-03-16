@@ -110,6 +110,15 @@
         }
       },
       {
+        "package": "UserDefaultsExtensions",
+        "repositoryURL": "https://github.com/elegantchaos/UserDefaultsExtensions.git",
+        "state": {
+          "branch": null,
+          "revision": "bab30cfe8908918fa295460e51c5e80ad9fac7b6",
+          "version": "1.0.1"
+        }
+      },
+      {
         "package": "XCTestExtensions",
         "repositoryURL": "https://github.com/elegantchaos/XCTestExtensions.git",
         "state": {

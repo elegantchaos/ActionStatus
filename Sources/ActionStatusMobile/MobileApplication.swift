@@ -74,8 +74,8 @@ class MobileApplication: Application {
         super.didSetUp(window)
     }
     
-    override func applySettings() {
-        super.applySettings()
+    override func loadSettings() {
+        super.loadSettings()
         updateBridge()
         
         settingsChannel.log("\(String.showInMenuKey) is \(appKitBridge?.showInMenu ?? false)")

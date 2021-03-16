@@ -6,7 +6,7 @@
 import Foundation
 import SwiftUIExtensions
 
-public enum RefreshRate: Int, CaseIterable {
+public enum RefreshRate: Int, CaseIterable, Equatable {
         case automatic = 0
         case quick = 30
         case minute  = 60

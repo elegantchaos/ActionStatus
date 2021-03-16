@@ -5,13 +5,14 @@
 
 import ApplicationExtensions
 import Combine
+import Files
 import Keychain
+import Hardware
 import Logger
 import SheetController
 import SwiftUI
 import SwiftUIExtensions
-import Hardware
-import Files
+import UserDefaultsExtensions
 
 public let settingsChannel = Channel("Settings")
 
@@ -31,7 +32,7 @@ open class Application: BasicApplication, ApplicationHost {
 
     public var refreshController: RefreshController? = nil
     public var rootController: UIViewController?
-    var settingsObserver: Any?
+    var settingsObserver: AnyCancellable?
     var exportWorkflow: Generator.Output? = nil
     public var filePicker: FilePicker?
     open var filePickerClass: FilePicker.Type { return StubFilePicker.self }
@@ -39,8 +40,6 @@ open class Application: BasicApplication, ApplicationHost {
     var stateChanged = false
     var modelWatcher: AnyCancellable?
     var stateWatcher: AnyCancellable?
-    var applyingSettings = false
-    var savingSettings = false
     
     public let sheetController = SheetController()
     
@@ -98,18 +97,12 @@ open class Application: BasicApplication, ApplicationHost {
     }
     
     open func didSetUp(_ window: UIWindow) {
-        applySettings()
+        loadSettings()
 
-//        settingsObserver = NotificationCenter.default
-//            .publisher(for: UserDefaults.didChangeNotification, object: nil)
-//            .debounce(for: .seconds(1.0), scheduler: RunLoop.main)
-//            .sink { value in
-//                print(value)
-//                if !self.savingSettings {
-//                    self.applySettings()
-//                }
-//            }
-        
+        settingsObserver = UserDefaults.standard.onChanged {
+            self.loadSettings()
+        }
+
         modelWatcher = model
             .objectWillChange
             .debounce(for: 1.0, scheduler: RunLoop.main)
@@ -121,31 +114,24 @@ open class Application: BasicApplication, ApplicationHost {
             .objectWillChange
             .debounce(for: 1.0, scheduler: RunLoop.main)
             .sink() { value in
-            if !self.applyingSettings {
                 self.saveSettings()
-            }
         }
     }
     
-    open func applySettings() {
+    open func loadSettings() {
+        settingsChannel.debug("Loading settings")
+        
         refreshController?.pause()
         let oldToken = try? Keychain.default.getToken(user: viewState.githubUser, server: viewState.githubServer)
-        applyingSettings = true
-        let defaults = UserDefaults.standard
-        if let rate = RefreshRate(rawValue: defaults.integer(forKey: .refreshIntervalKey)) {
-            viewState.refreshRate = rate
-        }
-        
-        if let size = DisplaySize(rawValue: defaults.integer(forKey: .displaySizeKey)) {
-            viewState.displaySize = size
-        }
 
-        viewState.githubUser = defaults.string(forKey: .githubUserKey) ?? ""
-        viewState.githubServer = defaults.string(forKey: .githubServerKey) ?? "api.github.com"
+        let defaults = UserDefaults.standard
+        defaults.read(&viewState.displaySize, fromKey: .displaySizeKey)
+        defaults.read(&viewState.refreshRate, fromKey: .refreshIntervalKey)
+        defaults.read(&viewState.githubUser, fromKey: .githubUserKey, default: "")
+        defaults.read(&viewState.githubServer, fromKey: .githubServerKey, default: "api.github.com")
         
-        settingsChannel.log("\(String.refreshIntervalKey) is \(viewState.refreshRate)")
-        settingsChannel.log("\(String.displaySizeKey) is \(viewState.displaySize)")
-        applyingSettings = false
+        settingsChannel.debug("\(String.refreshIntervalKey) is \(viewState.refreshRate)")
+        settingsChannel.debug("\(String.displaySizeKey) is \(viewState.displaySize)")
         
         let newToken = try? Keychain.default.getToken(user: viewState.githubUser, server: viewState.githubServer)
 
@@ -158,14 +144,14 @@ open class Application: BasicApplication, ApplicationHost {
     }
   
     func saveSettings() {
-        savingSettings = true
+        settingsChannel.debug("Saving settings")
+        
         let defaults = UserDefaults.standard
-        defaults.set(viewState.refreshRate.rawValue, forKey: .refreshIntervalKey)
-        defaults.set(viewState.displaySize.rawValue, forKey: .displaySizeKey)
-        defaults.set(viewState.githubUser, forKey: .githubUserKey)
-        defaults.set(viewState.githubServer, forKey: .githubServerKey)
+        defaults.write(viewState.refreshRate.rawValue, forKey: .refreshIntervalKey)
+        defaults.write(viewState.displaySize.rawValue, forKey: .displaySizeKey)
+        defaults.write(viewState.githubUser, forKey: .githubUserKey)
+        defaults.write(viewState.githubServer, forKey: .githubServerKey)
         // NB: github token is stored in the keychain
-        savingSettings = false
     }
     
     public func applyEnvironment<T>(to view: T) -> some View where T: View {
