@@ -67,13 +67,6 @@ class MobileApplication: Application {
         
     }
     
-    override func didSetUp(_ window: UIWindow) {
-        if let bridge = appKitBridge {
-            bridge.setup(with: self)
-        }
-        super.didSetUp(window)
-    }
-    
     override func loadSettings() {
         super.loadSettings()
         updateBridge()
@@ -117,6 +110,7 @@ class MobileApplication: Application {
                     instance.showUpdates = sparkleEnabled
                     #endif
                     appKitBridge = instance
+                    instance.setup(with: self)
                 }
             }
         }

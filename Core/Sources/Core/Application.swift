@@ -32,14 +32,12 @@ open class Application: BasicApplication, ApplicationHost {
 
     public var refreshController: RefreshController? = nil
     public var rootController: UIViewController?
-    var settingsObserver: AnyCancellable?
     var exportWorkflow: Generator.Output? = nil
     public var filePicker: FilePicker?
     open var filePickerClass: FilePicker.Type { return StubFilePicker.self }
     public var model = makeModel()
     var stateChanged = false
-    var modelWatcher: AnyCancellable?
-    var stateWatcher: AnyCancellable?
+    var observers: [AnyCancellable] = []
     
     public let sheetController = SheetController()
     
@@ -82,8 +80,28 @@ open class Application: BasicApplication, ApplicationHost {
                     .refreshIntervalKey: RefreshRate.automatic.rawValue,
                     .displaySizeKey: DisplaySize.automatic.rawValue
                 ])
-                
+
+                loadSettings()
                 restoreState()
+
+                observers.append(UserDefaults.standard.onChanged {
+                    self.loadSettings()
+                })
+
+                observers.append(model
+                    .objectWillChange
+                    .debounce(for: 1.0, scheduler: RunLoop.main)
+                    .sink {
+                    self.stateWasEdited()
+                })
+                
+                observers.append(viewState
+                    .objectWillChange
+                    .debounce(for: 1.0, scheduler: RunLoop.main)
+                    .sink() { value in
+                        self.saveSettings()
+                })
+                
                 completion(options)
             }
         }
@@ -91,31 +109,7 @@ open class Application: BasicApplication, ApplicationHost {
     }
     
     public override func tearDown() {
-        if let observer = settingsObserver {
-            NotificationCenter.default.removeObserver(observer, name: UserDefaults.didChangeNotification, object: nil)
-        }
-    }
-    
-    open func didSetUp(_ window: UIWindow) {
-        loadSettings()
-
-        settingsObserver = UserDefaults.standard.onChanged {
-            self.loadSettings()
-        }
-
-        modelWatcher = model
-            .objectWillChange
-            .debounce(for: 1.0, scheduler: RunLoop.main)
-            .sink {
-            self.stateWasEdited()
-        }
-        
-        stateWatcher = viewState
-            .objectWillChange
-            .debounce(for: 1.0, scheduler: RunLoop.main)
-            .sink() { value in
-                self.saveSettings()
-        }
+        observers = []
     }
     
     open func loadSettings() {

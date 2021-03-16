@@ -28,9 +28,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             self.window = window
             app.rootController = window.rootViewController
             window.makeKeyAndVisible()
-            DispatchQueue.main.async {
-                app.didSetUp(window)
-            }
         }
     }
 
