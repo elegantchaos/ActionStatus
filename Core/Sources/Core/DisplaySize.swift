@@ -14,13 +14,15 @@ public enum DisplaySize: Int, CaseIterable {
     case huge = 4
     
     var font: Font {
+        let base: UIFont = UIFont.preferredFont(forTextStyle: .title1)
+        let scale: CGFloat
         switch self {
-            case .automatic: return normalised.font
-            case .large: return .title
-            case .huge: return .largeTitle
-            case .medium: return .headline
-            case .small: return .body
+            case .small: scale = 0.6
+            case .medium: scale = 0.8
+            case .huge: scale = 1.2
+            default: scale = 1.0
         }
+        return Font(base.withSize(base.pointSize * scale))
     }
     
     var rowHeight: CGFloat { return 0 }

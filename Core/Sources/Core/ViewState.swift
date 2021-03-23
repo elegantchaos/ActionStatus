@@ -63,17 +63,17 @@ public class ViewState: ObservableObject {
         return newRepo
     }
     
-    var columns: [GridItem] {
+    var repoGridColumns: [GridItem] {
         #if os(tvOS)
-        let width: CGFloat
+        let count: Int
         switch displaySize {
-            case .small: width = 300
-            case .medium: width = 420
-            default: width = 640
+            case .small: count = 4
+            case .medium: count = 3
+            default: count = 2
         }
-        return [GridItem(.adaptive(minimum: width))]
+        return Array(repeating: .init(.flexible()), count: count)
         #else
-            return [GridItem(.adaptive(minimum: 256))]
+        return [GridItem(.adaptive(minimum: 256, maximum: 384))]
         #endif
     }
 }

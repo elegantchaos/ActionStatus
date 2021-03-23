@@ -26,7 +26,7 @@ public struct RepoListView: View {
                 }
             } else {
                 ScrollView {
-                    LazyVGrid(columns: viewState.columns) {
+                    LazyVGrid(columns: viewState.repoGridColumns, spacing: 0) {
                         ForEach(status.sortedRepos) { repo in
                             RepoCellView(repo: repo, selectable: false)
                         }
