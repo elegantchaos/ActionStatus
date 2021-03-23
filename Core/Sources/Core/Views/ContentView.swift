@@ -21,7 +21,7 @@ public struct ContentView: View {
         SheetControllerHost {
             NavigationView {
                 VStack(alignment: .center) {
-                    if model.itemIdentifiers.count == 0 {
+                    if model.count == 0 {
                         NoReposView()
                     }
                     

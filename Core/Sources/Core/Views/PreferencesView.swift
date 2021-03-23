@@ -15,6 +15,7 @@ public struct PreferencesView: View {
     @State var defaultOwner: String = ""
     @State var refreshRate: RefreshRate = .automatic
     @State var displaySize: DisplaySize = .automatic
+    @State var sortMode: SortMode = .name
     @State var showInMenu = true
     @State var showInDock = true
     @State var githubToken = ""
@@ -47,6 +48,7 @@ public struct PreferencesView: View {
                     FormPickerRow(label: "Item Size", variable: $displaySize, cases: DisplaySize.allCases, style: rowStyle)
                     FormToggleRow(label: "Show In Menubar", variable: $showInMenu, style: rowStyle)
                     FormToggleRow(label: "Show In Dock", variable: $showInDock, style: rowStyle)
+                    FormPickerRow(label: "Sort By", variable: $sortMode, cases: SortMode.allCases, style: rowStyle)
                 }
                 
                 FormSection(
@@ -70,6 +72,7 @@ public struct PreferencesView: View {
         displaySize = viewState.displaySize
         showInDock = UserDefaults.standard.bool(forKey: .showInDockKey)
         showInMenu = UserDefaults.standard.bool(forKey: .showInMenuKey)
+        sortMode = viewState.sortMode
         githubUser = viewState.githubUser
         githubServer = viewState.githubServer
         if let token = try? Keychain.default.getToken(user: viewState.githubUser, server: viewState.githubServer) {
@@ -88,6 +91,7 @@ public struct PreferencesView: View {
         viewState.displaySize = displaySize
         viewState.githubUser = githubUser
         viewState.githubServer = githubServer
+        viewState.sortMode = sortMode
         UserDefaults.standard.set(showInDock, forKey: .showInDockKey)
         UserDefaults.standard.set(showInMenu, forKey: .showInMenuKey)
         

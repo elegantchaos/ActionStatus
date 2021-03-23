@@ -207,7 +207,7 @@ extension MobileApplication: AppKitBridgeDelegate {
     }
     
     func itemCount() -> Int {
-        return model.itemIdentifiers.count
+        return model.count
     }
     
     func name(forItem item: Int) -> String {

@@ -24,8 +24,14 @@ private extension URL {
     var bookmarkKey: String { "bookmark:\(absoluteURL.path)" }
 }
 
+extension Comparable {
+    public static func < (lhs: Self, rhs: Self) -> Bool where Self: RawRepresentable, Self.RawValue: Comparable {
+        lhs.rawValue < rhs.rawValue
+    }
+}
+
 public struct Repo: Identifiable, Equatable, Hashable {
-    public enum State: UInt, Codable {
+    public enum State: UInt, Codable, Comparable {
         case unknown = 0
         case passing = 1
         case failing = 2

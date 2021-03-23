@@ -21,7 +21,7 @@ public struct FooterView: View {
                 Text(updater.status).statusStyle()
             } else {
                 HStack(spacing: 8) {
-                    Text("Monitoring \(model.itemIdentifiers.count) repos.")
+                    Text("Monitoring \(model.count) repos.")
                     if model.failing > 0 {
                         HStack(spacing: 4) {
                             SystemImage("exclamationmark.triangle.fill").foregroundColor(.red)

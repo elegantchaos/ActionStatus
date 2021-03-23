@@ -29,7 +29,8 @@ open class Application: BasicApplication, ApplicationHost {
     
     public lazy var updater: Updater = makeUpdater()
     public lazy var viewState = makeViewState()
-
+    public var status: Status = Status()
+    
     public var refreshController: RefreshController? = nil
     public var rootController: UIViewController?
     var exportWorkflow: Generator.Output? = nil
@@ -75,24 +76,22 @@ open class Application: BasicApplication, ApplicationHost {
         super.setUp(withOptions: options) { [self] options in
             DispatchQueue.main.async {
                 sheetController.environmentSetter = { view in AnyView(self.applyEnvironment(to: view)) }
-                
-                UserDefaults.standard.register(defaults: [
-                    .refreshIntervalKey: RefreshRate.automatic.rawValue,
-                    .displaySizeKey: DisplaySize.automatic.rawValue
-                ])
 
+                setupDefaultSettings()
                 loadSettings()
                 restoreState()
 
                 observers.append(UserDefaults.standard.onChanged {
                     self.loadSettings()
+                    self.status.update(with: model, viewState: viewState)
                 })
 
                 observers.append(model
                     .objectWillChange
                     .debounce(for: 1.0, scheduler: RunLoop.main)
                     .sink {
-                    self.stateWasEdited()
+                        self.stateWasEdited()
+                        self.status.update(with: model, viewState: viewState)
                 })
                 
                 observers.append(viewState
@@ -100,8 +99,10 @@ open class Application: BasicApplication, ApplicationHost {
                     .debounce(for: 1.0, scheduler: RunLoop.main)
                     .sink() { value in
                         self.saveSettings()
+                        self.status.update(with: model, viewState: viewState)
                 })
                 
+                status.update(with: model, viewState: viewState)
                 completion(options)
             }
         }
@@ -110,6 +111,14 @@ open class Application: BasicApplication, ApplicationHost {
     
     public override func tearDown() {
         observers = []
+    }
+    
+    func setupDefaultSettings() {
+        UserDefaults.standard.register(defaults: [
+            .refreshIntervalKey: RefreshRate.automatic.rawValue,
+            .displaySizeKey: DisplaySize.automatic.rawValue,
+            .sortModeKey: SortMode.state.rawValue
+        ])
     }
     
     open func loadSettings() {
@@ -123,6 +132,7 @@ open class Application: BasicApplication, ApplicationHost {
         defaults.read(&viewState.refreshRate, fromKey: .refreshIntervalKey)
         defaults.read(&viewState.githubUser, fromKey: .githubUserKey, default: "")
         defaults.read(&viewState.githubServer, fromKey: .githubServerKey, default: "api.github.com")
+        defaults.read(&viewState.sortMode, fromKey: .sortModeKey)
         
         settingsChannel.debug("\(String.refreshIntervalKey) is \(viewState.refreshRate)")
         settingsChannel.debug("\(String.displaySizeKey) is \(viewState.displaySize)")
@@ -145,6 +155,7 @@ open class Application: BasicApplication, ApplicationHost {
         defaults.write(viewState.displaySize.rawValue, forKey: .displaySizeKey)
         defaults.write(viewState.githubUser, forKey: .githubUserKey)
         defaults.write(viewState.githubServer, forKey: .githubServerKey)
+        defaults.write(viewState.sortMode.rawValue, forKey: .sortModeKey)
         // NB: github token is stored in the keychain
     }
     
@@ -154,6 +165,7 @@ open class Application: BasicApplication, ApplicationHost {
             .environmentObject(model)
             .environmentObject(updater)
             .environmentObject(sheetController)
+            .environmentObject(status)
     }
 
     public func stateWasEdited() {

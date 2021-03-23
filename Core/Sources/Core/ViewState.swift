@@ -20,6 +20,7 @@ public extension String {
     static let showInDockKey = "ShowInDock"
     static let githubUserKey = "GithubUser"
     static let githubServerKey = "GithubServer"
+    static let sortModeKey = "SortMode"
 }
 
 public class ViewState: ObservableObject {
@@ -30,10 +31,12 @@ public class ViewState: ObservableObject {
     @Published public var refreshRate: RefreshRate = .automatic
     @Published public var githubUser: String = ""
     @Published public var githubServer: String = "api.github.com"
-    
+    @Published public var sortMode: SortMode = .state
+
     public let host: ApplicationHost
     public let padding: CGFloat = 10
     let editIcon = "info.circle"
+    let linkIcon = "chevron.right.square"
     let startEditingIcon = "lock.fill"
     let stopEditingIcon = "lock.open.fill"
     let preferencesIcon = "gearshape"
@@ -54,4 +57,5 @@ public class ViewState: ObservableObject {
         selectedID = newRepo.id
         return newRepo
     }
+    
 }

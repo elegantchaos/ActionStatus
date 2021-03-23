@@ -32,6 +32,10 @@ public class Model: ObservableObject {
     @Published public var defaultWorkflow = "Tests"
     @Published public var defaultBranches: [String] = []
 
+    public var count: Int {
+        items.count
+    }
+    
     public var combinedState: [Repo.State] {
         var state: [Repo.State] = []
         if running > 0 {
@@ -123,6 +127,10 @@ public class Model: ObservableObject {
         return items[id]
     }
     
+    public func repos(sortedBy mode: SortMode) -> [Repo] {
+        return mode.sort(items.values)
+    }
+    
     public func update(repo: Repo, addIfMissing: Bool = true) {
         let item = items[repo.id]
         let update: Bool
@@ -200,14 +208,7 @@ internal extension Model {
     }
         
     func sortItems() {
-        let sorted = items.values.sorted { (r1, r2) -> Bool in
-            if (r1.state == r2.state) {
-                return r1.name < r2.name
-            }
-            
-            return r1.state.rawValue > r2.state.rawValue
-        }
-        
+        let sorted = repos(sortedBy: .state)
         let set = NSCountedSet()
         sorted.forEach({ set.add($0.state) })
 
