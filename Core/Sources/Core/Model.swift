@@ -21,12 +21,6 @@ public class Model: ObservableObject {
     internal let key: String = "State"
     internal var items: [UUID:Repo]
     
-    @Published public var itemIdentifiers: [UUID]
-    @Published public var passing: Int = 0
-    @Published public var failing: Int = 0
-    @Published public var running: Int = 0
-    @Published public var queued: Int = 0
-    @Published public var unreachable: Int = 0
     @Published public var defaultOwner = ""
     @Published public var defaultName = ""
     @Published public var defaultWorkflow = "Tests"
@@ -36,26 +30,7 @@ public class Model: ObservableObject {
         items.count
     }
     
-    public var combinedState: [Repo.State] {
-        var state: [Repo.State] = []
-        if running > 0 {
-            state.append(.running)
-        }
-        
-        if queued > 0 {
-            state.append(.queued)
-        }
-        
-        if failing > 0 {
-            state.append(.failing)
-        }
-        
-        if state.count == 0 {
-            state = (passing > 0) ? [.passing] : [.unknown]
-        }
-        return state
-    }
-    
+
     public init(_ repos: [Repo], store: NSUbiquitousKeyValueStore = NSUbiquitousKeyValueStore.default) {
         self.store = store
         
@@ -68,8 +43,6 @@ public class Model: ObservableObject {
         }
         
         self.items = index
-        self.itemIdentifiers = identifiers
-        sortItems()
         NotificationCenter.default.addObserver(self, selector: #selector(modelChangedExternally), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: NSUbiquitousKeyValueStore.default)
     }
 
@@ -92,7 +65,6 @@ public class Model: ObservableObject {
                 }
             }
             items = loadedRepos
-            sortItems()
         }
         
         if let key = store.string(forKey: .defaultOwnerKey) ?? UserDefaults.standard.string(forKey: .defaultOwnerKey) {
@@ -143,7 +115,6 @@ public class Model: ObservableObject {
         if update {
             modelChannel.log(items[repo.id] == nil ? "Added \(repo)" : "Updated \(repo)")
             items[repo.id] = repo
-            sortItems()
         }
     }
     
@@ -157,7 +128,6 @@ public class Model: ObservableObject {
     @discardableResult public func addRepo(viewState: ViewState) -> Repo {
         let repo = Repo(model: self)
         items[repo.id] = repo
-        itemIdentifiers.append(repo.id)
 
         return repo
     }
@@ -165,7 +135,6 @@ public class Model: ObservableObject {
     @discardableResult public func addRepo(name: String, owner: String) -> Repo {
         let repo = Repo(name, owner: owner, workflow: "Tests")
         items[repo.id] = repo
-        itemIdentifiers.append(repo.id)
 
         return repo
     }
@@ -182,20 +151,13 @@ public class Model: ObservableObject {
                     }
                 }
             }
-            sortItems()
         }
     }
     
-    public func remove(atOffsets offsets: IndexSet) {
-        let ids = offsets.map({ self.itemIdentifiers[$0] })
-        remove(repos: ids)
-    }
-    
-    public func remove(repos: [UUID]) {
-        for repoID in repos {
+    public func remove(reposWithIDs: [UUID]) {
+        for repoID in reposWithIDs {
             items[repoID] = nil
         }
-        sortItems()
     }
 }
 
@@ -206,21 +168,7 @@ internal extension Model {
     @objc func modelChangedExternally() {
         load(fromDefaultsKey: key)
     }
-        
-    func sortItems() {
-        let sorted = repos(sortedBy: .state)
-        let set = NSCountedSet()
-        sorted.forEach({ set.add($0.state) })
-
-        passing = set.count(for: Repo.State.passing)
-        failing = set.count(for: Repo.State.failing)
-        running = set.count(for: Repo.State.running)
-        queued = set.count(for: Repo.State.queued)
-        unreachable = set.count(for: Repo.State.unknown)
-        
-        itemIdentifiers = sorted.map({ $0.id })
-    }
-    
+            
     func add(fromGitRepo localGitFolderURL: URL, detector: NSDataDetector) {
         let containerURL = localGitFolderURL.deletingLastPathComponent()
         let containerName = containerURL.lastPathComponent

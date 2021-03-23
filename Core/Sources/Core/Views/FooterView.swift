@@ -9,7 +9,7 @@ import SwiftUIExtensions
 
 public struct FooterView: View {
     @EnvironmentObject var updater: Updater
-    @EnvironmentObject var model: Model
+    @EnvironmentObject var status: Status
     @EnvironmentObject var sheetController: SheetController
     
     public init() {
@@ -21,32 +21,32 @@ public struct FooterView: View {
                 Text(updater.status).statusStyle()
             } else {
                 HStack(spacing: 8) {
-                    Text("Monitoring \(model.count) repos.")
-                    if model.failing > 0 {
+                    Text("Monitoring \(status.sortedRepos.count) repos.")
+                    if status.failing > 0 {
                         HStack(spacing: 4) {
                             SystemImage("exclamationmark.triangle.fill").foregroundColor(.red)
-                            Text("\(model.failing) failing.")
+                            Text("\(status.failing) failing.")
                         }
                     }
 
-                    if model.queued > 0 {
+                    if status.queued > 0 {
                         HStack(spacing: 4) {
                             SystemImage("ellipsis").foregroundColor(.black)
-                            Text("\(model.queued) queued.")
+                            Text("\(status.queued) queued.")
                         }
                     }
 
-                    if model.running > 0 {
+                    if status.running > 0 {
                         HStack(spacing: 4) {
                             SystemImage("arrow.triangle.2.circlepath.fill").foregroundColor(.black)
-                            Text("\(model.running) running.")
+                            Text("\(status.running) running.")
                         }
                     }
 
-                    if model.unreachable > 0 {
+                    if status.unreachable > 0 {
                         HStack(spacing: 4) {
                             SystemImage("exclamationmark.triangle.fill").foregroundColor(.yellow)
-                            Text("\(model.unreachable) unreachable.")
+                            Text("\(status.unreachable) unreachable.")
                         }
                     }
                     

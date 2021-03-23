@@ -51,7 +51,7 @@ struct RepoCellView: View {
                 Text("Edit…")
             }
             
-            Button(action: { self.model.remove(repos: [repo.id]) }) {
+            Button(action: { self.model.remove(reposWithIDs: [repo.id]) }) {
                 Text("Delete")
             }
             

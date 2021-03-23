@@ -48,7 +48,6 @@ internal extension SimpleRefreshController {
                 refreshChannel.log("Completed Refresh")
                 switch state {
                     case .running:
-                        var changed = false
                         for (id, repo) in model.items {
                             if let state = newState[id] {
                                 var updated = repo
@@ -60,13 +59,8 @@ internal extension SimpleRefreshController {
                                         default: break
                                     }
                                     model.items[id] = updated
-                                    changed = true
                                 }
                             }
-                        }
-                        
-                        if changed {
-                            model.sortItems()
                         }
                         
                         timer.schedule(after: viewState.refreshRate.rate) { _ in

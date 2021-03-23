@@ -94,8 +94,9 @@ class MobileApplication: Application {
         appKitBridge?.showInDock = UserDefaults.standard.bool(forKey: .showInDockKey)
         appKitBridge?.showAddButton = viewState.isEditing
         
-        let index = Int(Date.timeIntervalSinceReferenceDate / .statusCycleInterval) % model.combinedState.count
-        let status = status(for: model.combinedState[index])
+        let combined = status.combinedState
+        let index = Int(Date.timeIntervalSinceReferenceDate / .statusCycleInterval) % combined.count
+        let status = status(for: self.status.combinedState[index])
         appKitBridge?.status = status
     }
     
@@ -211,21 +212,17 @@ extension MobileApplication: AppKitBridgeDelegate {
     }
     
     func name(forItem item: Int) -> String {
-        let id = model.itemIdentifiers[item]
-        return model.repo(withIdentifier: id)?.name ?? ""
+        return status.name(forRepoWithIndex: item)
     }
     
     func status(forItem item: Int) -> ItemStatus {
-        let id = model.itemIdentifiers[item]
-        guard let state = model.repo(withIdentifier: id)?.state else { return .unknown }
+        let state = status.state(forRepoWithIndex: item)
         return status(for: state)
     }
     
     func selectItem(_ item: Int) {
-        let id = model.itemIdentifiers[item]
-        if let repo = model.repo(withIdentifier: id) {
-            Application.native.openGithub(with: repo)
-        }
+        let repo = status.repo(withIndex: item)
+        Application.native.openGithub(with: repo)
     }
     
     func addItem() {

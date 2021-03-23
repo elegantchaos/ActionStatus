@@ -41,7 +41,8 @@ public struct RepoListView: View {
     }
     
     func delete(at offsets: IndexSet) {
-        model.remove(atOffsets: offsets)
+        let ids = status.repoIDs(atOffets: offsets)
+        model.remove(reposWithIDs: ids)
         viewState.host.saveState()
     }
     

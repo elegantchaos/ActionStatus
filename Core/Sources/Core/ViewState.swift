@@ -24,7 +24,6 @@ public extension String {
 }
 
 public class ViewState: ObservableObject {
-
     @Published public var isEditing: Bool = false
     @Published public var selectedID: UUID? = nil
     @Published public var displaySize: DisplaySize = .automatic
@@ -57,5 +56,4 @@ public class ViewState: ObservableObject {
         selectedID = newRepo.id
         return newRepo
     }
-    
 }
