@@ -5,16 +5,14 @@
 #  All code (c) 2020 - present day, Elegant Chaos Limited.
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-source Dependencies/ReleaseTools/Scripts/make-tools
+source "bootstrap-tools"
 
 echo " "
 echo "*************"
 echo "Uploading iOS  "
 echo "*************"
 
-set -o pipefail
-
-rt set scheme ActionStatus --platform=iOS
-rt archive --platform=iOS --show-output 2> /dev/null | xcpretty
-rt export --platform=iOS
-rt upload --platform=iOS
+$RT set scheme ActionStatus --platform=iOS
+$RT archive --platform=iOS --show-output 2> /dev/null | xcpretty
+$RT export --platform=iOS
+$RT upload --platform=iOS
