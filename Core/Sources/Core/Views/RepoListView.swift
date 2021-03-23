@@ -25,15 +25,13 @@ public struct RepoListView: View {
                     .onDelete(perform: delete)
                 }
             } else {
-                let columns = [
-                      GridItem(.adaptive(minimum: 256))
-                  ]
-
-                LazyVGrid(columns: columns) {
-                    ForEach(status.sortedRepos) { repo in
-                        RepoCellView(repo: repo, selectable: false)
-                    }
-                }.padding()
+                ScrollView {
+                    LazyVGrid(columns: viewState.columns) {
+                        ForEach(status.sortedRepos) { repo in
+                            RepoCellView(repo: repo, selectable: false)
+                        }
+                    }.padding()
+                }
             }
         }
         .environment(\.defaultMinListRowHeight, viewState.displaySize.rowHeight)

@@ -34,6 +34,13 @@ public class ViewState: ObservableObject {
 
     public let host: ApplicationHost
     public let padding: CGFloat = 10
+    
+    #if os(tvOS)
+    public let spacing: CGFloat = 640
+    #else
+    public let spacing: CGFloat = 256
+    #endif
+    
     let linkIcon = "chevron.right.square"
     let startEditingIcon = "lock.fill"
     let stopEditingIcon = "lock.open.fill"
@@ -54,5 +61,19 @@ public class ViewState: ObservableObject {
         host.saveState()
         selectedID = newRepo.id
         return newRepo
+    }
+    
+    var columns: [GridItem] {
+        #if os(tvOS)
+        let width: CGFloat
+        switch displaySize {
+            case .small: width = 300
+            case .medium: width = 420
+            default: width = 640
+        }
+        return [GridItem(.adaptive(minimum: width))]
+        #else
+            return [GridItem(.adaptive(minimum: 256))]
+        #endif
     }
 }

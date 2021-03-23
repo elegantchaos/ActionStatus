@@ -46,9 +46,12 @@ public struct PreferencesView: View {
                     footer: "Display settings."
                 ) {
                     FormPickerRow(label: "Item Size", variable: $displaySize, cases: DisplaySize.allCases, style: rowStyle)
+                    FormPickerRow(label: "Sort By", variable: $sortMode, cases: SortMode.allCases, style: rowStyle)
+
+                    #if targetEnvironment(macCatalyst)
                     FormToggleRow(label: "Show In Menubar", variable: $showInMenu, style: rowStyle)
                     FormToggleRow(label: "Show In Dock", variable: $showInDock, style: rowStyle)
-                    FormPickerRow(label: "Sort By", variable: $sortMode, cases: SortMode.allCases, style: rowStyle)
+                    #endif
                 }
                 
                 FormSection(
