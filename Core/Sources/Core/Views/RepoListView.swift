@@ -10,17 +10,30 @@ import SwiftUIExtensions
 public struct RepoListView: View {
     @EnvironmentObject var model: Model
     @EnvironmentObject var viewState: ViewState
-    @EnvironmentObject var sheetController: SheetController
     
     public init() {
     }
     
     public var body: some View {
-        List {
-            ForEach(model.itemIdentifiers, id: \.self) { repoID in
-                self.rowView(for: repoID)
+        VStack {
+            if viewState.isEditing {
+                List {
+                    ForEach(model.itemIdentifiers, id: \.self) { repoID in
+                        RepoCellView(repoID: repoID, selectable: true)
+                    }
+                    .onDelete(perform: delete)
+                }
+            } else {
+                let columns = [
+                      GridItem(.adaptive(minimum: 256))
+                  ]
+
+                LazyVGrid(columns: columns) {
+                    ForEach(model.itemIdentifiers, id: \.self) { repoID in
+                        RepoCellView(repoID: repoID, selectable: false)
+                    }
+                }.padding()
             }
-            .onDelete(perform: delete)
         }
         .environment(\.defaultMinListRowHeight, viewState.displaySize.rowHeight)
         .bindEditing(to: $viewState.isEditing)
@@ -31,16 +44,26 @@ public struct RepoListView: View {
         viewState.host.saveState()
     }
     
-    func edit(repoID: UUID) {
-        sheetController.show() {
-            EditView(repoID: repoID)
-        }
-    }
     
-    func rowView(for repoID: UUID) -> some View {
-        let selectable = viewState.isEditing
+}
+
+struct RepoListView_Previews: PreviewProvider {
+    static var previews: some View {
+        return PreviewContext().inject(into: RepoListView())
+    }
+}
+
+struct RepoCellView: View {
+    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var sheetController: SheetController
+    @EnvironmentObject var model: Model
+
+    let repoID: UUID
+    let selectable: Bool
+    
+    var body: some View {
         let repo = model.repo(withIdentifier: repoID)!
-        let view = HStack(alignment: .center, spacing: viewState.padding) {
+        return HStack(alignment: .center, spacing: viewState.padding) {
             if !selectable {
                 SystemImage(repo.badgeName)
                     .foregroundColor(repo.statusColor)
@@ -51,14 +74,15 @@ public struct RepoListView: View {
                 .lineLimit(1)
             if selectable {
                 Spacer()
-                EditButton(repoID: repoID)
+                EditButton(repoID: repo.id)
+            } else {
+                Spacer()
             }
         }
         .font(viewState.displaySize.font)
         .shim.contextMenu() { makeContentMenu(for: repo) }
-        .shim.onTapGesture() { if selectable { self.edit(repoID: repoID) } }
-        
-        return view.padding(0)
+        .shim.onTapGesture() { if selectable { self.edit(repoID: repo.id) } }
+        .padding(0)
     }
     
     func makeContentMenu(for repo: Repo) -> some View {
@@ -92,10 +116,10 @@ public struct RepoListView: View {
             }.accessibility(identifier: "generate")
         }
     }
-}
-
-struct RepoListView_Previews: PreviewProvider {
-    static var previews: some View {
-        return PreviewContext().inject(into: RepoListView())
+    
+    func edit(repoID: UUID) {
+        sheetController.show() {
+            EditView(repoID: repoID)
+        }
     }
 }
