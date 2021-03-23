@@ -10,7 +10,7 @@ import SwiftUIExtensions
 public struct RepoListView: View {
     @EnvironmentObject var model: Model
     @EnvironmentObject var viewState: ViewState
-    @EnvironmentObject var status: Status
+    @EnvironmentObject var status: RepoState
     
     public init() {
     }

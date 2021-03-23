@@ -4,8 +4,11 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Foundation
+import Logger
 
-public class Status: ObservableObject {
+let repoStateChannel = Channel("RepoState")
+
+public class RepoState: ObservableObject {
     @Published public var sortedRepos: [Repo] = []
     @Published public var passing: Int = 0
     @Published public var failing: Int = 0
@@ -14,7 +17,7 @@ public class Status: ObservableObject {
     @Published public var unreachable: Int = 0
 
     public func update(with model: Model, viewState: ViewState) {
-        print("updated")
+        repoStateChannel.log("updated")
         sortedRepos = model.repos(sortedBy: viewState.sortMode)
 
         let set = NSCountedSet()

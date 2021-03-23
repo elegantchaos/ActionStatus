@@ -29,7 +29,7 @@ open class Application: BasicApplication, ApplicationHost {
     
     public lazy var updater: Updater = makeUpdater()
     public lazy var viewState = makeViewState()
-    public var status: Status = Status()
+    public var status: RepoState = RepoState()
     
     public var refreshController: RefreshController? = nil
     public var rootController: UIViewController?

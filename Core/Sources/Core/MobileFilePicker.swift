@@ -6,7 +6,7 @@
 #if !os(tvOS)
 
 import UIKit
-import Foundation
+import UniformTypeIdentifiers
 
 public class MobileFilePicker: UIDocumentPickerViewController, FilePicker {
     typealias Completion = ([URL]) -> Void
@@ -14,10 +14,10 @@ public class MobileFilePicker: UIDocumentPickerViewController, FilePicker {
     let cleanupURLS: [URL]
     let completion: Completion?
 
-    public required init(forOpeningDocumentTypes types: [String], startingIn startURL: URL? = nil, completion: FilePickerCompletion? = nil) {
+    public required init(forOpeningDocumentTypes types: [UTType], startingIn startURL: URL? = nil, completion: FilePickerCompletion? = nil) {
         self.cleanupURLS = []
         self.completion = completion
-        super.init(documentTypes: types, in: .open)
+        super.init(forOpeningContentTypes: types)
         setup(startURL: startURL)
     }
     

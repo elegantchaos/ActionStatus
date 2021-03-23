@@ -4,9 +4,10 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import UIKit
+import UniformTypeIdentifiers
 
 class StubFilePicker: UIViewController, FilePicker {
-    required init(forOpeningDocumentTypes: [String], startingIn: URL?, completion: FilePickerCompletion?) {
+    required init(forOpeningDocumentTypes: [UTType], startingIn: URL?, completion: FilePickerCompletion?) {
         super.init(nibName: nil, bundle: nil)
     }
 
