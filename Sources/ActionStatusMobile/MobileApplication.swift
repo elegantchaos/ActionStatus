@@ -14,6 +14,10 @@ import UIKit
 import SparkleBridgeClient
 #endif
 
+extension TimeInterval {
+    static let statusCycleInterval = 1.5
+}
+
 extension Application {
     class var native: MobileApplication {
         UIApplication.shared.delegate as! MobileApplication
@@ -24,6 +28,7 @@ extension Application {
 class MobileApplication: Application {
     lazy var appKitBridge: AppKitBridge? = loadBridge()
     var editingSubscriber: AnyCancellable?
+    var updateTimer: Timer?
     
     #if canImport(SparkleBridgeClient)
     let sparkleEnabled = Bundle.main.hasFramework(named: "SparkleBridgeClient")
@@ -61,6 +66,12 @@ class MobileApplication: Application {
                 }
             }
             
+            let timer = Timer(timeInterval: .statusCycleInterval, repeats: true) { _ in
+                self.updateBridge()
+            }
+            RunLoop.main.add(timer, forMode: .default)
+            updateTimer = timer
+            
             completion(options)
         }
         
@@ -82,7 +93,10 @@ class MobileApplication: Application {
         appKitBridge?.showInMenu = UserDefaults.standard.bool(forKey: .showInMenuKey)
         appKitBridge?.showInDock = UserDefaults.standard.bool(forKey: .showInDockKey)
         appKitBridge?.showAddButton = viewState.isEditing
-        appKitBridge?.status = status(for: model.combinedState)
+        
+        let index = Int(Date.timeIntervalSinceReferenceDate / .statusCycleInterval) % model.combinedState.count
+        let status = status(for: model.combinedState[index])
+        appKitBridge?.status = status
     }
     
     fileprivate func loadSparkle() {

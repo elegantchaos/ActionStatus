@@ -32,22 +32,22 @@ public class Model: ObservableObject {
     @Published public var defaultWorkflow = "Tests"
     @Published public var defaultBranches: [String] = []
 
-    public var combinedState: Set<Repo.State> {
-        var state: Set<Repo.State> = []
+    public var combinedState: [Repo.State] {
+        var state: [Repo.State] = []
         if running > 0 {
-            state.insert(.running)
+            state.append(.running)
         }
         
         if queued > 0 {
-            state.insert(.queued)
+            state.append(.queued)
         }
         
         if failing > 0 {
-            state.insert(.failing)
+            state.append(.failing)
         }
         
         if state.count == 0 {
-            state.insert(passing > 0 ? .passing : .unknown)
+            state = (passing > 0) ? [.passing] : [.unknown]
         }
         return state
     }
