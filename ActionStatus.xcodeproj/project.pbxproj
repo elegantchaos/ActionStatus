@@ -88,6 +88,13 @@
 			remoteGlobalIDString = 8B5E7E8223F6BB3500087E15;
 			remoteInfo = AppKitBridge;
 		};
+		8BA13D29260A78AA007CB9CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8B3E649B23EAE62D00B28168 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8BD6749824C5E1E000289A08;
+			remoteInfo = Tools;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -590,6 +597,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				8BA13D2A260A78AA007CB9CD /* PBXTargetDependency */,
 			);
 			name = ActionStatusTV;
 			packageProductDependencies = (
@@ -928,6 +936,11 @@
 			platformFilter = maccatalyst;
 			target = 8B5E7E8223F6BB3500087E15 /* AppKitBridge */;
 			targetProxy = 8B5E7E8A23F6BB6100087E15 /* PBXContainerItemProxy */;
+		};
+		8BA13D2A260A78AA007CB9CD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8BD6749824C5E1E000289A08 /* Tools */;
+			targetProxy = 8BA13D29260A78AA007CB9CD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

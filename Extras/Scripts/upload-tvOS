@@ -5,16 +5,14 @@
 #  All code (c) 2020 - present day, Elegant Chaos Limited.
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-source Dependencies/ReleaseTools/Scripts/make-tools
+source "bootstrap-tools"
 
 echo " "
 echo "**************"
 echo "Uploading tvOS"
 echo "**************"
 
-set -o pipefail
-
-rt set scheme ActionStatus-tvOS --platform=tvOS
-rt archive --platform=tvOS --show-output 2> /dev/null | xcpretty
-rt export --platform=tvOS
-rt upload --platform=tvOS
+$RT set scheme ActionStatus-tvOS --platform=tvOS
+$RT archive --platform=tvOS --show-output 2> /dev/null | xcpretty
+$RT export --platform=tvOS
+$RT upload --platform=tvOS
