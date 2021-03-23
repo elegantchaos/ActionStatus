@@ -3,8 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-#include "BuildNumber.xcconfig"
-#include "../../Tools/Tools.xcconfig"
+#include "../Tools/Tools.xcconfig"
 
 RT_VERSION = 2.0.0
 RT_PRODUCT_NAME = Action Status

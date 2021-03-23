@@ -307,6 +307,7 @@
 		8B430E6B23F586100050BF2A /* ActionStatusTV */ = {
 			isa = PBXGroup;
 			children = (
+				8B5E7E6423F6A9C600087E15 /* TV.xcconfig */,
 				8B430E6C23F586100050BF2A /* TVApplication.swift */,
 				8BA13D26260A6148007CB9CD /* TVScene.swift */,
 				8B5B175123FADA9D00DD2AF5 /* Resources */,
@@ -343,7 +344,6 @@
 				8BBFAA8B2403F09F0091157A /* dsa_pub.pem */,
 				8B3E64B423EAE62E00B28168 /* Info.plist */,
 				8B3E64B123EAE62E00B28168 /* LaunchScreen.storyboard */,
-				8B5E7E6323F6A9C600087E15 /* Mobile.xcconfig */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -354,7 +354,6 @@
 				8B4893B4240D686200E3E112 /* ActionStatus.entitlements */,
 				8B430E7823F586110050BF2A /* Info.plist */,
 				8B430E7523F586110050BF2A /* LaunchScreen.storyboard */,
-				8B5E7E6423F6A9C600087E15 /* TV.xcconfig */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -364,7 +363,6 @@
 			children = (
 				8B5E7E9123F6C0A100087E15 /* BridgingHeader.h */,
 				8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */,
-				8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */,
 				2246FB24242E5428009E1731 /* IncludeSparkle.xcconfig */,
 				8B3E64AC23EAE62E00B28168 /* Assets.xcassets */,
 				8B430E9023F58E060050BF2A /* PreviewContent */,
@@ -376,7 +374,6 @@
 			isa = PBXGroup;
 			children = (
 				8B5E7E9223F6C0B600087E15 /* BridgingHeader.h */,
-				8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */,
 				8B5E7E8523F6BB3500087E15 /* Info.plist */,
 			);
 			path = Resources;
@@ -385,6 +382,7 @@
 		8B5E7E5723F6A79100087E15 /* ActionStatusMobile */ = {
 			isa = PBXGroup;
 			children = (
+				8B5E7E6323F6A9C600087E15 /* Mobile.xcconfig */,
 				8B9A813225FA49F600F44800 /* MobileApplication.swift */,
 				8BA13D24260A5989007CB9CD /* MobileScene.swift */,
 				8B5AEB472407EE630065524B /* SparkleUpdater.swift */,
@@ -396,6 +394,7 @@
 		8B5E7E5823F6A79900087E15 /* ActionStatus */ = {
 			isa = PBXGroup;
 			children = (
+				8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */,
 				8B5B175223FADAAE00DD2AF5 /* Resources */,
 			);
 			path = ActionStatus;
@@ -414,6 +413,7 @@
 		8B5E7E8423F6BB3500087E15 /* AppKitBridge */ = {
 			isa = PBXGroup;
 			children = (
+				8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */,
 				8B5E7E8C23F6BB8900087E15 /* AppKitBridge.swift */,
 				8B2F0AB923FC195700B2E62A /* InterceptingDelegate.h */,
 				8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */,

@@ -4,7 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 #include ".rt/RTCatalyst.xcconfig"
-#include "Sources/ActionStatus/Resources/ActionStatus.xcconfig"
+#include "Sources/ActionStatus/ActionStatus.xcconfig"
 
 OTHER_LDFLAGS = $ACTION_STATUS_ADDITIONAL_FRAMEWORKS
 

@@ -5,7 +5,7 @@
 
 
 #include ".rt/RTMac.xcconfig"
-#include "Sources/ActionStatus/Resources/ActionStatus.xcconfig"
+#include "Sources/ActionStatus/ActionStatus.xcconfig"
 
 SDKROOT = macosx
 MACOSX_DEPLOYMENT_TARGET = 11.0
