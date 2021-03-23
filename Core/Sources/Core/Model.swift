@@ -114,6 +114,7 @@ public class Model: ObservableObject {
         
         if update {
             modelChannel.log(items[repo.id] == nil ? "Added \(repo)" : "Updated \(repo)")
+            objectWillChange.send()
             items[repo.id] = repo
         }
     }
@@ -155,8 +156,9 @@ public class Model: ObservableObject {
     }
     
     public func remove(reposWithIDs: [UUID]) {
-        for repoID in reposWithIDs {
-            items[repoID] = nil
+        objectWillChange.send()
+        for id in reposWithIDs {
+            items.removeValue(forKey: id)
         }
     }
 }

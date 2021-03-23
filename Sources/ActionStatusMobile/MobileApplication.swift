@@ -45,36 +45,34 @@ class MobileApplication: Application {
     
     override var filePickerClass: FilePicker.Type { return MobileFilePicker.self }
 
-    override func didRefresh() {
-        super.didRefresh()
-        updateBridge()
-    }
-    
     override func setUp(withOptions options: LaunchOptions, completion: @escaping SetupCompletion) {
         super.setUp(withOptions: options) { [self] options in
             loadSparkle()
             
-            UserDefaults.standard.register(defaults: [
-                .showInMenuKey: true,
-                .showInDockKey: true
-                ]
-            )
-
-            editingSubscriber = viewState.$isEditing.sink() { _ in
-                DispatchQueue.main.async {
-                    self.updateBridge()
-                }
-            }
-            
             let timer = Timer(timeInterval: .statusCycleInterval, repeats: true) { _ in
                 self.updateBridge()
             }
+            
             RunLoop.main.add(timer, forMode: .default)
             updateTimer = timer
             
             completion(options)
         }
         
+    }
+    
+    override func updateRepoState() {
+        super.updateRepoState()
+        updateBridge()
+    }
+    
+    override func setupDefaultSettings() {
+        super.setupDefaultSettings()
+        UserDefaults.standard.register(defaults: [
+            .showInMenuKey: true,
+            .showInDockKey: true
+            ]
+        )
     }
     
     override func loadSettings() {
@@ -226,9 +224,7 @@ extension MobileApplication: AppKitBridgeDelegate {
     }
     
     func addItem() {
-        sheetController.show() {
-            EditView(repoID: nil)
-        }
+        editNewRepo()
     }
     
     func checkForUpdates() {

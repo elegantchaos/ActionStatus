@@ -14,26 +14,18 @@ public struct EditView: View {
     static let fieldStyle = RoundedBorderTextFieldStyle()
     #endif
 
-    let repoID: UUID?
+    let repo: Repo?
     
     @Environment(\.presentationMode) var presentation
     @EnvironmentObject var model: Model
     @EnvironmentObject var viewState: ViewState
     
-    var title: String { return repoID == nil ? "Add Repository" : "Edit Repository" }
-    var repo: Repo? {
-        guard let repoID = repoID, let repo = model.repo(withIdentifier: repoID) else { return nil }
-        return repo
-    }
+    var title: String { return repo == nil ? "Add Repository" : "Edit Repository" }
     
     @State var name = ""
     @State var owner = ""
     @State var workflow = ""
     @State var branches: String = ""
-    
-    public init(repoID: UUID? = nil) {
-        self.repoID = repoID
-    }
     
     public var body: some View {
         let localPath = repo?.url(forDevice: Device.main.identifier)?.path ?? ""
@@ -92,11 +84,11 @@ public struct EditView: View {
     }
     
     func openRepo() {
-        viewState.host.openGithub(with: update(repo: Repo(model: model)), at: .repo)
+        viewState.host.openGithub(with: updatedRepo, at: .repo)
     }
     
     func openWorkflow() {
-        viewState.host.openGithub(with: update(repo: Repo(model: model)), at: .workflow)
+        viewState.host.openGithub(with: updatedRepo, at: .workflow)
     }
 
     var trimmedWorkflow: String {
@@ -133,7 +125,7 @@ public struct EditView: View {
     }
     
     func load() {
-        if let repoID = repoID, let repo = model.repo(withIdentifier: repoID) {
+        if let repo = repo {
             name = repo.name
             owner = repo.owner
             workflow = repo.workflow
@@ -142,13 +134,11 @@ public struct EditView: View {
     }
     
     func save() {
-        let repo = self.repo ?? Repo(model: model)
-        let updated = update(repo: repo)
-        model.update(repo: updated)
+        model.update(repo: updatedRepo)
     }
     
-    func update(repo: Repo) -> Repo {
-        var updated = repo
+    var updatedRepo: Repo {
+        var updated = self.repo ?? Repo(model: model)
         updated.name = trimmedName
         updated.owner = trimmedOwner
         updated.workflow = trimmedWorkflow
@@ -162,7 +152,7 @@ public struct EditView: View {
 struct RepoEditView_Previews: PreviewProvider {
     static var previews: some View {
         let context = PreviewContext()
-        return context.inject(into: EditView(repoID: context.testRepo.id))
+        return context.inject(into: EditView(repo: context.testRepo))
     }
 }
 

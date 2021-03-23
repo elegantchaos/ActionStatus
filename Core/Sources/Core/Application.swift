@@ -37,7 +37,6 @@ open class Application: BasicApplication, ApplicationHost {
     public var filePicker: FilePicker?
     open var filePickerClass: FilePicker.Type { return StubFilePicker.self }
     public var model = makeModel()
-    var stateChanged = false
     var observers: [AnyCancellable] = []
     
     public let sheetController = SheetController()
@@ -72,6 +71,13 @@ open class Application: BasicApplication, ApplicationHost {
         return isSimulator || isUITesting ? TestModel() : Model([])
     }
     
+    public func editNewRepo() {
+        sheetController.show() {
+            EditView(repo: nil)
+        }
+    }
+    
+
     open override func setUp(withOptions options: BasicApplication.LaunchOptions, completion: @escaping BasicApplication.SetupCompletion) {
         super.setUp(withOptions: options) { [self] options in
             DispatchQueue.main.async {
@@ -82,38 +88,47 @@ open class Application: BasicApplication, ApplicationHost {
                 restoreState()
 
                 observers.append(UserDefaults.standard.onChanged {
+                    print("user defaults changed")
                     self.loadSettings()
-                    self.status.update(with: model, viewState: viewState)
+                    self.updateRepoState()
                 })
 
-                observers.append(model
-                    .objectWillChange
-                    .debounce(for: 1.0, scheduler: RunLoop.main)
-                    .sink {
-                        self.stateWasEdited()
-                        self.status.update(with: model, viewState: viewState)
-                })
+                observers.append(
+                    model
+                        .objectWillChange
+                        .debounce(for: 0.1, scheduler: RunLoop.main)
+                        .sink {
+                            print("model changed")
+                            self.saveState()
+                            self.updateRepoState()
+                        })
                 
-                observers.append(viewState
-                    .objectWillChange
-                    .debounce(for: 1.0, scheduler: RunLoop.main)
-                    .sink() { value in
-                        self.saveSettings()
-                        self.status.update(with: model, viewState: viewState)
-                })
+                observers.append(
+                    viewState
+                        .objectWillChange
+                        .debounce(for: 0.1, scheduler: RunLoop.main)
+                        .sink() { value in
+                            print("view state changed")
+                            self.saveSettings()
+                            self.updateRepoState()
+                        })
                 
-                status.update(with: model, viewState: viewState)
+                updateRepoState()
                 completion(options)
             }
         }
         
     }
     
+    open func updateRepoState() {
+        status.update(with: model, viewState: viewState)
+    }
+    
     public override func tearDown() {
         observers = []
     }
     
-    func setupDefaultSettings() {
+    open func setupDefaultSettings() {
         UserDefaults.standard.register(defaults: [
             .refreshIntervalKey: RefreshRate.automatic.rawValue,
             .displaySizeKey: DisplaySize.automatic.rawValue,
@@ -168,24 +183,8 @@ open class Application: BasicApplication, ApplicationHost {
             .environmentObject(status)
     }
 
-    public func stateWasEdited() {
-        DispatchQueue.main.async {
-            if !self.stateChanged {
-                modelChannel.log("Model Changed") // TODO: should be app channel
-            }
-            self.stateChanged = true
-            self.saveState()
-        }
-    }
-    
     public func saveState() {
-        DispatchQueue.main.async { [self] in
-            if stateChanged {
-                didRefresh()
-                model.save(toDefaultsKey: stateKey)
-                stateChanged = false
-            }
-        }
+        model.save(toDefaultsKey: stateKey)
     }
     
     func restoreState() {
@@ -200,10 +199,6 @@ open class Application: BasicApplication, ApplicationHost {
         refreshController?.resume()
     }
     
-    open func didRefresh() {
-        
-    }
-
     public func openGithub(with repo: Repo, at location: Repo.GithubLocation = .workflow) {
         UIApplication.shared.open(repo.githubURL(for: location))
     }

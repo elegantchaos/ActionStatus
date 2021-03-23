@@ -34,7 +34,6 @@ public class ViewState: ObservableObject {
 
     public let host: ApplicationHost
     public let padding: CGFloat = 10
-    let editIcon = "info.circle"
     let linkIcon = "chevron.right.square"
     let startEditingIcon = "lock.fill"
     let stopEditingIcon = "lock.open.fill"

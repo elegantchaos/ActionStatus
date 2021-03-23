@@ -10,7 +10,6 @@ public protocol ApplicationHost {
     var info: BundleInfo { get }
     var refreshController: RefreshController? { get }
     func saveState()
-    func stateWasEdited()
     func save(output: Generator.Output)
     func openGithub(with repo: Repo, at location: Repo.GithubLocation)
 }
@@ -21,10 +20,6 @@ extension ApplicationHost {
     }
     
     func saveState() {
-        
-    }
-    
-    func stateWasEdited() {
         
     }
     

@@ -26,7 +26,7 @@ public struct AddButton: View {
     
     func addRepo() {
         sheetController.show() {
-            EditView(repoID: nil)
+            EditView(repo: nil)
         }
     }
 }

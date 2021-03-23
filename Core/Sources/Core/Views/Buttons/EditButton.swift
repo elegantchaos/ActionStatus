@@ -8,21 +8,20 @@ import SwiftUI
 import SwiftUIExtensions
 
 struct EditButton: View {
-    @EnvironmentObject var viewState: ViewState
     @EnvironmentObject var sheetController: SheetController
     
-    let repoID: UUID
+    let repo: Repo
     
     var body: some View {
         Button(action: edit) {
-            SystemImage(viewState.editIcon)
+            SystemImage("info.circle")
                 .foregroundColor(Color.accentColor)
         }.accessibility(identifier: "editButton")
     }
 
     func edit() {
         sheetController.show() {
-            EditView(repoID: self.repoID)
+            EditView(repo: self.repo)
         }
     }
 }
@@ -30,6 +29,6 @@ struct EditButton: View {
 struct EditButton_Previews: PreviewProvider {
     static var previews: some View {
         let context = PreviewContext()
-        return context.inject(into: EditButton(repoID: context.testRepo.id))
+        return context.inject(into: EditButton(repo: context.testRepo))
     }
 }

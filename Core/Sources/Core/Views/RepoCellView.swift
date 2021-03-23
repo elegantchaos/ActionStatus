@@ -27,7 +27,7 @@ struct RepoCellView: View {
                 .lineLimit(1)
             if selectable {
                 Spacer()
-                EditButton(repoID: repo.id)
+                EditButton(repo: repo)
                 Button(action: handleShowRepo) {
                     Image(systemName: viewState.linkIcon)
                 }
@@ -37,7 +37,7 @@ struct RepoCellView: View {
         }
         .font(viewState.displaySize.font)
         .shim.contextMenu() { makeContentMenu(for: repo) }
-        .shim.onTapGesture() { if selectable { self.edit(repoID: repo.id) } }
+        .shim.onTapGesture(perform: handleEdit)
         .padding(0)
     }
     
@@ -45,7 +45,7 @@ struct RepoCellView: View {
         VStack {
             Button(action: {
                 self.sheetController.show() {
-                    EditView(repoID: repo.id)
+                    EditView(repo: repo)
                 }
             }) {
                 Text("Edit…")
@@ -81,9 +81,11 @@ struct RepoCellView: View {
         viewState.host.openGithub(with: repo, at: .workflow)
     }
     
-    func edit(repoID: UUID) {
-        sheetController.show() {
-            EditView(repoID: repoID)
+    func handleEdit() {
+        if selectable {
+            sheetController.show() {
+                EditView(repo: repo)
+            }
         }
     }
 }
