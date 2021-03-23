@@ -29,9 +29,9 @@
 		8B5E7E8923F6BB5100087E15 /* AppKitBridge.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8323F6BB3500087E15 /* AppKitBridge.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8B5E7E8D23F6BB8900087E15 /* AppKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8C23F6BB8900087E15 /* AppKitBridge.swift */; };
 		8B9A813325FA49F600F44800 /* MobileApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A813225FA49F600F44800 /* MobileApplication.swift */; };
-		8B9A813525FA4B1200F44800 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A813425FA4B1200F44800 /* SceneDelegate.swift */; };
 		8B9A813725FA508F00F44800 /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = 8B9A813625FA508F00F44800 /* Core */; };
 		8BA073A3260103E800F962B5 /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = 8BA073A2260103E800F962B5 /* Core */; };
+		8BA13D25260A5989007CB9CD /* MobileScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA13D24260A5989007CB9CD /* MobileScene.swift */; };
 		8BBFAA99240401C30091157A /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 8BBFAA8B2403F09F0091157A /* dsa_pub.pem */; };
 		8BDAC2C223FE8A64004154A1 /* BindingsExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C123FE8A64004154A1 /* BindingsExtensions */; };
 		8BDAC2C423FE8A6E004154A1 /* ApplicationExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8BDAC2C323FE8A6E004154A1 /* ApplicationExtensions */; };
@@ -157,7 +157,7 @@
 		8B5E7E9323F6C0C200087E15 /* AppKitBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppKitBridge.h; sourceTree = "<group>"; };
 		8B9A812D25FA389900F44800 /* Core */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Core; sourceTree = "<group>"; };
 		8B9A813225FA49F600F44800 /* MobileApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileApplication.swift; sourceTree = "<group>"; };
-		8B9A813425FA4B1200F44800 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		8BA13D24260A5989007CB9CD /* MobileScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileScene.swift; sourceTree = "<group>"; };
 		8BBFAA8B2403F09F0091157A /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		8BBFAA942403F8E80091157A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sparkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BD6749924C5E1E000289A08 /* Tools */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Tools; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -383,7 +383,7 @@
 			isa = PBXGroup;
 			children = (
 				8B9A813225FA49F600F44800 /* MobileApplication.swift */,
-				8B9A813425FA4B1200F44800 /* SceneDelegate.swift */,
+				8BA13D24260A5989007CB9CD /* MobileScene.swift */,
 				8B5AEB472407EE630065524B /* SparkleUpdater.swift */,
 				8B5B174F23FADA8500DD2AF5 /* Resources */,
 			);
@@ -848,7 +848,7 @@
 			files = (
 				8B9A813325FA49F600F44800 /* MobileApplication.swift in Sources */,
 				8B5AEB482407EE630065524B /* SparkleUpdater.swift in Sources */,
-				8B9A813525FA4B1200F44800 /* SceneDelegate.swift in Sources */,
+				8BA13D25260A5989007CB9CD /* MobileScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

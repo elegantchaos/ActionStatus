@@ -26,6 +26,10 @@ extension Application {
 
 @UIApplicationMain
 class MobileApplication: Application {
+    override class var shared: MobileApplication {
+        UIApplication.shared.delegate as! MobileApplication
+    }
+
     lazy var appKitBridge: AppKitBridge? = loadBridge()
     var editingSubscriber: AnyCancellable?
     var updateTimer: Timer?

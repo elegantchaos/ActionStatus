@@ -17,7 +17,7 @@ import UserDefaultsExtensions
 public let settingsChannel = Channel("Settings")
 
 open class Application: BasicApplication, ApplicationHost {
-    public static var instance: Application {
+    override open class var shared: Application {
         UIApplication.shared.delegate as! Application
     }
 
@@ -226,7 +226,7 @@ open class Application: BasicApplication, ApplicationHost {
         sheetController.dismiss()
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now().advanced(by: .seconds(1))) {
             #if targetEnvironment(macCatalyst)
-            Application.instance.presentPicker(self.pickerForSavingWorkflow()) // ugly hack - the SwiftUI sheet doesn't work properly on the mac
+            Application.shared.presentPicker(self.pickerForSavingWorkflow()) // ugly hack - the SwiftUI sheet doesn't work properly on the mac
             #else
             self.sheetController.show() {
                 DocumentPickerViewController(picker: self.pickerForSavingWorkflow())
