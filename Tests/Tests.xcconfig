@@ -4,7 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 #include ".rt/RTTests.xcconfig"
-#include "Sources/ActionStatus/Resources/ActionStatus.xcconfig"
+#include "Sources/ActionStatus/ActionStatus.xcconfig"
 
 TEST_TARGET_NAME = ActionStatusMobile
 PRODUCT_NAME = $(TARGET_NAME)
