@@ -33,14 +33,7 @@
       "target" : {
         "containerPath" : "container:ActionStatus.xcodeproj",
         "identifier" : "8B3E64C323EAE62F00B28168",
-        "name" : "ActionStatusUITests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..\/ActionStatusCore",
-        "identifier" : "ActionStatusCoreTests",
-        "name" : "ActionStatusCoreTests"
+        "name" : "ActionStatusUITestsMobile"
       }
     }
   ],

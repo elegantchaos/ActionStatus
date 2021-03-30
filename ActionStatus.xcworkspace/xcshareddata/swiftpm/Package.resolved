@@ -2,30 +2,12 @@
   "object": {
     "pins": [
       {
-        "package": "ApplicationExtensions",
-        "repositoryURL": "https://github.com/elegantchaos/ApplicationExtensions.git",
-        "state": {
-          "branch": null,
-          "revision": "f858e00faa4a80c88d7fe3d154cd57f7dc6609de",
-          "version": "2.1.2"
-        }
-      },
-      {
         "package": "BindingsExtensions",
         "repositoryURL": "https://github.com/elegantchaos/BindingsExtensions.git",
         "state": {
           "branch": null,
           "revision": "7431f1c8e03d54f53ec4848818ee53bb0bf34411",
           "version": "1.0.1"
-        }
-      },
-      {
-        "package": "Bundles",
-        "repositoryURL": "https://github.com/elegantchaos/Bundles.git",
-        "state": {
-          "branch": null,
-          "revision": "18a0b17452f464323206b540dadad3d9aa91f167",
-          "version": "1.0.8"
         }
       },
       {
@@ -53,6 +35,15 @@
           "branch": null,
           "revision": "ae19e456bd550fed8f341e5bae4318333c53a5b4",
           "version": "1.0.9"
+        }
+      },
+      {
+        "package": "Displays",
+        "repositoryURL": "https://github.com/elegantchaos/Displays.git",
+        "state": {
+          "branch": null,
+          "revision": "562add3c4f5b4bf760079ef327fd1e041682eed4",
+          "version": "1.1.0"
         }
       },
       {

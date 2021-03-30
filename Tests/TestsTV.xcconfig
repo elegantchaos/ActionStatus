@@ -7,3 +7,4 @@
 
 TEST_TARGET_NAME = ActionStatusTV
 SDKROOT = appletvos
+TVOS_DEPLOYMENT_TARGET = 14.0

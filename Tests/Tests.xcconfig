@@ -6,6 +6,9 @@
 #include ".rt/RTTests.xcconfig"
 #include "Sources/ActionStatus/ActionStatus.xcconfig"
 
+
 TEST_TARGET_NAME = ActionStatusMobile
 PRODUCT_NAME = $(TARGET_NAME)
 INFOPLIST_FILE = Tests/ActionStatusUITests/Info.plist
+IPHONEOS_DEPLOYMENT_TARGET = 14.0
+MACOSX_DEPLOYMENT_TARGET = 11.0

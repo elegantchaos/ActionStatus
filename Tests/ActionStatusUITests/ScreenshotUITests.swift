@@ -5,6 +5,7 @@
 
 import XCTest
 import CoreServices
+import Core
 
 #if targetEnvironment(macCatalyst)
 import Displays
