@@ -70,6 +70,7 @@ extension ItemStatus: CaseIterable {
         set {
             _status = newValue
             updateImage()
+            updateWindow()
         }
     }
     
@@ -135,23 +136,27 @@ extension AppKitBridgeSingleton: AppKitBridge {
             self.updateImage()
         }
 
-        let windowToIntercept = delegate.windowToIntercept()
-        for window in NSApp.windows {
-            if window.title == windowToIntercept {
-                windowInterceptor = InterceptingDelegate(window: window, interceptor: self)
-                mainWindow = window
-                
-                // if UI testing, force the window to a known position
-                if let testingFlag = ProcessInfo.processInfo.environment["UITesting"], testingFlag == "YES" {
-                    let screen = NSScreen.screens.last!.frame
-                    window.setFrameTopLeftPoint(CGPoint(x: screen.minX + 64.0, y: screen.maxY - 64.0))
-                }
-
-            }
-        }
-
     }
         
+    func updateWindow() {
+        if mainWindow == nil, let window = NSApp.mainWindow {
+            windowInterceptor = InterceptingDelegate(window: window, interceptor: self)
+            mainWindow = window
+            
+            // if UI testing, force the window to a known position
+            let screens = NSScreen.screens
+            if let screen = ProcessInfo.processInfo.environment["UITestScreen"], let index = Int(screen), index < screens.count {
+                let frame = screens[index].frame
+                window.setFrameTopLeftPoint(CGPoint(x: frame.minX + 64.0, y: frame.maxY - 64.0))
+            }
+
+            if let testingFlag = ProcessInfo.processInfo.environment["UITesting"], testingFlag == "YES" {
+                let screen = NSScreen.screens.last!.frame
+                window.setFrameTopLeftPoint(CGPoint(x: screen.minX + 64.0, y: screen.maxY - 64.0))
+            }
+        }
+    }
+    
     var showInDock: Bool {
         get { return NSApp.activationPolicy() == .regular }
         set {

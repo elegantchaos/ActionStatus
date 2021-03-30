@@ -7,10 +7,6 @@ import XCTest
 import CoreServices
 import Core
 
-#if targetEnvironment(macCatalyst)
-import Displays
-#endif
-
 class ScreenshotUITests: XCTestCase {
 
     override func setUp() {
@@ -18,16 +14,15 @@ class ScreenshotUITests: XCTestCase {
     }
 
     func cleanScreenshot() -> XCUIScreenshot {
-        #if targetEnvironment(macCatalyst)
-        let main = XCUIScreen.main
-        for screen in XCUIScreen.screens {
-            if screen != main {
-                return screen.screenshot()
-            }
+        let screens = XCUIScreen.screens
+        let screen: XCUIScreen
+        if let string = ProcessInfo.processInfo.environment["UITestScreen"], let index = Int(string), index < screens.count {
+            screen = screens[index]
+        } else {
+            screen = screens.last!
         }
-        #endif
         
-        return XCUIScreen.main.screenshot()
+        return screen.screenshot()
     }
     
     func makeScreenShot(_ name: String) {
@@ -44,30 +39,19 @@ class ScreenshotUITests: XCTestCase {
         app.launch()
         app.hideOtherApplications()
 
-        #if targetEnvironment(macCatalyst)
-        for display in Display.active {
-            if !display.isMain {
-                let move = app.menuItems["Move to \(display.name)"]
-                if move.exists {
-                    move.tap()
-                }
-            }
-        }
-        #endif
-        
         #if os(tvOS)
-        if app.keys.element(boundBy: 0).exists {
+        if app.keys.element(boundBy: 0).waitForExistence(timeout: 1.0) {
             app.typeText("")
         }
         #endif
         
-        let firstRow = app.staticTexts["Datastore"]
+        let firstRow = app.staticTexts["CollectionExtensions"]
         XCTAssertTrue(firstRow.waitForExistence(timeout: 5))
         makeScreenShot("01-main")
 
         #if !os(tvOS)
 //        let toggleEditing = app.buttons["toggleEditing"]
-//        XCTAssert(toggleEditing.exists)
+//        XCTAssert(toggleEditing.waitForExistence(timeout: 1.0))
 //        toggleEditing.tap()
 //        makeScreenShot("editing mode")
 //        toggleEditing.tap()
@@ -91,7 +75,7 @@ class ScreenshotUITests: XCTestCase {
 
         #if targetEnvironment(macCatalyst)
         let status = app.statusItems["ActionStatusStatusMenu"]
-        XCTAssert(status.exists)
+        XCTAssert(status.waitForExistence(timeout: 1.0))
         status.tap()
         makeScreenShot("05-status")
         #endif
@@ -141,7 +125,7 @@ extension XCUIApplication {
     func hideOtherApplications() {
         #if os(macOS) || targetEnvironment(macCatalyst)
         let item = menuItems["hideOtherApplications:"]
-        if item.exists {
+        if item.waitForExistence(timeout: 1.0) {
             item.tap()
         }
         #endif
@@ -150,7 +134,7 @@ extension XCUIApplication {
     func unhideApplications() {
         #if os(macOS) || targetEnvironment(macCatalyst)
         let item = menuItems["unhideAllApplications:"]
-        if item.exists {
+        if item.waitForExistence(timeout: 1.0) {
             item.tap()
         }
         #endif

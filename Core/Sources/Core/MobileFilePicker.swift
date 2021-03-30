@@ -17,11 +17,7 @@ public class MobileFilePicker: UIDocumentPickerViewController, FilePicker {
     public required init(forOpeningDocumentTypes types: [UTType], startingIn startURL: URL? = nil, completion: FilePickerCompletion? = nil) {
         self.cleanupURLS = []
         self.completion = completion
-        if #available(iOS 14.0, *) {
-            super.init(forOpeningContentTypes: types)
-        } else {
-            super.init(documentTypes: types.map({ $0.identifier }), in: .open)
-        }
+        super.init(documentTypes: types.map({ $0.identifier }), in: .open)
         
         setup(startURL: startURL)
     }

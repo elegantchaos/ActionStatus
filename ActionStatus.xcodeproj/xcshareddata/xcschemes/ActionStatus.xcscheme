@@ -29,7 +29,10 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:Tests/ActionStatus.xctestplan"
+            reference = "container:Tests/ActionStatus.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:Tests/Screenshots.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>

@@ -38,15 +38,6 @@
         }
       },
       {
-        "package": "Displays",
-        "repositoryURL": "https://github.com/elegantchaos/Displays.git",
-        "state": {
-          "branch": null,
-          "revision": "562add3c4f5b4bf760079ef327fd1e041682eed4",
-          "version": "1.1.0"
-        }
-      },
-      {
         "package": "Hardware",
         "repositoryURL": "https://github.com/elegantchaos/Hardware.git",
         "state": {
