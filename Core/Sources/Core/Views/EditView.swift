@@ -20,8 +20,9 @@ public struct EditView: View {
     @EnvironmentObject var model: Model
     @EnvironmentObject var viewState: ViewState
     
-    var title: String { return repo == nil ? "Add Repository" : "Edit Repository" }
-    
+    var title: String { "\(shortTitle) Repository" }
+    var shortTitle: String { return repo == nil ? "Add" : "Edit" }
+
     @State var name = ""
     @State var owner = ""
     @State var workflow = ""
@@ -31,7 +32,7 @@ public struct EditView: View {
         let localPath = repo?.url(forDevice: Device.main.identifier)?.path ?? ""
         let detailStyle = NameOrgStyle()
         
-        return SheetView(title, cancelAction: dismiss, doneAction: done) {
+        return SheetView(title, shortTitle: shortTitle, cancelAction: dismiss, doneAction: done) {
         Form {
             FormSection(
                 header: "Details",

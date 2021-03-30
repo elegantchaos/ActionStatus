@@ -10,8 +10,9 @@ import SwiftUIExtensions
 public struct SheetView<Content>: View where Content: View {
     typealias Action = () -> Void
     
-    init(_ title: String, cancelAction: Action? = nil, cancelLabel: String = "Cancel", doneAction: @escaping Action, doneLabel: String = "Done", @ViewBuilder content: @escaping () -> Content) {
+    init(_ title: String, shortTitle: String, cancelAction: Action? = nil, cancelLabel: String = "Cancel", doneAction: @escaping Action, doneLabel: String = "Done", @ViewBuilder content: @escaping () -> Content) {
         self.title = title
+        self.shortTitle = shortTitle
         self.cancelAction = cancelAction
         self.cancelLabel = cancelLabel
         self.doneAction = doneAction
@@ -19,7 +20,10 @@ public struct SheetView<Content>: View where Content: View {
         self.content = content
     }
     
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+
     let title: String
+    let shortTitle: String
     let cancelAction: Action?
     let cancelLabel: String
     let doneAction: Action
@@ -27,51 +31,73 @@ public struct SheetView<Content>: View where Content: View {
     let content: () -> Content
     
     public var body: some View {
-        AlignedLabelContainer {
-            VStack {
-                HStack(alignment: .center) {
-                    HStack {
-                        #if !targetEnvironment(macCatalyst)
-                        if cancelAction != nil {
-                            Button(action: cancelAction!) { Text(cancelLabel) }
-                                .accessibility(identifier: "cancel")
+        NavigationView {
+            AlignedLabelContainer {
+                content()
+                    .toolbar {
+                        ToolbarItem(placement: .principal) {
+                            let title = horizontalSizeClass == .compact ? shortTitle : self.title
+                            Text(title)
+                                .font(.headline)
+                                .fixedSize()
+                                .accessibility(identifier: "formHeader")
+                        }
+                        
+                        #if targetEnvironment(macCatalyst)
+                        ToolbarItem(placement: .bottomBar) {
+                            Spacer()
                         }
                         #endif
-                        Spacer()
+                        
+                        ToolbarItem(placement: cancelPlacement) {
+                            if let action = cancelAction {
+                                CancelButton(label: cancelLabel, action: action)
+                            }
+                        }
+                        
+                        ToolbarItem(placement: confirmationPlacement) {
+                            Button(action: doneAction) { Text(doneLabel) }
+                                .accessibility(identifier: "done")
+                                .keyboardShortcut(.defaultAction)
+                        }
                     }
-
-                    Text(title)
-                        .font(.headline)
-                        .fixedSize()
-                        .accessibility(identifier: "formHeader")
-
-                    HStack {
-                        Spacer()
-                        #if !targetEnvironment(macCatalyst)
-                        Button(action: doneAction) { Text(doneLabel) }
-                            .accessibility(identifier: "done")
-                        #endif
-                    }
-                }.padding([.leading, .trailing, .top], 20)
-                
-                content()
-                
-                #if targetEnvironment(macCatalyst)
-                
-                HStack(alignment: .center) {
-                    Spacer()
-                    if let action = cancelAction {
-                        Button(action: action) { Text(cancelLabel) }
-                            .accessibility(identifier: "cancel")
-                            .keyboardShortcut(.cancelAction)
-                    }
-                    Button(action: doneAction) { Text(doneLabel) }
-                        .accessibility(identifier: "done")
-                        .keyboardShortcut(.defaultAction)
-                }
-                .padding([.leading, .trailing, .top], 20)
-                #endif
             }
         }
     }
+
+    #if targetEnvironment(macCatalyst)
+    let cancelPlacement = ToolbarItemPlacement.bottomBar
+    let confirmationPlacement = ToolbarItemPlacement.bottomBar
+
+    struct CancelButton: View {
+        let label: String
+        let action: Action
+        
+        var body: some View {
+            Button(action: action) { Text(label) }
+                .accessibility(identifier: "cancel")
+                .keyboardShortcut(.cancelAction)
+                .padding(.trailing)
+        }
+    }
+
+    #else
+
+    let cancelPlacement = ToolbarItemPlacement.cancellationAction
+    let confirmationPlacement = ToolbarItemPlacement.confirmationAction
+
+    struct CancelButton: View {
+        let label: String
+        let action: Action!
+        
+        var body: some View {
+            Button(action: action!) { Text(label) }
+                .accessibility(identifier: "cancel")
+                .keyboardShortcut(.cancelAction)
+        }
+    }
+
+    #endif
+
 }
+

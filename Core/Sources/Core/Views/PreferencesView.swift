@@ -28,7 +28,7 @@ public struct PreferencesView: View {
     public var body: some View {
         let rowStyle = ClearFormRowStyle()
         
-        SheetView("ActionStatus Preferences", cancelAction: handleCancel, doneAction: handleSave) {
+        SheetView("ActionStatus Preferences", shortTitle: "Preferences", cancelAction: handleCancel, doneAction: handleSave) {
             Form {
                 FormSection(
                     header: "Connection",
@@ -61,9 +61,7 @@ public struct PreferencesView: View {
                     FormFieldRow(label: "Default Owner", variable: $defaultOwner, style: DefaultFormFieldStyle(contentType: .organizationName))
                 }
             }
-            .padding()
         }
-        .padding()
         .onAppear(perform: handleAppear)
         .environmentObject(viewState.formStyle)
     }

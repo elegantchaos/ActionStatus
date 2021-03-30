@@ -98,7 +98,7 @@ class MobileApplication: Application {
         
         let combined = status.combinedState
         let index = Int(Date.timeIntervalSinceReferenceDate / .statusCycleInterval) % combined.count
-        let status = status(for: self.status.combinedState[index])
+        let status = self.status(for: self.status.combinedState[index])
         appKitBridge?.status = status
     }
     

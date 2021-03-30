@@ -24,7 +24,7 @@ struct GenerateView: View {
     }
     
     var body: some View {
-        return SheetView(repo.name, cancelAction: onCancel, doneAction: onGenerate, doneLabel: "Save") {
+        return SheetView(repo.name, shortTitle: repo.name, cancelAction: onCancel, doneAction: onGenerate, doneLabel: "Save") {
             Text("Settings for workflow '\(repo.workflow).yml' in repo \(repo.owner)/\(repo.name).")
                 .font(.caption)
                 .padding(.top, viewState.padding)
