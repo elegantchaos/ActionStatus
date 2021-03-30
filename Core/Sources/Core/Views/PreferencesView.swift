@@ -36,9 +36,9 @@ public struct PreferencesView: View {
                 ) {
                     
                     FormPickerRow(label: "Refresh Every", variable: $refreshRate, cases: RefreshRate.allCases, style: rowStyle)
-                    FormFieldRow(label: "Github User", variable: $githubUser, style: DefaultFormFieldStyle(contentType: .username, clearButton: true))
-                    FormFieldRow(label: "Github Server", variable: $githubServer, style: DefaultFormFieldStyle(contentType: .URL, clearButton: true))
-                    FormFieldRow(label: "Github Token", variable: $githubToken, style: DefaultFormFieldStyle(contentType: .password, clearButton: true))
+                    FormFieldRow(label: "Github User", variable: $githubUser, style: DefaultFormFieldStyle(contentType: .username), clearButton: true)
+                    FormFieldRow(label: "Github Server", variable: $githubServer, style: DefaultFormFieldStyle(contentType: .URL), clearButton: true)
+                    FormFieldRow(label: "Github Token", variable: $githubToken, style: DefaultFormFieldStyle(contentType: .password), clearButton: true)
                 }
                 
                 FormSection(
