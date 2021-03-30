@@ -185,8 +185,7 @@ class MobileApplication: Application {
     func replacePreferences(with builder: UIMenuBuilder) {
         let command = UIKeyCommand(title: "Preferences…", image: nil, action: #selector(showPreferences), input: ",", modifierFlags: .command, propertyList: nil)
         let menu = UIMenu(title: "", image: nil, identifier: UIMenu.Identifier("\(info.id).showPreferences"), options: .displayInline, children: [command])
-        builder.insertSibling(menu, afterMenu: .preferences)
-        builder.replace(menu: .preferences, with: menu)
+        builder.insertSibling(menu, beforeMenu: .close)
     }
     
     @IBAction func showPreferences() {
