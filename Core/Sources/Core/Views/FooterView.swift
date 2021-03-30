@@ -24,28 +24,28 @@ public struct FooterView: View {
                     Text("Monitoring \(status.sortedRepos.count) repos.")
                     if status.failing > 0 {
                         HStack(spacing: 4) {
-                            SystemImage("exclamationmark.triangle.fill").foregroundColor(.red)
+                            StatusIcon("StatusFailing")
                             Text("\(status.failing) failing.")
                         }
                     }
 
                     if status.queued > 0 {
                         HStack(spacing: 4) {
-                            SystemImage("ellipsis").foregroundColor(.black)
+                            StatusIcon("StatusQueued")
                             Text("\(status.queued) queued.")
                         }
                     }
 
                     if status.running > 0 {
                         HStack(spacing: 4) {
-                            SystemImage("arrow.triangle.2.circlepath.fill").foregroundColor(.black)
+                            StatusIcon("StatusRunning")
                             Text("\(status.running) running.")
                         }
                     }
 
                     if status.unreachable > 0 {
                         HStack(spacing: 4) {
-                            SystemImage("exclamationmark.triangle.fill").foregroundColor(.yellow)
+                            StatusIcon("StatusUnknown")
                             Text("\(status.unreachable) unreachable.")
                         }
                     }
