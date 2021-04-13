@@ -21,24 +21,39 @@ public struct PreferencesView: View {
     @State var githubToken = ""
     @State var githubUser = ""
     @State var githubServer = ""
+    @State var useAuthentication = true
     
     public init() {
     }
     
     public var body: some View {
         let rowStyle = ClearFormRowStyle()
-        
         SheetView("ActionStatus Preferences", shortTitle: "Preferences", cancelAction: handleCancel, doneAction: handleSave) {
             Form {
                 FormSection(
-                    header: "Connection",
-                    footer: "Leave the github information blank to fall back on basic status checking (which works for public repos only)."
+                    header: { Text("Connection") },
+                    footer: {
+                        HStack {
+                            Spacer()
+                            VStack(alignment: .trailing) {
+                                Text("Without authentication, checking works for public repos only.")
+                                Text("With authentication, checking works for private repos\nand shows queued and running jobs.")
+                                if useAuthentication {
+                                    Link("Create a Github Token…", destination: URL(string: "https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token#creating-a-token")!)
+                                }
+                            }
+                            .multilineTextAlignment(.trailing)
+                        }
+                    }
                 ) {
                     
                     FormPickerRow(label: "Refresh Every", variable: $refreshRate, cases: RefreshRate.allCases, style: rowStyle)
-                    FormFieldRow(label: "Github User", variable: $githubUser, style: DefaultFormFieldStyle(contentType: .username), clearButton: true)
-                    FormFieldRow(label: "Github Server", variable: $githubServer, style: DefaultFormFieldStyle(contentType: .URL), clearButton: true)
-                    FormFieldRow(label: "Github Token", variable: $githubToken, style: DefaultFormFieldStyle(contentType: .password), clearButton: true)
+                    FormToggleRow(label: "Github Authentication", variable: $useAuthentication, style: rowStyle)
+                    if useAuthentication {
+                        FormFieldRow(label: "Github User", variable: $githubUser, style: DefaultFormFieldStyle(contentType: .username), clearButton: true)
+                        FormFieldRow(label: "Github Server", variable: $githubServer, style: DefaultFormFieldStyle(contentType: .URL), clearButton: true)
+                        FormFieldRow(label: "Github Token", variable: $githubToken, style: DefaultFormFieldStyle(contentType: .password), clearButton: true)
+                    }
                 }
                 
                 FormSection(
@@ -61,11 +76,13 @@ public struct PreferencesView: View {
                     FormFieldRow(label: "Default Owner", variable: $defaultOwner, style: DefaultFormFieldStyle(contentType: .organizationName))
                 }
             }
+            .bestFormPickerStyle()
         }
         .onAppear(perform: handleAppear)
         .environmentObject(viewState.formStyle)
     }
     
+    // notifications, read:org, read:user, repo, workflow
     
     func handleAppear() {
         defaultOwner = model.defaultOwner
