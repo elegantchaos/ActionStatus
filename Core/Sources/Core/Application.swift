@@ -138,40 +138,17 @@ open class Application: BasicApplication, ApplicationHost {
     
     open func loadSettings() {
         settingsChannel.debug("Loading settings")
-        
         refreshController?.pause()
-        let oldToken = try? Keychain.default.getToken(user: viewState.githubUser, server: viewState.githubServer)
-
-        let defaults = UserDefaults.standard
-        defaults.read(&viewState.displaySize, fromKey: .displaySizeKey)
-        defaults.read(&viewState.refreshRate, fromKey: .refreshIntervalKey)
-        defaults.read(&viewState.githubUser, fromKey: .githubUserKey, default: "")
-        defaults.read(&viewState.githubServer, fromKey: .githubServerKey, default: "api.github.com")
-        defaults.read(&viewState.sortMode, fromKey: .sortModeKey)
-        
-        settingsChannel.debug("\(String.refreshIntervalKey) is \(viewState.refreshRate)")
-        settingsChannel.debug("\(String.displaySizeKey) is \(viewState.displaySize)")
-        
-        let newToken = try? Keychain.default.getToken(user: viewState.githubUser, server: viewState.githubServer)
-
-        if oldToken != newToken {
+        if viewState.readSettings() == .tokenChanged {
             // we've changed the github settings, so we need to rebuild the refresh controller
             refreshController = makeRefreshController()
         }
-        
         refreshController?.resume()
     }
   
     func saveSettings() {
         settingsChannel.debug("Saving settings")
-        
-        let defaults = UserDefaults.standard
-        defaults.write(viewState.refreshRate.rawValue, forKey: .refreshIntervalKey)
-        defaults.write(viewState.displaySize.rawValue, forKey: .displaySizeKey)
-        defaults.write(viewState.githubUser, forKey: .githubUserKey)
-        defaults.write(viewState.githubServer, forKey: .githubServerKey)
-        defaults.write(viewState.sortMode.rawValue, forKey: .sortModeKey)
-        // NB: github token is stored in the keychain
+        viewState.writeSettings()
     }
     
     public func applyEnvironment<T>(to view: T) -> some View where T: View {

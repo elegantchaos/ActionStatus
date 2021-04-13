@@ -4,6 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Bundles
+import Keychain
 import SwiftUI
 import SwiftUIExtensions
 
@@ -18,6 +19,7 @@ public extension String {
     static let displaySizeKey = "TextSize"
     static let showInMenuKey = "ShowInMenu"
     static let showInDockKey = "ShowInDock"
+    static let githubAuthenticationKey = "GithubAuthentication"
     static let githubUserKey = "GithubUser"
     static let githubServerKey = "GithubServer"
     static let sortModeKey = "SortMode"
@@ -28,6 +30,7 @@ public class ViewState: ObservableObject {
     @Published public var selectedID: UUID? = nil
     @Published public var displaySize: DisplaySize = .automatic
     @Published public var refreshRate: RefreshRate = .automatic
+    @Published public var githubAuthentication: Bool = false
     @Published public var githubUser: String = ""
     @Published public var githubServer: String = "api.github.com"
     @Published public var sortMode: SortMode = .state
@@ -75,5 +78,40 @@ public class ViewState: ObservableObject {
         #else
         return [GridItem(.adaptive(minimum: 256, maximum: 384))]
         #endif
+    }
+    
+    enum ReadSettingsResult {
+        case tokenUnchanged
+        case tokenChanged
+    }
+    
+    func readSettings() -> ReadSettingsResult {
+        let oldToken = try? Keychain.default.getToken(user: githubUser, server: githubServer)
+
+        let defaults = UserDefaults.standard
+        defaults.read(&displaySize, fromKey: .displaySizeKey)
+        defaults.read(&refreshRate, fromKey: .refreshIntervalKey)
+        defaults.read(&githubAuthentication, fromKey: .githubAuthenticationKey)
+        defaults.read(&githubUser, fromKey: .githubUserKey, default: "")
+        defaults.read(&githubServer, fromKey: .githubServerKey, default: "api.github.com")
+        defaults.read(&sortMode, fromKey: .sortModeKey)
+        
+        settingsChannel.debug("\(String.refreshIntervalKey) is \(refreshRate)")
+        settingsChannel.debug("\(String.displaySizeKey) is \(displaySize)")
+        
+        let newToken = try? Keychain.default.getToken(user: githubUser, server: githubServer)
+
+        return (oldToken != newToken) ? .tokenChanged : .tokenUnchanged
+    }
+    
+    func writeSettings() {
+        let defaults = UserDefaults.standard
+        defaults.write(refreshRate.rawValue, forKey: .refreshIntervalKey)
+        defaults.write(displaySize.rawValue, forKey: .displaySizeKey)
+        defaults.write(githubUser, forKey: .githubUserKey)
+        defaults.write(githubServer, forKey: .githubServerKey)
+        defaults.write(sortMode.rawValue, forKey: .sortModeKey)
+        // NB: github token is stored in the keychain
+
     }
 }
