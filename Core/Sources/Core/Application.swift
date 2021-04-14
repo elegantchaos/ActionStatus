@@ -149,12 +149,12 @@ open class Application: BasicApplication, ApplicationHost {
     
     open func loadSettings() {
         settingsChannel.debug("Loading settings")
-        refreshController?.pause()
-        if viewState.settings.readSettings() == .tokenChanged {
+        pauseRefresh()
+        if viewState.settings.readSettings() == .authenticationChanged {
             // we've changed the github settings, so we need to rebuild the refresh controller
-            refreshController = makeRefreshController()
+            resetRefresh()
         }
-        refreshController?.resume()
+        resumeRefresh()
     }
   
     func saveSettings() {
@@ -185,6 +185,10 @@ open class Application: BasicApplication, ApplicationHost {
     
     func resumeRefresh() {
         refreshController?.resume()
+    }
+    
+    func resetRefresh() {
+        refreshController = makeRefreshController()
     }
     
     public func open(url: URL) {

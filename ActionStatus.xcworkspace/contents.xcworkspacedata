@@ -41,4 +41,7 @@
          location = "group:../ThreadExtensions">
       </FileRef>
    </Group>
+   <FileRef
+      location = "group:../UserDefaultsExtensions">
+   </FileRef>
 </Workspace>

@@ -15,13 +15,18 @@ public struct PreferencesView: View {
     @State var settings = Settings()
     @State var owner: String = ""
     @State var token: String = ""
+    @State var oldestNewest: Bool = false
     
     public init() {
     }
     
     public var body: some View {
         SheetView("ActionStatus Preferences", shortTitle: "Preferences", cancelAction: handleCancel, doneAction: handleSave) {
-            PreferencesForm(settings: $settings, githubToken: $token, defaultOwner: $owner)
+            PreferencesForm(
+                settings: $settings,
+                githubToken: $token,
+                defaultOwner: $owner,
+                oldestNewest: $oldestNewest)
                 .environmentObject(viewState.formStyle)
         }
         .onAppear(perform: handleAppear)
@@ -33,6 +38,7 @@ public struct PreferencesView: View {
 
     
     func handleAppear() {
+        Application.shared.pauseRefresh()
         settings = viewState.settings
         owner = model.defaultOwner
         token = settings.readToken()
@@ -40,8 +46,15 @@ public struct PreferencesView: View {
     
     func handleSave() {
         model.defaultOwner = owner
+        let authenticationChanged = settings.authenticationChanged(from: viewState.settings)
         viewState.settings = settings
         viewState.settings.writeToken(token)
+        
+        if authenticationChanged {
+            Application.shared.resetRefresh()
+        }
+
+        Application.shared.resumeRefresh()
         presentation.wrappedValue.dismiss()
     }
 
@@ -51,11 +64,12 @@ public struct PreferencesForm: View {
     @Binding var settings: Settings
     @Binding var githubToken: String
     @Binding var defaultOwner: String
+    @Binding var oldestNewest: Bool
+
     @EnvironmentObject var viewState: ViewState
 
     public var body: some View {
-        let rowStyle = ClearFormRowStyle()
-        Form {
+        return Form {
             FormSection(
                 header: { Text("Connection") },
                 footer: {
@@ -76,8 +90,8 @@ public struct PreferencesForm: View {
                 }
             ) {
                 
-                FormPickerRow(label: "Refresh Every", variable: $settings.refreshRate, cases: RefreshRate.allCases, style: rowStyle)
-                FormToggleRow(label: "Github Authentication", variable: $settings.githubAuthentication, style: rowStyle)
+                FormPickerRow(label: "Refresh Every", variable: $settings.refreshRate, cases: RefreshRate.allCases)
+                FormToggleRow(label: "Github Authentication", variable: $settings.githubAuthentication)
                 if settings.githubAuthentication {
                     FormFieldRow(label: "Github User", variable: $settings.githubUser, style: DefaultFormFieldStyle(contentType: .username), clearButton: true)
                     FormFieldRow(label: "Github Server", variable: $settings.githubServer, style: DefaultFormFieldStyle(contentType: .URL), clearButton: true)
@@ -89,12 +103,12 @@ public struct PreferencesForm: View {
                 header: "Display",
                 footer: "Display settings."
             ) {
-                FormPickerRow(label: "Item Size", variable: $settings.displaySize, cases: DisplaySize.allCases, style: rowStyle)
-                FormPickerRow(label: "Sort By", variable: $settings.sortMode, cases: SortMode.allCases, style: rowStyle)
+                FormPickerRow(label: "Item Size", variable: $settings.displaySize, cases: DisplaySize.allCases)
+                FormPickerRow(label: "Sort By", variable: $settings.sortMode, cases: SortMode.allCases)
 
                 #if targetEnvironment(macCatalyst)
-                FormToggleRow(label: "Show In Menubar", variable: $settings.showInMenu, style: rowStyle)
-                FormToggleRow(label: "Show In Dock", variable: $settings.showInDock, style: rowStyle)
+                FormToggleRow(label: "Show In Menubar", variable: $settings.showInMenu)
+                FormToggleRow(label: "Show In Dock", variable: $settings.showInDock)
                 #endif
             }
             
@@ -104,6 +118,14 @@ public struct PreferencesForm: View {
             ) {
                 FormFieldRow(label: "Default Owner", variable: $defaultOwner, style: DefaultFormFieldStyle(contentType: .organizationName))
             }
+
+            FormSection(
+                header: "Workflows",
+                footer: "Settings to use when generating workflow files."
+            ) {
+                FormToggleRow(label: "Test Lowest And Highest Only", variable: $oldestNewest)
+            }
+
         }
         .bestFormPickerStyle()
     }

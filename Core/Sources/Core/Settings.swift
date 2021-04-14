@@ -6,6 +6,19 @@
 import Foundation
 import Keychain
 
+public extension String {
+    static let defaultOwnerKey = "DefaultOwner"
+    static let refreshIntervalKey = "RefreshInterval"
+    static let displaySizeKey = "TextSize"
+    static let showInMenuKey = "ShowInMenu"
+    static let showInDockKey = "ShowInDock"
+    static let githubAuthenticationKey = "GithubAuthentication"
+    static let githubUserKey = "GithubUser"
+    static let githubServerKey = "GithubServer"
+    static let sortModeKey = "SortMode"
+    static let testOldestNewestKey = "TestOldestNewest"
+}
+
 public struct Settings {
     public var isEditing: Bool = false
     var selectedID: UUID? = nil
@@ -18,11 +31,18 @@ public struct Settings {
     var showInMenu = false
     var showInDock = false
     
-    enum ReadSettingsResult {
-        case tokenUnchanged
-        case tokenChanged
+    enum ReadResult {
+        case authenticationUnchanged
+        case authenticationChanged
     }
    
+    func authenticationChanged(from other: Settings) -> Bool {
+        guard githubAuthentication == other.githubAuthentication else { return true }
+        guard githubUser == other.githubUser else { return true }
+        guard githubServer == other.githubServer else { return true }
+        return readToken() != other.readToken()
+    }
+    
     func readToken() -> String {
         let token = try? Keychain.default.getToken(user: githubUser, server: githubServer)
         return token ?? ""
@@ -41,8 +61,8 @@ public struct Settings {
         return isEditing
     }
     
-    mutating func readSettings() -> ReadSettingsResult {
-        let oldToken = readToken()
+    mutating func readSettings() -> ReadResult {
+        let oldSettings = self
         let defaults = UserDefaults.standard
         defaults.read(&displaySize, fromKey: .displaySizeKey)
         defaults.read(&refreshRate, fromKey: .refreshIntervalKey)
@@ -52,11 +72,11 @@ public struct Settings {
         defaults.read(&sortMode, fromKey: .sortModeKey)
         defaults.read(&showInMenu, fromKey: .showInMenuKey)
         defaults.read(&showInDock, fromKey: .showInDockKey)
-
+        
         settingsChannel.debug("\(String.refreshIntervalKey) is \(refreshRate)")
         settingsChannel.debug("\(String.displaySizeKey) is \(displaySize)")
         
-        return (oldToken != readToken()) ? .tokenChanged : .tokenUnchanged
+        return authenticationChanged(from: oldSettings) ? .authenticationChanged : .authenticationUnchanged
     }
     
     func writeSettings() {
@@ -69,6 +89,7 @@ public struct Settings {
         defaults.write(sortMode.rawValue, forKey: .sortModeKey)
         defaults.write(showInDock, forKey: .showInDockKey)
         defaults.write(showInMenu, forKey: .showInMenuKey)
+
         // NB: github token is stored in the keychain
 
     }

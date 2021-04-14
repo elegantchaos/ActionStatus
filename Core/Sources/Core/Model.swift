@@ -25,6 +25,7 @@ public class Model: ObservableObject {
     @Published public var defaultName = ""
     @Published public var defaultWorkflow = "Tests"
     @Published public var defaultBranches: [String] = []
+    @Published public var testOldestNewest = true
 
     public var count: Int {
         items.count
@@ -70,6 +71,7 @@ public class Model: ObservableObject {
         if let key = store.string(forKey: .defaultOwnerKey) ?? UserDefaults.standard.string(forKey: .defaultOwnerKey) {
             defaultOwner = key
         }
+        testOldestNewest = store.bool(forKey: .testOldestNewestKey)
     }
     
     public func save(toDefaultsKey key: String) {
@@ -93,6 +95,7 @@ public class Model: ObservableObject {
         
         store.set(repoIDs, forKey: key)
         store.set(defaultOwner, forKey: .defaultOwnerKey)
+        store.set(testOldestNewest, forKey: .testOldestNewestKey)
     }
     
     public func repo(withIdentifier id: UUID) -> Repo? {

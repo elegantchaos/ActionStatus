@@ -12,17 +12,6 @@ struct PreviewHost: ApplicationHost {
     var refreshController: RefreshController? { return nil }
 }
 
-public extension String {
-    static let defaultOwnerKey = "DefaultOwner"
-    static let refreshIntervalKey = "RefreshInterval"
-    static let displaySizeKey = "TextSize"
-    static let showInMenuKey = "ShowInMenu"
-    static let showInDockKey = "ShowInDock"
-    static let githubAuthenticationKey = "GithubAuthentication"
-    static let githubUserKey = "GithubUser"
-    static let githubServerKey = "GithubServer"
-    static let sortModeKey = "SortMode"
-}
 
 public class ViewState: ObservableObject {
     @Published public var settings = Settings()
