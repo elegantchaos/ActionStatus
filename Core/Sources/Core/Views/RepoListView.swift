@@ -17,7 +17,7 @@ public struct RepoListView: View {
     
     public var body: some View {
         VStack {
-            if viewState.isEditing {
+            if viewState.settings.isEditing {
                 List {
                     ForEach(status.sortedRepos) { repo in
                         RepoCellView(repo: repo, selectable: true)
@@ -34,8 +34,8 @@ public struct RepoListView: View {
                 }
             }
         }
-        .environment(\.defaultMinListRowHeight, viewState.displaySize.rowHeight)
-        .bindEditing(to: $viewState.isEditing)
+        .environment(\.defaultMinListRowHeight, viewState.settings.displaySize.rowHeight)
+        .bindEditing(to: $viewState.settings.isEditing)
     }
     
     func delete(at offsets: IndexSet) {

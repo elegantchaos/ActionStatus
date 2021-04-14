@@ -18,7 +18,7 @@ public class RepoState: ObservableObject {
 
     public func update(with model: Model, viewState: ViewState) {
         repoStateChannel.log("updated")
-        sortedRepos = model.repos(sortedBy: viewState.sortMode)
+        sortedRepos = model.repos(sortedBy: viewState.settings.sortMode)
 
         let set = NSCountedSet()
         sortedRepos.forEach({ set.add($0.state) })

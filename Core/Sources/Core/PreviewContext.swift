@@ -11,7 +11,7 @@ struct PreviewContext {
     @State var state = ViewState(host: PreviewHost())
     
     init(isEditing: Bool = true) {
-        state.isEditing = isEditing
+        state.settings.isEditing = isEditing
     }
     
     var testRepo: Repo {

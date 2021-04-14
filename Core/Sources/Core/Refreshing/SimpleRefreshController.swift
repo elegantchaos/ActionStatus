@@ -63,7 +63,7 @@ internal extension SimpleRefreshController {
                             }
                         }
                         
-                        timer.schedule(after: viewState.refreshRate.rate) { _ in
+                        timer.schedule(after: viewState.settings.refreshRate.rate) { _ in
                             self.doRefresh()
                         }
                         

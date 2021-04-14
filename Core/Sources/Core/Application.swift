@@ -39,6 +39,10 @@ open class Application: BasicApplication, ApplicationHost {
     public var model = makeModel()
     var observers: [AnyCancellable] = []
     
+    var settings: Settings {
+        viewState.settings
+    }
+
     public let sheetController = SheetController()
     
     func makeViewState() -> ViewState {
@@ -54,15 +58,22 @@ open class Application: BasicApplication, ApplicationHost {
     }
     
     func makeRefreshController() -> RefreshController {
-        do {
-            let token = try Keychain.default.getToken(user: viewState.githubUser, server: viewState.githubServer)
-            let controller = OctoidRefreshController(model: model, viewState: viewState, token: token)
-            refreshChannel.log("Using github refresh controller for \(viewState.githubUser)/\(viewState.githubServer)")
-            return controller
-        } catch {
-            refreshChannel.log("Couldn't get token: \(error). Defaulting to simple refresh controller.")
-            return SimpleRefreshController(model: model, viewState: viewState)
+        if settings.githubAuthentication {
+            do {
+                let token = try Keychain.default.getToken(user: settings.githubUser, server: settings.githubServer)
+                let controller = OctoidRefreshController(model: model, viewState: viewState, token: token)
+                refreshChannel.log("Using github refresh controller for \(settings.githubUser)/\(settings.githubServer)")
+                return controller
+            } catch {
+                refreshChannel.log("Couldn't get token: \(error). Defaulting to simple refresh controller.")
+            }
+        } else {
+            refreshChannel.log("Authentication is disabled. Defaulting to simple refresh controller.")
         }
+
+        // fall back to simple non-authenticated mode
+        return SimpleRefreshController(model: model, viewState: viewState)
+
     }
     
     class func makeModel() -> Model {
@@ -139,7 +150,7 @@ open class Application: BasicApplication, ApplicationHost {
     open func loadSettings() {
         settingsChannel.debug("Loading settings")
         refreshController?.pause()
-        if viewState.readSettings() == .tokenChanged {
+        if viewState.settings.readSettings() == .tokenChanged {
             // we've changed the github settings, so we need to rebuild the refresh controller
             refreshController = makeRefreshController()
         }
@@ -148,7 +159,7 @@ open class Application: BasicApplication, ApplicationHost {
   
     func saveSettings() {
         settingsChannel.debug("Saving settings")
-        viewState.writeSettings()
+        viewState.settings.writeSettings()
     }
     
     public func applyEnvironment<T>(to view: T) -> some View where T: View {
@@ -176,8 +187,8 @@ open class Application: BasicApplication, ApplicationHost {
         refreshController?.resume()
     }
     
-    public func openGithub(with repo: Repo, at location: Repo.GithubLocation = .workflow) {
-        UIApplication.shared.open(repo.githubURL(for: location))
+    public func open(url: URL) {
+        UIApplication.shared.open(url)
     }
     
     func pickerForSavingWorkflow() -> FilePicker {

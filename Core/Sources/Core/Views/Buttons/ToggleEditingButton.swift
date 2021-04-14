@@ -14,12 +14,12 @@ public struct ToggleEditingButton: View {
     
     public var body: some View {
         Button(action: toggleEditing) {
-            SystemImage(viewState.isEditing ? viewState.stopEditingIcon : viewState.startEditingIcon).frame(width: 32, height: 32, alignment: .center)
+            SystemImage(viewState.settings.isEditing ? viewState.stopEditingIcon : viewState.startEditingIcon).frame(width: 32, height: 32, alignment: .center)
         }.accessibility(identifier: "toggleEditing")
     }
     
     func toggleEditing() {
-        viewState.isEditing.toggle()
+        viewState.settings.isEditing.toggle()
     }
 }
 
@@ -29,7 +29,7 @@ struct ToggleEditingButton_Previews: PreviewProvider {
         let context = PreviewContext()
         return context.inject(into:
             VStack {
-                Text(context.state.isEditing ? "Editing Enabled" : "Editing Disabled")
+                Text(context.state.settings.isEditing ? "Editing Enabled" : "Editing Disabled")
                 ToggleEditingButton()
             }
         )

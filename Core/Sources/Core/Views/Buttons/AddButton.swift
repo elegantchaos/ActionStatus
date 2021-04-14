@@ -19,8 +19,8 @@ public struct AddButton: View {
         Button(action: addRepo ) {
             Text("Add")
         }
-        .disabled(!viewState.isEditing)
-        .opacity(viewState.isEditing ? 1.0 : 0.0)
+        .disabled(!viewState.settings.isEditing)
+        .opacity(viewState.settings.isEditing ? 1.0 : 0.0)
         .animation(.easeInOut)
     }
     

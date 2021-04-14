@@ -11,117 +11,101 @@ public struct PreferencesView: View {
     @Environment(\.presentationMode) var presentation
     @EnvironmentObject var viewState: ViewState
     @EnvironmentObject var model: Model
-    
-    @State var defaultOwner: String = ""
-    @State var refreshRate: RefreshRate = .automatic
-    @State var displaySize: DisplaySize = .automatic
-    @State var sortMode: SortMode = .name
-    @State var showInMenu = true
-    @State var showInDock = true
-    @State var githubToken = ""
-    @State var githubUser = ""
-    @State var githubServer = ""
-    @State var useAuthentication = true
+
+    @State var settings = Settings()
+    @State var owner: String = ""
+    @State var token: String = ""
     
     public init() {
     }
     
     public var body: some View {
-        let rowStyle = ClearFormRowStyle()
         SheetView("ActionStatus Preferences", shortTitle: "Preferences", cancelAction: handleCancel, doneAction: handleSave) {
-            Form {
-                FormSection(
-                    header: { Text("Connection") },
-                    footer: {
-                        HStack {
-                            Spacer()
-                            VStack(alignment: .trailing) {
-                                Text("Without authentication, checking works for public repos only.")
-                                Text("With authentication, checking works for private repos\nand shows queued and running jobs.")
-                                if useAuthentication {
-                                    Link("Create a Github Token…", destination: URL(string: "https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token#creating-a-token")!)
-                                }
-                            }
-                            .multilineTextAlignment(.trailing)
-                        }
-                    }
-                ) {
-                    
-                    FormPickerRow(label: "Refresh Every", variable: $refreshRate, cases: RefreshRate.allCases, style: rowStyle)
-                    FormToggleRow(label: "Github Authentication", variable: $useAuthentication, style: rowStyle)
-                    if useAuthentication {
-                        FormFieldRow(label: "Github User", variable: $githubUser, style: DefaultFormFieldStyle(contentType: .username), clearButton: true)
-                        FormFieldRow(label: "Github Server", variable: $githubServer, style: DefaultFormFieldStyle(contentType: .URL), clearButton: true)
-                        FormFieldRow(label: "Github Token", variable: $githubToken, style: DefaultFormFieldStyle(contentType: .password), clearButton: true)
-                    }
-                }
-                
-                FormSection(
-                    header: "Display",
-                    footer: "Display settings."
-                ) {
-                    FormPickerRow(label: "Item Size", variable: $displaySize, cases: DisplaySize.allCases, style: rowStyle)
-                    FormPickerRow(label: "Sort By", variable: $sortMode, cases: SortMode.allCases, style: rowStyle)
-
-                    #if targetEnvironment(macCatalyst)
-                    FormToggleRow(label: "Show In Menubar", variable: $showInMenu, style: rowStyle)
-                    FormToggleRow(label: "Show In Dock", variable: $showInDock, style: rowStyle)
-                    #endif
-                }
-                
-                FormSection(
-                    header: "Creation",
-                    footer: "Defaults to use for new repos."
-                ) {
-                    FormFieldRow(label: "Default Owner", variable: $defaultOwner, style: DefaultFormFieldStyle(contentType: .organizationName))
-                }
-            }
-            .bestFormPickerStyle()
+            PreferencesForm(settings: $settings, githubToken: $token, defaultOwner: $owner)
+                .environmentObject(viewState.formStyle)
         }
         .onAppear(perform: handleAppear)
-        .environmentObject(viewState.formStyle)
     }
-    
-    // notifications, read:org, read:user, repo, workflow
-    
-    func handleAppear() {
-        defaultOwner = model.defaultOwner
-        refreshRate = viewState.refreshRate
-        displaySize = viewState.displaySize
-        showInDock = UserDefaults.standard.bool(forKey: .showInDockKey)
-        showInMenu = UserDefaults.standard.bool(forKey: .showInMenuKey)
-        sortMode = viewState.sortMode
-        githubUser = viewState.githubUser
-        githubServer = viewState.githubServer
-        if let token = try? Keychain.default.getToken(user: viewState.githubUser, server: viewState.githubServer) {
-            githubToken = token
-        }
-        
-    }
-    
+
     func handleCancel() {
         presentation.wrappedValue.dismiss()
     }
+
     
-    func handleSave() {
-        model.defaultOwner = defaultOwner
-        viewState.refreshRate = refreshRate
-        viewState.displaySize = displaySize
-        viewState.githubUser = githubUser
-        viewState.githubServer = githubServer
-        viewState.sortMode = sortMode
-        UserDefaults.standard.set(showInDock, forKey: .showInDockKey)
-        UserDefaults.standard.set(showInMenu, forKey: .showInMenuKey)
-        
-        // save token...
-        do {
-            try Keychain.default.addToken(githubToken, user: githubUser, server: githubServer)
-        } catch {
-            print("Failed to save token \(error)")
-        }
-        
-        presentation.wrappedValue.dismiss()
+    func handleAppear() {
+        settings = viewState.settings
+        owner = model.defaultOwner
+        token = settings.readToken()
     }
     
+    func handleSave() {
+        model.defaultOwner = owner
+        viewState.settings = settings
+        viewState.settings.writeToken(token)
+        presentation.wrappedValue.dismiss()
+    }
+
+}
+
+public struct PreferencesForm: View {
+    @Binding var settings: Settings
+    @Binding var githubToken: String
+    @Binding var defaultOwner: String
+    @EnvironmentObject var viewState: ViewState
+
+    public var body: some View {
+        let rowStyle = ClearFormRowStyle()
+        Form {
+            FormSection(
+                header: { Text("Connection") },
+                footer: {
+                    HStack {
+                        Spacer()
+                        VStack(alignment: .trailing) {
+                            if settings.githubAuthentication {
+                                Text("With authentication, checking works for private repos and shows queued and running jobs. The token requires the following permissions:\n  notifications, read:org, read:user, repo, workflow.")
+                                HStack {
+                                    Text("More info... ")
+                                    LinkButton(url: URL(string: "https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token#creating-a-token")!)
+                                }
+                            } else {
+                                Text("Without authentication, checking works for public repos only.")
+                            }
+                        }
+                    }
+                }
+            ) {
+                
+                FormPickerRow(label: "Refresh Every", variable: $settings.refreshRate, cases: RefreshRate.allCases, style: rowStyle)
+                FormToggleRow(label: "Github Authentication", variable: $settings.githubAuthentication, style: rowStyle)
+                if settings.githubAuthentication {
+                    FormFieldRow(label: "Github User", variable: $settings.githubUser, style: DefaultFormFieldStyle(contentType: .username), clearButton: true)
+                    FormFieldRow(label: "Github Server", variable: $settings.githubServer, style: DefaultFormFieldStyle(contentType: .URL), clearButton: true)
+                    FormFieldRow(label: "Github Token", variable: $githubToken, style: DefaultFormFieldStyle(contentType: .password), clearButton: true)
+                }
+            }
+            
+            FormSection(
+                header: "Display",
+                footer: "Display settings."
+            ) {
+                FormPickerRow(label: "Item Size", variable: $settings.displaySize, cases: DisplaySize.allCases, style: rowStyle)
+                FormPickerRow(label: "Sort By", variable: $settings.sortMode, cases: SortMode.allCases, style: rowStyle)
+
+                #if targetEnvironment(macCatalyst)
+                FormToggleRow(label: "Show In Menubar", variable: $settings.showInMenu, style: rowStyle)
+                FormToggleRow(label: "Show In Dock", variable: $settings.showInDock, style: rowStyle)
+                #endif
+            }
+            
+            FormSection(
+                header: "Creation",
+                footer: "Defaults to use for new repos."
+            ) {
+                FormFieldRow(label: "Default Owner", variable: $defaultOwner, style: DefaultFormFieldStyle(contentType: .organizationName))
+            }
+        }
+        .bestFormPickerStyle()
+    }
 }
 

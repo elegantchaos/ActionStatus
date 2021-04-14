@@ -28,14 +28,12 @@ struct RepoCellView: View {
             if selectable {
                 Spacer()
                 EditButton(repo: repo)
-                Button(action: handleShowRepo) {
-                    Image(systemName: viewState.linkIcon)
-                }
+                LinkButton(url: repo.githubURL(for: .repo))
             } else {
                 Spacer()
             }
         }
-        .font(viewState.displaySize.font)
+        .font(viewState.settings.displaySize.font)
         .shim.contextMenu() { makeContentMenu(for: repo) }
         .shim.onTapGesture(perform: handleEdit)
         .padding(0)
@@ -74,11 +72,11 @@ struct RepoCellView: View {
     }
     
     func handleShowRepo() {
-        viewState.host.openGithub(with: repo, at: .repo)
+        viewState.host.open(url: repo.githubURL(for: .repo))
     }
     
     func handleShowWorkflow() {
-        viewState.host.openGithub(with: repo, at: .workflow)
+        viewState.host.open(url: repo.githubURL(for: .workflow))
     }
     
     func handleEdit() {

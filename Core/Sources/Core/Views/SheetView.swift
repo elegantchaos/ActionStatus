@@ -34,33 +34,31 @@ public struct SheetView<Content>: View where Content: View {
         NavigationView {
             AlignedLabelContainer {
                 content()
-                    .toolbar {
-                        ToolbarItem(placement: .principal) {
-                            let title = horizontalSizeClass == .compact ? shortTitle : self.title
-                            Text(title)
-                                .font(.headline)
-                                .fixedSize()
-                                .accessibility(identifier: "formHeader")
-                        }
-                        
-                        #if targetEnvironment(macCatalyst)
-                        ToolbarItem(placement: .bottomBar) {
-                            Spacer()
-                        }
-                        #endif
-                        
-                        ToolbarItem(placement: cancelPlacement) {
-                            if let action = cancelAction {
-                                CancelButton(label: cancelLabel, action: action)
-                            }
-                        }
-                        
-                        ToolbarItem(placement: confirmationPlacement) {
-                            Button(action: doneAction) { Text(doneLabel) }
-                                .accessibility(identifier: "done")
-                                .keyboardShortcut(.defaultAction)
-                        }
+            }
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    let title = horizontalSizeClass == .compact ? shortTitle : self.title
+                    Text(title)
+                        .accessibility(identifier: "formHeader")
+                }
+                
+                #if targetEnvironment(macCatalyst)
+                ToolbarItem(placement: .bottomBar) {
+                    Spacer()
+                }
+                #endif
+                
+                ToolbarItem(placement: cancelPlacement) {
+                    if let action = cancelAction {
+                        CancelButton(label: cancelLabel, action: action)
                     }
+                }
+                
+                ToolbarItem(placement: confirmationPlacement) {
+                    Button(action: doneAction) { Text(doneLabel) }
+                        .accessibility(identifier: "done")
+                        .keyboardShortcut(.defaultAction)
+                }
             }
         }
     }

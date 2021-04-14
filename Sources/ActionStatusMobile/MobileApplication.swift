@@ -94,7 +94,7 @@ class MobileApplication: Application {
     fileprivate func updateBridge() {
         appKitBridge?.showInMenu = UserDefaults.standard.bool(forKey: .showInMenuKey)
         appKitBridge?.showInDock = UserDefaults.standard.bool(forKey: .showInDockKey)
-        appKitBridge?.showAddButton = viewState.isEditing
+        appKitBridge?.showAddButton = viewState.settings.isEditing
         
         let combined = status.combinedState
         let index = Int(Date.timeIntervalSinceReferenceDate / .statusCycleInterval) % combined.count
@@ -223,7 +223,7 @@ extension MobileApplication: AppKitBridgeDelegate {
     
     func selectItem(_ item: Int) {
         let repo = status.repo(withIndex: item)
-        Application.native.openGithub(with: repo)
+        Application.native.open(url: repo.githubURL())
     }
     
     func addItem() {
@@ -237,7 +237,6 @@ extension MobileApplication: AppKitBridgeDelegate {
     }
     
     func toggleEditing() -> Bool {
-        viewState.isEditing = !viewState.isEditing
-        return viewState.isEditing
+        viewState.settings.toggleEditing()
     }
 }

@@ -25,19 +25,21 @@ struct GenerateView: View {
     
     var body: some View {
         return SheetView(repo.name, shortTitle: repo.name, cancelAction: onCancel, doneAction: onGenerate, doneLabel: "Save") {
-            Text("Settings for workflow '\(repo.workflow).yml' in repo \(repo.owner)/\(repo.name).")
-                .font(.caption)
-                .padding(.top, viewState.padding)
+            VStack {
+                Text("Settings for workflow '\(repo.workflow).yml' in repo \(repo.owner)/\(repo.name).")
+                    .font(.subheadline)
+                    .padding(.top, viewState.padding)
 
-            Form {
-                TogglesView(title: "Platforms", options: self.generator.platforms, toggles: $platforms)
-                TogglesView(title: "Swift", options: self.generator.compilers, toggles: $compilers)
-                TogglesView(title: "Configuration", options: self.generator.configurations, toggles: $configurations)
-                TogglesView(title: "Other Options", options: self.generator.general, toggles: $general)
+                Form {
+                    TogglesView(title: "Platforms", options: self.generator.platforms, toggles: $platforms)
+                    TogglesView(title: "Swift", options: self.generator.compilers, toggles: $compilers)
+                    TogglesView(title: "Configuration", options: self.generator.configurations, toggles: $configurations)
+                    TogglesView(title: "Other Options", options: self.generator.general, toggles: $general)
+                }
+                
+                Spacer()
             }
-            .padding()
         }
-        .padding()
         .onAppear(perform: onAppear)
         .onDisappear(perform: onDisappear)
     }

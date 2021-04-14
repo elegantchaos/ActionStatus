@@ -4,7 +4,6 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Bundles
-import Keychain
 import SwiftUI
 import SwiftUIExtensions
 
@@ -26,14 +25,7 @@ public extension String {
 }
 
 public class ViewState: ObservableObject {
-    @Published public var isEditing: Bool = false
-    @Published public var selectedID: UUID? = nil
-    @Published public var displaySize: DisplaySize = .automatic
-    @Published public var refreshRate: RefreshRate = .automatic
-    @Published public var githubAuthentication: Bool = false
-    @Published public var githubUser: String = ""
-    @Published public var githubServer: String = "api.github.com"
-    @Published public var sortMode: SortMode = .state
+    @Published public var settings = Settings()
 
     public let host: ApplicationHost
     public let padding: CGFloat = 10
@@ -44,7 +36,7 @@ public class ViewState: ObservableObject {
     public let spacing: CGFloat = 256
     #endif
     
-    let linkIcon = "chevron.right.square"
+    let linkIcon = "arrow.right.circle.fill"
     let startEditingIcon = "lock.fill"
     let stopEditingIcon = "lock.open.fill"
     let preferencesIcon = "gearshape"
@@ -52,7 +44,8 @@ public class ViewState: ObservableObject {
     let formStyle = FormStyle(
         headerFont: .headline,
         footerFont: Font.body.italic(),
-        contentFont: Font.body.bold()
+        labelOpacity: 0.5,
+        contentFont: Font.body
     )
     
     public init(host: ApplicationHost) {
@@ -62,7 +55,7 @@ public class ViewState: ObservableObject {
     @discardableResult func addRepo(to model: Model) -> Repo {
         let newRepo = model.addRepo(viewState: self)
         host.saveState()
-        selectedID = newRepo.id
+        settings.selectedID = newRepo.id
         return newRepo
     }
     
@@ -79,39 +72,6 @@ public class ViewState: ObservableObject {
         return [GridItem(.adaptive(minimum: 256, maximum: 384))]
         #endif
     }
+     
     
-    enum ReadSettingsResult {
-        case tokenUnchanged
-        case tokenChanged
-    }
-    
-    func readSettings() -> ReadSettingsResult {
-        let oldToken = try? Keychain.default.getToken(user: githubUser, server: githubServer)
-
-        let defaults = UserDefaults.standard
-        defaults.read(&displaySize, fromKey: .displaySizeKey)
-        defaults.read(&refreshRate, fromKey: .refreshIntervalKey)
-        defaults.read(&githubAuthentication, fromKey: .githubAuthenticationKey)
-        defaults.read(&githubUser, fromKey: .githubUserKey, default: "")
-        defaults.read(&githubServer, fromKey: .githubServerKey, default: "api.github.com")
-        defaults.read(&sortMode, fromKey: .sortModeKey)
-        
-        settingsChannel.debug("\(String.refreshIntervalKey) is \(refreshRate)")
-        settingsChannel.debug("\(String.displaySizeKey) is \(displaySize)")
-        
-        let newToken = try? Keychain.default.getToken(user: githubUser, server: githubServer)
-
-        return (oldToken != newToken) ? .tokenChanged : .tokenUnchanged
-    }
-    
-    func writeSettings() {
-        let defaults = UserDefaults.standard
-        defaults.write(refreshRate.rawValue, forKey: .refreshIntervalKey)
-        defaults.write(displaySize.rawValue, forKey: .displaySizeKey)
-        defaults.write(githubUser, forKey: .githubUserKey)
-        defaults.write(githubServer, forKey: .githubServerKey)
-        defaults.write(sortMode.rawValue, forKey: .sortModeKey)
-        // NB: github token is stored in the keychain
-
-    }
 }

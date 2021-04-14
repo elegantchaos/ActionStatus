@@ -13,7 +13,7 @@ public struct EditView: View {
     #else
     static let fieldStyle = RoundedBorderTextFieldStyle()
     #endif
-
+    
     let repo: Repo?
     
     @Environment(\.presentationMode) var presentation
@@ -22,7 +22,7 @@ public struct EditView: View {
     
     var title: String { "\(shortTitle) Repository" }
     var shortTitle: String { return repo == nil ? "Add" : "Edit" }
-
+    
     @State var name = ""
     @State var owner = ""
     @State var workflow = ""
@@ -32,66 +32,54 @@ public struct EditView: View {
         let localPath = repo?.url(forDevice: Device.main.identifier)?.path ?? ""
         let detailStyle = NameOrgStyle()
         
-        return SheetView(title, shortTitle: shortTitle, cancelAction: dismiss, doneAction: done) {
-        Form {
-            FormSection(
-                header: "Details",
-                footer: "Enter the name and owner of the repository, and the name of the workflow file to test. Enter a list of specific branches to test, or leave blank to just test the default branch."
-            ) {
-                FormFieldRow(label: "name", placeholder: "github repo name", variable: $name, style: detailStyle, clearButton: true)
-                FormFieldRow(label: "owner", placeholder: "github user or organisation", variable: $owner, style: detailStyle, clearButton: true)
-                FormFieldRow(label: "workflow", placeholder: "Tests.yml", variable: $workflow, style: detailStyle, clearButton: true)
-                FormFieldRow(label: "branches", placeholder: "branch1, branch2, …", variable: $branches, style: BranchListStyle(), clearButton: true)
-            }
-            
-            FormSection(
-                header: "Locations",
-                footer: "Corresponding locations on Github."
-            ) {
-                FormRow(label: "repo") {
-                    HStack(alignment: .firstTextBaseline) {
-                        Text("https://github.com/\(trimmedOwner)/\(trimmedName)").bold()
-                        Spacer()
-                        Button(action: openRepo) {
-                            SystemImage("arrowshape.turn.up.right.circle")
+        return
+            SheetView(title, shortTitle: shortTitle, cancelAction: dismiss, doneAction: done) {
+                Form {
+                    FormSection(
+                        header: "Details",
+                        footer: "Enter the name and owner of the repository, and the name of the workflow file to test. Enter a list of specific branches to test, or leave blank to just test the default branch."
+                    ) {
+                        FormFieldRow(label: "name", placeholder: "github repo name", variable: $name, style: detailStyle, clearButton: true)
+                        FormFieldRow(label: "owner", placeholder: "github user or organisation", variable: $owner, style: detailStyle, clearButton: true)
+                        FormFieldRow(label: "workflow", placeholder: "Tests.yml", variable: $workflow, style: detailStyle, clearButton: true)
+                        FormFieldRow(label: "branches", placeholder: "branch1, branch2, …", variable: $branches, style: BranchListStyle(), clearButton: true)
+                    }
+                    
+                    FormSection(
+                        header: "Locations",
+                        footer: "Corresponding locations on Github."
+                    ) {
+                        FormRow(label: "repo") {
+                            HStack(alignment: .firstTextBaseline) {
+                                Text("https://github.com/\(trimmedOwner)/\(trimmedName)")
+                                Spacer()
+                                LinkButton(url: updatedRepo.githubURL(for: .repo))
+                            }
+                        }
+                        
+                        FormRow(label: "status") {
+                            HStack(alignment: .firstTextBaseline) {
+                                Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions?query=workflow%3A\(trimmedWorkflow)")
+                                Spacer()
+                                LinkButton(url: updatedRepo.githubURL(for: .workflow))
+                            }
+                        }
+                        
+                        if !localPath.isEmpty {
+                            FormRow(label: "local") {
+                                Text(localPath)
+                            }
                         }
                     }
                 }
-                
-                FormRow(label: "status") {
-                    HStack(alignment: .firstTextBaseline) {
-                        Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions?query=workflow%3A\(trimmedWorkflow)").bold()
-                        Spacer()
-                        Button(action: openWorkflow) {
-                            SystemImage("arrowshape.turn.up.right.circle")
-                        }
-                    }
-                }
-                
-                if !localPath.isEmpty {
-                    FormRow(label: "local") {
-                        Text(localPath)
-                    }
-                }
             }
+            .environmentObject(viewState.formStyle)
+            .onAppear() {
+                viewState.host.refreshController?.pause()
+                self.load()
             }
-        }
-        .padding()
-        .environmentObject(viewState.formStyle)
-        .onAppear() {
-            viewState.host.refreshController?.pause()
-            self.load()
-        }
     }
     
-    func openRepo() {
-        viewState.host.openGithub(with: updatedRepo, at: .repo)
-    }
-    
-    func openWorkflow() {
-        viewState.host.openGithub(with: updatedRepo, at: .workflow)
-    }
-
     var trimmedWorkflow: String {
         var stripped = workflow.trimmingCharacters(in: .whitespaces)
         if let range = stripped.range(of: ".yml") {

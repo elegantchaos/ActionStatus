@@ -11,7 +11,7 @@ public protocol ApplicationHost {
     var refreshController: RefreshController? { get }
     func saveState()
     func save(output: Generator.Output)
-    func openGithub(with repo: Repo, at location: Repo.GithubLocation)
+    func open(url: URL)
 }
 
 extension ApplicationHost {
@@ -27,7 +27,6 @@ extension ApplicationHost {
         
     }
     
-    func openGithub(with repo: Repo, at location: Repo.GithubLocation) {
-        
+    func open(url: URL) {
     }
 }
