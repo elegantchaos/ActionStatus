@@ -20,7 +20,7 @@ public struct RepoListView: View {
             if viewState.settings.isEditing {
                 List {
                     ForEach(status.sortedRepos) { repo in
-                        RepoCellView(repo: repo, selectable: true)
+                        RepoCellView(repoID: repo.id, selectable: true)
                     }
                     .onDelete(perform: delete)
                 }
@@ -28,7 +28,7 @@ public struct RepoListView: View {
                 ScrollView {
                     LazyVGrid(columns: viewState.repoGridColumns, spacing: 0) {
                         ForEach(status.sortedRepos) { repo in
-                            RepoCellView(repo: repo, selectable: false)
+                            RepoCellView(repoID: repo.id, selectable: false)
                         }
                     }.padding()
                 }
