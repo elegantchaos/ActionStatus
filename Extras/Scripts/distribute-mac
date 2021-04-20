@@ -5,7 +5,7 @@
 #  All code (c) 2020 - present day, Elegant Chaos Limited.
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-source Dependencies/ReleaseTools/Scripts/make-tools
+source "bootstrap-tools"
 
 echo "***************"
 echo "Releasing macOS"
@@ -13,10 +13,10 @@ echo "***************"
 
 set -o pipefail
 
-rt set scheme ActionStatus-Sparkle --platform macOS
-rt archive --xcconfig Sources/ActionStatus/Resources/IncludeSparkle.xcconfig 2>/dev/null | xcpretty
-rt export --distribution true
-rt notarize
-rt wait
-rt compress
-rt publish
+$RT set scheme ActionStatus-Sparkle --platform macOS
+$RT archive --xcconfig Sources/ActionStatus/Resources/IncludeSparkle.xcconfig 2>/dev/null | xcpretty
+$RT export --distribution
+$RT notarize
+$RT wait
+$RT compress
+$RT publish
