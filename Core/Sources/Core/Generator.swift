@@ -161,20 +161,20 @@ public class Generator {
      }
 
     public func generateWorkflow(for repo: Repo, application: BundleInfo) -> Output? {
-        var compilers = enabledCompilers(for: repo)
-        if repo.settings.options.contains("firstlast") && (compilers.count > 0) {
-            let first = compilers.first!
-            let last = compilers.last!
-            compilers = [first]
-            if first != last {
-                compilers.append(last)
+        let supportedCompilers = enabledCompilers(for: repo)
+        var compilersToTest = supportedCompilers
+        if repo.settings.options.contains("firstlast") && (supportedCompilers.count > 0) {
+            compilersToTest = [supportedCompilers.first!]
+            let last = supportedCompilers.last!
+            if !compilersToTest.contains(last) {
+                compilersToTest.append(last)
             }
         }
         
         let platforms = enabledPlatforms(for: repo)
 
-        let source = generateYAML(for: repo, platforms: platforms, compilers: compilers, application: application)
-        let (header, delimiter) = generateHeader(for: repo, platforms: platforms, compilers: compilers, application: application)
+        let source = generateYAML(for: repo, platforms: platforms, compilers: compilersToTest, application: application)
+        let (header, delimiter) = generateHeader(for: repo, platforms: platforms, compilers: supportedCompilers, application: application)
         
         guard let data = source.data(using: .utf8) else { return nil }
         return Output(repo: repo, source: source, data: data, header: header, delimiter: delimiter)
