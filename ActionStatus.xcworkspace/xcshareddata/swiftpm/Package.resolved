@@ -20,6 +20,15 @@
         }
       },
       {
+        "package": "CollectionExtensions",
+        "repositoryURL": "https://github.com/elegantchaos/CollectionExtensions.git",
+        "state": {
+          "branch": null,
+          "revision": "203421ff555981e6e9545e3a0d62a82b3c896deb",
+          "version": "1.1.4"
+        }
+      },
+      {
         "package": "DataFetcher",
         "repositoryURL": "https://github.com/elegantchaos/DataFetcher.git",
         "state": {
@@ -80,15 +89,6 @@
           "branch": null,
           "revision": "6bda5a45a2f687a82a0fbb002bee8ad31e44f478",
           "version": "1.1.0"
-        }
-      },
-      {
-        "package": "UserDefaultsExtensions",
-        "repositoryURL": "https://github.com/elegantchaos/UserDefaultsExtensions.git",
-        "state": {
-          "branch": null,
-          "revision": "bab30cfe8908918fa295460e51c5e80ad9fac7b6",
-          "version": "1.0.1"
         }
       },
       {
