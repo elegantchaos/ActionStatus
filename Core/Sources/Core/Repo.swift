@@ -31,7 +31,7 @@ extension Comparable {
 }
 
 public struct Repo: Identifiable, Equatable, Hashable {
-    public enum State: UInt, Codable, Comparable {
+    public enum State: UInt, Codable, Comparable, CaseIterable {
         case unknown = 0
         case passing = 1
         case failing = 2
@@ -106,7 +106,6 @@ public struct Repo: Identifiable, Equatable, Hashable {
 
     }
     
-
     mutating public func remember(url: URL, forDevice device: String) {
         paths[device] = url.absoluteURL.path
         storeBookmark(for: url)
