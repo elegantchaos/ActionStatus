@@ -12,10 +12,11 @@ struct RepoCellView: View {
     @EnvironmentObject var sheetController: SheetController
     @EnvironmentObject var model: Model
 
-    let repo: Repo
+    let repoID: UUID
     let selectable: Bool
     
     var body: some View {
+        let repo = model.repo(withIdentifier: repoID)!
         return HStack(alignment: .center, spacing: viewState.padding) {
             if !selectable {
                 SystemImage(repo.badgeName)
@@ -34,12 +35,12 @@ struct RepoCellView: View {
             }
         }
         .font(viewState.settings.displaySize.font)
-        .shim.contextMenu() { makeContentMenu(for: repo) }
+        .shim.contextMenu() { makeContextMenu(for: repo) }
         .shim.onTapGesture(perform: handleEdit)
         .padding(0)
     }
     
-    func makeContentMenu(for repo: Repo) -> some View {
+    func makeContextMenu(for repo: Repo) -> some View {
         VStack {
             Button(action: {
                 self.sheetController.show() {
@@ -68,22 +69,38 @@ struct RepoCellView: View {
             }) {
                 Text("Generate Workflow…").accessibility(identifier: "generateLabel")
             }.accessibility(identifier: "generate")
+            
+            #if DEBUG
+            Button(action: handleToggleState) {
+                Text("DEBUG: Advance State")
+            }
+            #endif
         }
     }
     
     func handleShowRepo() {
-        viewState.host.open(url: repo.githubURL(for: .repo))
+        if let repo = model.repo(withIdentifier: repoID) {
+            viewState.host.open(url: repo.githubURL(for: .repo))
+        }
     }
     
     func handleShowWorkflow() {
-        viewState.host.open(url: repo.githubURL(for: .workflow))
+        if let repo = model.repo(withIdentifier: repoID) {
+            viewState.host.open(url: repo.githubURL(for: .workflow))
+        }
     }
     
     func handleEdit() {
-        if selectable {
+        if selectable, let repo = model.repo(withIdentifier: repoID) {
             sheetController.show() {
                 EditView(repo: repo)
             }
+        }
+    }
+    
+    func handleToggleState() {
+        if let repo = model.repo(withIdentifier: repoID), let newState = Repo.State(rawValue: (repo.state.rawValue + 1) % UInt(Repo.State.allCases.count)) {
+            model.update(repoWithID: repoID, state: newState)
         }
     }
 }
