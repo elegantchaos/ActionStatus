@@ -41,6 +41,7 @@ public class Generator {
     public let general = [
         Option("build", name: "Perform Build"),
         Option("test", name: "Run Tests"),
+        Option("firstlast", name: "Use Oldest and Newest Swift Only"),
         Option("notify", name: "Post Notifications"),
         Option("upload", name: "Upload Logs"),
         Option("header", name: "Add a header to README.md")
@@ -160,7 +161,16 @@ public class Generator {
      }
 
     public func generateWorkflow(for repo: Repo, application: BundleInfo) -> Output? {
-        let compilers = enabledCompilers(for: repo)
+        var compilers = enabledCompilers(for: repo)
+        if repo.settings.options.contains("firstlast") && (compilers.count > 0) {
+            let first = compilers.first!
+            let last = compilers.last!
+            compilers = [first]
+            if first != last {
+                compilers.append(last)
+            }
+        }
+        
         let platforms = enabledPlatforms(for: repo)
 
         let source = generateYAML(for: repo, platforms: platforms, compilers: compilers, application: application)
