@@ -51,27 +51,28 @@ public class OctoidRefreshController: RefreshController {
     
     func update(repo: Repo, with run: WorkflowRun) {
         refreshChannel.log("\(repo.name) status: \(run.status), conclusion: \(run.conclusion ?? "")")
-        var updated = repo
+        let state: Repo.State
+        
         switch run.status {
             case "queued":
-                updated.state = .queued
+                state = .queued
             case "in_progress":
-                updated.state = .running
+                state = .running
             case "completed":
                 switch run.conclusion {
                     case "success":
-                        updated.state = .passing
+                        state = .passing
                     case "failure":
-                        updated.state = .failing
+                        state = .failing
                     default:
-                        updated.state = .unknown
+                        state = .unknown
                 }
             default:
-                updated.state = .unknown
+                state = .unknown
         }
 
         DispatchQueue.main.async {
-            self.model.update(repo: updated)
+            self.model.update(repoWithID: repo.id, state: state)
         }
     }
 }

@@ -34,7 +34,8 @@ public class Model: ObservableObject {
 
     public init(_ repos: [Repo], store: NSUbiquitousKeyValueStore = NSUbiquitousKeyValueStore.default) {
         self.store = store
-        
+        store.synchronize()
+
         var index: [UUID:Repo] = [:]
         var identifiers: [UUID] = []
         for repo in repos {
@@ -52,7 +53,6 @@ public class Model: ObservableObject {
     public func load(fromDefaultsKey key: String) {
         modelChannel.log("Loading from key \(key)")
         let decoder = Repo.dictionaryDecoder
-        store.synchronize()
         if let repoIDs = store.array(forKey: key) as? Array<String> {
             var loadedRepos: [UUID:Repo] = [:]
             for repoID in repoIDs {
@@ -63,6 +63,8 @@ public class Model: ObservableObject {
                     } catch {
                         modelChannel.log("Failed to restore repo data from \(dict).\n\nError:\(error)")
                     }
+                } else {
+                    modelChannel.log("Missing repo data for \(repoID).")
                 }
             }
             items = loadedRepos
@@ -90,6 +92,7 @@ public class Model: ObservableObject {
             let removedIDs = Set(oldRepoIDs).subtracting(Set(repoIDs))
             for removedID in removedIDs {
                 store.removeObject(forKey: removedID)
+                modelChannel.log("Removed repo data for \(removedID)")
             }
         }
         
@@ -104,6 +107,13 @@ public class Model: ObservableObject {
     
     public func repos(sortedBy mode: SortMode) -> [Repo] {
         return mode.sort(items.values)
+    }
+    
+    public func update(repoWithID id: UUID, state: Repo.State) {
+        if var repo = items[id] {
+            repo.state = state
+            items[id] = repo
+        }
     }
     
     public func update(repo: Repo, addIfMissing: Bool = true) {

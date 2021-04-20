@@ -41,15 +41,10 @@ struct GenerateView: View {
             }
         }
         .onAppear(perform: onAppear)
-        .onDisappear(perform: onDisappear)
     }
     
     func onAppear() {
         fetchSettings()
-    }
-    
-    func onDisappear() {
-        storeSettings()
     }
     
     func onCancel() {
