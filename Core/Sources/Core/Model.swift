@@ -111,6 +111,8 @@ public class Model: ObservableObject {
     
     public func update(repoWithID id: UUID, state: Repo.State) {
         if var repo = items[id] {
+            modelChannel.log("Updated state of \(repo) to \(state)")
+            objectWillChange.send()
             repo.state = state
             items[id] = repo
         }
