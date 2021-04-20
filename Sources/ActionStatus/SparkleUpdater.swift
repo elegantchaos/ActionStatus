@@ -21,7 +21,7 @@ class SparkleUpdater: Updater {
     }
     
     override func installUpdate() {
-        respondToUpdate(choice: .write)
+        respondToUpdate(choice: .update)
     }
     
     override func skipUpdate() {
