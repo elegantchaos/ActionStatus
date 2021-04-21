@@ -71,8 +71,10 @@ struct RepoCellView: View {
             }.accessibility(identifier: "generate")
             
             #if DEBUG
-            Button(action: handleToggleState) {
-                Text("DEBUG: Advance State")
+            if !ProcessInfo.processInfo.environment.isTestingUI {
+                Button(action: handleToggleState) {
+                    Text("DEBUG: Advance State")
+                }
             }
             #endif
         }
