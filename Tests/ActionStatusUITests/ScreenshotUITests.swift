@@ -6,11 +6,18 @@
 import XCTest
 import CoreServices
 import Core
+import AppKit
 
 class ScreenshotUITests: XCTestCase {
 
     override func setUp() {
         continueAfterFailure = false
+    }
+
+    var screenshotsURL: URL {
+        let url = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("Screenshots")
+        try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: [:])
+        return url
     }
 
     func cleanScreenshot() -> XCUIScreenshot {
@@ -27,15 +34,23 @@ class ScreenshotUITests: XCTestCase {
     
     func makeScreenShot(_ name: String) {
         let screenshot = cleanScreenshot()
-        let attachment = XCTAttachment(uniformTypeIdentifier: kUTTypePNG as String, name: name, payload: screenshot.pngRepresentation, userInfo: [:])
+        let data = screenshot.pngRepresentation
+        let attachment = XCTAttachment(uniformTypeIdentifier: kUTTypePNG as String, name: name, payload: data, userInfo: [:])
         attachment.lifetime = .keepAlways
         add(attachment)
+        
+        
+        let url = screenshotsURL.appendingPathComponent(name).appendingPathExtension("png")
+        try? data.write(to: url)
     }
     
     func testMakeScreenshots() {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
         app.launchEnvironment.isTestingUI = true
+        app.launchEnvironment["UITestScreen"] = ProcessInfo.processInfo.environment["UITestScreen"]
+        app.launchEnvironment["Screenshots"] = screenshotsURL.absoluteString
+
         app.launch()
         app.hideOtherApplications()
 
@@ -79,8 +94,9 @@ class ScreenshotUITests: XCTestCase {
         status.tap()
         makeScreenShot("05-status")
         #endif
-        
-        app.unhideApplications()
+
+//        app.unhideApplications()
+        app.quit()
     }
     
     func testElements() {
@@ -139,6 +155,16 @@ extension XCUIApplication {
         }
         #endif
     }
+
+    func quit() {
+        #if os(macOS) || targetEnvironment(macCatalyst)
+        let item = menuItems["handleQuit:"]
+        if item.waitForExistence(timeout: 1.0) {
+            item.tap()
+        }
+        #endif
+    }
+
 }
 
 /*
