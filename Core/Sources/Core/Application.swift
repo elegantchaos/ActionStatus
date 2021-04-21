@@ -188,7 +188,9 @@ open class Application: BasicApplication, ApplicationHost {
     }
     
     func resetRefresh() {
-        refreshController = makeRefreshController()
+        if !ProcessInfo.processInfo.environment.isTestingUI {
+            refreshController = makeRefreshController()
+        }
     }
     
     public func open(url: URL) {
