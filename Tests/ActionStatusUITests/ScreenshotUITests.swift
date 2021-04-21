@@ -35,11 +35,6 @@ class ScreenshotUITests: XCTestCase {
     func makeScreenShot(_ name: String) {
         let screenshot = cleanScreenshot()
         let data = screenshot.pngRepresentation
-        let attachment = XCTAttachment(uniformTypeIdentifier: kUTTypePNG as String, name: name, payload: data, userInfo: [:])
-        attachment.lifetime = .keepAlways
-        add(attachment)
-        
-        
         let url = screenshotsURL.appendingPathComponent(name).appendingPathExtension("png")
         try? data.write(to: url)
     }
