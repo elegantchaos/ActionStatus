@@ -144,15 +144,11 @@ extension AppKitBridgeSingleton: AppKitBridge {
             mainWindow = window
             
             // if UI testing, force the window to a known position
+            let environment = ProcessInfo.processInfo.environment
             let screens = NSScreen.screens
-            if let screen = ProcessInfo.processInfo.environment["UITestScreen"], let index = Int(screen), index < screens.count {
+            if let screen = environment["UITestScreen"], let index = Int(screen), index < screens.count {
                 let frame = screens[index].frame
                 window.setFrameTopLeftPoint(CGPoint(x: frame.minX + 64.0, y: frame.maxY - 64.0))
-            }
-
-            if let testingFlag = ProcessInfo.processInfo.environment["UITesting"], testingFlag == "YES" {
-                let screen = NSScreen.screens.last!.frame
-                window.setFrameTopLeftPoint(CGPoint(x: screen.minX + 64.0, y: screen.maxY - 64.0))
             }
         }
     }
@@ -248,6 +244,11 @@ extension AppKitBridgeSingleton: NSMenuDelegate {
     }
 
     @IBAction func handleQuit(_ sender: Any) {
+        // if we've been given a screenshot folder, reveal it in the finder
+        if let string = ProcessInfo.processInfo.environment["Screenshots"], let url = URL(string: string) {
+            NSWorkspace.shared.open(url)
+        }
+        
         NSApp.terminate(self)
     }
 
