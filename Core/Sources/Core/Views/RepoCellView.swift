@@ -16,28 +16,31 @@ struct RepoCellView: View {
     let selectable: Bool
     
     var body: some View {
-        let repo = model.repo(withIdentifier: repoID)!
-        return HStack(alignment: .center, spacing: viewState.padding) {
-            if !selectable {
-                SystemImage(repo.badgeName)
-                    .foregroundColor(repo.statusColor)
-            }
-            Text(repo.name)
-                .allowsTightening(true)
-                .truncationMode(.middle)
-                .lineLimit(1)
-            if selectable {
-                Spacer()
-                EditButton(repo: repo)
-                LinkButton(url: repo.githubURL(for: .repo))
-            } else {
-                Spacer()
+        Group {
+            if let repo = model.repo(withIdentifier: repoID) {
+                HStack(alignment: .center, spacing: viewState.padding) {
+                    if !selectable {
+                        SystemImage(repo.badgeName)
+                            .foregroundColor(repo.statusColor)
+                    }
+                    Text(repo.name)
+                        .allowsTightening(true)
+                        .truncationMode(.middle)
+                        .lineLimit(1)
+                    if selectable {
+                        Spacer()
+                        EditButton(repo: repo)
+                        LinkButton(url: repo.githubURL(for: .repo))
+                    } else {
+                        Spacer()
+                    }
+                }
+                .font(viewState.settings.displaySize.font)
+                .shim.contextMenu() { makeContextMenu(for: repo) }
+                .shim.onTapGesture(perform: handleEdit)
+                .padding(0)
             }
         }
-        .font(viewState.settings.displaySize.font)
-        .shim.contextMenu() { makeContextMenu(for: repo) }
-        .shim.onTapGesture(perform: handleEdit)
-        .padding(0)
     }
     
     func makeContextMenu(for repo: Repo) -> some View {
