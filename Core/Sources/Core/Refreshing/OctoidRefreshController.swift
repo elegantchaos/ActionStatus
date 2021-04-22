@@ -41,10 +41,8 @@ public class OctoidRefreshController: RefreshController {
     
     func update(repo: Repo, message: Message) {
         refreshChannel.log("Error for \(repo.name) was: \(message.message)")
-        var updated = repo
-        updated.state = .unknown
         DispatchQueue.main.async {
-            self.model.update(repo: updated)
+            self.model.update(repoWithID: repo.id, state: .unknown)
         }
 
     }
