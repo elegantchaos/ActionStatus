@@ -11,22 +11,22 @@ public struct RepoGridView: View {
     @EnvironmentObject var viewState: ViewState
     @EnvironmentObject var status: RepoState
     
-    public init() {
-    }
+    let namespace: Namespace.ID
     
     public var body: some View {
-        ScrollView {
+        ScrollView(.vertical) {
             LazyVGrid(columns: viewState.repoGridColumns, spacing: 4) {
                 ForEach(status.sortedRepos) { repo in
-                    RepoCellView(repoID: repo.id, selectable: false)
+                    RepoCellView(repo: repo, selectable: false, namespace: namespace)
                 }
-            }.padding()
+            }
         }
+        .padding()
     }
 }
 
-struct RepoGridView_Previews: PreviewProvider {
-    static var previews: some View {
-        return PreviewContext().inject(into: RepoGridView())
-    }
-}
+//struct RepoGridView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        return PreviewContext().inject(into: RepoGridView())
+//    }
+//}

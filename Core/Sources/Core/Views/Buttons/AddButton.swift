@@ -17,7 +17,8 @@ public struct AddButton: View {
     
     public var body: some View {
         Button(action: addRepo ) {
-            Image(systemName: viewState.addRepoIcon)
+            Text("Add")
+//            Image(systemName: viewState.addRepoIcon)
         }
         .accessibility(identifier: "addButton")
         .foregroundColor(.black)

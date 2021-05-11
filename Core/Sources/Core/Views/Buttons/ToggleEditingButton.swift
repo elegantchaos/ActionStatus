@@ -13,11 +13,15 @@ public struct ToggleEditingButton: View {
     }
     
     public var body: some View {
-        Button(action: toggleEditing) {
-            SystemImage(viewState.settings.isEditing ? viewState.stopEditingIcon : viewState.startEditingIcon).frame(width: 32, height: 32, alignment: .center)
-                .foregroundColor(.black)
+        HStack {
+            Button(action: toggleEditing) {
+                Text(viewState.settings.isEditing ? "Done" : "Edit")
+//                Image(systemName: viewState.settings.isEditing ? viewState.stopEditingIcon : viewState.startEditingIcon)
+            }
+            .accentColor(.black)
+            .font(.footnote)
+            .accessibility(identifier: "toggleEditing")
         }
-        .accessibility(identifier: "toggleEditing")
     }
     
     func toggleEditing() {

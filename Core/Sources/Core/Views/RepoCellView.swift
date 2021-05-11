@@ -11,16 +11,13 @@ struct RepoCellView: View {
     @EnvironmentObject var viewState: ViewState
     @EnvironmentObject var sheetController: SheetController
     @EnvironmentObject var model: Model
-    
-    let repoID: UUID
+
+    let repo: Repo
     let selectable: Bool
-    
+    let namespace: Namespace.ID
+
     var body: some View {
-        Group {
-            if let repo = model.repo(withIdentifier: repoID) {
-                cellWithMenu(for: repo)
-            }
-        }
+        cellWithMenu(for: repo)
     }
     
     func cell(for repo: Repo) -> some View {
@@ -30,10 +27,12 @@ struct RepoCellView: View {
                     SystemImage(repo.badgeName)
                         .foregroundColor(repo.statusColor)
                 }
+
                 Text(repo.name)
                     .allowsTightening(true)
                     .truncationMode(.middle)
                     .lineLimit(1)
+
                 if selectable {
                     Spacer()
                     EditButton(repo: repo)
@@ -43,12 +42,12 @@ struct RepoCellView: View {
                     Spacer()
                 }
             }
+            .matchedGeometryEffect(id: repo.id, in: namespace)
         }
         .padding(0)
         .font(viewState.settings.displaySize.font)
         .foregroundColor(.black)
         .buttonStyle(PlainButtonStyle())
-        .id(repo.id)
     }
     
     func cellWithMenu(for repo: Repo) -> some View {
@@ -94,42 +93,32 @@ struct RepoCellView: View {
     }
     
     func handleShowRepo() {
-        if let repo = model.repo(withIdentifier: repoID) {
-            viewState.host.open(url: repo.githubURL(for: .repo))
-        }
+        viewState.host.open(url: repo.githubURL(for: .repo))
     }
     
     func handleShowWorkflow() {
-        if let repo = model.repo(withIdentifier: repoID) {
-            viewState.host.open(url: repo.githubURL(for: .workflow))
-        }
+        viewState.host.open(url: repo.githubURL(for: .workflow))
     }
     
     func handleEdit() {
-        if let repo = model.repo(withIdentifier: repoID) {
-            sheetController.show() {
-                EditView(repo: repo)
-            }
+        sheetController.show() {
+            EditView(repo: repo)
         }
     }
     
     func handleGenerate() {
-        if let repo = model.repo(withIdentifier: repoID) {
-            sheetController.show() {
-                GenerateView(repoID: repo.id)
-            }
+        sheetController.show() {
+            GenerateView(repoID: repo.id)
         }
     }
     
     func handleDelete() {
-        if let repo = model.repo(withIdentifier: repoID) {
-            model.remove(reposWithIDs: [repo.id])
-        }
+        model.remove(reposWithIDs: [repo.id])
     }
     
     func handleToggleState() {
-        if let repo = model.repo(withIdentifier: repoID), let newState = Repo.State(rawValue: (repo.state.rawValue + 1) % UInt(Repo.State.allCases.count)) {
-            model.update(repoWithID: repoID, state: newState)
+        if let newState = Repo.State(rawValue: (repo.state.rawValue + 1) % UInt(Repo.State.allCases.count)) {
+            model.update(repoWithID: repo.id, state: newState)
         }
     }
     

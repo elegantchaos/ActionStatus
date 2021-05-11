@@ -12,13 +12,12 @@ public struct RepoListView: View {
     @EnvironmentObject var viewState: ViewState
     @EnvironmentObject var status: RepoState
     
-    public init() {
-    }
+    let namespace: Namespace.ID
     
     public var body: some View {
-        List {
+        List { 
             ForEach(status.sortedRepos) { repo in
-                RepoCellView(repoID: repo.id, selectable: true)
+                RepoCellView(repo: repo, selectable: true, namespace: namespace)
             }
             .onDelete(perform: delete)
         }
@@ -29,14 +28,12 @@ public struct RepoListView: View {
     func delete(at offsets: IndexSet) {
         let ids = status.repoIDs(atOffets: offsets)
         model.remove(reposWithIDs: ids)
-        viewState.host.saveState()
     }
-    
-    
 }
 
-struct RepoListView_Previews: PreviewProvider {
-    static var previews: some View {
-        return PreviewContext().inject(into: RepoListView())
-    }
-}
+//
+//struct RepoListView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        return PreviewContext().inject(into: RepoListView())
+//    }
+//}

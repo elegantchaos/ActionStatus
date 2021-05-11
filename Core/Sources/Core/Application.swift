@@ -100,7 +100,7 @@ open class Application: BasicApplication, ApplicationHost {
                 restoreState()
 
                 observers.append(UserDefaults.standard.onChanged {
-                    print("user defaults changed")
+                    monitoringChannel.log("user defaults changed")
                     self.loadSettings()
                     self.updateRepoState()
                 })

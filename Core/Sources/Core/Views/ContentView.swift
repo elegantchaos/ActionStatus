@@ -13,7 +13,8 @@ public struct ContentView: View {
     @EnvironmentObject var model: Model
     @EnvironmentObject var viewState: ViewState
     @EnvironmentObject var sheetController: SheetController
-
+    @Namespace() var defaultNamespace
+    
     public init() {
     }
     
@@ -24,12 +25,10 @@ public struct ContentView: View {
                 VStack(alignment: .center) {
                     if model.count == 0 {
                         NoReposView()
-                    }
-                    
-                    if viewState.settings.isEditing {
-                        RepoListView()
+                    } else if viewState.settings.isEditing {
+                        RepoListView(namespace: defaultNamespace)
                     } else {
-                        RepoGridView()
+                        RepoGridView(namespace: defaultNamespace)
                     }
                     
                     Spacer()
@@ -38,7 +37,7 @@ public struct ContentView: View {
                 .toolbar {
                         ToolbarItem(placement: .navigationBarLeading) {
                             if viewState.settings.isEditing {
-                            AddButton()
+                                AddButton()
                             }
                         }
                     
@@ -53,6 +52,7 @@ public struct ContentView: View {
                 }
             }
             .navigationViewStyle(StackNavigationViewStyle())
+            
         }
         .onAppear(perform: onAppear)
     }
