@@ -11,76 +11,85 @@ struct RepoCellView: View {
     @EnvironmentObject var viewState: ViewState
     @EnvironmentObject var sheetController: SheetController
     @EnvironmentObject var model: Model
-
+    
     let repoID: UUID
     let selectable: Bool
     
     var body: some View {
         Group {
             if let repo = model.repo(withIdentifier: repoID) {
-                HStack(alignment: .center, spacing: viewState.padding) {
-                    if !selectable {
-                        SystemImage(repo.badgeName)
-                            .foregroundColor(repo.statusColor)
-                    }
-                    Text(repo.name)
-                        .allowsTightening(true)
-                        .truncationMode(.middle)
-                        .lineLimit(1)
-                    if selectable {
-                        Spacer()
-                        EditButton(repo: repo)
-                        LinkButton(url: repo.githubURL(for: .repo))
-                    } else {
-                        Spacer()
-                    }
-                }
-                .font(viewState.settings.displaySize.font)
-                .shim.contextMenu() { makeContextMenu(for: repo) }
-                .shim.onTapGesture(perform: handleEdit)
-                .padding(0)
+                cellWithMenu(for: repo)
             }
         }
     }
     
-    func makeContextMenu(for repo: Repo) -> some View {
-        VStack {
-            Button(action: {
-                self.sheetController.show() {
-                    EditView(repo: repo)
-                }
-            }) {
-                Text("Edit…")
+    func cell(for repo: Repo) -> some View {
+        return Button(action: handleEdit) {
+            HStack(alignment: .center, spacing: viewState.padding) {
+            if !selectable {
+                SystemImage(repo.badgeName)
+                    .foregroundColor(repo.statusColor)
             }
-            
-            Button(action: { self.model.remove(reposWithIDs: [repo.id]) }) {
-                Text("Delete")
+            Text(repo.name)
+                .allowsTightening(true)
+                .truncationMode(.middle)
+                .lineLimit(1)
+            if selectable {
+                Spacer()
+                EditButton(repo: repo)
+                GenerateButton(repo: repo)
+                LinkButton(url: repo.githubURL(for: .repo))
+            } else {
+                Spacer()
             }
-            
-            Button(action: handleShowRepo) {
-                Text("Show Repository In Github…")
             }
-            
-            Button(action: handleShowWorkflow) {
-                Text("Show Workflow In Github…")
-            }
-            
-            Button(action: {
-                self.sheetController.show() {
-                    GenerateView(repoID: repo.id)
-                }
-            }) {
-                Text("Generate Workflow…").accessibility(identifier: "generateLabel")
-            }.accessibility(identifier: "generate")
-            
-            #if DEBUG
-            if !ProcessInfo.processInfo.environment.isTestingUI {
-                Button(action: handleToggleState) {
-                    Text("DEBUG: Advance State")
-                }
-            }
-            #endif
         }
+        .padding(0)
+        .font(viewState.settings.displaySize.font)
+        .foregroundColor(.black)
+        .buttonStyle(PlainButtonStyle())
+    }
+    
+    func cellWithMenu(for repo: Repo) -> some View {
+        return cell(for: repo)
+            .contextMenu(
+                ContextMenu {
+                    Text("\(repo.name)")
+                    
+                    Button(action: handleEdit) {
+                        Label("Settings…", systemImage: viewState.editButtonIcon)
+                    }
+                    
+                    Button(action: handleGenerate) {
+                        Label("Workflow…", systemImage: viewState.generateButtonIcon)
+                            .accessibility(identifier: "generateLabel")
+                    }
+                    .accessibility(identifier: "generate")
+                    
+                    Button(action: handleShowRepo) {
+                        Label("Open In Github…", systemImage: viewState.linkIcon)
+                    }
+                    
+                    Button(action: handleShowWorkflow) {
+                        Label("Open Workflow In Github…", systemImage: viewState.linkIcon)
+                    }
+                    
+                    Divider()
+                    
+                    Button(action: handleDelete) {
+                        Label("Delete", systemImage: viewState.deleteRepoIcon)
+                    }
+                    #if DEBUG
+                    
+                    if !ProcessInfo.processInfo.environment.isTestingUI {
+                        Divider()
+                        Button(action: handleToggleState) {
+                            Text("DEBUG: Advance State")
+                        }
+                    }
+                    #endif
+                }
+            )
     }
     
     func handleShowRepo() {
@@ -96,10 +105,24 @@ struct RepoCellView: View {
     }
     
     func handleEdit() {
-        if selectable, let repo = model.repo(withIdentifier: repoID) {
+        if let repo = model.repo(withIdentifier: repoID) {
             sheetController.show() {
                 EditView(repo: repo)
             }
+        }
+    }
+    
+    func handleGenerate() {
+        if let repo = model.repo(withIdentifier: repoID) {
+            sheetController.show() {
+                GenerateView(repoID: repo.id)
+            }
+        }
+    }
+    
+    func handleDelete() {
+        if let repo = model.repo(withIdentifier: repoID) {
+            model.remove(reposWithIDs: [repo.id])
         }
     }
     
@@ -108,4 +131,5 @@ struct RepoCellView: View {
             model.update(repoWithID: repoID, state: newState)
         }
     }
+    
 }

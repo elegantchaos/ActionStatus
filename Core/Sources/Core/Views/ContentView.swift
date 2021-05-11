@@ -25,7 +25,11 @@ public struct ContentView: View {
                         NoReposView()
                     }
                     
-                    RepoListView().padding(.top, viewState.padding)
+                    if viewState.settings.isEditing {
+                        RepoListView()
+                    } else {
+                        RepoGridView()
+                    }
                     
                     Spacer()
                     FooterView()

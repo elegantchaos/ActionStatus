@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "Bundles",
+        "repositoryURL": "https://github.com/elegantchaos/Bundles.git",
+        "state": {
+          "branch": null,
+          "revision": "18a0b17452f464323206b540dadad3d9aa91f167",
+          "version": "1.0.8"
+        }
+      },
+      {
         "package": "Coercion",
         "repositoryURL": "https://github.com/elegantchaos/Coercion.git",
         "state": {

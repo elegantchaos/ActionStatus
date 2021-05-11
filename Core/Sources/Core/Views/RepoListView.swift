@@ -16,23 +16,11 @@ public struct RepoListView: View {
     }
     
     public var body: some View {
-        VStack {
-            if viewState.settings.isEditing {
-                List {
-                    ForEach(status.sortedRepos) { repo in
-                        RepoCellView(repoID: repo.id, selectable: true)
-                    }
-                    .onDelete(perform: delete)
-                }
-            } else {
-                ScrollView {
-                    LazyVGrid(columns: viewState.repoGridColumns, spacing: 0) {
-                        ForEach(status.sortedRepos) { repo in
-                            RepoCellView(repoID: repo.id, selectable: false)
-                        }
-                    }.padding()
-                }
+        List {
+            ForEach(status.sortedRepos) { repo in
+                RepoCellView(repoID: repo.id, selectable: true)
             }
+            .onDelete(perform: delete)
         }
         .environment(\.defaultMinListRowHeight, viewState.settings.displaySize.rowHeight)
         .bindEditing(to: $viewState.settings.isEditing)

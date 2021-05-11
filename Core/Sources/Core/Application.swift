@@ -15,6 +15,7 @@ import SwiftUIExtensions
 import UserDefaultsExtensions
 
 public let settingsChannel = Channel("Settings")
+public let monitoringChannel = Channel("Monitoring")
 
 open class Application: BasicApplication, ApplicationHost {
     override open class var shared: Application {
@@ -109,7 +110,7 @@ open class Application: BasicApplication, ApplicationHost {
                         .objectWillChange
                         .debounce(for: 0.1, scheduler: RunLoop.main)
                         .sink {
-                            print("model changed")
+                            monitoringChannel.log("model changed")
                             self.saveState()
                             self.updateRepoState()
                         })
@@ -119,7 +120,7 @@ open class Application: BasicApplication, ApplicationHost {
                         .objectWillChange
                         .debounce(for: 0.1, scheduler: RunLoop.main)
                         .sink() { value in
-                            print("view state changed")
+                            monitoringChannel.log("view state changed")
                             self.saveSettings()
                             self.updateRepoState()
                         })
