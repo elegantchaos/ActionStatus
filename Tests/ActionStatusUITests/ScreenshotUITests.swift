@@ -6,10 +6,14 @@
 import XCTest
 import CoreServices
 import Core
+
+#if canImport(AppKit)
 import AppKit
+#endif
 
 class ScreenshotUITests: XCTestCase {
-
+    var urls: [URL] = []
+    
     override func setUp() {
         continueAfterFailure = false
     }
@@ -23,11 +27,15 @@ class ScreenshotUITests: XCTestCase {
     func cleanScreenshot() -> XCUIScreenshot {
         let screens = XCUIScreen.screens
         let screen: XCUIScreen
+        #if targetEnvironment(macCatalyst)
         if let string = ProcessInfo.processInfo.environment["UITestScreen"], let index = Int(string), index < screens.count {
             screen = screens[index]
         } else {
             screen = screens.last!
         }
+        #else
+        screen = screens.first!
+        #endif
         
         return screen.screenshot()
     }
@@ -36,7 +44,16 @@ class ScreenshotUITests: XCTestCase {
         let screenshot = cleanScreenshot()
         let data = screenshot.pngRepresentation
         let url = screenshotsURL.appendingPathComponent(name).appendingPathExtension("png")
-        try? data.write(to: url)
+        do {
+            try data.write(to: url)
+            urls.append(url)
+        } catch {
+            print("Screenshot \(name) failed.")
+        }
+
+        let attachment = XCTAttachment(uniformTypeIdentifier: kUTTypePNG as String, name: name, payload: screenshot.pngRepresentation, userInfo: [:])
+        attachment.lifetime = .keepAlways
+        add(attachment)
     }
     
     func testMakeScreenshots() {
@@ -55,7 +72,7 @@ class ScreenshotUITests: XCTestCase {
         }
         #endif
         
-        let firstRow = app.staticTexts["CollectionExtensions"]
+        let firstRow = app.buttons["CollectionExtensions"]
         XCTAssertTrue(firstRow.waitForExistence(timeout: 5))
         makeScreenShot("01-main")
 
@@ -66,17 +83,17 @@ class ScreenshotUITests: XCTestCase {
 //        makeScreenShot("editing mode")
 //        toggleEditing.tap()
 
-        app.showContextMenu(for: firstRow, highlighting: "Edit…")
+        app.showContextMenu(for: firstRow, highlighting: "Settings…")
         makeScreenShot("02-contextual")
 
-        app.selectContextMenuItem("Edit…")
-        let cancel = app.buttons["cancel"].firstMatch
+        app.selectContextMenuItem("Settings…")
+        let cancel = app.buttons["Cancel"].firstMatch
         XCTAssert(cancel.waitForExistence(timeout: 1))
         makeScreenShot("03-editor")
         cancel.tap()
 
         app.showContextMenu(for: firstRow)
-        app.selectContextMenuItem("Generate Workflow…")
+        app.selectContextMenuItem("Workflow…")
  
         XCTAssert(cancel.waitForExistence(timeout: 1))
         makeScreenShot("04-generate")
@@ -92,6 +109,9 @@ class ScreenshotUITests: XCTestCase {
 
 //        app.unhideApplications()
         app.quit()
+        
+        let names = urls.map({ $0.deletingPathExtension().lastPathComponent }).joined(separator: ", ")
+        print("\n\n***********\nScreenshots \(names) logged to \(screenshotsURL)\n\n")
     }
     
     func testElements() {

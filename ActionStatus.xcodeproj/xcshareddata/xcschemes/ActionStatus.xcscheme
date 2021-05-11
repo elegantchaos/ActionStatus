@@ -27,6 +27,24 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
+      <PostActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Run Script"
+               scriptText = "set &gt; /tmp/test.log&#10;open &quot;$HOME/Library/Developer/CoreSimulator/Devices/$TARGET_DEVICE_IDENTIFIER/data/Containers/Data/Application/&quot;*&quot;/tmp/Screenshots/&quot;&#10;&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "8B3E64C323EAE62F00B28168"
+                     BuildableName = "ActionStatusUITestsMobile.xctest"
+                     BlueprintName = "ActionStatusUITestsMobile"
+                     ReferencedContainer = "container:ActionStatus.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PostActions>
       <TestPlans>
          <TestPlanReference
             reference = "container:Tests/ActionStatus.xctestplan">

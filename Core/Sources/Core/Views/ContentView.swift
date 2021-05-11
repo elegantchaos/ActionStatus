@@ -9,54 +9,25 @@ import SwiftUI
 import SwiftUIExtensions
 
 public struct ContentView: View {
-    
-    @EnvironmentObject var model: Model
     @EnvironmentObject var viewState: ViewState
     @EnvironmentObject var sheetController: SheetController
-    @Namespace() var defaultNamespace
-    
-    public init() {
-    }
     
     public var body: some View {
-        let name = Application.shared.info.name
         return SheetControllerHost {
-            NavigationView {
-                VStack(alignment: .center) {
-                    if model.count == 0 {
-                        NoReposView()
-                    } else if viewState.settings.isEditing {
-                        RepoListView(namespace: defaultNamespace)
-                    } else {
-                        RepoGridView(namespace: defaultNamespace)
-                    }
-                    
-                    Spacer()
-                    FooterView()
-                }
-                .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            if viewState.settings.isEditing {
-                                AddButton()
-                            }
-                        }
-                    
-                    ToolbarItem(placement: .principal) {
-                        Text(name)
-                            .font(.title)
-                    }
-                    
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        ToggleEditingButton()
-                    }
-                }
+            #if targetEnvironment(macCatalyst)
+            RootView()
+            #else
+            return NavigationView {
+                RootView()
+                    .iosToolbar(includeAddButton: viewState.settings.isEditing)
             }
             .navigationViewStyle(StackNavigationViewStyle())
-            
+            #endif
+
         }
         .onAppear(perform: onAppear)
     }
-    
+        
     func onAppear()  {
         #if !os(tvOS)
         UITableView.appearance().separatorStyle = .none
@@ -70,38 +41,24 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-fileprivate extension View {
-    #if os(tvOS) || targetEnvironment(macCatalyst)
-    
-    // MARK: tvOS/macOS Don't show nav bar
-    
-    func setupNavigation() -> some View {
-        return
-            navigationBarTitle("")
-                .navigationBarHidden(true)
+extension View {
+    func iosToolbar(includeAddButton: Bool) -> some View {
+        self
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                if includeAddButton {
+                    AddButton()
+                }
+            }
+        
+            ToolbarItem(placement: .principal) {
+                Text(Application.shared.info.name)
+                    .font(.title)
+            }
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
+                ToggleEditingButton()
+            }
+        }
     }
-    
-    func setupNavigationStyle() -> some View {
-        return navigationViewStyle(StackNavigationViewStyle())
-    }
-    
-    #elseif canImport(UIKit)
-    
-    // MARK: iOS
-    
-    func setupNavigation() -> some View {
-        let name = Application.shared.info.name
-        return
-            navigationBarTitle(Text(name), displayMode: .inline)
-                .navigationBarItems(
-                    leading: AddButton(),
-                    trailing: ToggleEditingButton()
-                )
-    }
-    
-    func setupNavigationStyle() -> some View {
-        return navigationViewStyle(StackNavigationViewStyle())
-    }
-    
-    #endif
 }

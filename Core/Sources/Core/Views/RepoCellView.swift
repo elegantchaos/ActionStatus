@@ -58,6 +58,7 @@ struct RepoCellView: View {
                     
                     Button(action: handleEdit) {
                         Label("Settings…", systemImage: viewState.editButtonIcon)
+                            .accessibility(identifier: "editLabel")
                     }
                     
                     Button(action: handleGenerate) {
