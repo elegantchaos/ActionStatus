@@ -32,6 +32,7 @@ public class ViewState: ObservableObject {
     let editButtonIcon = "ellipsis.circle"
     let generateButtonIcon = "doc.badge.ellipsis"
     let deleteRepoIcon = "minus.circle"
+    let addRepoIcon = "plus.circle"
     
     let formStyle = FormStyle(
         headerFont: .headline,

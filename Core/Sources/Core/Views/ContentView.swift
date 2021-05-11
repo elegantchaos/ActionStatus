@@ -18,7 +18,8 @@ public struct ContentView: View {
     }
     
     public var body: some View {
-        SheetControllerHost {
+        let name = Application.shared.info.name
+        return SheetControllerHost {
             NavigationView {
                 VStack(alignment: .center) {
                     if model.count == 0 {
@@ -34,7 +35,22 @@ public struct ContentView: View {
                     Spacer()
                     FooterView()
                 }
-                .setupNavigation()
+                .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            if viewState.settings.isEditing {
+                            AddButton()
+                            }
+                        }
+                    
+                    ToolbarItem(placement: .principal) {
+                        Text(name)
+                            .font(.title)
+                    }
+                    
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        ToggleEditingButton()
+                    }
+                }
             }
             .navigationViewStyle(StackNavigationViewStyle())
         }

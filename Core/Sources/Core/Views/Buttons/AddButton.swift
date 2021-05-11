@@ -17,10 +17,10 @@ public struct AddButton: View {
     
     public var body: some View {
         Button(action: addRepo ) {
-            Text("Add")
+            Image(systemName: viewState.addRepoIcon)
         }
-        .disabled(!viewState.settings.isEditing)
-        .opacity(viewState.settings.isEditing ? 1.0 : 0.0)
+        .accessibility(identifier: "addButton")
+        .foregroundColor(.black)
         .animation(.easeInOut)
     }
     

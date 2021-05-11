@@ -26,28 +26,29 @@ struct RepoCellView: View {
     func cell(for repo: Repo) -> some View {
         return Button(action: handleEdit) {
             HStack(alignment: .center, spacing: viewState.padding) {
-            if !selectable {
-                SystemImage(repo.badgeName)
-                    .foregroundColor(repo.statusColor)
-            }
-            Text(repo.name)
-                .allowsTightening(true)
-                .truncationMode(.middle)
-                .lineLimit(1)
-            if selectable {
-                Spacer()
-                EditButton(repo: repo)
-                GenerateButton(repo: repo)
-                LinkButton(url: repo.githubURL(for: .repo))
-            } else {
-                Spacer()
-            }
+                if !selectable {
+                    SystemImage(repo.badgeName)
+                        .foregroundColor(repo.statusColor)
+                }
+                Text(repo.name)
+                    .allowsTightening(true)
+                    .truncationMode(.middle)
+                    .lineLimit(1)
+                if selectable {
+                    Spacer()
+                    EditButton(repo: repo)
+                    GenerateButton(repo: repo)
+                    LinkButton(url: repo.githubURL(for: .repo))
+                } else {
+                    Spacer()
+                }
             }
         }
         .padding(0)
         .font(viewState.settings.displaySize.font)
         .foregroundColor(.black)
         .buttonStyle(PlainButtonStyle())
+        .id(repo.id)
     }
     
     func cellWithMenu(for repo: Repo) -> some View {

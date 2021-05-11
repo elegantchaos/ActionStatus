@@ -15,11 +15,15 @@ public struct ToggleEditingButton: View {
     public var body: some View {
         Button(action: toggleEditing) {
             SystemImage(viewState.settings.isEditing ? viewState.stopEditingIcon : viewState.startEditingIcon).frame(width: 32, height: 32, alignment: .center)
-        }.accessibility(identifier: "toggleEditing")
+                .foregroundColor(.black)
+        }
+        .accessibility(identifier: "toggleEditing")
     }
     
     func toggleEditing() {
-        viewState.settings.isEditing.toggle()
+        withAnimation {
+            viewState.settings.isEditing.toggle()
+        }
     }
 }
 
