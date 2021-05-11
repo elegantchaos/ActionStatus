@@ -13,10 +13,8 @@ struct StatusIcon: View {
     }
     
     var body: some View {
-        Image(name)
-            .resizable()
-            .frame(width: 14, height: 14)
-    }
+        Image("\(name)Small")
+    }	
 }
 
 struct StatusIcon_Previews: PreviewProvider {
