@@ -9,7 +9,13 @@
     }
   ],
   "defaultOptions" : {
-
+    "environmentVariableEntries" : [
+      {
+        "key" : "UITestScreen",
+        "value" : "1"
+      }
+    ],
+    "uiTestingScreenshotsLifetime" : "keepNever"
   },
   "testTargets" : [
     {

@@ -10,6 +10,7 @@
 		226D6C89247590AE00B54967 /* ScreenshotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */; };
 		22E778472476D230009ED66A /* ActionStatusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */; };
 		22E778482476D234009ED66A /* ScreenshotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */; };
+		8B2133F4264C4CFC00BE3D8D /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = 8B2133F3264C4CFC00BE3D8D /* Core */; };
 		8B2F0ABB23FC195800B2E62A /* InterceptingDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */; };
 		8B3E64B023EAE62E00B28168 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64AF23EAE62E00B28168 /* Preview Assets.xcassets */; };
 		8B3E64B323EAE62E00B28168 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64B123EAE62E00B28168 /* LaunchScreen.storyboard */; };
@@ -50,13 +51,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 8B430E6923F586100050BF2A;
 			remoteInfo = ActionStatusTV;
-		};
-		22E778492476D2F8009ED66A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8B3E649B23EAE62D00B28168 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8B3E64A223EAE62D00B28168;
-			remoteInfo = ActionStatusMobile;
 		};
 		8B19170D24E554920072CD85 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -191,6 +185,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B2133F4264C4CFC00BE3D8D /* Core in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,10 +499,10 @@
 			);
 			dependencies = (
 				22E778412476A606009ED66A /* PBXTargetDependency */,
-				22E7784A2476D2F8009ED66A /* PBXTargetDependency */,
 			);
 			name = ActionStatusUITestsTV;
 			packageProductDependencies = (
+				8B2133F3264C4CFC00BE3D8D /* Core */,
 			);
 			productName = "Action StatusUITestsTV";
 			productReference = 22E7783B2476A606009ED66A /* ActionStatusUITestsTV.xctest */;
@@ -905,11 +900,6 @@
 			target = 8B430E6923F586100050BF2A /* ActionStatusTV */;
 			targetProxy = 22E778462476BCA2009ED66A /* PBXContainerItemProxy */;
 		};
-		22E7784A2476D2F8009ED66A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8B3E64A223EAE62D00B28168 /* ActionStatusMobile */;
-			targetProxy = 22E778492476D2F8009ED66A /* PBXContainerItemProxy */;
-		};
 		8B19170E24E554920072CD85 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8BD6749824C5E1E000289A08 /* Tools */;
@@ -962,6 +952,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 22E778452476A6C9009ED66A /* TestsTV.xcconfig */;
 			buildSettings = {
+				TVOS_DEPLOYMENT_TARGET = 14.1;
 			};
 			name = Debug;
 		};
@@ -969,6 +960,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 22E778452476A6C9009ED66A /* TestsTV.xcconfig */;
 			buildSettings = {
+				TVOS_DEPLOYMENT_TARGET = 14.1;
 			};
 			name = Release;
 		};
@@ -1023,7 +1015,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1078,7 +1069,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1164,7 +1154,6 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CURRENT_PROJECT_VERSION = BUILD;
-				TVOS_DEPLOYMENT_TARGET = 14.0;
 			};
 			name = Debug;
 		};
@@ -1174,7 +1163,6 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CURRENT_PROJECT_VERSION = BUILD;
-				TVOS_DEPLOYMENT_TARGET = 14.0;
 			};
 			name = Release;
 		};
@@ -1323,6 +1311,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		8B2133F3264C4CFC00BE3D8D /* Core */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Core;
+		};
 		8B4336ED23FFE7C700598A04 /* DictionaryCoding */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DictionaryCoding;
