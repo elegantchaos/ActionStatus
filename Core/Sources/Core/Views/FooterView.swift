@@ -18,7 +18,8 @@ public struct FooterView: View {
     public var body: some View {
         VStack(spacing: 10) {
             if !updater.status.isEmpty {
-                Text(updater.status).statusStyle()
+                Text(updater.status)
+                    .statusStyle()
             } else {
                 HStack(spacing: 8) {
                     Text("Monitoring \(status.sortedRepos.count) repos.")
@@ -49,9 +50,8 @@ public struct FooterView: View {
                             Text("\(status.unreachable) unreachable.")
                         }
                     }
-                    
-                    PreferencesButton()
-                }.statusStyle()
+                }
+                .statusStyle()
             }
             
             if hasUpdate {

@@ -41,6 +41,8 @@ extension View {
                 ToolbarItem(placement: .navigationBarLeading) {
                 if includeAddButton {
                     AddButton()
+                } else {
+                    PreferencesButton()
                 }
             }
         
