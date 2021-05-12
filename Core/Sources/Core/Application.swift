@@ -74,7 +74,6 @@ open class Application: BasicApplication, ApplicationHost {
 
         // fall back to simple non-authenticated mode
         return SimpleRefreshController(model: model, context: context)
-
     }
     
     class func makeModel() -> Model {
@@ -153,7 +152,7 @@ open class Application: BasicApplication, ApplicationHost {
     open func loadSettings() {
         settingsChannel.debug("Loading settings")
         pauseRefresh()
-        if context.settings.readSettings() == .authenticationChanged {
+        if (context.settings.readSettings() == .authenticationChanged) || (refreshController == nil) {
             // we've changed the github settings, so we need to rebuild the refresh controller
             resetRefresh()
         }
