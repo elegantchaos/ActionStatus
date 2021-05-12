@@ -133,7 +133,9 @@ open class Application: BasicApplication, ApplicationHost {
     }
     
     open func updateRepoState() {
-        status.update(with: model, viewState: viewState)
+        withAnimation {
+            status.update(with: model, viewState: viewState)
+        }
     }
     
     public override func tearDown() {
