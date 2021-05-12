@@ -50,15 +50,8 @@ internal extension SimpleRefreshController {
                     case .running:
                         for (id, repo) in model.items {
                             if let state = newState[id] {
-                                var updated = repo
-                                if state != updated.state {
-                                    updated.state = state
-                                    switch state {
-                                        case .passing: updated.lastSucceeded = Date()
-                                        case .failing: updated.lastFailed = Date()
-                                        default: break
-                                    }
-                                    model.items[id] = updated
+                                if state != repo.state {
+                                    model.update(repoWithID: repo.id, state: state)
                                 }
                             }
                         }
