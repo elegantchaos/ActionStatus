@@ -58,11 +58,18 @@ open class Application: BasicApplication, ApplicationHost {
         restoreState()
     }
     
-    func makeRefreshController() -> RefreshController {
+    func makeRefreshController() -> RefreshController? {
+        // disable refreshing for UI testing
+        guard !ProcessInfo.processInfo.environment.isTestingUI else { return nil }
+        
+        if settings.testRefresh {
+            return RandomisingRefreshController(model: model)
+        }
+        
         if settings.githubAuthentication {
             do {
                 let token = try Keychain.default.getToken(user: settings.githubUser, server: settings.githubServer)
-                let controller = OctoidRefreshController(model: model, context: context, token: token)
+                let controller = OctoidRefreshController(model: model, token: token)
                 refreshChannel.log("Using github refresh controller for \(settings.githubUser)/\(settings.githubServer)")
                 return controller
             } catch {
@@ -73,7 +80,7 @@ open class Application: BasicApplication, ApplicationHost {
         }
 
         // fall back to simple non-authenticated mode
-        return SimpleRefreshController(model: model, context: context)
+        return SimpleRefreshController(model: model)
     }
     
     class func makeModel() -> Model {
@@ -128,7 +135,6 @@ open class Application: BasicApplication, ApplicationHost {
                 completion(options)
             }
         }
-        
     }
     
     open func updateRepoState() {
@@ -152,10 +158,12 @@ open class Application: BasicApplication, ApplicationHost {
     open func loadSettings() {
         settingsChannel.debug("Loading settings")
         pauseRefresh()
-        if (context.settings.readSettings() == .authenticationChanged) || (refreshController == nil) {
-            // we've changed the github settings, so we need to rebuild the refresh controller
+
+        if context.settings.readSettings() == .authenticationChanged {
+            // we've changed authentication method, so reset the refresh controller
             resetRefresh()
         }
+        
         resumeRefresh()
     }
   
@@ -181,18 +189,21 @@ open class Application: BasicApplication, ApplicationHost {
         model.load(fromDefaultsKey: stateKey)
     }
     
-    func pauseRefresh() {
+    public func pauseRefresh() {
         refreshController?.pause()
     }
     
-    func resumeRefresh() {
-        refreshController?.resume()
+    public func resumeRefresh() {
+        if refreshController == nil {
+            refreshController = makeRefreshController()
+        }
+
+        refreshController?.resume(rate: settings.refreshRate.rate)
     }
     
     func resetRefresh() {
-        if !ProcessInfo.processInfo.environment.isTestingUI {
-            refreshController = makeRefreshController()
-        }
+        pauseRefresh()
+        refreshController = nil
     }
     
     public func open(url: URL) {

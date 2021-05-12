@@ -89,6 +89,9 @@ public struct PreferencesForm: View {
                     }
                 }
             ) {
+                #if DEBUG
+                FormToggleRow(label: "Test Refresh", variable: $settings.testRefresh)
+                #endif
                 
                 FormPickerRow(label: "Refresh Every", variable: $settings.refreshRate, cases: RefreshRate.allCases)
                 FormToggleRow(label: "Github Authentication", variable: $settings.githubAuthentication)

@@ -9,18 +9,16 @@ import Logger
 public let refreshChannel = Channel("com.elegantchaos.actionstatus.Refresh")
 
 public enum RefreshState {
-    case running
+    case running(Double)
     case paused(Int)
 }
 
 public class RefreshController {
     internal let model: Model
-    internal let context: ViewContext
     internal var state: RefreshState = .paused(1)
 
-    public init(model: Model, context: ViewContext) {
+    public init(model: Model) {
         self.model = model
-        self.context = context
     }
 
     internal func startRefresh() { fatalError("needs overriding") }
@@ -41,12 +39,12 @@ public extension RefreshController {
         }
     }
     
-    func resume() {
+    func resume(rate: Double) {
         DispatchQueue.main.async { [self] in
             switch state {
                 case .paused(let level):
                     if level == 1 {
-                        state = .running
+                        state = .running(rate)
                         startRefresh()
                     } else {
                         state = .paused(level - 1)

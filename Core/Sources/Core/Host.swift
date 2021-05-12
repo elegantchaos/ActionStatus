@@ -8,10 +8,11 @@ import Bundles
 
 public protocol ApplicationHost {
     var info: BundleInfo { get }
-    var refreshController: RefreshController? { get }
     func saveState()
     func save(output: Generator.Output)
     func open(url: URL)
+    func pauseRefresh()
+    func resumeRefresh()
 }
 
 extension ApplicationHost {
@@ -28,5 +29,13 @@ extension ApplicationHost {
     }
     
     func open(url: URL) {
+    }
+    
+    func pauseRefresh() {
+        
+    }
+    
+    func resumeRefresh() {
+        
     }
 }

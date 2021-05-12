@@ -17,6 +17,7 @@ public extension String {
     static let githubServerKey = "GithubServer"
     static let sortModeKey = "SortMode"
     static let testOldestNewestKey = "TestOldestNewest"
+    static let testRefresh = "TestRefresh"
 }
 
 public struct Settings {
@@ -30,6 +31,7 @@ public struct Settings {
     var sortMode: SortMode = .state
     var showInMenu = false
     var showInDock = false
+    var testRefresh = false
     
     enum ReadResult {
         case authenticationUnchanged
@@ -37,6 +39,7 @@ public struct Settings {
     }
    
     func authenticationChanged(from other: Settings) -> Bool {
+        guard testRefresh == other.testRefresh else { return true }
         guard githubAuthentication == other.githubAuthentication else { return true }
         guard githubUser == other.githubUser else { return true }
         guard githubServer == other.githubServer else { return true }
@@ -72,7 +75,8 @@ public struct Settings {
         defaults.read(&sortMode, fromKey: .sortModeKey)
         defaults.read(&showInMenu, fromKey: .showInMenuKey)
         defaults.read(&showInDock, fromKey: .showInDockKey)
-        
+        defaults.read(&testRefresh, fromKey: .testRefresh)
+
         settingsChannel.debug("\(String.refreshIntervalKey) is \(refreshRate)")
         settingsChannel.debug("\(String.displaySizeKey) is \(displaySize)")
         
@@ -89,6 +93,7 @@ public struct Settings {
         defaults.write(sortMode.rawValue, forKey: .sortModeKey)
         defaults.write(showInDock, forKey: .showInDockKey)
         defaults.write(showInMenu, forKey: .showInMenuKey)
+        defaults.write(testRefresh, forKey: .testRefresh)
 
         // NB: github token is stored in the keychain
 

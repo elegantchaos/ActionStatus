@@ -75,7 +75,7 @@ public struct EditView: View {
             }
             .environmentObject(context.formStyle)
             .onAppear() {
-                context.host.refreshController?.pause()
+                context.host.pauseRefresh()
                 self.load()
             }
     }
@@ -104,7 +104,7 @@ public struct EditView: View {
     }
     
     func dismiss() {
-        context.host.refreshController?.resume()
+        context.host.resumeRefresh()
         presentation.wrappedValue.dismiss()
     }
     

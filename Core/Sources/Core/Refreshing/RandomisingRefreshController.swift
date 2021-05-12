@@ -11,9 +11,9 @@ import Foundation
 public class RandomisingRefreshController: RefreshController {
     internal let timer: OneShotTimer
     
-    override public init(model: Model, context: ViewContext) {
+    override public init(model: Model) {
         self.timer = OneShotTimer()
-        super.init(model: model, context: context)
+        super.init(model: model)
     }
     
     override func startRefresh() {
@@ -33,18 +33,19 @@ public class RandomisingRefreshController: RefreshController {
 
 internal extension RandomisingRefreshController {
     func doRefresh() {
-        DispatchQueue.main.asyncAfter(deadline: .now().advanced(by: .seconds(1))) { [self] in
-            switch state {
-                case .running:
-                    refreshChannel.log("Completed Refresh")
-                    if let id = self.model.items.randomElement()?.value.id, let newState = Repo.State.allCases.randomElement() {
-                        self.model.update(repoWithID: id, state: newState)
-                    }
+        switch state {
+            case .running:
+                refreshChannel.log("Completed Refresh")
+                if let id = self.model.items.randomElement()?.value.id, let newState = Repo.State.allCases.randomElement() {
+                    self.model.update(repoWithID: id, state: newState)
+                }
+                
+                timer.schedule(after: 5.0) { [self] _ in
                     doRefresh()
-                    
-                default:
-                    refreshChannel.log("Skipping Update (We Are Paused)")
-            }
+                }
+                
+            default:
+                refreshChannel.log("Skipping Update (We Are Paused)")
         }
     }
 }

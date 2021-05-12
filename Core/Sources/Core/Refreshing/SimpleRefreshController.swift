@@ -15,9 +15,9 @@ import Foundation
 public class SimpleRefreshController: RefreshController {
     internal let timer: OneShotTimer
     
-    override public init(model: Model, context: ViewContext) {
+    override public init(model: Model) {
         self.timer = OneShotTimer()
-        super.init(model: model, context: context)
+        super.init(model: model)
     }
     
     override func startRefresh() {
@@ -47,7 +47,7 @@ internal extension SimpleRefreshController {
             DispatchQueue.main.async {
                 refreshChannel.log("Completed Refresh")
                 switch state {
-                    case .running:
+                    case .running(let rate):
                         for (id, repo) in model.items {
                             if let state = newState[id] {
                                 if state != repo.state {
@@ -56,7 +56,7 @@ internal extension SimpleRefreshController {
                             }
                         }
                         
-                        timer.schedule(after: context.settings.refreshRate.rate) { _ in
+                        timer.schedule(after: rate) { _ in
                             self.doRefresh()
                         }
                         
