@@ -114,6 +114,11 @@ public class Model: ObservableObject {
             modelChannel.log("Updated state of \(repo) to \(state)")
             objectWillChange.send()
             repo.state = state
+            switch state {
+                case .passing: repo.lastSucceeded = Date()
+                case .failing: repo.lastFailed = Date()
+                default: break
+            }
             items[id] = repo
         }
     }
