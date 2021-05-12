@@ -8,12 +8,8 @@ import SwiftUIExtensions
 import Hardware
 
 public struct EditView: View {
-    #if os(tvOS)
-    static let fieldStyle = DefaultTextFieldStyle()
-    #else
-    static let fieldStyle = RoundedBorderTextFieldStyle()
-    #endif
-    
+    static let fieldStyle = Shim.RoundedBorderTextFieldStyle()
+
     let repo: Repo?
     
     @Environment(\.presentationMode) var presentation

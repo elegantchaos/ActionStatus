@@ -18,12 +18,7 @@ public class ViewContext: ObservableObject {
 
     public let host: ApplicationHost
     public let padding: CGFloat = 10
-    
-    #if os(tvOS)
-    public let spacing: CGFloat = 640
-    #else
-    public let spacing: CGFloat = 256
-    #endif
+    public let spacing = CGFloat(tvOS: 640, other: 256)
     
     let linkIcon = "arrow.right.circle.fill"
     let startEditingIcon = "lock.fill"

@@ -25,13 +25,6 @@ public struct ContentView: View {
             #endif
 
         }
-        .onAppear(perform: onAppear)
-    }
-        
-    func onAppear()  {
-        #if !os(tvOS)
-        UITableView.appearance().separatorStyle = .none
-        #endif
     }
 }
 

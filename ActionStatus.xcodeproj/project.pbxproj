@@ -962,8 +962,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 22E778452476A6C9009ED66A /* TestsTV.xcconfig */;
 			buildSettings = {
-				SDKROOT = appletvos;
-				TVOS_DEPLOYMENT_TARGET = 13.4;
 			};
 			name = Debug;
 		};
@@ -971,8 +969,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 22E778452476A6C9009ED66A /* TestsTV.xcconfig */;
 			buildSettings = {
-				SDKROOT = appletvos;
-				TVOS_DEPLOYMENT_TARGET = 13.4;
 			};
 			name = Release;
 		};
@@ -1168,6 +1164,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CURRENT_PROJECT_VERSION = BUILD;
+				TVOS_DEPLOYMENT_TARGET = 14.0;
 			};
 			name = Debug;
 		};
@@ -1177,6 +1174,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CURRENT_PROJECT_VERSION = BUILD;
+				TVOS_DEPLOYMENT_TARGET = 14.0;
 			};
 			name = Release;
 		};

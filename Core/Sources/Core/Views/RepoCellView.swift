@@ -17,8 +17,47 @@ struct RepoCellView: View {
     let namespace: Namespace.ID
 
     var body: some View {
-        cellWithMenu(for: repo)
-    }
+        let cell = cell(for: repo)
+        return cell
+            .shim
+            .contextMenu {
+                Text("\(repo.name)")
+                
+                Button(action: handleEdit) {
+                    Label("Settings…", systemImage: context.editButtonIcon)
+                        .accessibility(identifier: "editLabel")
+                }
+                
+                Button(action: handleGenerate) {
+                    Label("Workflow…", systemImage: context.generateButtonIcon)
+                        .accessibility(identifier: "generateLabel")
+                }
+                .accessibility(identifier: "generate")
+                
+                Button(action: handleShowRepo) {
+                    Label("Open In Github…", systemImage: context.linkIcon)
+                }
+                
+                Button(action: handleShowWorkflow) {
+                    Label("Open Workflow In Github…", systemImage: context.linkIcon)
+                }
+                
+                Divider()
+                
+                Button(action: handleDelete) {
+                    Label("Delete", systemImage: context.deleteRepoIcon)
+                }
+                #if DEBUG
+                
+                if !ProcessInfo.processInfo.environment.isTestingUI {
+                    Divider()
+                    Button(action: handleToggleState) {
+                        Text("DEBUG: Advance State")
+                    }
+                }
+                #endif
+            }
+     }
     
     func cell(for repo: Repo) -> some View {
         return Button(action: handleEdit) {
@@ -48,55 +87,6 @@ struct RepoCellView: View {
         .font(context.settings.displaySize.font)
         .foregroundColor(.black)
         .buttonStyle(PlainButtonStyle())
-    }
-    
-    func cellWithMenu(for repo: Repo) -> some View {
-        let cell = cell(for: repo)
-        
-        #if os(tvOS)
-        return cell
-        #else
-        return cell
-            .contextMenu(
-                ContextMenu {
-                    Text("\(repo.name)")
-                    
-                    Button(action: handleEdit) {
-                        Label("Settings…", systemImage: context.editButtonIcon)
-                            .accessibility(identifier: "editLabel")
-                    }
-                    
-                    Button(action: handleGenerate) {
-                        Label("Workflow…", systemImage: context.generateButtonIcon)
-                            .accessibility(identifier: "generateLabel")
-                    }
-                    .accessibility(identifier: "generate")
-                    
-                    Button(action: handleShowRepo) {
-                        Label("Open In Github…", systemImage: context.linkIcon)
-                    }
-                    
-                    Button(action: handleShowWorkflow) {
-                        Label("Open Workflow In Github…", systemImage: context.linkIcon)
-                    }
-                    
-                    Divider()
-                    
-                    Button(action: handleDelete) {
-                        Label("Delete", systemImage: context.deleteRepoIcon)
-                    }
-                    #if DEBUG
-                    
-                    if !ProcessInfo.processInfo.environment.isTestingUI {
-                        Divider()
-                        Button(action: handleToggleState) {
-                            Text("DEBUG: Advance State")
-                        }
-                    }
-                    #endif
-                }
-            )
-        #endif
     }
     
     func handleShowRepo() {
