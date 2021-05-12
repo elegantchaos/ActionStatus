@@ -51,7 +51,12 @@ struct RepoCellView: View {
     }
     
     func cellWithMenu(for repo: Repo) -> some View {
-        return cell(for: repo)
+        let cell = cell(for: repo)
+        
+        #if os(tvOS)
+        return cell
+        #else
+        return cell
             .contextMenu(
                 ContextMenu {
                     Text("\(repo.name)")
@@ -91,6 +96,7 @@ struct RepoCellView: View {
                     #endif
                 }
             )
+        #endif
     }
     
     func handleShowRepo() {

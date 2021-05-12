@@ -20,8 +20,10 @@ public struct SheetView<Content>: View where Content: View {
         self.content = content
     }
     
+    #if !os(tvOS)
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-
+    #endif
+    
     let title: String
     let shortTitle: String
     let cancelAction: Action?
@@ -37,7 +39,7 @@ public struct SheetView<Content>: View where Content: View {
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    let title = horizontalSizeClass == .compact ? shortTitle : self.title
+                    let title = useShortTitle ? shortTitle : self.title
                     Text(title)
                         .accessibility(identifier: "formHeader")
                 }
@@ -57,7 +59,7 @@ public struct SheetView<Content>: View where Content: View {
                 ToolbarItem(placement: confirmationPlacement) {
                     Button(action: doneAction) { Text(doneLabel) }
                         .accessibility(identifier: "done")
-                        .keyboardShortcut(.defaultAction)
+                        .defaultShortcut()
                 }
             }
         }
@@ -91,7 +93,7 @@ public struct SheetView<Content>: View where Content: View {
         var body: some View {
             Button(action: action!) { Text(label) }
                 .accessibility(identifier: "cancel")
-                .keyboardShortcut(.cancelAction)
+                .cancelShortcut()
         }
     }
 
@@ -99,3 +101,38 @@ public struct SheetView<Content>: View where Content: View {
 
 }
 
+#if os(tvOS)
+
+extension SheetView {
+    var useShortTitle: Bool { return true }
+}
+
+extension View {
+    func defaultShortcut() -> some View {
+        self
+    }
+    
+    func cancelShortcut() -> some View {
+        self
+    }
+}
+#else
+
+extension SheetView {
+    var useShortTitle: Bool {
+        return horizontalSizeClass == .compact
+    }
+}
+
+extension View {
+    func defaultShortcut() -> some View {
+        self
+            .keyboardShortcut(.defaultAction)
+    }
+    
+    func cancelShortcut() -> some View {
+        self
+            .keyboardShortcut(.cancelAction)
+    }
+}
+#endif
