@@ -17,7 +17,7 @@ public class Option {
 
 extension Option: Equatable {
     public static func == (lhs: Option, rhs: Option) -> Bool {
-        return lhs.name == rhs.name
+        return (lhs.name == rhs.name) && (lhs.id == rhs.id)
     }
 }
 
