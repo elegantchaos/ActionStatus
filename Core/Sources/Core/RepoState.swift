@@ -17,7 +17,8 @@ public class RepoState: ObservableObject {
     @Published public var unreachable: Int = 0
 
     public func update(with model: Model, viewState: ViewState) {
-        repoStateChannel.log("updated")d
+        repoStateChannel.log("updated")
+        
         sortedRepos = model.repos(sortedBy: viewState.settings.sortMode)
 
         let set = NSCountedSet()
