@@ -13,7 +13,7 @@ struct PreviewHost: ApplicationHost {
 }
 
 
-public class ViewState: ObservableObject {
+public class ViewContext: ObservableObject {
     @Published public var settings = Settings()
 
     public let host: ApplicationHost
@@ -46,7 +46,7 @@ public class ViewState: ObservableObject {
     }
     
     @discardableResult func addRepo(to model: Model) -> Repo {
-        let newRepo = model.addRepo(viewState: self)
+        let newRepo = model.addRepo(context: self)
         host.saveState()
         settings.selectedID = newRepo.id
         return newRepo

@@ -8,12 +8,12 @@ import SwiftUI
 import SwiftUIExtensions
 
 struct PreferencesButton: View {
-    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var context: ViewContext
     @EnvironmentObject var sheetController: SheetController
     
     var body: some View {
         Button(action: showPreferences) {
-            SystemImage(viewState.preferencesIcon)
+            SystemImage(context.preferencesIcon)
                 .foregroundColor(Color.accentColor)
         }.accessibility(identifier: "preferencesButton")
     }

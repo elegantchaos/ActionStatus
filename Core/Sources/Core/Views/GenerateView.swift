@@ -11,7 +11,7 @@ struct GenerateView: View {
     let repoID: UUID
     
     @EnvironmentObject var model: Model
-    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var context: ViewContext
     @Environment(\.presentationMode) var presentation
     
     @State var platforms: [Bool] = []
@@ -28,7 +28,7 @@ struct GenerateView: View {
             VStack {
                 Text("Settings for workflow '\(repo.workflow).yml' in repo \(repo.owner)/\(repo.name).")
                     .font(.subheadline)
-                    .padding(.top, viewState.padding)
+                    .padding(.top, context.padding)
 
                 Form {
                     TogglesView(title: "Platforms", options: self.generator.platforms, toggles: $platforms)
@@ -52,7 +52,7 @@ struct GenerateView: View {
     }
 
     func onGenerate() {
-        let host = viewState.host
+        let host = context.host
         storeSettings()
         if let output = generator.generateWorkflow(for: repo, application: host.info) {
             host.save(output: output)
@@ -82,7 +82,7 @@ struct GenerateView: View {
 }
 
 struct TogglesView: View {
-    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var context: ViewContext
 
     let title: String
     let options: [Option]
@@ -100,7 +100,7 @@ struct TogglesView: View {
 
         return Section(header:
             HStack {
-                Text(title).font(viewState.formStyle.headerFont)
+                Text(title).font(context.formStyle.headerFont)
                 Spacer()
                 Toggle("Enable All", isOn: allSet)
             }

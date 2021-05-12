@@ -8,14 +8,14 @@ import SwiftUI
 import SwiftUIExtensions
 
 struct GenerateButton: View {
-    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var context: ViewContext
     @EnvironmentObject var sheetController: SheetController
     
     let repo: Repo
     
     var body: some View {
         Button(action: handleTapped) {
-            SystemImage(viewState.generateButtonIcon)
+            SystemImage(context.generateButtonIcon)
         }
         .accessibility(identifier: "generateButton")
     }

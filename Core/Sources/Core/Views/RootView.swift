@@ -7,14 +7,14 @@ import SwiftUI
 
 struct RootView: View {
     @Namespace() var defaultNamespace
-    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var context: ViewContext
     @EnvironmentObject var model: Model
 
     var body: some View {
         VStack(alignment: .center) {
             if model.count == 0 {
                 NoReposView()
-            } else if viewState.settings.isEditing {
+            } else if context.settings.isEditing {
                 RepoListView(namespace: defaultNamespace)
             } else {
                 RepoGridView(namespace: defaultNamespace)

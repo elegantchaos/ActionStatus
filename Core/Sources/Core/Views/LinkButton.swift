@@ -6,18 +6,18 @@
 import SwiftUI
 
 struct LinkButton: View {
-    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var context: ViewContext
     
     let url: URL
 
     var body: some View {
         Button(action: handleLink) {
-            Image(systemName: viewState.linkIcon)
+            Image(systemName: context.linkIcon)
                 .foregroundColor(.gray)
         }
     }
     
     func handleLink() {
-        viewState.host.open(url: url)
+        context.host.open(url: url)
     }
 }

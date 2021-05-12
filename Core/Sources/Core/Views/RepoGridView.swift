@@ -8,14 +8,14 @@ import SwiftUI
 import SwiftUIExtensions
 
 public struct RepoGridView: View {
-    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var context: ViewContext
     @EnvironmentObject var status: RepoState
     
     let namespace: Namespace.ID
     
     public var body: some View {
         ScrollView(.vertical) {
-            LazyVGrid(columns: viewState.repoGridColumns, spacing: 4) {
+            LazyVGrid(columns: context.repoGridColumns, spacing: 4) {
                 ForEach(status.sortedRepos) { repo in
                     RepoCellView(repo: repo, selectable: false, namespace: namespace)
                 }

@@ -94,7 +94,7 @@ class MobileApplication: Application {
     fileprivate func updateBridge() {
         appKitBridge?.showInMenu = UserDefaults.standard.bool(forKey: .showInMenuKey)
         appKitBridge?.showInDock = UserDefaults.standard.bool(forKey: .showInDockKey)
-        appKitBridge?.showAddButton = viewState.settings.isEditing
+        appKitBridge?.showAddButton = context.settings.isEditing
         
         let combined = status.combinedState
         let index = Int(Date.timeIntervalSinceReferenceDate / .statusCycleInterval) % combined.count
@@ -237,6 +237,6 @@ extension MobileApplication: AppKitBridgeDelegate {
     }
     
     func toggleEditing() -> Bool {
-        viewState.settings.toggleEditing()
+        context.settings.toggleEditing()
     }
 }

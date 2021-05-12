@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftUIExtensions
 
 public struct ContentView: View {
-    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var context: ViewContext
     @EnvironmentObject var sheetController: SheetController
     
     public var body: some View {
@@ -19,7 +19,7 @@ public struct ContentView: View {
             #else
             return NavigationView {
                 RootView()
-                    .iosToolbar(includeAddButton: viewState.settings.isEditing)
+                    .iosToolbar(includeAddButton: context.settings.isEditing)
             }
             .navigationViewStyle(StackNavigationViewStyle())
             #endif

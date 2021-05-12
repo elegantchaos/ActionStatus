@@ -8,7 +8,7 @@ import SwiftUI
 import SwiftUIExtensions
 
 struct RepoCellView: View {
-    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var context: ViewContext
     @EnvironmentObject var sheetController: SheetController
     @EnvironmentObject var model: Model
 
@@ -22,7 +22,7 @@ struct RepoCellView: View {
     
     func cell(for repo: Repo) -> some View {
         return Button(action: handleEdit) {
-            HStack(alignment: .center, spacing: viewState.padding) {
+            HStack(alignment: .center, spacing: context.padding) {
                 if !selectable {
                     SystemImage(repo.badgeName)
                         .foregroundColor(repo.statusColor)
@@ -45,7 +45,7 @@ struct RepoCellView: View {
             .matchedGeometryEffect(id: repo.id, in: namespace)
         }
         .padding(0)
-        .font(viewState.settings.displaySize.font)
+        .font(context.settings.displaySize.font)
         .foregroundColor(.black)
         .buttonStyle(PlainButtonStyle())
     }
@@ -62,28 +62,28 @@ struct RepoCellView: View {
                     Text("\(repo.name)")
                     
                     Button(action: handleEdit) {
-                        Label("Settings…", systemImage: viewState.editButtonIcon)
+                        Label("Settings…", systemImage: context.editButtonIcon)
                             .accessibility(identifier: "editLabel")
                     }
                     
                     Button(action: handleGenerate) {
-                        Label("Workflow…", systemImage: viewState.generateButtonIcon)
+                        Label("Workflow…", systemImage: context.generateButtonIcon)
                             .accessibility(identifier: "generateLabel")
                     }
                     .accessibility(identifier: "generate")
                     
                     Button(action: handleShowRepo) {
-                        Label("Open In Github…", systemImage: viewState.linkIcon)
+                        Label("Open In Github…", systemImage: context.linkIcon)
                     }
                     
                     Button(action: handleShowWorkflow) {
-                        Label("Open Workflow In Github…", systemImage: viewState.linkIcon)
+                        Label("Open Workflow In Github…", systemImage: context.linkIcon)
                     }
                     
                     Divider()
                     
                     Button(action: handleDelete) {
-                        Label("Delete", systemImage: viewState.deleteRepoIcon)
+                        Label("Delete", systemImage: context.deleteRepoIcon)
                     }
                     #if DEBUG
                     
@@ -100,11 +100,11 @@ struct RepoCellView: View {
     }
     
     func handleShowRepo() {
-        viewState.host.open(url: repo.githubURL(for: .repo))
+        context.host.open(url: repo.githubURL(for: .repo))
     }
     
     func handleShowWorkflow() {
-        viewState.host.open(url: repo.githubURL(for: .workflow))
+        context.host.open(url: repo.githubURL(for: .workflow))
     }
     
     func handleEdit() {

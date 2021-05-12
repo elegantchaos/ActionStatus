@@ -8,7 +8,7 @@ import SwiftUI
 import SwiftUIExtensions
 
 public struct AddButton: View {
-    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var context: ViewContext
     @EnvironmentObject var model: Model
     @EnvironmentObject var sheetController: SheetController
     
@@ -18,7 +18,7 @@ public struct AddButton: View {
     public var body: some View {
         Button(action: addRepo ) {
             Text("Add")
-//            Image(systemName: viewState.addRepoIcon)
+//            Image(systemName: context.addRepoIcon)
         }
         .accessibility(identifier: "addButton")
         .foregroundColor(.black)

@@ -9,7 +9,7 @@ import SwiftUIExtensions
 
 public struct RepoListView: View {
     @EnvironmentObject var model: Model
-    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var context: ViewContext
     @EnvironmentObject var status: RepoState
     
     let namespace: Namespace.ID
@@ -21,8 +21,8 @@ public struct RepoListView: View {
             }
             .onDelete(perform: delete)
         }
-        .environment(\.defaultMinListRowHeight, viewState.settings.displaySize.rowHeight)
-        .bindEditing(to: $viewState.settings.isEditing)
+        .environment(\.defaultMinListRowHeight, context.settings.displaySize.rowHeight)
+        .bindEditing(to: $context.settings.isEditing)
     }
     
     func delete(at offsets: IndexSet) {

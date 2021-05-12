@@ -141,7 +141,7 @@ public class Model: ObservableObject {
         }
     }
      
-    @discardableResult public func addRepo(viewState: ViewState) -> Repo {
+    @discardableResult public func addRepo(context: ViewContext) -> Repo {
         let repo = Repo(model: self)
         items[repo.id] = repo
 

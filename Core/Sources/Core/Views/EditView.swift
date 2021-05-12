@@ -18,7 +18,7 @@ public struct EditView: View {
     
     @Environment(\.presentationMode) var presentation
     @EnvironmentObject var model: Model
-    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var context: ViewContext
     
     var title: String { "\(shortTitle) Repository" }
     var shortTitle: String { return repo == nil ? "Add" : "Edit" }
@@ -73,9 +73,9 @@ public struct EditView: View {
                     }
                 }
             }
-            .environmentObject(viewState.formStyle)
+            .environmentObject(context.formStyle)
             .onAppear() {
-                viewState.host.refreshController?.pause()
+                context.host.refreshController?.pause()
                 self.load()
             }
     }
@@ -104,7 +104,7 @@ public struct EditView: View {
     }
     
     func dismiss() {
-        viewState.host.refreshController?.resume()
+        context.host.refreshController?.resume()
         presentation.wrappedValue.dismiss()
     }
     

@@ -8,7 +8,7 @@ import SwiftUI
 struct PreviewContext {
 
     @State var model = TestModel()
-    @State var state = ViewState(host: PreviewHost())
+    @State var state = ViewContext(host: PreviewHost())
     
     init(isEditing: Bool = true) {
         state.settings.isEditing = isEditing

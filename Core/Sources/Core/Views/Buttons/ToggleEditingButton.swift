@@ -7,7 +7,7 @@ import SwiftUI
 import SwiftUIExtensions
 
 public struct ToggleEditingButton: View {
-    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var context: ViewContext
 
     public init() {
     }
@@ -15,8 +15,8 @@ public struct ToggleEditingButton: View {
     public var body: some View {
         HStack {
             Button(action: toggleEditing) {
-                Text(viewState.settings.isEditing ? "Done" : "Edit")
-//                Image(systemName: viewState.settings.isEditing ? viewState.stopEditingIcon : viewState.startEditingIcon)
+                Text(context.settings.isEditing ? "Done" : "Edit")
+//                Image(systemName: context.settings.isEditing ? context.stopEditingIcon : context.startEditingIcon)
             }
             .accentColor(.black)
             .font(.footnote)
@@ -26,7 +26,7 @@ public struct ToggleEditingButton: View {
     
     func toggleEditing() {
         withAnimation {
-            viewState.settings.isEditing.toggle()
+            context.settings.isEditing.toggle()
         }
     }
 }

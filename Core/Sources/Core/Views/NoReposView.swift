@@ -7,7 +7,7 @@ import SwiftUI
 
 public struct NoReposView: View {
     @EnvironmentObject var model: Model
-    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var context: ViewContext
     
     public init() {
     }
@@ -40,7 +40,7 @@ public struct NoReposView: View {
     }
     
     func makeInitialView() {
-        viewState.addRepo(to: model)
+        context.addRepo(to: model)
     }
 
 }

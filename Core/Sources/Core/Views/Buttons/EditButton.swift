@@ -8,14 +8,14 @@ import SwiftUI
 import SwiftUIExtensions
 
 struct EditButton: View {
-    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var context: ViewContext
     @EnvironmentObject var sheetController: SheetController
     
     let repo: Repo
     
     var body: some View {
         Button(action: handleTapped) {
-            SystemImage(viewState.editButtonIcon)
+            SystemImage(context.editButtonIcon)
         }
         .accessibility(identifier: "editButton")
         .foregroundColor(.black)

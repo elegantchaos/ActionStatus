@@ -16,10 +16,10 @@ public class RepoState: ObservableObject {
     @Published public var queued: Int = 0
     @Published public var unreachable: Int = 0
 
-    public func update(with model: Model, viewState: ViewState) {
+    public func update(with model: Model, context: ViewContext) {
         repoStateChannel.log("updated")
         
-        sortedRepos = model.repos(sortedBy: viewState.settings.sortMode)
+        sortedRepos = model.repos(sortedBy: context.settings.sortMode)
 
         let set = NSCountedSet()
         sortedRepos.forEach({ set.add($0.state) })

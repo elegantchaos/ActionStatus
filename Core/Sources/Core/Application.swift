@@ -29,7 +29,7 @@ open class Application: BasicApplication, ApplicationHost {
     #endif
     
     public lazy var updater: Updater = makeUpdater()
-    public lazy var viewState = makeViewState()
+    public lazy var context = makeViewState()
     public var status: RepoState = RepoState()
     
     public var refreshController: RefreshController? = nil
@@ -41,13 +41,13 @@ open class Application: BasicApplication, ApplicationHost {
     var observers: [AnyCancellable] = []
     
     var settings: Settings {
-        viewState.settings
+        context.settings
     }
 
     public let sheetController = SheetController()
     
-    func makeViewState() -> ViewState {
-        return ViewState(host: self)
+    func makeViewState() -> ViewContext {
+        return ViewContext(host: self)
     }
     
     open func makeUpdater() -> Updater {
@@ -62,7 +62,7 @@ open class Application: BasicApplication, ApplicationHost {
         if settings.githubAuthentication {
             do {
                 let token = try Keychain.default.getToken(user: settings.githubUser, server: settings.githubServer)
-                let controller = OctoidRefreshController(model: model, viewState: viewState, token: token)
+                let controller = OctoidRefreshController(model: model, context: context, token: token)
                 refreshChannel.log("Using github refresh controller for \(settings.githubUser)/\(settings.githubServer)")
                 return controller
             } catch {
@@ -73,7 +73,7 @@ open class Application: BasicApplication, ApplicationHost {
         }
 
         // fall back to simple non-authenticated mode
-        return SimpleRefreshController(model: model, viewState: viewState)
+        return SimpleRefreshController(model: model, context: context)
 
     }
     
@@ -116,7 +116,7 @@ open class Application: BasicApplication, ApplicationHost {
                         })
                 
                 observers.append(
-                    viewState
+                    context
                         .objectWillChange
                         .debounce(for: 0.1, scheduler: RunLoop.main)
                         .sink() { value in
@@ -134,7 +134,7 @@ open class Application: BasicApplication, ApplicationHost {
     
     open func updateRepoState() {
         withAnimation {
-            status.update(with: model, viewState: viewState)
+            status.update(with: model, context: context)
         }
     }
     
@@ -153,7 +153,7 @@ open class Application: BasicApplication, ApplicationHost {
     open func loadSettings() {
         settingsChannel.debug("Loading settings")
         pauseRefresh()
-        if viewState.settings.readSettings() == .authenticationChanged {
+        if context.settings.readSettings() == .authenticationChanged {
             // we've changed the github settings, so we need to rebuild the refresh controller
             resetRefresh()
         }
@@ -162,12 +162,12 @@ open class Application: BasicApplication, ApplicationHost {
   
     func saveSettings() {
         settingsChannel.debug("Saving settings")
-        viewState.settings.writeSettings()
+        context.settings.writeSettings()
     }
     
     public func applyEnvironment<T>(to view: T) -> some View where T: View {
         return view
-            .environmentObject(viewState)
+            .environmentObject(context)
             .environmentObject(model)
             .environmentObject(updater)
             .environmentObject(sheetController)

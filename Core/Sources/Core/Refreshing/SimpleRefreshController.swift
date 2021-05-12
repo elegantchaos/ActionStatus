@@ -15,9 +15,9 @@ import Foundation
 public class SimpleRefreshController: RefreshController {
     internal let timer: OneShotTimer
     
-    override public init(model: Model, viewState: ViewState) {
+    override public init(model: Model, context: ViewContext) {
         self.timer = OneShotTimer()
-        super.init(model: model, viewState: viewState)
+        super.init(model: model, context: context)
     }
     
     override func startRefresh() {
@@ -63,7 +63,7 @@ internal extension SimpleRefreshController {
                             }
                         }
                         
-                        timer.schedule(after: viewState.settings.refreshRate.rate) { _ in
+                        timer.schedule(after: context.settings.refreshRate.rate) { _ in
                             self.doRefresh()
                         }
                         

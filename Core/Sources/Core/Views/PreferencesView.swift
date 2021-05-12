@@ -9,7 +9,7 @@ import SwiftUIExtensions
 
 public struct PreferencesView: View {
     @Environment(\.presentationMode) var presentation
-    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var context: ViewContext
     @EnvironmentObject var model: Model
 
     @State var settings = Settings()
@@ -27,7 +27,7 @@ public struct PreferencesView: View {
                 githubToken: $token,
                 defaultOwner: $owner,
                 oldestNewest: $oldestNewest)
-                .environmentObject(viewState.formStyle)
+                .environmentObject(context.formStyle)
         }
         .onAppear(perform: handleAppear)
     }
@@ -39,16 +39,16 @@ public struct PreferencesView: View {
     
     func handleAppear() {
         Application.shared.pauseRefresh()
-        settings = viewState.settings
+        settings = context.settings
         owner = model.defaultOwner
         token = settings.readToken()
     }
     
     func handleSave() {
         model.defaultOwner = owner
-        let authenticationChanged = settings.authenticationChanged(from: viewState.settings)
-        viewState.settings = settings
-        viewState.settings.writeToken(token)
+        let authenticationChanged = settings.authenticationChanged(from: context.settings)
+        context.settings = settings
+        context.settings.writeToken(token)
         
         if authenticationChanged {
             Application.shared.resetRefresh()
@@ -66,7 +66,7 @@ public struct PreferencesForm: View {
     @Binding var defaultOwner: String
     @Binding var oldestNewest: Bool
 
-    @EnvironmentObject var viewState: ViewState
+    @EnvironmentObject var context: ViewContext
 
     public var body: some View {
         return Form {
