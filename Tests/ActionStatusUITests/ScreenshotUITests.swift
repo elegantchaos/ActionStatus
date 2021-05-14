@@ -61,7 +61,7 @@ class ScreenshotUITests: XCTestCase {
         let app = XCUIApplication()
         app.launchEnvironment.isTestingUI = true
         app.launchEnvironment["UITestScreen"] = ProcessInfo.processInfo.environment["UITestScreen"]
-        app.launchEnvironment["Screenshots"] = screenshotsURL.absoluteString
+//        app.launchEnvironment["Screenshots"] = screenshotsURL.absoluteString // the app will open this folder when it quits
 
         app.launch()
         app.hideOtherApplications()

@@ -160,23 +160,10 @@
 		8BA13D26260A6148007CB9CD /* TVScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVScene.swift; sourceTree = "<group>"; };
 		8BBFAA8B2403F09F0091157A /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		8BBFAA942403F8E80091157A /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Sparkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BD0730B264EB9B700D18957 /* Screenshots */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Screenshots; path = Extras/Screenshots; sourceTree = "<group>"; };
 		8BD6749924C5E1E000289A08 /* Tools */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Tools; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BD6749B24C5E1E000289A08 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		8BD674A724C5E89700289A08 /* ActionStatusTools */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = ActionStatusTools; path = "../../Library/Developer/Xcode/DerivedData/ActionStatus-eyxiiohnmopaeecoqfsepoodpvxl/Build/Products/Debug/ActionStatusTools"; sourceTree = "<group>"; };
-		8BDBC696240EB752005CDA0D /* Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.58.49.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.58.49.png"; sourceTree = "<group>"; };
-		8BDBC697240EB752005CDA0D /* Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.58.37.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.58.37.png"; sourceTree = "<group>"; };
-		8BDBC698240EB752005CDA0D /* Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.58.42.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.58.42.png"; sourceTree = "<group>"; };
-		8BDBC699240EB752005CDA0D /* Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.58.54.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.58.54.png"; sourceTree = "<group>"; };
-		8BDBC69A240EB752005CDA0D /* Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.59.12.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.59.12.png"; sourceTree = "<group>"; };
-		8BDBC69C240EB752005CDA0D /* Simulator Screen Shot - iPhone 8 Plus - 2020-03-03 at 10.50.29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPhone 8 Plus - 2020-03-03 at 10.50.29.png"; sourceTree = "<group>"; };
-		8BDBC69D240EB752005CDA0D /* Simulator Screen Shot - iPhone 8 Plus - 2020-03-03 at 10.50.16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPhone 8 Plus - 2020-03-03 at 10.50.16.png"; sourceTree = "<group>"; };
-		8BDBC69E240EB752005CDA0D /* Simulator Screen Shot - iPhone 8 Plus - 2020-03-03 at 10.50.50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPhone 8 Plus - 2020-03-03 at 10.50.50.png"; sourceTree = "<group>"; };
-		8BDBC69F240EB752005CDA0D /* Simulator Screen Shot - iPhone 8 Plus - 2020-03-03 at 10.50.22.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPhone 8 Plus - 2020-03-03 at 10.50.22.png"; sourceTree = "<group>"; };
-		8BDBC6A1240EB752005CDA0D /* Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.28.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.28.png"; sourceTree = "<group>"; };
-		8BDBC6A2240EB752005CDA0D /* Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.05.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.05.png"; sourceTree = "<group>"; };
-		8BDBC6A3240EB752005CDA0D /* Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.44.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.44.png"; sourceTree = "<group>"; };
-		8BDBC6A4240EB752005CDA0D /* Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.19.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.19.png"; sourceTree = "<group>"; };
-		8BDBC6A6240EB752005CDA0D /* Simulator Screen Shot - Apple TV 4K - 2020-03-02 at 18.38.36.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simulator Screen Shot - Apple TV 4K - 2020-03-02 at 18.38.36.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -236,7 +223,7 @@
 		8B045A8324055A3C00EC21D6 /* Extras */ = {
 			isa = PBXGroup;
 			children = (
-				8BDBC694240EB752005CDA0D /* Screenshots */,
+				8BD0730B264EB9B700D18957 /* Screenshots */,
 				8B045A8424055A6200EC21D6 /* Assets */,
 				226D6C8424755D1D00B54967 /* Scripts */,
 			);
@@ -426,60 +413,6 @@
 				8B19170F24E56E010072CD85 /* Tools.xcconfig */,
 			);
 			path = Tools;
-			sourceTree = "<group>";
-		};
-		8BDBC694240EB752005CDA0D /* Screenshots */ = {
-			isa = PBXGroup;
-			children = (
-				8BDBC695240EB752005CDA0D /* iPad Pro 12.9 */,
-				8BDBC69B240EB752005CDA0D /* iPhone 5.5 */,
-				8BDBC6A0240EB752005CDA0D /* iPhone 6.5 */,
-				8BDBC6A5240EB752005CDA0D /* tvOS */,
-			);
-			name = Screenshots;
-			path = Extras/Screenshots;
-			sourceTree = "<group>";
-		};
-		8BDBC695240EB752005CDA0D /* iPad Pro 12.9 */ = {
-			isa = PBXGroup;
-			children = (
-				8BDBC696240EB752005CDA0D /* Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.58.49.png */,
-				8BDBC697240EB752005CDA0D /* Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.58.37.png */,
-				8BDBC698240EB752005CDA0D /* Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.58.42.png */,
-				8BDBC699240EB752005CDA0D /* Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.58.54.png */,
-				8BDBC69A240EB752005CDA0D /* Simulator Screen Shot - iPad Pro (12.9-inch) (3rd generation) - 2020-03-03 at 10.59.12.png */,
-			);
-			path = "iPad Pro 12.9";
-			sourceTree = "<group>";
-		};
-		8BDBC69B240EB752005CDA0D /* iPhone 5.5 */ = {
-			isa = PBXGroup;
-			children = (
-				8BDBC69C240EB752005CDA0D /* Simulator Screen Shot - iPhone 8 Plus - 2020-03-03 at 10.50.29.png */,
-				8BDBC69D240EB752005CDA0D /* Simulator Screen Shot - iPhone 8 Plus - 2020-03-03 at 10.50.16.png */,
-				8BDBC69E240EB752005CDA0D /* Simulator Screen Shot - iPhone 8 Plus - 2020-03-03 at 10.50.50.png */,
-				8BDBC69F240EB752005CDA0D /* Simulator Screen Shot - iPhone 8 Plus - 2020-03-03 at 10.50.22.png */,
-			);
-			path = "iPhone 5.5";
-			sourceTree = "<group>";
-		};
-		8BDBC6A0240EB752005CDA0D /* iPhone 6.5 */ = {
-			isa = PBXGroup;
-			children = (
-				8BDBC6A1240EB752005CDA0D /* Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.28.png */,
-				8BDBC6A2240EB752005CDA0D /* Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.05.png */,
-				8BDBC6A3240EB752005CDA0D /* Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.44.png */,
-				8BDBC6A4240EB752005CDA0D /* Simulator Screen Shot - iPhone 11 Pro Max - 2020-03-03 at 10.53.19.png */,
-			);
-			path = "iPhone 6.5";
-			sourceTree = "<group>";
-		};
-		8BDBC6A5240EB752005CDA0D /* tvOS */ = {
-			isa = PBXGroup;
-			children = (
-				8BDBC6A6240EB752005CDA0D /* Simulator Screen Shot - Apple TV 4K - 2020-03-02 at 18.38.36.png */,
-			);
-			path = tvOS;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

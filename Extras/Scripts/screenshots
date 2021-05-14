@@ -23,6 +23,14 @@ function make_screenshots {
 
     echo "Extracting Screenshots."
     xcparse screenshots --model .build/tests/results.xcresult/ "$screenshots"
+    
+    echo "Renaming Screenshots"
+    pat="(.*)_.*_.*.png"
+    for file in "$screenshots"/*/*.png; do
+        [[ $file =~ $pat ]]
+        mv "$file" "${BASH_REMATCH[1]}.png"
+        echo "$file -> ${BASH_REMATCH[1]}.png"
+    done
 }
 
 if [[ "$1" == "" ]]
