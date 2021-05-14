@@ -139,7 +139,6 @@
 		8B430E6C23F586100050BF2A /* TVApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVApplication.swift; sourceTree = "<group>"; };
 		8B430E7623F586110050BF2A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B430E7823F586110050BF2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BuildNumber.xcconfig; sourceTree = "<group>"; };
 		8B451E0223F42F960056EF3E /* ActionStatus.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ActionStatus.xcconfig; sourceTree = "<group>"; };
 		8B451E1623F446BA0056EF3E /* ActionStatus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ActionStatus.entitlements; sourceTree = "<group>"; };
 		8B4893AC240D581200E3E112 /* SparkleBridgeClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SparkleBridgeClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -360,7 +359,6 @@
 			isa = PBXGroup;
 			children = (
 				8B5E7E9123F6C0A100087E15 /* BridgingHeader.h */,
-				8B451E0123F42F3C0056EF3E /* BuildNumber.xcconfig */,
 				2246FB24242E5428009E1731 /* IncludeSparkle.xcconfig */,
 				8B3E64AC23EAE62E00B28168 /* Assets.xcassets */,
 				8B430E9023F58E060050BF2A /* PreviewContent */,
