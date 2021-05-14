@@ -85,7 +85,7 @@ struct RepoCellView: View {
         }
         .padding(0)
         .font(context.settings.displaySize.font)
-        .foregroundColor(.black)
+        .foregroundColor(.primary)
         .buttonStyle(PlainButtonStyle())
     }
     
