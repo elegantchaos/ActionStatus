@@ -165,7 +165,7 @@ public struct Repo: Identifiable, Equatable, Hashable {
         switch state {
             case .failing: return .red
             case .passing: return .green
-            default: return .black
+            default: return .primary
         }
     }
     
