@@ -26,7 +26,6 @@ public class Generator {
     
     public let platforms = [
         Platform("macOS", name: "macOS"),
-        Platform("macOS-xcode", name: "macOS", xcodeDestination: ""),
         Platform("iOS", name: "iOS", xcodeDestination: "iPhone 11"),
         Platform("tvOS", name: "tvOS", xcodeDestination: "Apple TV"),
         Platform("watchOS", name: "watchOS", xcodeDestination: "Apple Watch Series 5 - 44mm"),
@@ -39,9 +38,8 @@ public class Generator {
     ]
     
     public let general = [
-        Option("build", name: "Perform Build"),
         Option("test", name: "Run Tests"),
-        Option("firstlast", name: "Use Oldest and Newest Swift Only"),
+        Option("firstlast", name: "Check Oldest and Newest Swift Only"),
         Option("notify", name: "Post Notifications"),
         Option("upload", name: "Upload Logs"),
         Option("header", name: "Add a header to README.md")

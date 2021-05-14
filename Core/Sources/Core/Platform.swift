@@ -17,7 +17,7 @@ public class Platform: Option {
         if xcodeDestination == nil {
             return name
         } else {
-            return "\(name) (xcodebuild)"
+            return "\(name)"
         }
     }
     
@@ -81,18 +81,6 @@ public class Platform: Option {
             """
 
         let pathFix = customToolchain ? "export PATH=\"swift-latest:$PATH\"; " : ""
-        if build {
-            for config in configurations {
-                yaml.append(
-                    """
-                    
-                            - name: Build (\(config))
-                              run: \(pathFix)swift build -c \(config.lowercased())
-                    """
-                )
-            }
-        }
-        
         if test {
             for config in configurations {
                 let buildForTesting = config == "Release" ? "-Xswiftc -enable-testing" : ""
@@ -106,7 +94,18 @@ public class Platform: Option {
                     """
                 )
             }
+        } else {
+            for config in configurations {
+                yaml.append(
+                    """
+                        
+                                - name: Build (\(config))
+                                  run: \(pathFix)swift build -c \(config.lowercased())
+                        """
+                )
+            }
         }
+
         return yaml
     }
 
@@ -149,21 +148,6 @@ public class Platform: Option {
             """
         )
         
-        if build {
-            for config in configurations {
-                yaml.append(
-                    """
-                    
-                            - name: Build (\(name) \(config))
-                              run: |
-                                source "setup.sh"
-                                echo "Building workspace $WORKSPACE scheme $SCHEME."
-                                xcodebuild clean build -workspace "$WORKSPACE" -scheme "$SCHEME" -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | tee logs/xcodebuild-\(id)-build-\(config.lowercased()).log | xcpretty
-                    """
-                )
-            }
-        }
-        
         if test && (id != "watchOS") {
             for config in configurations {
                 let extraArgs = config == "Release" ? "ENABLE_TESTABILITY=YES" : ""
@@ -178,7 +162,23 @@ public class Platform: Option {
                     """
                 )
             }
+        } else {
+            for config in configurations {
+                let extraArgs = config == "Release" ? "ENABLE_TESTABILITY=YES" : ""
+                yaml.append(
+                    """
+                    
+                            - name: Build (\(name) \(config))
+                              run: |
+                                source "setup.sh"
+                                echo "Building workspace $WORKSPACE scheme $SCHEME."
+                                xcodebuild clean build -workspace "$WORKSPACE" -scheme "$SCHEME" -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \(extraArgs) | tee logs/xcodebuild-\(id)-build-\(config.lowercased()).log | xcpretty
+                    """
+                )
+            }
         }
+        
+
         
         return yaml
     }
