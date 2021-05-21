@@ -47,13 +47,13 @@ public struct Settings {
     }
     
     func readToken() -> String {
-        let token = try? Keychain.default.getToken(user: githubUser, server: githubServer)
+        let token = try? Keychain.default.password(for: githubUser, on: githubServer)
         return token ?? ""
     }
 
     func writeToken(_ token: String) {
         do {
-            try Keychain.default.addToken(token, user: githubUser, server: githubServer)
+            try Keychain.default.update(password: token, for: githubUser, on: githubServer)
         } catch {
             print("Failed to save token \(error)")
         }
