@@ -30,6 +30,12 @@ public struct FooterView: View {
                     .statusStyle()
             } else {
                 HStack(spacing: 8) {
+                    #if os(tvOS)
+                    Spacer()
+                        .frame(width: 32)
+                    Spacer()
+                    #endif
+                    
                     Text("Monitoring \(status.sortedRepos.count) repos.")
                     if status.failing > 0 {
                         HStack(spacing: 4) {
@@ -37,36 +43,37 @@ public struct FooterView: View {
                             Text("\(status.failing) failing.")
                         }
                     }
-
+                    
                     if status.queued > 0 {
                         HStack(spacing: 4) {
                             StatusIcon("StatusQueued")
                             Text("\(status.queued) queued.")
                         }
                     }
-
+                    
                     if status.running > 0 {
                         HStack(spacing: 4) {
                             StatusIcon("StatusRunning")
                             Text("\(status.running) running.")
                         }
                     }
-
+                    
                     if status.unreachable > 0 {
                         HStack(spacing: 4) {
                             StatusIcon("StatusUnknown")
                             Text("\(status.unreachable) unreachable.")
                         }
                     }
-                    
+
                     #if os(tvOS)
-                    if #available(tvOS 15.0, *) {
-                        PreferencesButton()
-                            .prefersDefaultFocus(in: namespace)
-                            .focused(focus, equals: .prefs)
-                            .buttonStyle(FadingFocusButtonStyle())
-                    }
+                    Spacer()
+                    PreferencesButton()
+                        .prefersDefaultFocus(in: namespace)
+                        .focused(focus, equals: .prefs)
+                        .buttonStyle(FadingFocusButtonStyle())
+                        .frame(width: 32)
                     #endif
+
                 }
                 .statusStyle()
             }
@@ -82,6 +89,7 @@ public struct FooterView: View {
             }
         }
         .padding()
+        .frame(maxWidth: .infinity)
     }
     
     var hasUpdate: Bool {
