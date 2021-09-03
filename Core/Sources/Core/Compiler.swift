@@ -28,8 +28,8 @@ public class Compiler: Option {
             return false
         }
 
-        // macOS nightly development builds don't seem to have a full toolchain so don't support testing on iOS/tvOS/watchOS devices
-        if (id == "swift-nightly") && (device != "macOS") {
+        // macOS toolchain builds can't support testing on iOS/tvOS as they don't include the simulator
+        if device != "macOS", case .toolchain = mac {
             return false
         }
         
