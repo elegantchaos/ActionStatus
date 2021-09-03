@@ -21,6 +21,14 @@ public class Platform: Option {
         }
     }
     
+    public func jobName(with compiler: Compiler) -> String {
+        if subPlatforms.isEmpty {
+            return "\(name) (\(compiler.name))"
+        } else {
+            return "\(name) (\(compiler.name), Xcode)"
+        }
+    }
+
     public func yaml(repo: Repo, compilers: [Compiler], configurations: [String]) -> String {
         let settings = repo.settings
         let package = repo.name
@@ -36,7 +44,7 @@ public class Platform: Option {
             """
             
                 \(id)-\(compiler.id):
-                    name: \(name) (\(compiler.name))
+                    name: \(jobName(with: compiler))
             """
             
             containerYAML(&job, compiler, &xcodeToolchain, &xcodeVersion)
