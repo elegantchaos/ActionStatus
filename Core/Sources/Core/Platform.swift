@@ -22,11 +22,14 @@ public class Platform: Option {
     }
     
     public func jobName(with compiler: Compiler) -> String {
-        guard !subPlatforms.isEmpty, case .xcode(let version, _) = compiler.mac else {
-            return "\(name) (\(compiler.name))"
+        if !subPlatforms.isEmpty {
+            switch compiler.mac {
+                case .xcode(let version, _), .toolchain(let version, _, _):
+                    return "\(name) (\(compiler.name), Xcode \(version))"
+            }
         }
-        
-        return "\(name) (\(compiler.name), Xcode \(version)"
+
+        return "\(name) (\(compiler.name))"
     }
 
     public func yaml(repo: Repo, compilers: [Compiler], configurations: [String]) -> String {
