@@ -55,7 +55,7 @@ public class Platform: Option {
             } else {
                 job.append(xcodebuildCommonYAML())
                 for platform in subPlatforms {
-                    job.append(platform.xcodebuildYAML(configurations: configurations, package: package, build: build, test: test))
+                    job.append(platform.xcodebuildYAML(configurations: configurations, package: package, build: build, test: test, compiler: compiler))
                 }
             }
             
@@ -121,7 +121,7 @@ public class Platform: Option {
         return yaml
     }
 
-    fileprivate func xcodebuildYAML(configurations: [String], package: String, build: Bool, test: Bool) -> String {
+    fileprivate func xcodebuildYAML(configurations: [String], package: String, build: Bool, test: Bool, compiler: Compiler) -> String {
         var yaml = ""
         let destinationName = xcodeDestination ?? ""
         let destination = destinationName.isEmpty ? "" : "-destination \"name=\(destinationName)\""
@@ -148,7 +148,7 @@ public class Platform: Option {
             """
         )
         
-        if test && (id != "watchOS") {
+        if test && compiler.supportsTesting(on: id) {
             for config in configurations {
                 let extraArgs = config == "Release" ? "ENABLE_TESTABILITY=YES" : ""
                 yaml.append(
@@ -172,7 +172,7 @@ public class Platform: Option {
                               run: |
                                 source "setup.sh"
                                 echo "Building workspace $WORKSPACE scheme $SCHEME."
-                                xcodebuild clean build -workspace "$WORKSPACE" -scheme "$SCHEME" -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \(extraArgs) | tee logs/xcodebuild-\(id)-build-\(config.lowercased()).log | xcpretty
+                                xcodebuild clean build -workspace "$WORKSPACE" -scheme "$SCHEME" \(destination) -configuration \(config) CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO \(extraArgs) | tee logs/xcodebuild-\(id)-build-\(config.lowercased()).log | xcpretty
                     """
                 )
             }
@@ -231,6 +231,7 @@ public class Platform: Option {
                         wget --quiet https://swift.org/builds/$branch/xcode/$downloadYML/$downloadYML-osx.pkg
                         sudo installer -pkg $downloadYML-osx.pkg -target /
                         ln -s "/Library/Developer/Toolchains/$downloadYML.xctoolchain/usr/bin" swift-latest
+                        ls -d /Applications/Xcode*
                         sudo xcode-select -s /Applications/Xcode_\(version).app
                         swift --version
                     - name: Xcode Version
@@ -247,6 +248,7 @@ public class Platform: Option {
             
                     - name: Xcode Version
                       run: |
+                        ls -d /Applications/Xcode*
                         sudo xcode-select -s /Applications/Xcode_\(version).app
                         xcodebuild -version
                         swift --version
@@ -266,20 +268,16 @@ public class Platform: Option {
             )
             
             default:
-                yaml.append(
-                    """
-
-                            runs-on: macOS-latest
-                    """
-                )
-                
+                let macosImage: String
                 switch compiler.mac {
-                    case .xcode(let version):
+                    case .xcode(let version, let image):
                         xcodeVersion = version
+                        macosImage = image
                         
-                    case .toolchain(let version, let branch):
+                    case .toolchain(let version, let branch, let image):
                         xcodeVersion = version
                         xcodeToolchain = branch
+                        macosImage = image
                         yaml.append(
                             """
 
@@ -287,7 +285,15 @@ public class Platform: Option {
                                         TOOLCHAINS: swift
                             """
                         )
-            }
+                }
+
+                yaml.append(
+                    """
+
+                            runs-on: \(macosImage)
+                    """
+                )
+                
         }
     }
     

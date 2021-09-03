@@ -7,8 +7,8 @@ import Foundation
 
 public class Compiler: Option {
     public enum XcodeMode {
-        case xcode(version: String)
-        case toolchain(version: String, branch: String)
+        case xcode(version: String, image: String = "macos-latest")
+        case toolchain(version: String, branch: String, image: String = "macos-latest")
     }
     
     let short: String
@@ -20,5 +20,19 @@ public class Compiler: Option {
         self.linux = linux
         self.mac = mac
         super.init(id, name: name)
+    }
+    
+    func supportsTesting(on device: String) -> Bool {
+        // no Xcode version supports watchOS testing
+        if device == "watchOS" {
+            return false
+        }
+
+        // macOS nightly development builds don't seem to have a full toolchain so don't support testing on iOS/tvOS/watchOS devices
+        if (id == "swift-nightly") && (device != "macOS") {
+            return false
+        }
+        
+        return true
     }
 }
