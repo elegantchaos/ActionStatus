@@ -11,6 +11,7 @@ public protocol ApplicationHost {
     func saveState()
     func save(output: Generator.Output)
     func open(url: URL)
+    func reveal(url: URL)
     func pauseRefresh()
     func resumeRefresh()
 }
@@ -29,6 +30,10 @@ extension ApplicationHost {
     }
     
     func open(url: URL) {
+    }
+    
+    func reveal(url: URL) {
+        
     }
     
     func pauseRefresh() {

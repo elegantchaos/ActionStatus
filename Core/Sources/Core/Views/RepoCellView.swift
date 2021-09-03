@@ -3,6 +3,7 @@
 //  All code (c) 2021 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Hardware
 import SheetController
 import SwiftUI
 import SwiftUIExtensions
@@ -41,7 +42,13 @@ struct RepoCellView: View {
                 Button(action: handleShowWorkflow) {
                     Label("Open Workflow In Github…", systemImage: context.linkIcon)
                 }
-                
+
+                if let url = repo.url(forDevice: Device.main.identifier) {
+                    Button(action: { handleReveal(url: url) }) {
+                        Label("Reveal In Finder…", systemImage: context.linkIcon)
+                    }
+                }
+
                 Divider()
                 
                 Button(action: handleDelete) {
@@ -118,5 +125,10 @@ struct RepoCellView: View {
             model.update(repoWithID: repo.id, state: newState)
         }
     }
-    
+ 
+    func handleReveal(url: URL) {
+        url.accessSecurityScopedResource { unlockedURL in
+            context.host.reveal(url: unlockedURL)
+        }
+    }
 }

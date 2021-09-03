@@ -87,6 +87,14 @@ class MobileApplication: Application {
         settingsChannel.log("\(String.showInDockKey) is \(appKitBridge?.showInDock ?? false)")
     }
 
+    override func reveal(url: URL) {
+        if let bridge = appKitBridge {
+            bridge.reveal(inFinder: url)
+        } else {
+            super.reveal(url: url)
+        }
+    }
+    
     fileprivate func status(for state: Repo.State) -> ItemStatus {
         return ItemStatus(rawValue: state.rawValue) ?? .unknown
     }

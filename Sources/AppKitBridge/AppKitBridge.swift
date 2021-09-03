@@ -123,6 +123,10 @@ extension ItemStatus: CaseIterable {
 
 
 extension AppKitBridgeSingleton: AppKitBridge {
+    func reveal(inFinder url: URL) {
+        NSWorkspace.shared.activateFileViewerSelecting([url])
+    }
+    
     func setup(with delegate: AppKitBridgeDelegate) {
         self.delegate = delegate
         self.nextResponder = NSApp.nextResponder

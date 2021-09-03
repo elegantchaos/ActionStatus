@@ -209,7 +209,11 @@ open class Application: BasicApplication, ApplicationHost {
     public func open(url: URL) {
         UIApplication.shared.open(url)
     }
-    
+
+    open func reveal(url: URL) {
+        UIApplication.shared.open(url)
+    }
+
     func pickerForSavingWorkflow() -> FilePicker {
         let workflow = exportWorkflow!
         
