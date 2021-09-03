@@ -90,7 +90,7 @@ struct RepoCellView: View {
             }
             .matchedGeometryEffect(id: repo.id, in: namespace)
         }
-        .padding(0)
+        .padding(cellPadding)
         .font(context.settings.displaySize.font)
         .foregroundColor(.primary)
         .buttonStyle(PlainButtonStyle())
@@ -130,5 +130,13 @@ struct RepoCellView: View {
         url.accessSecurityScopedResource { unlockedURL in
             context.host.reveal(url: unlockedURL)
         }
+    }
+    
+    var cellPadding: CGFloat {
+        #if os(tvOS)
+            return 16
+        #else
+            return 4
+        #endif
     }
 }

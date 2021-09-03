@@ -15,7 +15,7 @@ public struct RepoGridView: View {
     
     public var body: some View {
         ScrollView(.vertical) {
-            LazyVGrid(columns: context.repoGridColumns, spacing: 4) {
+            LazyVGrid(columns: context.repoGridColumns, spacing: 0) {
                 ForEach(status.sortedRepos) { repo in
                     RepoCellView(repo: repo, selectable: false, namespace: namespace)
                 }
