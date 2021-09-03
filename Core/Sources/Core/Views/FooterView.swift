@@ -11,8 +11,17 @@ public struct FooterView: View {
     @EnvironmentObject var updater: Updater
     @EnvironmentObject var status: RepoState
     @EnvironmentObject var sheetController: SheetController
+    @EnvironmentObject var focusThingy: FocusThingy
+
+    let namespace: Namespace.ID
     
-    public init() {
+    #if os(tvOS)
+    let focus: FocusState<Focus?>.Binding
+    #endif
+    
+    public init(namespace: Namespace.ID, focus: FocusState<Focus?>.Binding) {
+        self.namespace = namespace
+        self.focus = focus
     }
     
     public var body: some View {
@@ -50,6 +59,14 @@ public struct FooterView: View {
                             Text("\(status.unreachable) unreachable.")
                         }
                     }
+                    
+                    #if os(tvOS)
+                    if #available(tvOS 15.0, *) {
+                        PreferencesButton()
+                            .prefersDefaultFocus(in: namespace)
+                            .focused(focus, equals: .prefs)
+                    }
+                    #endif
                 }
                 .statusStyle()
             }
@@ -63,7 +80,8 @@ public struct FooterView: View {
                     SparkleProgressView().frame(width: geometryReader.size.width * 0.25, height: 16)
                 }
             }
-        }.padding()
+        }
+        .padding()
     }
     
     var hasUpdate: Bool {
@@ -73,4 +91,5 @@ public struct FooterView: View {
     var showProgress: Bool {
         return (updater.progress > 0.0) && (updater.progress < 1.0)
     }
+    
 }

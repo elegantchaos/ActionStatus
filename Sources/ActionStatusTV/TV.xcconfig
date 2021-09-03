@@ -6,4 +6,4 @@
 #include ".rt/RTTV.xcconfig"
 #include "Sources/ActionStatus/ActionStatus.xcconfig"
 
-TVOS_DEPLOYMENT_TARGET = 14.0
+TVOS_DEPLOYMENT_TARGET = 15.0

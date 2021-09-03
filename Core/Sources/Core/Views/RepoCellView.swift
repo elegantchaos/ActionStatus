@@ -17,6 +17,10 @@ struct RepoCellView: View {
     let selectable: Bool
     let namespace: Namespace.ID
 
+    #if os(tvOS)
+    let focus: FocusState<Focus?>.Binding
+    #endif
+
     var body: some View {
         let cell = cell(for: repo)
         return cell
@@ -93,7 +97,12 @@ struct RepoCellView: View {
         .padding(cellPadding)
         .font(context.settings.displaySize.font)
         .foregroundColor(.primary)
-        .buttonStyle(PlainButtonStyle())
+        #if os(tvOS)
+        .buttonStyle(TestButtonStyle(repo: repo))
+        .focused(focus, equals: .repo(repo.id))
+        #else
+        .buttonStyle(.plain)
+        #endif
     }
     
     func handleShowRepo() {
@@ -134,9 +143,27 @@ struct RepoCellView: View {
     
     var cellPadding: CGFloat {
         #if os(tvOS)
-            return 16
+            return 0
         #else
             return 4
         #endif
+    }
+}
+
+
+struct TestButtonStyle: ButtonStyle {
+    @EnvironmentObject var focus: FocusThingy
+    @Environment(\.isFocused) var isFocused: Bool
+
+    let repo: Repo
+    
+    func makeBody(configuration: Configuration) -> some View {
+        if isFocused {
+            if focus.focussedRepo != repo.id {
+                focus.focussedRepo = repo.id
+            }
+        }
+        return configuration.label
+            .background(isFocused ? Color.gray.opacity(focus.alpha) : Color.clear)
     }
 }

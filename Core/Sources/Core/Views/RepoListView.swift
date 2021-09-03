@@ -14,10 +14,18 @@ public struct RepoListView: View {
     
     let namespace: Namespace.ID
     
+#if os(tvOS)
+let focus: FocusState<Focus?>.Binding
+#endif
+
     public var body: some View {
         List { 
             ForEach(status.sortedRepos) { repo in
+#if os(tvOS)
+                RepoCellView(repo: repo, selectable: true, namespace: namespace, focus: focus)
+#else
                 RepoCellView(repo: repo, selectable: true, namespace: namespace)
+#endif
             }
             .onDelete(perform: delete)
         }
