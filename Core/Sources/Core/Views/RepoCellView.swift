@@ -98,7 +98,7 @@ struct RepoCellView: View {
         .font(context.settings.displaySize.font)
         .foregroundColor(.primary)
         #if os(tvOS)
-        .buttonStyle(TestButtonStyle(repo: repo))
+        .buttonStyle(FadingFocusButtonStyle())
         .focused(focus, equals: .repo(repo.id))
         #else
         .buttonStyle(.plain)
@@ -150,20 +150,3 @@ struct RepoCellView: View {
     }
 }
 
-
-struct TestButtonStyle: ButtonStyle {
-    @EnvironmentObject var focus: FocusThingy
-    @Environment(\.isFocused) var isFocused: Bool
-
-    let repo: Repo
-    
-    func makeBody(configuration: Configuration) -> some View {
-        if isFocused {
-            if focus.focussedRepo != repo.id {
-                focus.focussedRepo = repo.id
-            }
-        }
-        return configuration.label
-            .background(isFocused ? Color.gray.opacity(focus.alpha) : Color.clear)
-    }
-}

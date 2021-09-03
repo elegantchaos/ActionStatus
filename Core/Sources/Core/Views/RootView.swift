@@ -6,50 +6,6 @@
 import SwiftUI
 import Combine
 
-class FocusThingy: ObservableObject {
-    @Published var alpha: Double = 1.0
-    @Published var focussedRepo: UUID?
-    
-#if os(tvOS)
-    var listeners: [AnyCancellable] = []
-
-//    @available(tvOS 15.0, *) var focusBinding: Binding<Focus?> {
-//        Binding<Focus?>(
-//            get: { self.prefsFocussed },
-//            set: { value in self.prefsFocussed = value }
-//        )
-//    }
-//
-    init() {
-//        if #available(tvOS 15.0, *) {
-//            let listener = prefsFocussed.publisher.sink { newValue in
-//                withAnimation {
-//                    self.alpha = 1.0
-//                }
-//            }
-//            listeners.append(listener)
-//        }
-    }
-    
-    func handleFocusChanged() {
-        alpha = 1.0
-        withAnimation(.easeIn(duration: 2.0)) {
-            alpha = 0.1
-        }
-    }
-
-#endif
-    
-}
-
-#if os(tvOS)
-extension FocusThingy: Equatable {
-    static func == (lhs: FocusThingy, rhs: FocusThingy) -> Bool {
-        lhs.focussedRepo == rhs.focussedRepo
-    }
-}
-#endif
-
 public enum Focus: Hashable, Equatable {
     case repo(UUID)
     case prefs
@@ -59,7 +15,7 @@ struct RootView: View {
     @Namespace() var defaultNamespace
     @EnvironmentObject var context: ViewContext
     @EnvironmentObject var model: Model
-    @State var focusState = FocusThingy()
+    @State var focusState = FadingFocusState()
     
     #if os(tvOS)
     @FocusState var focus: Focus?

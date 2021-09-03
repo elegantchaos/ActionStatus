@@ -11,7 +11,6 @@ public struct FooterView: View {
     @EnvironmentObject var updater: Updater
     @EnvironmentObject var status: RepoState
     @EnvironmentObject var sheetController: SheetController
-    @EnvironmentObject var focusThingy: FocusThingy
 
     let namespace: Namespace.ID
     
@@ -65,6 +64,7 @@ public struct FooterView: View {
                         PreferencesButton()
                             .prefersDefaultFocus(in: namespace)
                             .focused(focus, equals: .prefs)
+                            .buttonStyle(FadingFocusButtonStyle())
                     }
                     #endif
                 }
