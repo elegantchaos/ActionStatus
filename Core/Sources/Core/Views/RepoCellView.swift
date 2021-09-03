@@ -29,7 +29,7 @@ struct RepoCellView: View {
                 }
                 
                 Button(action: handleGenerate) {
-                    Label("Workflow…", systemImage: context.generateButtonIcon)
+                    Label("Generate Workflow…", systemImage: context.generateButtonIcon)
                         .accessibility(identifier: "generateLabel")
                 }
                 .accessibility(identifier: "generate")
