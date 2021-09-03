@@ -68,7 +68,7 @@ open class Application: BasicApplication, ApplicationHost {
         
         if settings.githubAuthentication {
             do {
-                let token = try Keychain.default.getToken(user: settings.githubUser, server: settings.githubServer)
+                let token = try Keychain.default.password(for: settings.githubUser, on: settings.githubServer)
                 let controller = OctoidRefreshController(model: model, token: token)
                 refreshChannel.log("Using github refresh controller for \(settings.githubUser)/\(settings.githubServer)")
                 return controller
