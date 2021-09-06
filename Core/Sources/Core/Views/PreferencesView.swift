@@ -66,90 +66,65 @@ public struct PreferencesForm: View {
     @Binding var githubToken: String
     @Binding var defaultOwner: String
     @Binding var oldestNewest: Bool
+    @AppStorage("selectedSettingsPanel") var selectedPane: PreferenceTabs = .connection
 
     @EnvironmentObject var context: ViewContext
 
-    enum PreferenceTabs: Int {
+    enum PreferenceTabs: Int, CaseIterable {
         case connection
         case display
         case other
         case debug
+        
+        var label: String {
+            switch self {
+                case .connection: return "Connection"
+                case .display: return "Display"
+                case .other: return "Other"
+                case .debug: return "Debug"
+            }
+        }
+        
+        var icon: String {
+            switch self {
+                case .connection: return "network"
+                case .display: return "display"
+                case .other: return "slider.horizontal.3"
+                case .debug: return "ant"
+            }
+        }
+        
     }
-    
+
     public var body: some View {
-        TabView {
-            ConnectionPrefsView(settings: $settings, token: $githubToken)
-                .tag(PreferenceTabs.connection)
-                .tabItem {
-                    Label("Connection", systemImage: "network")
+        VStack {
+            Picker("Panes", selection: $selectedPane) {
+                ForEach(PreferenceTabs.allCases, id: \.self) { kind in
+                    VStack {
+                        Image(systemName: kind.icon)
+                    }
                 }
-            
-            DisplayPrefsView(settings: $settings)
-                .tag(PreferenceTabs.display)
-                .tabItem {
-                    Label("Display", systemImage: "display")
-                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+            .padding(.bottom, 20)
 
-            OtherPrefsView(owner: $defaultOwner, oldestNewest: $oldestNewest)
-                .tag(PreferenceTabs.display)
-                .tabItem {
-                    Label("Other", systemImage: "slider.horizontal.3")
-                }
+            switch selectedPane {
+                case .connection:
+                    ConnectionPrefsView(settings: $settings, token: $githubToken)
 
-            #if DEBUG
-            DebugPrefsView(settings: $settings)
-                .tag(PreferenceTabs.display)
-                .tabItem {
-                    Label("Debug", systemImage: "ant")
-                }
-            #endif
-
+                case .display:
+                    DisplayPrefsView(settings: $settings)
+                case .other:
+                    OtherPrefsView(owner: $defaultOwner, oldestNewest: $oldestNewest)
+                case .debug:
+                    DebugPrefsView(settings: $settings)
+            }
         }
         .padding()
     }
 }
 
-//        return Form {
-//            FormSection(
-//                header: { Text("Connection") },
-//                footer: {
-//                    HStack {
-//                        Spacer()
-//                        VStack(alignment: .trailing) {
-//                            if settings.githubAuthentication {
-//                                Text("With authentication, checking works for private repos and shows queued and running jobs. The token requires the following permissions:\n  notifications, read:org, read:user, repo, workflow.")
-//                                HStack {
-//                                    Text("More info... ")
-//                                    LinkButton(url: URL(string: "https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token#creating-a-token")!)
-//                                }
-//                            } else {
-//                                Text("Without authentication, checking works for public repos only.")
-//                            }
-//                        }
-//                    }
-//                }
-//            ) {
-//
-//                ConnectionPrefsView(settings: $settings, token: $githubToken)
-//            }
-//
-//            FormSection(
-//                header: "Creation",
-//                footer: "Defaults to use for new repos."
-//            ) {
-//                FormFieldRow(label: "Default Owner", variable: $defaultOwner, style: DefaultFormFieldStyle(contentType: .organizationName))
-//            }
-//
-//            FormSection(
-//                header: "Workflows",
-//                footer: "Settings to use when generating workflow files."
-//            ) {
-//                FormToggleRow(label: "Test Lowest And Highest Only", variable: $oldestNewest)
-//            }
-//
-//        }
-//        .bestFormPickerStyle()
-//    }
 
 struct ConnectionPrefsView: View {
     @Binding var settings: Settings
@@ -168,6 +143,17 @@ struct ConnectionPrefsView: View {
             LabelledPicker("Refresh Rate", icon: "lock.circle", value: $settings.refreshRate, values: RefreshRate.allCases)
 
             Spacer()
+
+            if settings.githubAuthentication {
+                Text("With authentication, private repos are checked, and we can show queued and running jobs. The token requires the following permissions:\n  notifications, read:org, read:user, repo, workflow.")
+                HStack {
+                    Text("More info... ")
+                    LinkButton(url: URL(string: "https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token#creating-a-token")!)
+                }
+            } else {
+                Text("Without authentication, checking works for public repos only.")
+            }
+
         }
 
     }
