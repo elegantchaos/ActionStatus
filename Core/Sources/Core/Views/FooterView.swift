@@ -16,12 +16,11 @@ public struct FooterView: View {
     
     #if os(tvOS)
     let focus: FocusState<Focus?>.Binding
-    #endif
-    
     public init(namespace: Namespace.ID, focus: FocusState<Focus?>.Binding) {
         self.namespace = namespace
         self.focus = focus
     }
+    #endif
     
     public var body: some View {
         VStack(spacing: 10) {

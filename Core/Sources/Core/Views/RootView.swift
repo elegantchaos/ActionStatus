@@ -40,14 +40,20 @@ struct RootView: View {
             }
             
             Spacer()
+            #if os(tvOS)
             FooterView(namespace: defaultNamespace, focus: $focus)
+            #else
+            FooterView(namespace: defaultNamespace)
+            #endif
         }
+        .onAppear(perform: handleAppear)
+        #if os(tvOS)
         .focusScope(defaultNamespace)
         .environmentObject(focusState)
-        .onAppear(perform: handleAppear)
         .onChange(of: focus) { value in
             focusState.handleFocusChanged()
         }
+        #endif
     }
     
     func handleAppear() {

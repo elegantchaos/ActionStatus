@@ -5,6 +5,7 @@
 
 import SwiftUI
 import SwiftUIExtensions
+import LabelledGrid
 
 public enum DisplaySize: Int, CaseIterable {
     case automatic = 0
@@ -32,7 +33,11 @@ public enum DisplaySize: Int, CaseIterable {
     }
 }
 
-extension DisplaySize: Labelled {
+extension DisplaySize: LabelledPickerValue {
+    public var id: Int {
+        rawValue
+    }
+    
     public var label: String {
         switch self {
             case .automatic: return "Default (\(normalised.label))"

@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../LabelledGrid">
+   </FileRef>
+   <FileRef
       location = "group:ActionStatus.xcodeproj">
    </FileRef>
    <FileRef

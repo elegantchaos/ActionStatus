@@ -110,6 +110,15 @@
         }
       },
       {
+        "package": "LabelledGrid",
+        "repositoryURL": "https://github.com/elegantchaos/LabelledGrid.git",
+        "state": {
+          "branch": null,
+          "revision": "395d052e5a264f8039d833dcb884acedc7b453c0",
+          "version": "0.0.1"
+        }
+      },
+      {
         "package": "Logger",
         "repositoryURL": "https://github.com/elegantchaos/Logger.git",
         "state": {

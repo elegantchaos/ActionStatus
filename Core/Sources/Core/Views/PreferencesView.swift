@@ -3,6 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import LabelledGrid
 import Keychain
 import SwiftUI
 import SwiftUIExtensions
@@ -68,69 +69,155 @@ public struct PreferencesForm: View {
 
     @EnvironmentObject var context: ViewContext
 
+    enum PreferenceTabs: Int {
+        case connection
+        case display
+        case other
+        case debug
+    }
+    
     public var body: some View {
-        return Form {
-            FormSection(
-                header: { Text("Connection") },
-                footer: {
-                    HStack {
-                        Spacer()
-                        VStack(alignment: .trailing) {
-                            if settings.githubAuthentication {
-                                Text("With authentication, checking works for private repos and shows queued and running jobs. The token requires the following permissions:\n  notifications, read:org, read:user, repo, workflow.")
-                                HStack {
-                                    Text("More info... ")
-                                    LinkButton(url: URL(string: "https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token#creating-a-token")!)
-                                }
-                            } else {
-                                Text("Without authentication, checking works for public repos only.")
-                            }
-                        }
-                    }
+        TabView {
+            ConnectionPrefsView(settings: $settings, token: $githubToken)
+                .tag(PreferenceTabs.connection)
+                .tabItem {
+                    Label("Connection", systemImage: "network")
                 }
-            ) {
-                #if DEBUG
-                FormToggleRow(label: "Test Refresh", variable: $settings.testRefresh)
-                #endif
-                
-                FormPickerRow(label: "Refresh Every", variable: $settings.refreshRate, cases: RefreshRate.allCases)
-                FormToggleRow(label: "Github Authentication", variable: $settings.githubAuthentication)
-                if settings.githubAuthentication {
-                    FormFieldRow(label: "Github User", variable: $settings.githubUser, style: DefaultFormFieldStyle(contentType: .username), clearButton: true)
-                    FormFieldRow(label: "Github Server", variable: $settings.githubServer, style: DefaultFormFieldStyle(contentType: .URL), clearButton: true)
-                    FormFieldRow(label: "Github Token", variable: $githubToken, style: DefaultFormFieldStyle(contentType: .password), clearButton: true)
+            
+            DisplayPrefsView(settings: $settings)
+                .tag(PreferenceTabs.display)
+                .tabItem {
+                    Label("Display", systemImage: "display")
                 }
-            }
-            
-            FormSection(
-                header: "Display",
-                footer: "Display settings."
-            ) {
-                FormPickerRow(label: "Item Size", variable: $settings.displaySize, cases: DisplaySize.allCases)
-                FormPickerRow(label: "Sort By", variable: $settings.sortMode, cases: SortMode.allCases)
 
-                #if targetEnvironment(macCatalyst)
-                FormToggleRow(label: "Show In Menubar", variable: $settings.showInMenu)
-                FormToggleRow(label: "Show In Dock", variable: $settings.showInDock)
-                #endif
-            }
-            
-            FormSection(
-                header: "Creation",
-                footer: "Defaults to use for new repos."
-            ) {
-                FormFieldRow(label: "Default Owner", variable: $defaultOwner, style: DefaultFormFieldStyle(contentType: .organizationName))
-            }
+            OtherPrefsView(owner: $defaultOwner, oldestNewest: $oldestNewest)
+                .tag(PreferenceTabs.display)
+                .tabItem {
+                    Label("Other", systemImage: "slider.horizontal.3")
+                }
 
-            FormSection(
-                header: "Workflows",
-                footer: "Settings to use when generating workflow files."
-            ) {
-                FormToggleRow(label: "Test Lowest And Highest Only", variable: $oldestNewest)
-            }
+            #if DEBUG
+            DebugPrefsView(settings: $settings)
+                .tag(PreferenceTabs.display)
+                .tabItem {
+                    Label("Debug", systemImage: "ant")
+                }
+            #endif
 
         }
-        .bestFormPickerStyle()
+        .padding()
     }
 }
+
+//        return Form {
+//            FormSection(
+//                header: { Text("Connection") },
+//                footer: {
+//                    HStack {
+//                        Spacer()
+//                        VStack(alignment: .trailing) {
+//                            if settings.githubAuthentication {
+//                                Text("With authentication, checking works for private repos and shows queued and running jobs. The token requires the following permissions:\n  notifications, read:org, read:user, repo, workflow.")
+//                                HStack {
+//                                    Text("More info... ")
+//                                    LinkButton(url: URL(string: "https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token#creating-a-token")!)
+//                                }
+//                            } else {
+//                                Text("Without authentication, checking works for public repos only.")
+//                            }
+//                        }
+//                    }
+//                }
+//            ) {
+//
+//                ConnectionPrefsView(settings: $settings, token: $githubToken)
+//            }
+//
+//            FormSection(
+//                header: "Creation",
+//                footer: "Defaults to use for new repos."
+//            ) {
+//                FormFieldRow(label: "Default Owner", variable: $defaultOwner, style: DefaultFormFieldStyle(contentType: .organizationName))
+//            }
+//
+//            FormSection(
+//                header: "Workflows",
+//                footer: "Settings to use when generating workflow files."
+//            ) {
+//                FormToggleRow(label: "Test Lowest And Highest Only", variable: $oldestNewest)
+//            }
+//
+//        }
+//        .bestFormPickerStyle()
+//    }
+
+struct ConnectionPrefsView: View {
+    @Binding var settings: Settings
+    @Binding var token: String
+
+    var body: some View {
+        LabelledStack {
+            LabelledToggle("Github", icon: "lock.circle", prompt: "Use github authentication", value: $settings.githubAuthentication)
+            
+            if settings.githubAuthentication {
+                LabelledField("User", icon: "person", placeholder: "user", text: $settings.githubUser)
+                LabelledField("Server", icon: "network", placeholder: "host", text: $settings.githubServer)
+                LabelledField("Token", icon: "tag", placeholder: "token", text: $token)
+            }
+
+            LabelledPicker("Refresh Rate", icon: "lock.circle", value: $settings.refreshRate, values: RefreshRate.allCases)
+
+            Spacer()
+        }
+
+    }
+}
+
+
+struct DisplayPrefsView: View {
+    @Binding var settings: Settings
+
+    var body: some View {
+        LabelledStack {
+            LabelledPicker("Item Size", icon: "arrow.up.and.down.circle", value: $settings.displaySize)
+            LabelledPicker("Sort By", icon: "line.horizontal.3.decrease.circle", value: $settings.sortMode)
+            #if targetEnvironment(macCatalyst)
+            LabelledToggle("Show In Menubar", icon: "arrow.triangle.2.circlepath.circle", prompt: "Show menu", value: $settings.showInMenu)
+            LabelledToggle("Show In Dock", icon: "arrow.triangle.2.circlepath.circle", prompt: "Show icon in dock", value: $settings.showInDock)
+            #endif
+            
+            Spacer()
+        }
+
+    }
+}
+
+struct OtherPrefsView: View {
+    @Binding var owner: String
+    @Binding var oldestNewest: Bool
+    
+    var body: some View {
+        LabelledStack {
+            LabelledField("Default Owner", icon: "arrow.up.and.down.circle", placeholder: "github user or org", text: $owner)
+            LabelledToggle("Workflows", icon: "arrow.triangle.2.circlepath.circle", prompt: "Test lowest & highest Swift", value: $oldestNewest)
+
+            Spacer()
+        }
+
+    }
+}
+
+struct DebugPrefsView: View {
+    @Binding var settings: Settings
+
+    var body: some View {
+        LabelledStack {
+            LabelledToggle("Refresh", icon: "arrow.triangle.2.circlepath.circle", prompt: "Use test refresh controller", value: $settings.testRefresh)
+            
+            Spacer()
+        }
+
+    }
+}
+
 

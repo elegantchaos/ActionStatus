@@ -5,6 +5,7 @@
 
 import Foundation
 import SwiftUIExtensions
+import LabelledGrid
 
 public enum RefreshRate: Int, CaseIterable, Equatable {
         case automatic = 0
@@ -31,5 +32,11 @@ extension RefreshRate: Labelled {
         } else {
             return "\(rawValue / 60) minutes"
         }
+    }
+}
+
+extension RefreshRate: LabelledPickerValue {
+    public var id: Int {
+        self.rawValue
     }
 }
