@@ -4,6 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import LabelledGrid
+import LoggerUI
 import Keychain
 import SwiftUI
 import SwiftUIExtensions
@@ -12,7 +13,7 @@ public struct PreferencesView: View {
     @Environment(\.presentationMode) var presentation
     @EnvironmentObject var context: ViewContext
     @EnvironmentObject var model: Model
-
+    
     @State var settings = Settings()
     @State var owner: String = ""
     @State var token: String = ""
@@ -29,15 +30,15 @@ public struct PreferencesView: View {
                 defaultOwner: $owner,
                 oldestNewest: $oldestNewest
             )
-            .environmentObject(context.formStyle)
+                .environmentObject(context.formStyle)
         }
         .onAppear(perform: handleAppear)
     }
-
+    
     func handleCancel() {
         presentation.wrappedValue.dismiss()
     }
-
+    
     
     func handleAppear() {
         Application.shared.pauseRefresh()
@@ -55,11 +56,11 @@ public struct PreferencesView: View {
         if authenticationChanged {
             Application.shared.resetRefresh()
         }
-
+        
         Application.shared.resumeRefresh()
         presentation.wrappedValue.dismiss()
     }
-
+    
 }
 
 public struct PreferencesForm: View {
@@ -70,9 +71,9 @@ public struct PreferencesForm: View {
     @Binding var defaultOwner: String
     @Binding var oldestNewest: Bool
     @AppStorage("selectedSettingsPanel") var selectedPane: PreferenceTabs = .connection
-
+    
     @EnvironmentObject var context: ViewContext
-
+    
     enum PreferenceTabs: Int, CaseIterable {
         case connection
         case display
@@ -98,7 +99,7 @@ public struct PreferencesForm: View {
         }
         
     }
-
+    
     public var body: some View {
         VStack {
             Picker("Panes", selection: $selectedPane) {
@@ -110,19 +111,19 @@ public struct PreferencesForm: View {
             .padding(.horizontal)
             .padding(.bottom, 20)
             .adaptiveIconSize()
-
-            ScrollView {
-                switch selectedPane {
-                    case .connection:
-                        ConnectionPrefsView(settings: $settings, token: $githubToken)
-
-                    case .display:
-                        DisplayPrefsView(settings: $settings)
-                    case .other:
-                        OtherPrefsView(owner: $defaultOwner, oldestNewest: $oldestNewest)
-                    case .debug:
-                        DebugPrefsView(settings: $settings)
-                }
+            
+            switch selectedPane {
+                case .connection:
+                    ConnectionPrefsView(settings: $settings, token: $githubToken)
+                    
+                case .display:
+                    DisplayPrefsView(settings: $settings)
+                    
+                case .other:
+                    OtherPrefsView(owner: $defaultOwner, oldestNewest: $oldestNewest)
+                    
+                case .debug:
+                    DebugPrefsView(settings: $settings)
             }
         }
         .padding()
@@ -133,52 +134,58 @@ public struct PreferencesForm: View {
 struct ConnectionPrefsView: View {
     @Binding var settings: Settings
     @Binding var token: String
-
+    
     var body: some View {
-        LabelledStack {
-            LabelledToggle("Checking Method", icon: "lock", prompt: "Use Github API", value: $settings.githubAuthentication)
-            
-            if settings.githubAuthentication {
-                LabelledField("User", icon: "person", placeholder: "user", contentType: .emailAddress, text: $settings.githubUser)
-                LabelledField("Server", icon: "network", placeholder: "host", contentType: .URL, text: $settings.githubServer)
-                LabelledField("Token", icon: "tag", placeholder: "token", text: $token)
-            }
-
-            LabelledPicker("Refresh Rate", icon: "clock.arrow.2.circlepath", value: $settings.refreshRate, values: RefreshRate.allCases)
-
-            Spacer()
-
-            if settings.githubAuthentication {
-                Text("With the Github API enabled, private repos are checked, and we can show queued and running jobs. The token requires the following permissions:\n  notifications, read:org, read:user, repo, workflow.")
-                HStack {
-                    Text("More info... ")
-                    LinkButton(url: URL(string: "https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token#creating-a-token")!)
+        ScrollView {
+            LabelledStack {
+                LabelledToggle("Checking Method", icon: "lock", prompt: "Use Github API", value: $settings.githubAuthentication)
+                
+                if settings.githubAuthentication {
+                    LabelledField("User", icon: "person", placeholder: "user", contentType: .emailAddress, text: $settings.githubUser)
+                    LabelledField("Server", icon: "network", placeholder: "host", contentType: .URL, text: $settings.githubServer)
+                    LabelledSecureField("Token", icon: "tag", placeholder: "token", text: $token)
                 }
-            } else {
-                Text("Without the Github API, checking works for public repos only.")
+                
+                LabelledPicker("Refresh Rate", icon: "clock.arrow.2.circlepath", value: $settings.refreshRate, values: RefreshRate.allCases)
+                
+                Spacer()
+                
+                if settings.githubAuthentication {
+                    if #available(macOS 12.0, iOS 15.0, tvOS 15.0, *) {
+                        Text("With the Github API enabled, private repos are checked, and we can show queued and running jobs. [More info...](https://actionstatus.elegantchaos.com/help/authentication.html)")
+                    } else {
+                        Text("With the Github API enabled, private repos are checked, and we can show queued and running jobs.")
+                        HStack {
+                            Text("More info... ")
+                            LinkButton(url: URL(string: "help/authentication.html")!)
+                        }
+                    }
+                } else {
+                    Text("Without the Github API, checking works for public repos only.")
+                }
+                
             }
-
         }
-
     }
 }
 
 
 struct DisplayPrefsView: View {
     @Binding var settings: Settings
-
+    
     var body: some View {
-        LabelledStack {
-            LabelledPicker("Item Size", icon: "arrow.left.and.right", value: $settings.displaySize)
-            LabelledPicker("Sort By", icon: "line.horizontal.3.decrease", value: $settings.sortMode)
-            #if targetEnvironment(macCatalyst)
-            LabelledToggle("Show In Menubar", icon: "filemenu.and.cursorarrow", prompt: "Show menu", value: $settings.showInMenu)
-            LabelledToggle("Show In Dock", icon: "dock.rectangle", prompt: "Show icon in dock", value: $settings.showInDock)
-            #endif
-            
-            Spacer()
+        ScrollView {
+            LabelledStack {
+                LabelledPicker("Item Size", icon: "arrow.left.and.right", value: $settings.displaySize)
+                LabelledPicker("Sort By", icon: "line.horizontal.3.decrease", value: $settings.sortMode)
+#if targetEnvironment(macCatalyst)
+                LabelledToggle("Show In Menubar", icon: "filemenu.and.cursorarrow", prompt: "Show menu", value: $settings.showInMenu)
+                LabelledToggle("Show In Dock", icon: "dock.rectangle", prompt: "Show icon in dock", value: $settings.showInDock)
+#endif
+                
+                Spacer()
+            }
         }
-
     }
 }
 
@@ -187,33 +194,41 @@ struct OtherPrefsView: View {
     @Binding var oldestNewest: Bool
     
     var body: some View {
-        LabelledStack {
-            LabelledField("Default Owner", icon: "person", placeholder: "github user or org", text: $owner)
-            LabelledToggle("Workflows", icon: "flowchart", prompt: "Test lowest & highest Swift", value: $oldestNewest)
-
-            Spacer()
+        ScrollView {
+            LabelledStack {
+                LabelledField("Default Owner", icon: "person", placeholder: "github user or org", text: $owner)
+                LabelledToggle("Workflows", icon: "flowchart", prompt: "Test lowest & highest Swift", value: $oldestNewest)
+                
+                Spacer()
+            }
         }
-
     }
 }
 
 struct DebugPrefsView: View {
     @Binding var settings: Settings
-
+    
     var body: some View {
-        LabelledStack {
-            LabelledToggle("Refresh", icon: "clock.arrow.2.circlepath", prompt: "Use test refresh controller", value: $settings.testRefresh)
+        VStack {
+            LabelledStack {
+                LabelledToggle("Refresh", icon: "clock.arrow.2.circlepath", prompt: "Use test refresh controller", value: $settings.testRefresh)
+                LabelledLine("Log Channels", icon: "ant") {
+                    LoggerChannelsHeaderView()
+                }
+            }
             
-            Spacer()
+            ScrollView {
+                LoggerChannelsStackView()
+            }
         }
-
+        
     }
 }
 
 
 struct AdaptiveIconSize: ViewModifier {
     @Environment(\.horizontalSizeClass) var horizontalSize
-
+    
     func body(content: Content) -> some View {
         if horizontalSize == .compact {
             content
