@@ -16,6 +16,7 @@ import UserDefaultsExtensions
 
 public let settingsChannel = Channel("Settings")
 public let monitoringChannel = Channel("Monitoring")
+public let refreshControllerChannel = Channel("RefreshController")
 
 open class Application: BasicApplication, ApplicationHost {
     override open class var shared: Application {
@@ -106,6 +107,7 @@ open class Application: BasicApplication, ApplicationHost {
                 restoreState()
 
                 observers.append(UserDefaults.standard.onChanged {
+                    assert(Thread.isMainThread)
                     monitoringChannel.log("user defaults changed")
                     self.loadSettings()
                     self.updateRepoState()
@@ -116,6 +118,7 @@ open class Application: BasicApplication, ApplicationHost {
                         .objectWillChange
                         .debounce(for: 0.1, scheduler: RunLoop.main)
                         .sink {
+                            assert(Thread.isMainThread)
                             monitoringChannel.log("model changed")
                             self.saveState()
                             self.updateRepoState()
@@ -126,6 +129,7 @@ open class Application: BasicApplication, ApplicationHost {
                         .objectWillChange
                         .debounce(for: 0.1, scheduler: RunLoop.main)
                         .sink() { value in
+                            assert(Thread.isMainThread)
                             monitoringChannel.log("view state changed")
                             self.saveSettings()
                             self.updateRepoState()
@@ -190,6 +194,7 @@ open class Application: BasicApplication, ApplicationHost {
     }
     
     public func pauseRefresh() {
+        refreshControllerChannel.log("Paused")
         refreshController?.pause()
     }
     
@@ -198,11 +203,13 @@ open class Application: BasicApplication, ApplicationHost {
             refreshController = makeRefreshController()
         }
 
+        refreshControllerChannel.log("Resumed")
         refreshController?.resume(rate: settings.refreshRate.rate)
     }
     
     func resetRefresh() {
-        pauseRefresh()
+        refreshControllerChannel.log("Reset")
+        refreshController?.pause()
         refreshController = nil
     }
     

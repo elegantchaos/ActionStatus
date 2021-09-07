@@ -110,6 +110,7 @@ public class Model: ObservableObject {
     }
     
     public func update(repoWithID id: UUID, state: Repo.State) {
+        assert(Thread.isMainThread)
         if var repo = items[id] {
             modelChannel.log("Updated state of \(repo) to \(state)")
             objectWillChange.send()
@@ -124,6 +125,7 @@ public class Model: ObservableObject {
     }
     
     public func update(repo: Repo, addIfMissing: Bool = true) {
+        assert(Thread.isMainThread)
         let item = items[repo.id]
         let update: Bool
         if let existing = item, !repo.identical(to: existing) {
