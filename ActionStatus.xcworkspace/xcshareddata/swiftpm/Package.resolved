@@ -110,21 +110,12 @@
         }
       },
       {
-        "package": "LabelledGrid",
-        "repositoryURL": "https://github.com/elegantchaos/LabelledGrid.git",
-        "state": {
-          "branch": null,
-          "revision": "395d052e5a264f8039d833dcb884acedc7b453c0",
-          "version": "0.0.1"
-        }
-      },
-      {
         "package": "Logger",
         "repositoryURL": "https://github.com/elegantchaos/Logger.git",
         "state": {
           "branch": null,
-          "revision": "0f404f713ccf80c659e45c0af80b4d7b2160ebee",
-          "version": "1.7.2"
+          "revision": "50da0037cd25c2f9444effbb2afe15bb00f70a98",
+          "version": "1.7.3"
         }
       },
       {
