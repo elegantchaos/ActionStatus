@@ -19,6 +19,8 @@ public struct ContentView: View {
             #else
             return NavigationView {
                 RootView()
+                    .navigationTitle(Application.shared.info.name)
+                    .navigationBarTitleDisplayMode(.inline)
                     .iosToolbar(includeAddButton: context.settings.isEditing)
             }
             .navigationViewStyle(StackNavigationViewStyle())
@@ -45,11 +47,11 @@ extension View {
                     PreferencesButton()
                 }
             }
-        
-            ToolbarItem(placement: .principal) {
-                Text(Application.shared.info.name)
-                    .font(.title)
-            }
+//        
+//            ToolbarItem(placement: .principal) {
+//                Text(Application.shared.info.name)
+//                    .font(.title)
+//            }
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 ToggleEditingButton()

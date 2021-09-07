@@ -27,8 +27,9 @@ public struct PreferencesView: View {
                 settings: $settings,
                 githubToken: $token,
                 defaultOwner: $owner,
-                oldestNewest: $oldestNewest)
-                .environmentObject(context.formStyle)
+                oldestNewest: $oldestNewest
+            )
+            .environmentObject(context.formStyle)
         }
         .onAppear(perform: handleAppear)
     }
@@ -110,16 +111,18 @@ public struct PreferencesForm: View {
             .padding(.bottom, 20)
             .adaptiveIconSize()
 
-            switch selectedPane {
-                case .connection:
-                    ConnectionPrefsView(settings: $settings, token: $githubToken)
+            ScrollView {
+                switch selectedPane {
+                    case .connection:
+                        ConnectionPrefsView(settings: $settings, token: $githubToken)
 
-                case .display:
-                    DisplayPrefsView(settings: $settings)
-                case .other:
-                    OtherPrefsView(owner: $defaultOwner, oldestNewest: $oldestNewest)
-                case .debug:
-                    DebugPrefsView(settings: $settings)
+                    case .display:
+                        DisplayPrefsView(settings: $settings)
+                    case .other:
+                        OtherPrefsView(owner: $defaultOwner, oldestNewest: $oldestNewest)
+                    case .debug:
+                        DebugPrefsView(settings: $settings)
+                }
             }
         }
         .padding()
@@ -136,8 +139,8 @@ struct ConnectionPrefsView: View {
             LabelledToggle("Checking Method", icon: "lock", prompt: "Use Github API", value: $settings.githubAuthentication)
             
             if settings.githubAuthentication {
-                LabelledField("User", icon: "person", placeholder: "user", text: $settings.githubUser)
-                LabelledField("Server", icon: "network", placeholder: "host", text: $settings.githubServer)
+                LabelledField("User", icon: "person", placeholder: "user", contentType: .emailAddress, text: $settings.githubUser)
+                LabelledField("Server", icon: "network", placeholder: "host", contentType: .URL, text: $settings.githubServer)
                 LabelledField("Token", icon: "tag", placeholder: "token", text: $token)
             }
 
