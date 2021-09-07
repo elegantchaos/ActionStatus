@@ -4,6 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Foundation
+import Labelled
 import SwiftUIExtensions
 import LabelledGrid
 
@@ -23,20 +24,18 @@ public enum RefreshRate: Int, CaseIterable, Equatable {
         }
     }
 
-extension RefreshRate: Labelled {
-    public var label: String {
+extension RefreshRate: LabelledPickerValue {
+    public var id: Int {
+        self.rawValue
+    }
+
+    public var labelName: String {
         if self == .automatic {
-            return "Default (\(normalised.label))"
+            return "Default (\(normalised.labelName))"
         } else if rawValue < 60 {
             return "\(rawValue) seconds"
         } else {
             return "\(rawValue / 60) minutes"
         }
-    }
-}
-
-extension RefreshRate: LabelledPickerValue {
-    public var id: Int {
-        self.rawValue
     }
 }

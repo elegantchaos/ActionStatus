@@ -28,7 +28,7 @@ public enum SortMode: String, CaseIterable {
 extension SortMode: LabelledPickerValue {
     public var id: String { rawValue }
     
-    public var label: String {
+    public var labelName: String {
         switch self {
             case .name: return "Name"
             case .state: return "State"

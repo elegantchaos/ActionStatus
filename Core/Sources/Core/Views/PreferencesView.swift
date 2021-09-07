@@ -22,7 +22,7 @@ public struct PreferencesView: View {
     }
     
     public var body: some View {
-        SheetView("ActionStatus Preferences", shortTitle: "Preferences", cancelAction: handleCancel, doneAction: handleSave) {
+        SheetView("ActionStatus Settings", shortTitle: "Settings", cancelAction: handleCancel, doneAction: handleSave) {
             PreferencesForm(
                 settings: $settings,
                 githubToken: $token,
@@ -62,6 +62,8 @@ public struct PreferencesView: View {
 }
 
 public struct PreferencesForm: View {
+    @Environment(\.horizontalSizeClass) var horizontalSize
+    
     @Binding var settings: Settings
     @Binding var githubToken: String
     @Binding var defaultOwner: String
@@ -100,14 +102,13 @@ public struct PreferencesForm: View {
         VStack {
             Picker("Panes", selection: $selectedPane) {
                 ForEach(PreferenceTabs.allCases, id: \.self) { kind in
-                    VStack {
-                        Image(systemName: kind.icon)
-                    }
+                    Label(kind.label, systemImage: kind.icon)
                 }
             }
             .pickerStyle(.segmented)
             .padding(.horizontal)
             .padding(.bottom, 20)
+            .adaptiveIconSize()
 
             switch selectedPane {
                 case .connection:
@@ -132,7 +133,7 @@ struct ConnectionPrefsView: View {
 
     var body: some View {
         LabelledStack {
-            LabelledToggle("Github", icon: "lock.circle", prompt: "Use github authentication", value: $settings.githubAuthentication)
+            LabelledToggle("Checking Method", icon: "lock", prompt: "Use Github API", value: $settings.githubAuthentication)
             
             if settings.githubAuthentication {
                 LabelledField("User", icon: "person", placeholder: "user", text: $settings.githubUser)
@@ -140,18 +141,18 @@ struct ConnectionPrefsView: View {
                 LabelledField("Token", icon: "tag", placeholder: "token", text: $token)
             }
 
-            LabelledPicker("Refresh Rate", icon: "lock.circle", value: $settings.refreshRate, values: RefreshRate.allCases)
+            LabelledPicker("Refresh Rate", icon: "clock.arrow.2.circlepath", value: $settings.refreshRate, values: RefreshRate.allCases)
 
             Spacer()
 
             if settings.githubAuthentication {
-                Text("With authentication, private repos are checked, and we can show queued and running jobs. The token requires the following permissions:\n  notifications, read:org, read:user, repo, workflow.")
+                Text("With the Github API enabled, private repos are checked, and we can show queued and running jobs. The token requires the following permissions:\n  notifications, read:org, read:user, repo, workflow.")
                 HStack {
                     Text("More info... ")
                     LinkButton(url: URL(string: "https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token#creating-a-token")!)
                 }
             } else {
-                Text("Without authentication, checking works for public repos only.")
+                Text("Without the Github API, checking works for public repos only.")
             }
 
         }
@@ -165,11 +166,11 @@ struct DisplayPrefsView: View {
 
     var body: some View {
         LabelledStack {
-            LabelledPicker("Item Size", icon: "arrow.up.and.down.circle", value: $settings.displaySize)
-            LabelledPicker("Sort By", icon: "line.horizontal.3.decrease.circle", value: $settings.sortMode)
+            LabelledPicker("Item Size", icon: "arrow.left.and.right", value: $settings.displaySize)
+            LabelledPicker("Sort By", icon: "line.horizontal.3.decrease", value: $settings.sortMode)
             #if targetEnvironment(macCatalyst)
-            LabelledToggle("Show In Menubar", icon: "arrow.triangle.2.circlepath.circle", prompt: "Show menu", value: $settings.showInMenu)
-            LabelledToggle("Show In Dock", icon: "arrow.triangle.2.circlepath.circle", prompt: "Show icon in dock", value: $settings.showInDock)
+            LabelledToggle("Show In Menubar", icon: "filemenu.and.cursorarrow", prompt: "Show menu", value: $settings.showInMenu)
+            LabelledToggle("Show In Dock", icon: "dock.rectangle", prompt: "Show icon in dock", value: $settings.showInDock)
             #endif
             
             Spacer()
@@ -184,8 +185,8 @@ struct OtherPrefsView: View {
     
     var body: some View {
         LabelledStack {
-            LabelledField("Default Owner", icon: "arrow.up.and.down.circle", placeholder: "github user or org", text: $owner)
-            LabelledToggle("Workflows", icon: "arrow.triangle.2.circlepath.circle", prompt: "Test lowest & highest Swift", value: $oldestNewest)
+            LabelledField("Default Owner", icon: "person", placeholder: "github user or org", text: $owner)
+            LabelledToggle("Workflows", icon: "flowchart", prompt: "Test lowest & highest Swift", value: $oldestNewest)
 
             Spacer()
         }
@@ -198,7 +199,7 @@ struct DebugPrefsView: View {
 
     var body: some View {
         LabelledStack {
-            LabelledToggle("Refresh", icon: "arrow.triangle.2.circlepath.circle", prompt: "Use test refresh controller", value: $settings.testRefresh)
+            LabelledToggle("Refresh", icon: "clock.arrow.2.circlepath", prompt: "Use test refresh controller", value: $settings.testRefresh)
             
             Spacer()
         }
@@ -207,3 +208,25 @@ struct DebugPrefsView: View {
 }
 
 
+struct AdaptiveIconSize: ViewModifier {
+    @Environment(\.horizontalSizeClass) var horizontalSize
+
+    func body(content: Content) -> some View {
+        if horizontalSize == .compact {
+            content
+                .labelStyle(.iconOnly)
+        } else if #available(iOS 15.0, *) {
+            content
+                .labelStyle(.titleAndIcon)
+        } else {
+            content
+                .labelStyle(.automatic)
+        }
+    }
+}
+
+extension View {
+    func adaptiveIconSize() -> some View {
+        return self.modifier(AdaptiveIconSize())
+    }
+}

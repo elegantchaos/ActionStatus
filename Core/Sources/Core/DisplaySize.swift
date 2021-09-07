@@ -38,9 +38,9 @@ extension DisplaySize: LabelledPickerValue {
         rawValue
     }
     
-    public var label: String {
+    public var labelName: String {
         switch self {
-            case .automatic: return "Default (\(normalised.label))"
+            case .automatic: return "Default (\(normalised.labelName))"
             case .large: return "Large"
             case .huge: return "Huge"
             case .medium: return "Medium"
