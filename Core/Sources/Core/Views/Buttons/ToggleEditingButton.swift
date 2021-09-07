@@ -16,10 +16,7 @@ public struct ToggleEditingButton: View {
         HStack {
             Button(action: toggleEditing) {
                 Text(context.settings.isEditing ? "Done" : "Edit")
-//                Image(systemName: context.settings.isEditing ? context.stopEditingIcon : context.startEditingIcon)
             }
-            .accentColor(.black)
-            .font(.footnote)
             .accessibility(identifier: "toggleEditing")
         }
     }

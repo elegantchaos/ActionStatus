@@ -9,12 +9,16 @@ import SwiftUIExtensions
 
 struct PreferencesButton: View {
     @EnvironmentObject var context: ViewContext
+    @Environment(\.horizontalSizeClass) var horizontalSize
     @EnvironmentObject var sheetController: SheetController
     
     var body: some View {
         Button(action: showPreferences) {
-            SystemImage(context.preferencesIcon)
-                .foregroundColor(Color.accentColor)
+            if horizontalSize == .compact {
+                Image(systemName: context.preferencesIcon)
+            } else {
+                Text("Settings")
+            }
         }.accessibility(identifier: "preferencesButton")
     }
 

@@ -47,7 +47,7 @@ extension View {
                     PreferencesButton()
                 }
             }
-//        
+//
 //            ToolbarItem(placement: .principal) {
 //                Text(Application.shared.info.name)
 //                    .font(.title)

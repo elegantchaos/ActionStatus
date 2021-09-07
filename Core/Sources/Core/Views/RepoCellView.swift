@@ -85,8 +85,8 @@ struct RepoCellView: View {
 
                 if selectable {
                     Spacer()
-                    EditButton(repo: repo)
-                    GenerateButton(repo: repo)
+                    EditRepoButton(repo: repo)
+                    GenerateWorkflowButton(repo: repo)
                     LinkButton(url: repo.githubURL(for: .repo))
                 } else {
                     Spacer()

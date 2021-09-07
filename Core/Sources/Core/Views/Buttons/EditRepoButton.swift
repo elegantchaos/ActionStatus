@@ -1,13 +1,13 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-//  Created by Sam Deane on 11/05/21.
-//  All code (c) 2021 - present day, Elegant Chaos Limited.
+//  Created by Sam Deane on 14/05/2020.
+//  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import SheetController
 import SwiftUI
 import SwiftUIExtensions
 
-struct GenerateButton: View {
+struct EditRepoButton: View {
     @EnvironmentObject var context: ViewContext
     @EnvironmentObject var sheetController: SheetController
     
@@ -15,23 +15,22 @@ struct GenerateButton: View {
     
     var body: some View {
         Button(action: handleTapped) {
-            SystemImage(context.generateButtonIcon)
+            SystemImage(context.editButtonIcon)
         }
-        .accessibility(identifier: "generateButton")
+        .accessibility(identifier: "editButton")
+        .foregroundColor(.black)
     }
 
     func handleTapped() {
         sheetController.show() {
-            GenerateView(repoID: repo.id)
+            EditView(repo: self.repo)
         }
     }
 }
 
-struct GenerateButton_Previews: PreviewProvider {
+struct EditButton_Previews: PreviewProvider {
     static var previews: some View {
         let context = PreviewContext()
-        return context.inject(into: GenerateButton(repo: context.testRepo))
+        return context.inject(into: EditRepoButton(repo: context.testRepo))
     }
 }
-
-
