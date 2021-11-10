@@ -70,10 +70,12 @@ public class Model: ObservableObject {
             items = loadedRepos
         }
         
-        if let key = store.string(forKey: .defaultOwnerKey) ?? UserDefaults.standard.string(forKey: .defaultOwnerKey) {
-            defaultOwner = key
+        DispatchQueue.main.async { [self] in
+            if let key = store.string(forKey: .defaultOwnerKey) ?? UserDefaults.standard.string(forKey: .defaultOwnerKey) {
+                defaultOwner = key
+            }
+            testOldestNewest = store.bool(forKey: .testOldestNewestKey)
         }
-        testOldestNewest = store.bool(forKey: .testOldestNewestKey)
     }
     
     public func save(toDefaultsKey key: String) {
