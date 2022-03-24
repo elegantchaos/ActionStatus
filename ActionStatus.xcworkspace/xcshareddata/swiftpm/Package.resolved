@@ -110,6 +110,24 @@
         }
       },
       {
+        "package": "Labelled",
+        "repositoryURL": "https://github.com/elegantchaos/Labelled.git",
+        "state": {
+          "branch": null,
+          "revision": "892869299c05e2f3d67f1d81337f3b4a31088c76",
+          "version": "1.0.4"
+        }
+      },
+      {
+        "package": "LabelledGrid",
+        "repositoryURL": "https://github.com/elegantchaos/LabelledGrid.git",
+        "state": {
+          "branch": null,
+          "revision": "86d97484d659a1ce3862ddd4e2cf4f9753e632a1",
+          "version": "1.0.2"
+        }
+      },
+      {
         "package": "Logger",
         "repositoryURL": "https://github.com/elegantchaos/Logger.git",
         "state": {
@@ -152,6 +170,15 @@
           "branch": null,
           "revision": "93fde2600bd0764388154c2bee23770c1b351362",
           "version": "1.0.2"
+        }
+      },
+      {
+        "package": "swift-argument-parser",
+        "repositoryURL": "https://github.com/apple/swift-argument-parser.git",
+        "state": {
+          "branch": null,
+          "revision": "6b2aa2748a7881eebb9f84fb10c01293e15b52ca",
+          "version": "0.5.0"
         }
       },
       {
