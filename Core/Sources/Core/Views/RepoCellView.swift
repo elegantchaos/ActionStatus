@@ -71,7 +71,7 @@ struct RepoCellView: View {
      }
     
     func cell(for repo: Repo) -> some View {
-        return Button(action: handleEdit) {
+        return Button(action: handleShowWorkflow) {
             HStack(alignment: .center, spacing: context.padding) {
                 if !selectable {
                     SystemImage(repo.badgeName)
