@@ -695,7 +695,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#source \"${RT_SCRIPTS_PATH}/embed\"\nsource \"Extras/Scripts/embed\"\n";
+			shellScript = "source \"$PROJECT_DIR/Extras/Scripts/embed\"\n";
+			showEnvVarsInLog = 0;
 		};
 		8BD674A224C5E26500289A08 /* Update Build Version */ = {
 			isa = PBXShellScriptBuildPhase;

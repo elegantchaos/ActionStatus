@@ -1,0 +1,114 @@
+#!/bin/bash
+
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+#  Created by Sam Deane on 27/02/2020.
+#  All code (c) 2020 - present day, Elegant Chaos Limited.
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+function resign {
+    local out=$(codesign --verbose --force --deep --options runtime --sign "$IDENTITY" "$1" 2>&1)
+    if [[ $? != 0 ]]
+    then
+        echo $out
+    fi
+}
+
+function resign_bundle {
+    local bundle=$1
+    local bundleName=$(basename "$bundle")
+    if [[ "$bundleName" != "Settings.bundle" ]]
+    then
+        echo "$2Re-signing $bundleName"
+        resign_frameworks "$bundle/Contents/Frameworks/" "$2    "
+        resign "$bundle"
+    fi
+}
+
+function resign_bundles {
+    if [[ -e "$1" ]]
+    then
+        pushd "$1" > /dev/null
+        for bundle in *.bundle
+        do
+            resign_bundle "$bundle" "$2"
+        done
+        popd > /dev/null
+    fi
+}
+
+function resign_framework {
+    local framework=$1
+    local frameworkName=$(basename "$framework")
+    echo "$2Re-signing $frameworkName"
+
+    resign_bundles "$framework/Versions/A/Resources/" "$2    "
+    resign "$framework/Versions/A"
+}
+
+function resign_frameworks {
+    if [[ -e "$1" ]]
+    then
+        pushd "$1" > /dev/null
+        for framework in *.framework
+        do
+            resign_framework "$framework" "$2"
+        done
+        popd > /dev/null
+    fi
+}
+
+function resign_xpc {
+    local xpc=$1
+    local xpcName=$(basename "$xpc")
+    echo "$2Re-signing $xpcName"
+    resign "$xpc"
+}
+
+function resign_xpcs {
+    if [[ -e "$1" ]]
+    then
+        pushd "$1" > /dev/null
+        for xpc in *.xpc
+        do
+            resign_xpc "$xpc" "$2"
+        done
+        popd > /dev/null
+    fi
+}
+
+function copy_xpcs {
+if [[ -e "$1" ]]
+then
+    pushd "$1" > /dev/null
+    for xpc in *.xpc
+    do
+        local xpcName=$(basename "$xpc")
+        echo "Copying $xpcName"
+        ditto "$xpc" "$RT_BUILT_XPCSERVICES_DIR/$xpcName"
+    done
+fi
+}
+
+set -e
+shopt -s nullglob
+
+if [[ "$PLATFORM_NAME" != "macosx" ]]
+then
+  exit 0
+fi
+
+
+
+# By default, use the configured code signing identity for the project/target
+IDENTITY="${EXPANDED_CODE_SIGN_IDENTITY}"
+if [ "$IDENTITY" == "" ]
+then
+    # If a code signing identity is not specified, use ad hoc signing
+    IDENTITY="-"
+fi
+
+resign_bundles "$RT_BUILT_RESOURCES_DIR"
+resign_frameworks "$RT_BUILT_FRAMEWORKS_DIR"
+resign_xpcs "$RT_BUILT_XPCSERVICES_DIR"
+
+#/usr/bin/codesign -vvvv --deep "$RT_BUILT_FRAMEWORKS_DIR/SparkleBridgeClient.framework"
