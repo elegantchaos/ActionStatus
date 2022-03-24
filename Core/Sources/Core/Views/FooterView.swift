@@ -76,16 +76,6 @@ public struct FooterView: View {
                 }
                 .statusStyle()
             }
-            
-            if hasUpdate {
-                SparkleView()
-            }
-
-            if showProgress {
-                GeometryReader { geometryReader in
-                    SparkleProgressView().frame(width: geometryReader.size.width * 0.25, height: 16)
-                }
-            }
         }
         .padding()
         .frame(maxWidth: .infinity)

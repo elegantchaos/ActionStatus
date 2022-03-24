@@ -44,7 +44,7 @@ internal extension SimpleRefreshController {
                 newState[id] = checkState(for: repo)
             }
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [self] in
                 refreshChannel.log("Completed Refresh")
                 switch state {
                     case .running(let rate):

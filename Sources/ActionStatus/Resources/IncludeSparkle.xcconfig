@@ -1,7 +1,0 @@
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-//  Created by Sam Deane on 14/02/20.
-//  All code (c) 2020 - present day, Elegant Chaos Limited.
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-INCLUDE_SPARKLE = true
-ACTION_STATUS_ADDITIONAL_FRAMEWORKS = -weak_framework SparkleBridgeClient

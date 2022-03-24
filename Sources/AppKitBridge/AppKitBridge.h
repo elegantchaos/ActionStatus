@@ -28,7 +28,6 @@ typedef NS_CLOSED_ENUM(NSUInteger, ItemStatus) { // NB: order should match the c
 - (ItemStatus) statusForItem: (NSInteger) item;
 - (void) selectItem: (NSInteger) item;
 - (void) showPreferences;
-- (void) checkForUpdates;
 - (BOOL) toggleEditing;
 - (void) addItem;
 @end
@@ -39,7 +38,6 @@ typedef NS_CLOSED_ENUM(NSUInteger, ItemStatus) { // NB: order should match the c
 @property (nonatomic) BOOL showInMenu;
 @property (nonatomic) BOOL showInDock;
 @property (nonatomic) BOOL showAddButton;
-@property (nonatomic) BOOL showUpdates;
 @property (nonatomic, readonly) SEL showWindowSelector;
 
 - (void) setupWithDelegate: (id<AppKitBridgeDelegate>) delegate;

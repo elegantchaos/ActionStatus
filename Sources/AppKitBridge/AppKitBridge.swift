@@ -74,8 +74,6 @@ extension ItemStatus: CaseIterable {
         }
     }
     
-    var showUpdates = false
-
     class func setupImages() -> ImageTable {
         var images: ImageTable = [:]
         for mode in ImageMode.allCases {
@@ -215,9 +213,6 @@ extension AppKitBridgeSingleton: NSMenuDelegate {
             menu.addItem(withTitle: "About \(appName)", action: #selector(handleAbout(_:)), keyEquivalent: "")
             menu.addItem(withTitle: "Show \(appName)", action: #selector(handleShow(_:)), keyEquivalent: "")
             menu.addItem(withTitle: "Preferences…", action: #selector(handlePreferences(_:)), keyEquivalent: "")
-            if showUpdates {
-                menu.addItem(withTitle: "Check For Updates…", action: #selector(handleCheckForUpdates(_:)), keyEquivalent: "")
-            }
             menu.addItem(withTitle: "Quit \(appName)", action: #selector(handleQuit(_:)), keyEquivalent: "")
         }
     }
@@ -235,10 +230,6 @@ extension AppKitBridgeSingleton: NSMenuDelegate {
     @IBAction func handlePreferences(_ sender: Any) {
         handleShow(sender)
         delegate?.showPreferences()
-    }
-
-    @IBAction func handleCheckForUpdates(_ sender: Any) {
-        delegate?.checkForUpdates()
     }
     
     @IBAction func handleShow(_ sender: Any) {

@@ -99,7 +99,7 @@ open class Application: BasicApplication, ApplicationHost {
 
     open override func setUp(withOptions options: BasicApplication.LaunchOptions, completion: @escaping BasicApplication.SetupCompletion) {
         super.setUp(withOptions: options) { [self] options in
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [self] in
                 sheetController.environmentSetter = { view in AnyView(self.applyEnvironment(to: view)) }
 
                 setupDefaultSettings()

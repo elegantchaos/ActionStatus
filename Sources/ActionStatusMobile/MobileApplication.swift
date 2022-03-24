@@ -10,10 +10,6 @@ import Logger
 import SwiftUI
 import UIKit
 
-#if canImport(SparkleBridgeClient)
-import SparkleBridgeClient
-#endif
-
 extension TimeInterval {
     static let statusCycleInterval = 1.5
 }
@@ -34,24 +30,10 @@ class MobileApplication: Application {
     var editingSubscriber: AnyCancellable?
     var updateTimer: Timer?
     
-    #if canImport(SparkleBridgeClient)
-    let sparkleEnabled = Bundle.main.hasFramework(named: "SparkleBridgeClient")
-    var sparkleBridge: SparkleBridgePlugin? = nil
-
-    override func makeUpdater() -> Updater {
-        if sparkleEnabled {
-            return SparkleUpdater()
-        } else {
-            return super.makeUpdater()
-        }
-    }
-    #endif
-    
     override var filePickerClass: FilePicker.Type { return MobileFilePicker.self }
 
     override func setUp(withOptions options: LaunchOptions, completion: @escaping SetupCompletion) {
         super.setUp(withOptions: options) { [self] options in
-            loadSparkle()
             
             let timer = Timer(timeInterval: .statusCycleInterval, repeats: true) { _ in
                 self.updateBridge()
@@ -110,29 +92,10 @@ class MobileApplication: Application {
         appKitBridge?.status = status
     }
     
-    fileprivate func loadSparkle() {
-        #if canImport(SparkleBridgeClient)
-        if let updater = updater as? SparkleUpdater {
-            let result = SparkleBridgeClient.load(with: updater.driver)
-            switch result {
-                case .success(let plugin):
-                    sparkleBridge = plugin
-                    sparkleBridge?.checkForUpdates()
-                case .failure(let error):
-                    print(error)
-                    self.updater = Updater()
-            }
-        }
-        #endif
-    }
-    
     fileprivate func loadBridge() -> AppKitBridge? {
         if let bridgeURL = Bundle.main.url(forResource: "AppKitBridge", withExtension: "bundle"), let bundle = Bundle(url: bridgeURL) {
             if let cls = bundle.principalClass as? NSObject.Type {
                 if let instance = cls.init() as? AppKitBridge {
-                    #if canImport(SparkleBridgeClient)
-                    instance.showUpdates = sparkleEnabled
-                    #endif
                     instance.setup(with: self)
                     return instance
                 }
@@ -151,7 +114,6 @@ class MobileApplication: Application {
             builder.remove(menu: .toolbar)
 
             replacePreferences(with: builder)
-            buildCheckForUpdates(with: builder)
             buildShowStatus(with: builder)
             buildAddLocal(with: builder)
         }
@@ -163,17 +125,6 @@ class MobileApplication: Application {
         if let url = URL(string: "https://actionstatus.elegantchaos.com/help") {
             UIApplication.shared.open(url)
         }
-    }
-
-    func buildCheckForUpdates(with builder: UIMenuBuilder) {
-        #if canImport(SparkleBridgeClient)
-        if sparkleEnabled {
-            let command = UIKeyCommand(title: "Check For Updates…", image: nil, action: #selector(checkForUpdates), input: "", modifierFlags: [], propertyList: nil)
-            builder.replaceChildren(ofMenu: .about) { (children) -> [UIMenuElement] in
-                return children + [command]
-            }
-        }
-        #endif
     }
 
     func buildShowStatus(with builder: UIMenuBuilder) {
@@ -236,12 +187,6 @@ extension MobileApplication: AppKitBridgeDelegate {
     
     func addItem() {
         editNewRepo()
-    }
-    
-    func checkForUpdates() {
-        #if canImport(SparkleBridgeClient)
-        sparkleBridge?.checkForUpdates()
-        #endif
     }
     
     func toggleEditing() -> Bool {

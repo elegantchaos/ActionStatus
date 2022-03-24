@@ -173,15 +173,6 @@
         }
       },
       {
-        "package": "swift-argument-parser",
-        "repositoryURL": "https://github.com/apple/swift-argument-parser.git",
-        "state": {
-          "branch": null,
-          "revision": "6b2aa2748a7881eebb9f84fb10c01293e15b52ca",
-          "version": "0.5.0"
-        }
-      },
-      {
         "package": "SwiftUIExtensions",
         "repositoryURL": "https://github.com/elegantchaos/SwiftUIExtensions.git",
         "state": {

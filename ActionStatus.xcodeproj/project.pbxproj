@@ -22,7 +22,6 @@
 		8B430E8F23F58CEE0050BF2A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64AF23EAE62E00B28168 /* Preview Assets.xcassets */; };
 		8B430E9123F5947E0050BF2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64AC23EAE62E00B28168 /* Assets.xcassets */; };
 		8B4336EE23FFE7C700598A04 /* DictionaryCoding in Frameworks */ = {isa = PBXBuildFile; productRef = 8B4336ED23FFE7C700598A04 /* DictionaryCoding */; };
-		8B5AEB482407EE630065524B /* SparkleUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5AEB472407EE630065524B /* SparkleUpdater.swift */; };
 		8B5B175E23FAEBD300DD2AF5 /* SwiftUIExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8B5B175D23FAEBD300DD2AF5 /* SwiftUIExtensions */; };
 		8B5E7E8923F6BB5100087E15 /* AppKitBridge.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8323F6BB3500087E15 /* AppKitBridge.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8B5E7E8D23F6BB8900087E15 /* AppKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E7E8C23F6BB8900087E15 /* AppKitBridge.swift */; };
@@ -111,7 +110,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2246FB24242E5428009E1731 /* IncludeSparkle.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = IncludeSparkle.xcconfig; sourceTree = "<group>"; };
 		226D6C8424755D1D00B54967 /* Scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Scripts; path = Extras/Scripts; sourceTree = "<group>"; };
 		226D6C8524758F1500B54967 /* Screenshots.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Screenshots.xctestplan; sourceTree = "<group>"; };
 		226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotUITests.swift; sourceTree = "<group>"; };
@@ -144,7 +142,6 @@
 		8B4893AC240D581200E3E112 /* SparkleBridgeClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SparkleBridgeClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B4893B4240D686200E3E112 /* ActionStatus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ActionStatus.entitlements; sourceTree = "<group>"; };
 		8B522FA423F6E9D60020AD36 /* AppKitBridge.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppKitBridge.xcconfig; sourceTree = "<group>"; };
-		8B5AEB472407EE630065524B /* SparkleUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SparkleUpdater.swift; path = Sources/ActionStatus/SparkleUpdater.swift; sourceTree = SOURCE_ROOT; };
 		8B5E7E6223F6A97D00087E15 /* Tests.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Tests.xcconfig; sourceTree = "<group>"; };
 		8B5E7E6323F6A9C600087E15 /* Mobile.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Mobile.xcconfig; sourceTree = "<group>"; };
 		8B5E7E6423F6A9C600087E15 /* TV.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TV.xcconfig; sourceTree = "<group>"; };
@@ -346,7 +343,6 @@
 			isa = PBXGroup;
 			children = (
 				8B5E7E9123F6C0A100087E15 /* BridgingHeader.h */,
-				2246FB24242E5428009E1731 /* IncludeSparkle.xcconfig */,
 				8B3E64AC23EAE62E00B28168 /* Assets.xcassets */,
 				8B430E9023F58E060050BF2A /* PreviewContent */,
 			);
@@ -368,7 +364,6 @@
 				8B5E7E6323F6A9C600087E15 /* Mobile.xcconfig */,
 				8B9A813225FA49F600F44800 /* MobileApplication.swift */,
 				8BA13D24260A5989007CB9CD /* MobileScene.swift */,
-				8B5AEB472407EE630065524B /* SparkleUpdater.swift */,
 				8B5B174F23FADA8500DD2AF5 /* Resources */,
 			);
 			path = ActionStatusMobile;
@@ -443,7 +438,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8B3E64CD23EAE62F00B28168 /* Build configuration list for PBXNativeTarget "ActionStatusMobile" */;
 			buildPhases = (
-				8B03019E2417E2BC003A19A4 /* Perform Checks */,
 				8B3E649F23EAE62D00B28168 /* Sources */,
 				8B3E64A023EAE62D00B28168 /* Frameworks */,
 				8B3E64A123EAE62D00B28168 /* Resources */,
@@ -509,7 +503,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8B430E7923F586110050BF2A /* Build configuration list for PBXNativeTarget "ActionStatusTV" */;
 			buildPhases = (
-				8B0301A02417E48A003A19A4 /* Perform Checks */,
 				8B430E6623F586100050BF2A /* Sources */,
 				8B430E6723F586100050BF2A /* Frameworks */,
 				8B430E6823F586100050BF2A /* Resources */,
@@ -686,44 +679,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		8B03019E2417E2BC003A19A4 /* Perform Checks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Perform Checks";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"Extras/Scripts/perform-checks\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8B0301A02417E48A003A19A4 /* Perform Checks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Perform Checks";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"Extras/Scripts/perform-checks\"\n";
-			showEnvVarsInLog = 0;
-		};
 		8B3BA5A5240541AD0071F0C1 /* Sign Embedded Stuff */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 12;
@@ -778,7 +733,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B9A813325FA49F600F44800 /* MobileApplication.swift in Sources */,
-				8B5AEB482407EE630065524B /* SparkleUpdater.swift in Sources */,
 				8BA13D25260A5989007CB9CD /* MobileScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
