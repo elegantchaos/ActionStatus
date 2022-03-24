@@ -126,7 +126,7 @@
          <ExecutionAction
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
-               title = "Run Script"
+               title = "Run Pre Archive"
                scriptText = "&quot;$RT_SHARED_SCRIPTS_PATH/pre-archive&quot;&#10;">
                <EnvironmentBuildable>
                   <BuildableReference

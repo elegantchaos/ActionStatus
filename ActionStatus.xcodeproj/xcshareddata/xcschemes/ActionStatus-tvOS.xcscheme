@@ -5,24 +5,6 @@
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
-      <PreActions>
-         <ExecutionAction
-            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
-            <ActionContent
-               title = "Run Script"
-               scriptText = "&quot;$RT_SHARED_SCRIPTS_PATH/pre-build&quot;&#10;">
-               <EnvironmentBuildable>
-                  <BuildableReference
-                     BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "8B430E6923F586100050BF2A"
-                     BuildableName = "Action Status.app"
-                     BlueprintName = "ActionStatusTV"
-                     ReferencedContainer = "container:ActionStatus.xcodeproj">
-                  </BuildableReference>
-               </EnvironmentBuildable>
-            </ActionContent>
-         </ExecutionAction>
-      </PreActions>
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -112,7 +94,7 @@
          <ExecutionAction
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
-               title = "Run Script"
+               title = "Run Pre Archive"
                scriptText = "&quot;$RT_SHARED_SCRIPTS_PATH/pre-archive&quot;&#10;&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
