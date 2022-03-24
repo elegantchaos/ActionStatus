@@ -3,6 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Hardware
 import SheetController
 import SwiftUI
 import SwiftUIExtensions
@@ -14,7 +15,7 @@ struct PreferencesButton: View {
     
     var body: some View {
         Button(action: showPreferences) {
-            if horizontalSize == .compact {
+            if (horizontalSize == .compact) || Hardware.Platform.current.base == .tvOS {
                 Image(systemName: context.preferencesIcon)
             } else {
                 Text("Settings")

@@ -114,8 +114,8 @@
         "repositoryURL": "https://github.com/elegantchaos/Labelled.git",
         "state": {
           "branch": null,
-          "revision": "892869299c05e2f3d67f1d81337f3b4a31088c76",
-          "version": "1.0.4"
+          "revision": "19ff9ec3501a4ce27dda48ec49120dde998864d1",
+          "version": "1.0.7"
         }
       },
       {
@@ -123,8 +123,8 @@
         "repositoryURL": "https://github.com/elegantchaos/LabelledGrid.git",
         "state": {
           "branch": null,
-          "revision": "86d97484d659a1ce3862ddd4e2cf4f9753e632a1",
-          "version": "1.0.2"
+          "revision": "f95965e2d877de73a4133306bd9c83bdef8972db",
+          "version": "1.0.3"
         }
       },
       {

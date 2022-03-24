@@ -35,7 +35,9 @@ public struct SheetView<Content>: View where Content: View {
             AlignedLabelContainer {
                 content()
             }
+            #if !os(tvOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     let title = (horizontalSizeClass == .compact) ? shortTitle : self.title

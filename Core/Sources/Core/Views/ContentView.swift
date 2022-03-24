@@ -20,8 +20,10 @@ public struct ContentView: View {
             return NavigationView {
                 RootView()
                     .navigationTitle(Application.shared.info.name)
+                #if !os(tvOS)
                     .navigationBarTitleDisplayMode(.inline)
                     .iosToolbar(includeAddButton: context.settings.isEditing)
+                #endif
             }
             .navigationViewStyle(StackNavigationViewStyle())
             #endif
