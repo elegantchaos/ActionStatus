@@ -5,12 +5,12 @@
 
 #include "../Tools/Tools.xcconfig"
 
-RT_VERSION = 2.0.5
+RT_VERSION = 2.0.6
 RT_PRODUCT_NAME = Action Status
 RT_SHORT_NAME = ActionStatus
 RT_BUNDLE_IDENTIFIER = com.elegantchaos.actionstatus
 RT_TEAM = 2H48644JM2
-RT_COPYRIGHT = Copyright © 2021 Elegant Chaos Limited. All rights reserved.
+RT_COPYRIGHT = Copyright © 2022 Elegant Chaos Limited. All rights reserved.
 
 ACTION_STATUS_ADDITIONAL_FRAMEWORKS =
 
