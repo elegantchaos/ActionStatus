@@ -259,6 +259,9 @@ extension AppKitBridgeSingleton: NSMenuDelegate {
 extension AppKitBridgeSingleton: NSWindowDelegate {
     func windowShouldClose(_ sender: NSWindow) -> Bool {
         if quitting, let delegate = originalDelegate {
+            // something in the Catalyst implementation of the Quit menu seems to get confused
+            // if we intercept windowShouldClose, so we implement quit by disabling the interception
+            // and then closing the window - which in turn should cause an orderly shutdown of the app
             return (delegate.windowShouldClose!)(sender)
         } else {
             sender.setIsVisible(false)
