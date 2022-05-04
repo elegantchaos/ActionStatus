@@ -233,7 +233,7 @@ public class Platform: Option {
                     - name: Install Toolchain
                       run: |
                         branch="\(branch)"
-                        wget --quiet https://swift.org/builds/$branch/xcode/latest-build.yml
+                        wget --quiet https://download.swift.org/$branch/xcode/latest-build.yml
                         grep "download:" < latest-build.yml > filtered.yml
                         sed -e 's/-osx.pkg//g' filtered.yml > stripped.yml
                         sed -e 's/:[^:\\/\\/]/YML="/g;s/$/"/g;s/ *=/=/g' stripped.yml > snapshot.sh
