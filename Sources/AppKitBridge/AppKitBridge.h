@@ -43,6 +43,7 @@ typedef NS_CLOSED_ENUM(NSUInteger, ItemStatus) { // NB: order should match the c
 - (void) setupWithDelegate: (id<AppKitBridgeDelegate>) delegate;
 - (id) makeToolbar;
 - (void) revealInFinder: (NSURL *) url;
+- (void) handleQuit: (id) sender;
 @end
 
 @interface AppKitBridgeImp <AppKitBridge>

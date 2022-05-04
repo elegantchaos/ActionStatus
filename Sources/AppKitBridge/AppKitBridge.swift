@@ -48,10 +48,12 @@ extension ItemStatus: CaseIterable {
     
     var delegate: AppKitBridgeDelegate?
     var windowInterceptor: InterceptingDelegate?
+    var originalDelegate: NSWindowDelegate?
     var mainWindow: NSWindow?
     var statusItem: NSStatusItem?
     var toolbar: NSToolbar?
     var editingItem: NSToolbarItem?
+    var quitting = false
     lazy var unlockedImage = systemImage("lock.open.fill", label: "Done Editing")
     lazy var lockedImage = systemImage("lock.fill", label: "Edit Repos")
     lazy var addImage = systemImage("plus", label: "Add Repo")
@@ -142,6 +144,7 @@ extension AppKitBridgeSingleton: AppKitBridge {
         
     func updateWindow() {
         if mainWindow == nil, let window = NSApp.mainWindow {
+            originalDelegate = window.delegate
             windowInterceptor = InterceptingDelegate(window: window, interceptor: self)
             mainWindow = window
             
@@ -244,7 +247,8 @@ extension AppKitBridgeSingleton: NSMenuDelegate {
             NSWorkspace.shared.open(url)
         }
         
-        NSApp.terminate(self)
+        quitting = true
+        mainWindow?.performClose(sender)
     }
 
     @IBAction func handleHelp(_ sender: Any) {
@@ -254,8 +258,12 @@ extension AppKitBridgeSingleton: NSMenuDelegate {
 
 extension AppKitBridgeSingleton: NSWindowDelegate {
     func windowShouldClose(_ sender: NSWindow) -> Bool {
-        sender.setIsVisible(false)
-        return false;
+        if quitting, let delegate = originalDelegate {
+            return (delegate.windowShouldClose!)(sender)
+        } else {
+            sender.setIsVisible(false)
+            return false;
+        }
     }
 }
 

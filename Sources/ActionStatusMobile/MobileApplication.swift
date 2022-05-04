@@ -114,6 +114,7 @@ class MobileApplication: Application {
             builder.remove(menu: .toolbar)
 
             replacePreferences(with: builder)
+            replaceQuit(with: builder)
             buildShowStatus(with: builder)
             buildAddLocal(with: builder)
         }
@@ -140,11 +141,21 @@ class MobileApplication: Application {
         let menu = UIMenu(title: "", image: nil, identifier: UIMenu.Identifier("\(info.id).addLocal"), options: .displayInline, children: [command])
         builder.insertChild(menu, atStartOfMenu: .file)
     }
-
+    
     func replacePreferences(with builder: UIMenuBuilder) {
         let command = UIKeyCommand(title: "Preferences…", image: nil, action: #selector(showPreferences), input: ",", modifierFlags: .command, propertyList: nil)
         let menu = UIMenu(title: "", image: nil, identifier: UIMenu.Identifier("\(info.id).showPreferences"), options: .displayInline, children: [command])
         builder.insertSibling(menu, beforeMenu: .close)
+    }
+
+    func replaceQuit(with builder: UIMenuBuilder) {
+        let command = UIKeyCommand(title: "Quit \(info.name)", image: nil, action: #selector(handleQuit), input: "Q", modifierFlags: .command, propertyList: nil)
+        let menu = UIMenu(title: "", image: nil, identifier: UIMenu.Identifier("\(info.id).handleQuit"), options: .displayInline, children: [command])
+        builder.replace(menu: .quit, with: menu)
+    }
+
+    @IBAction func handleQuit() {
+        appKitBridge?.handleQuit(self)
     }
     
     @IBAction func showPreferences() {
