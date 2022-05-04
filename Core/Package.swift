@@ -19,7 +19,7 @@ let package = Package(
         .package(url: "https://github.com/elegantchaos/ApplicationExtensions.git", from: "2.1.3"),
         .package(url: "https://github.com/elegantchaos/BindingsExtensions.git", from: "1.0.1"),
         .package(url: "https://github.com/elegantchaos/Bundles.git", from: "1.0.9"),
-        .package(url: "https://github.com/elegantchaos/CollectionExtensions.git", from: "1.1.6"),
+        .package(url: "https://github.com/elegantchaos/CollectionExtensions.git", from: "1.1.9"),
         .package(url: "https://github.com/elegantchaos/DictionaryCoding.git", from: "1.0.9"),
         .package(url: "https://github.com/elegantchaos/Files.git", from: "1.2.1"),
         .package(url: "https://github.com/elegantchaos/Hardware.git", from: "1.0.1"),
