@@ -226,12 +226,12 @@ public class Platform: Option {
         return yaml
     }
     
+
     fileprivate func toolchainYAML(_ yaml: inout String, _ branch: String, _ version: String) {
-        yaml.append(
+        let download: String
+        if branch == "development" {
+            download =
             """
-            
-                    - name: Install Toolchain
-                      run: |
                         branch="\(branch)"
                         wget --quiet https://download.swift.org/$branch/xcode/latest-build.yml
                         grep "download:" < latest-build.yml > filtered.yml
@@ -242,6 +242,22 @@ public class Platform: Option {
                         wget --quiet https://swift.org/builds/$branch/xcode/$downloadYML/$downloadYML-osx.pkg
                         sudo installer -pkg $downloadYML-osx.pkg -target /
                         ln -s "/Library/Developer/Toolchains/$downloadYML.xctoolchain/usr/bin" swift-latest
+            """
+        } else {
+            download =
+            """
+                        wget --quiet https://download.swift.org/\(branch.lowercased())/xcode/\(branch)/\(branch)-osx.pkg
+                        sudo installer -pkg \(branch)-osx.pkg -target /
+                        ln -s "/Library/Developer/Toolchains/\(branch).xctoolchain/usr/bin" swift-latest
+            """
+        }
+
+        yaml.append(
+            """
+            
+                    - name: Install Toolchain
+                      run: |
+            \(download)
                         ls -d /Applications/Xcode*
                         sudo xcode-select -s /Applications/Xcode_\(version).app
                         swift --version
