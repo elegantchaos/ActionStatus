@@ -12,6 +12,7 @@ echo "*************"
 echo "Uploading iOS  "
 echo "*************"
 
+$RT set scheme ActionStatus --platform=iOS 
 $RT archive --platform=iOS --show-output 2> /dev/null | xcpretty
 $RT export --platform=iOS
 $RT upload --platform=iOS
