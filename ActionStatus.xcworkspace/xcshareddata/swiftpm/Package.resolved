@@ -96,8 +96,8 @@
         "repositoryURL": "https://github.com/elegantchaos/JSONSession.git",
         "state": {
           "branch": null,
-          "revision": "bed9dea36a108b5b09f7ae6afef6abe8d3761768",
-          "version": "1.1.0"
+          "revision": "636fdf1fc8050f619e5299892c1ac0b95fd6677f",
+          "version": "1.1.1"
         }
       },
       {
@@ -114,8 +114,8 @@
         "repositoryURL": "https://github.com/elegantchaos/Labelled.git",
         "state": {
           "branch": null,
-          "revision": "19ff9ec3501a4ce27dda48ec49120dde998864d1",
-          "version": "1.0.7"
+          "revision": "9177120bfc53b55572b044c80e91b035d24db12b",
+          "version": "1.0.8"
         }
       },
       {
@@ -150,8 +150,8 @@
         "repositoryURL": "https://github.com/elegantchaos/Octoid.git",
         "state": {
           "branch": null,
-          "revision": "0bb56bbc022ba2c193b4f634abc869ae83838487",
-          "version": "1.0.4"
+          "revision": "7640765e7587b8654c4df78f2ce5e37f45380f96",
+          "version": "1.0.6"
         }
       },
       {

@@ -26,7 +26,7 @@ let package = Package(
         .package(url: "https://github.com/elegantchaos/Keychain.git", from: "1.0.0"),
         .package(url: "https://github.com/elegantchaos/LabelledGrid.git", from: "1.0.3"),
         .package(url: "https://github.com/elegantchaos/Logger.git", from: "1.7.3"),
-        .package(url: "https://github.com/elegantchaos/Octoid.git", from: "1.0.4"),
+        .package(url: "https://github.com/elegantchaos/Octoid.git", from: "1.0.6"),
         .package(url: "https://github.com/elegantchaos/SheetController.git", from: "1.0.2"),
         .package(url: "https://github.com/elegantchaos/SwiftUIExtensions.git", from: "1.3.6"),
         .package(url: "https://github.com/elegantchaos/UserDefaultsExtensions.git", from: "1.0.1"),
