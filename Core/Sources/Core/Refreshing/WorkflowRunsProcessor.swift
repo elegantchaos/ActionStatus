@@ -20,6 +20,10 @@ struct WorkflowRunsProcessor: Processor {
     
     func process(_ runs: WorkflowRuns, response: HTTPURLResponse, for request: Request, in session: RepoPollingSession) -> RepeatStatus {
         
+        if runs.isEmpty {
+            return .cancel
+        }
+        
         let latest = runs.latestRun
         session.refreshController.update(repo: session.repo, with: latest)
         if latest.status == "completed" {
