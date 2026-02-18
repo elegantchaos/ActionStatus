@@ -1,5 +1,5 @@
 #!/bin/bash
-# Purpose: Verify local changes via formatting/linting, package build, and unsigned app builds.
+# Purpose: Verify local changes via formatting/linting, unsigned app builds across platforms, and tests.
 # Usage: Extras/Scripts/validate-changes [--clean]
 
 set -euo pipefail
@@ -31,12 +31,10 @@ done
 CACHE_ROOT="$ROOT/.build/cache"
 VERIFY_ROOT="$ROOT/.build/verify"
 DERIVED_DATA_PATH="$ROOT/.build/derived-data"
-CORE_PACKAGE_PATH="$ROOT/Dependencies/Core"
-CORE_BUILD_PATH="$CORE_PACKAGE_PATH/.build"
 
 if [ "$FORCE_CLEAN" -eq 1 ]; then
   echo "==> Clean mode enabled: removing local build artifacts and caches"
-  rm -rf "$ROOT/.build" "$CORE_BUILD_PATH"
+  rm -rf "$ROOT/.build"
 fi
 
 mkdir -p "$CACHE_ROOT/clang-module-cache" "$CACHE_ROOT/swift-module-cache" "$CACHE_ROOT/xdg-cache" "$CACHE_ROOT/home" "$VERIFY_ROOT"
@@ -44,17 +42,6 @@ export HOME="$CACHE_ROOT/home"
 export CLANG_MODULE_CACHE_PATH="$CACHE_ROOT/clang-module-cache"
 export SWIFTPM_MODULECACHE_OVERRIDE="$CACHE_ROOT/swift-module-cache"
 export XDG_CACHE_HOME="$CACHE_ROOT/xdg-cache"
-
-CORE_PACKAGE_PATH_MARKER="$CACHE_ROOT/core-package-path.txt"
-PREVIOUS_CORE_PACKAGE_PATH=""
-if [ -f "$CORE_PACKAGE_PATH_MARKER" ]; then
-  PREVIOUS_CORE_PACKAGE_PATH="$(cat "$CORE_PACKAGE_PATH_MARKER")"
-fi
-if [ "$PREVIOUS_CORE_PACKAGE_PATH" != "$CORE_PACKAGE_PATH" ] && [ -d "$CORE_BUILD_PATH" ]; then
-  echo "==> Core package path changed; removing stale Core build artifacts"
-  rm -rf "$CORE_BUILD_PATH"
-fi
-echo "$CORE_PACKAGE_PATH" > "$CORE_PACKAGE_PATH_MARKER"
 
 echo "==> Validating changes in $ROOT"
 
@@ -83,23 +70,15 @@ else
   echo "No changed Swift files to format or lint."
 fi
 
-if [ "$FORCE_CLEAN" -eq 1 ]; then
-  echo "==> Running clean on Core package"
-  swift package clean --package-path "$CORE_PACKAGE_PATH"
-fi
-
-echo "==> Building Core package"
-HOST_ARCH="$(uname -m)"
-if ! swift build --package-path "$CORE_PACKAGE_PATH" --disable-sandbox --triple "${HOST_ARCH}-apple-macosx10.15"; then
-  echo "WARN: Standalone Core SwiftPM build failed; continuing with Xcode workspace validation."
-fi
-
 echo "==> Building app schemes with xcodebuild (no code signing)"
-rm -rf "$DERIVED_DATA_PATH"
+if [ "$FORCE_CLEAN" -eq 1 ]; then
+  rm -rf "$DERIVED_DATA_PATH"
+fi
 
 IOS_LOG="$VERIFY_ROOT/validate_changes_ios.log"
-CATALYST_LOG="$VERIFY_ROOT/validate_changes_catalyst.log"
+MACOS_LOG="$VERIFY_ROOT/validate_changes_macos.log"
 TVOS_LOG="$VERIFY_ROOT/validate_changes_tvos.log"
+TEST_LOG="$VERIFY_ROOT/validate_changes_tests.log"
 
 XCODE_ACTION=(build)
 if [ "$FORCE_CLEAN" -eq 1 ]; then
@@ -117,10 +96,10 @@ xcodebuild \
 xcodebuild \
   -workspace "$ROOT/ActionStatus.xcworkspace" \
   -scheme ActionStatus \
-  -destination "generic/platform=macOS,variant=Mac Catalyst" \
+  -destination "generic/platform=macOS" \
   -derivedDataPath "$DERIVED_DATA_PATH" \
   CODE_SIGNING_ALLOWED=NO \
-  "${XCODE_ACTION[@]}" >"$CATALYST_LOG" 2>&1
+  "${XCODE_ACTION[@]}" >"$MACOS_LOG" 2>&1
 
 xcodebuild \
   -workspace "$ROOT/ActionStatus.xcworkspace" \
@@ -130,7 +109,48 @@ xcodebuild \
   CODE_SIGNING_ALLOWED=NO \
   "${XCODE_ACTION[@]}" >"$TVOS_LOG" 2>&1
 
+echo "==> Running tests"
+IOS_TEST_DESTINATION="$(
+  xcodebuild -workspace "$ROOT/ActionStatus.xcworkspace" -scheme ActionStatus -showdestinations 2>/dev/null \
+    | awk -F'[,}]' '
+        /platform:iOS Simulator/ && $0 !~ /placeholder/ {
+          os = ""
+          name = ""
+          for (i = 1; i <= NF; i++) {
+            gsub(/^[[:space:]]+|[[:space:]]+$/, "", $i)
+            if ($i ~ /^OS:/) {
+              sub(/^OS:/, "", $i)
+              os = $i
+            }
+            if ($i ~ /^name:/) {
+              sub(/^name:/, "", $i)
+              name = $i
+            }
+          }
+          if (os != "" && name != "") {
+            printf "platform=iOS Simulator,OS=%s,name=%s\n", os, name
+            exit
+          }
+        }
+      '
+)"
+
+if [ -z "$IOS_TEST_DESTINATION" ]; then
+  echo "No available iOS simulator found for test execution."
+  exit 1
+fi
+
+xcodebuild \
+  -workspace "$ROOT/ActionStatus.xcworkspace" \
+  -scheme ActionStatus \
+  -testPlan ActionStatus \
+  -destination "$IOS_TEST_DESTINATION" \
+  -derivedDataPath "$DERIVED_DATA_PATH" \
+  CODE_SIGNING_ALLOWED=NO \
+  test >"$TEST_LOG" 2>&1
+
 echo "==> Verification complete"
 echo "iOS build log: $IOS_LOG"
-echo "Catalyst build log: $CATALYST_LOG"
+echo "macOS build log: $MACOS_LOG"
 echo "tvOS build log: $TVOS_LOG"
+echo "test log: $TEST_LOG"
