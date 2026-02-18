@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8B5E7E8223F6BB3500087E15"
-               BuildableName = ".bundle"
+               BuildableName = "AppKitBridge.bundle"
                BlueprintName = "AppKitBridge"
                ReferencedContainer = "container:ActionStatus.xcodeproj">
             </BuildableReference>
@@ -51,7 +51,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8B5E7E8223F6BB3500087E15"
-            BuildableName = ".bundle"
+            BuildableName = "AppKitBridge.bundle"
             BlueprintName = "AppKitBridge"
             ReferencedContainer = "container:ActionStatus.xcodeproj">
          </BuildableReference>
