@@ -1,25 +1,35 @@
 #!/bin/bash
-# Purpose: Submit iOS and tvOS builds using ReleaseTools and push tags.
+# Purpose: Submit iOS, tvOS, and macOS builds using ReleaseTools and push tags.
 # Usage: Extras/Scripts/upload
 
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-RT="$ROOT/Extras/Scripts/rt"
+echo " "
+echo "**********"
+echo "Submitting"
+echo "**********"
+
+rt tag
 
 echo " "
 echo "**************"
 echo "Submitting iOS"
 echo "**************"
-"$RT" submit --platform=iOS --scheme=ActionStatus
+rt submit --platform=iOS --scheme=ActionStatus
 
 echo " "
 echo "***************"
 echo "Submitting tvOS"
 echo "***************"
-"$RT" submit --platform=tvOS --scheme=ActionStatus-tvOS
+rt submit --platform=tvOS --scheme=ActionStatus-tvOS
+
+echo " "
+echo "****************"
+echo "Submitting macOS"
+echo "****************"
+rt submit --platform=macOS --scheme=ActionStatus
 
 echo "------------"
 echo "Pushing Tags"
 echo "------------"
-git -C "$ROOT" push --tags --force
+git push --tags --force

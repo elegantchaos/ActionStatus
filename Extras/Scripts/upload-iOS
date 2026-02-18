@@ -4,12 +4,9 @@
 
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-RT="$ROOT/Extras/Scripts/rt"
-
 echo " "
 echo "**************"
 echo "Submitting iOS"
 echo "**************"
-"$RT" submit --platform=iOS --scheme=ActionStatus
-git -C "$ROOT" push --tags --force
+rt submit --platform=iOS --scheme=ActionStatus
+git push --tags --force
