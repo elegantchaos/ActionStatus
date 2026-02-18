@@ -112,7 +112,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8B3E64B823EAE62E00B28168"
-               BuildableName = ".xctest"
+               BuildableName = "Action Status Tests.xctest"
                BlueprintName = "ActionStatusTests"
                ReferencedContainer = "container:ActionStatus.xcodeproj">
             </BuildableReference>
@@ -122,7 +122,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8B3E64C323EAE62F00B28168"
-               BuildableName = ".xctest"
+               BuildableName = "Action Status UI Tests Mobile.xctest"
                BlueprintName = "ActionStatusUITestsMobile"
                ReferencedContainer = "container:ActionStatus.xcodeproj">
             </BuildableReference>

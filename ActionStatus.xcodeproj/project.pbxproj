@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -93,9 +93,9 @@
 		226D6C8524758F1500B54967 /* Screenshots.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Screenshots.xctestplan; sourceTree = "<group>"; };
 		226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotUITests.swift; sourceTree = "<group>"; };
 		228D838C246AC10700943918 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		22AA000026B3A10000AA0001 /* Settings.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Settings.xcconfig; sourceTree = "<group>"; };
 		22E778362476A5A5009ED66A /* Screenshots-tvOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Screenshots-tvOS.xctestplan"; sourceTree = "<group>"; };
-		22E7783B2476A606009ED66A /* ActionStatusUITestsTV.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ActionStatusUITestsTV.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-			22AA000026B3A10000AA0001 /* Settings.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Settings.xcconfig; sourceTree = "<group>"; };
+		22E7783B2476A606009ED66A /* Action Status UI Tests TV.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Action Status UI Tests TV.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B045A8424055A6200EC21D6 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Assets; path = Extras/Assets; sourceTree = "<group>"; };
 		8B2F0AB923FC195700B2E62A /* InterceptingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterceptingDelegate.h; sourceTree = "<group>"; };
 		8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterceptingDelegate.m; sourceTree = "<group>"; };
@@ -105,10 +105,10 @@
 		8B3E64AF23EAE62E00B28168 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		8B3E64B223EAE62E00B28168 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B3E64B423EAE62E00B28168 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8B3E64B923EAE62E00B28168 /* ActionStatusTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ActionStatusTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B3E64B923EAE62E00B28168 /* Action Status Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Action Status Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B3E64BD23EAE62E00B28168 /* ActionStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionStatusTests.swift; sourceTree = "<group>"; };
 		8B3E64BF23EAE62E00B28168 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8B3E64C423EAE62F00B28168 /* ActionStatusUITestsMobile.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ActionStatusUITestsMobile.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B3E64C423EAE62F00B28168 /* Action Status UI Tests Mobile.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Action Status UI Tests Mobile.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionStatusUITests.swift; sourceTree = "<group>"; };
 		8B3E64CA23EAE62F00B28168 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B430E6A23F586100050BF2A /* Action Status.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Action Status.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -197,13 +197,13 @@
 			name = Extras;
 			sourceTree = "<group>";
 		};
-			8B3E649A23EAE62D00B28168 = {
-				isa = PBXGroup;
-				children = (
-					8B9A812D25FA389900F44800 /* Core */,
-					228D838C246AC10700943918 /* README.md */,
-					22AA000026B3A10000AA0001 /* Settings.xcconfig */,
-					8B3E64A523EAE62D00B28168 /* Sources */,
+		8B3E649A23EAE62D00B28168 = {
+			isa = PBXGroup;
+			children = (
+				8B9A812D25FA389900F44800 /* Core */,
+				228D838C246AC10700943918 /* README.md */,
+				22AA000026B3A10000AA0001 /* Settings.xcconfig */,
+				8B3E64A523EAE62D00B28168 /* Sources */,
 				8B522FA223F6E7B40020AD36 /* Tests */,
 				8B045A8324055A3C00EC21D6 /* Extras */,
 				8B3E64A423EAE62D00B28168 /* Products */,
@@ -213,25 +213,25 @@
 		};
 		8B3E64A423EAE62D00B28168 /* Products */ = {
 			isa = PBXGroup;
-				children = (
-					8B3E64A323EAE62D00B28168 /* Action Status.app */,
-					8B3E64B923EAE62E00B28168 /* ActionStatusTests.xctest */,
-					8B3E64C423EAE62F00B28168 /* ActionStatusUITestsMobile.xctest */,
-					8B430E6A23F586100050BF2A /* Action Status.app */,
-					8B5E7E8323F6BB3500087E15 /* AppKitBridge.bundle */,
-					22E7783B2476A606009ED66A /* ActionStatusUITestsTV.xctest */,
-				);
+			children = (
+				8B3E64A323EAE62D00B28168 /* Action Status.app */,
+				8B3E64B923EAE62E00B28168 /* Action Status Tests.xctest */,
+				8B3E64C423EAE62F00B28168 /* Action Status UI Tests Mobile.xctest */,
+				8B430E6A23F586100050BF2A /* Action Status.app */,
+				8B5E7E8323F6BB3500087E15 /* AppKitBridge.bundle */,
+				22E7783B2476A606009ED66A /* Action Status UI Tests TV.xctest */,
+			);
 			name = Products;
 			sourceTree = "<group>";
 		};
 		8B3E64A523EAE62D00B28168 /* Sources */ = {
 			isa = PBXGroup;
-				children = (
-					8B5E7E5823F6A79900087E15 /* ActionStatus */,
-					8B5E7E5723F6A79100087E15 /* ActionStatusMobile */,
-					8B430E6B23F586100050BF2A /* ActionStatusTV */,
-					8B5E7E8423F6BB3500087E15 /* AppKitBridge */,
-				);
+			children = (
+				8B5E7E5823F6A79900087E15 /* ActionStatus */,
+				8B5E7E5723F6A79100087E15 /* ActionStatusMobile */,
+				8B430E6B23F586100050BF2A /* ActionStatusTV */,
+				8B5E7E8423F6BB3500087E15 /* AppKitBridge */,
+			);
 			path = Sources;
 			sourceTree = "<group>";
 		};
@@ -254,12 +254,12 @@
 			path = ActionStatusUITests;
 			sourceTree = "<group>";
 		};
-			8B430E6B23F586100050BF2A /* ActionStatusTV */ = {
-				isa = PBXGroup;
-				children = (
-					8B430E6C23F586100050BF2A /* TVApplication.swift */,
-					8BA13D26260A6148007CB9CD /* TVScene.swift */,
-					8B5B175123FADA9D00DD2AF5 /* Resources */,
+		8B430E6B23F586100050BF2A /* ActionStatusTV */ = {
+			isa = PBXGroup;
+			children = (
+				8B430E6C23F586100050BF2A /* TVApplication.swift */,
+				8BA13D26260A6148007CB9CD /* TVScene.swift */,
+				8B5B175123FADA9D00DD2AF5 /* Resources */,
 			);
 			path = ActionStatusTV;
 			sourceTree = "<group>";
@@ -272,15 +272,15 @@
 			path = PreviewContent;
 			sourceTree = "<group>";
 		};
-			8B522FA223F6E7B40020AD36 /* Tests */ = {
-				isa = PBXGroup;
-				children = (
-					8B3C0576240FDAAD00FB533B /* ActionStatus.xctestplan */,
-					226D6C8524758F1500B54967 /* Screenshots.xctestplan */,
-					22E778362476A5A5009ED66A /* Screenshots-tvOS.xctestplan */,
-					8B3E64BC23EAE62E00B28168 /* ActionStatusTests */,
-					8B3E64C723EAE62F00B28168 /* ActionStatusUITests */,
-				);
+		8B522FA223F6E7B40020AD36 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				8B3C0576240FDAAD00FB533B /* ActionStatus.xctestplan */,
+				226D6C8524758F1500B54967 /* Screenshots.xctestplan */,
+				22E778362476A5A5009ED66A /* Screenshots-tvOS.xctestplan */,
+				8B3E64BC23EAE62E00B28168 /* ActionStatusTests */,
+				8B3E64C723EAE62F00B28168 /* ActionStatusUITests */,
+			);
 			path = Tests;
 			sourceTree = "<group>";
 		};
@@ -324,39 +324,39 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-			8B5E7E5723F6A79100087E15 /* ActionStatusMobile */ = {
-				isa = PBXGroup;
-				children = (
-					8B9A813225FA49F600F44800 /* MobileApplication.swift */,
-					8BA13D24260A5989007CB9CD /* MobileScene.swift */,
-					8B5B174F23FADA8500DD2AF5 /* Resources */,
+		8B5E7E5723F6A79100087E15 /* ActionStatusMobile */ = {
+			isa = PBXGroup;
+			children = (
+				8B9A813225FA49F600F44800 /* MobileApplication.swift */,
+				8BA13D24260A5989007CB9CD /* MobileScene.swift */,
+				8B5B174F23FADA8500DD2AF5 /* Resources */,
 			);
 			path = ActionStatusMobile;
 			sourceTree = "<group>";
 		};
-			8B5E7E5823F6A79900087E15 /* ActionStatus */ = {
-				isa = PBXGroup;
-				children = (
-					8B5B175223FADAAE00DD2AF5 /* Resources */,
-				);
+		8B5E7E5823F6A79900087E15 /* ActionStatus */ = {
+			isa = PBXGroup;
+			children = (
+				8B5B175223FADAAE00DD2AF5 /* Resources */,
+			);
 			path = ActionStatus;
 			sourceTree = "<group>";
 		};
-			8B5E7E7823F6BA8400087E15 /* Frameworks */ = {
-				isa = PBXGroup;
-				children = (
-					8B4893AC240D581200E3E112 /* SparkleBridgeClient.framework */,
-					8BBFAA942403F8E80091157A /* Sparkle.framework */,
-				);
+		8B5E7E7823F6BA8400087E15 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8B4893AC240D581200E3E112 /* SparkleBridgeClient.framework */,
+				8BBFAA942403F8E80091157A /* Sparkle.framework */,
+			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-			8B5E7E8423F6BB3500087E15 /* AppKitBridge */ = {
-				isa = PBXGroup;
-				children = (
-					8B5E7E8C23F6BB8900087E15 /* AppKitBridge.swift */,
-					8B2F0AB923FC195700B2E62A /* InterceptingDelegate.h */,
-					8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */,
+		8B5E7E8423F6BB3500087E15 /* AppKitBridge */ = {
+			isa = PBXGroup;
+			children = (
+				8B5E7E8C23F6BB8900087E15 /* AppKitBridge.swift */,
+				8B2F0AB923FC195700B2E62A /* InterceptingDelegate.h */,
+				8B2F0ABA23FC195800B2E62A /* InterceptingDelegate.m */,
 				8B5E7E9323F6C0C200087E15 /* AppKitBridge.h */,
 				8B5B175323FAE05600DD2AF5 /* Resources */,
 			);
@@ -384,23 +384,23 @@
 				8B2133F3264C4CFC00BE3D8D /* Core */,
 			);
 			productName = "Action StatusUITestsTV";
-			productReference = 22E7783B2476A606009ED66A /* ActionStatusUITestsTV.xctest */;
+			productReference = 22E7783B2476A606009ED66A /* Action Status UI Tests TV.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		8B3E64A223EAE62D00B28168 /* ActionStatusMobile */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8B3E64CD23EAE62F00B28168 /* Build configuration list for PBXNativeTarget "ActionStatusMobile" */;
-				buildPhases = (
-					8B3E649F23EAE62D00B28168 /* Sources */,
-					8B3E64A023EAE62D00B28168 /* Frameworks */,
-					8B3E64A123EAE62D00B28168 /* Resources */,
-					8B5AEB55240819F50065524B /* CopyFiles */,
-				);
+			buildPhases = (
+				8B3E649F23EAE62D00B28168 /* Sources */,
+				8B3E64A023EAE62D00B28168 /* Frameworks */,
+				8B3E64A123EAE62D00B28168 /* Resources */,
+				8B5AEB55240819F50065524B /* CopyFiles */,
+			);
 			buildRules = (
 			);
-				dependencies = (
-					8B5E7E8B23F6BB6100087E15 /* PBXTargetDependency */,
-				);
+			dependencies = (
+				8B5E7E8B23F6BB6100087E15 /* PBXTargetDependency */,
+			);
 			name = ActionStatusMobile;
 			packageProductDependencies = (
 				8B9A813625FA508F00F44800 /* Core */,
@@ -426,7 +426,7 @@
 			packageProductDependencies = (
 			);
 			productName = GithubStatusTests;
-			productReference = 8B3E64B923EAE62E00B28168 /* ActionStatusTests.xctest */;
+			productReference = 8B3E64B923EAE62E00B28168 /* Action Status Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		8B3E64C323EAE62F00B28168 /* ActionStatusUITestsMobile */ = {
@@ -447,7 +447,7 @@
 				8BC2753126134B350015A8DA /* Core */,
 			);
 			productName = GithubStatusUITests;
-			productReference = 8B3E64C423EAE62F00B28168 /* ActionStatusUITestsMobile.xctest */;
+			productReference = 8B3E64C423EAE62F00B28168 /* Action Status UI Tests Mobile.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		8B430E6923F586100050BF2A /* ActionStatusTV */ = {
@@ -460,8 +460,8 @@
 			);
 			buildRules = (
 			);
-				dependencies = (
-				);
+			dependencies = (
+			);
 			name = ActionStatusTV;
 			packageProductDependencies = (
 				8B5B175D23FAEBD300DD2AF5 /* SwiftUIExtensions */,
@@ -485,8 +485,8 @@
 			);
 			buildRules = (
 			);
-				dependencies = (
-				);
+			dependencies = (
+			);
 			name = AppKitBridge;
 			packageProductDependencies = (
 			);
@@ -542,14 +542,14 @@
 			productRefGroup = 8B3E64A423EAE62D00B28168 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
-				targets = (
-					8B3E64A223EAE62D00B28168 /* ActionStatusMobile */,
-					8B430E6923F586100050BF2A /* ActionStatusTV */,
-					8B5E7E8223F6BB3500087E15 /* AppKitBridge */,
-					8B3E64B823EAE62E00B28168 /* ActionStatusTests */,
-					8B3E64C323EAE62F00B28168 /* ActionStatusUITestsMobile */,
-					22E7783A2476A606009ED66A /* ActionStatusUITestsTV */,
-				);
+			targets = (
+				8B3E64A223EAE62D00B28168 /* ActionStatusMobile */,
+				8B430E6923F586100050BF2A /* ActionStatusTV */,
+				8B5E7E8223F6BB3500087E15 /* AppKitBridge */,
+				8B3E64B823EAE62E00B28168 /* ActionStatusTests */,
+				8B3E64C323EAE62F00B28168 /* ActionStatusUITestsMobile */,
+				22E7783A2476A606009ED66A /* ActionStatusUITestsTV */,
+			);
 		};
 /* End PBXProject section */
 
@@ -605,9 +605,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		22E778372476A606009ED66A /* Sources */ = {
@@ -709,32 +706,34 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-			22E778432476A606009ED66A /* Debug */ = {
-				isa = XCBuildConfiguration;
-				baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
-				buildSettings = {
-					INFOPLIST_FILE = Tests/ActionStatusUITests/Info.plist;
-					PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).tv.ui.tests";
-					SDKROOT = appletvos;
-					TEST_TARGET_NAME = ActionStatusTV;
-				};
-				name = Debug;
+		22E778432476A606009ED66A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = Tests/ActionStatusUITests/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).tv.ui.tests";
+				PRODUCT_NAME = "$(ACTION_STATUS_NAME) UI Tests TV";
+				SDKROOT = appletvos;
+				TEST_TARGET_NAME = ActionStatusTV;
 			};
-			22E778442476A606009ED66A /* Release */ = {
-				isa = XCBuildConfiguration;
-				baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
-				buildSettings = {
-					INFOPLIST_FILE = Tests/ActionStatusUITests/Info.plist;
-					PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).tv.ui.tests";
-					SDKROOT = appletvos;
-					TEST_TARGET_NAME = ActionStatusTV;
-				};
-				name = Release;
+			name = Debug;
+		};
+		22E778442476A606009ED66A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = Tests/ActionStatusUITests/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).tv.ui.tests";
+				PRODUCT_NAME = "$(ACTION_STATUS_NAME) UI Tests TV";
+				SDKROOT = appletvos;
+				TEST_TARGET_NAME = ActionStatusTV;
 			};
-			8B3E64CB23EAE62F00B28168 /* Debug */ = {
-				isa = XCBuildConfiguration;
-				baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
-				buildSettings = {
+			name = Release;
+		};
+		8B3E64CB23EAE62F00B28168 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
+			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -792,10 +791,10 @@
 			};
 			name = Debug;
 		};
-			8B3E64CC23EAE62F00B28168 /* Release */ = {
-				isa = XCBuildConfiguration;
-				baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
-				buildSettings = {
+		8B3E64CC23EAE62F00B28168 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
+			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -847,181 +846,189 @@
 			};
 			name = Release;
 		};
-			8B3E64CE23EAE62F00B28168 /* Debug */ = {
-				isa = XCBuildConfiguration;
-				baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
-				buildSettings = {
-					ASSETCATALOG_COMPILER_APPICON_NAME = AppIconMobile;
-					CODE_SIGN_ENTITLEMENTS = Sources/ActionStatusMobile/Resources/ActionStatus.entitlements;
-					DEVELOPMENT_ASSET_PATHS = "Sources/ActionStatus/Resources/PreviewContent";
-					ENABLE_HARDENED_RUNTIME = YES;
-					INFOPLIST_FILE = Sources/ActionStatusMobile/Resources/Info.plist;
-					LD_RUNPATH_SEARCH_PATHS = (
-						"$(inherited)",
-						"@executable_path/Frameworks",
-					);
-					PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER)";
-					PRODUCT_NAME = "$(ACTION_STATUS_NAME)";
-					SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-					SUPPORTS_MACCATALYST = YES;
-					SWIFT_OBJC_BRIDGING_HEADER = Sources/ActionStatus/Resources/BridgingHeader.h;
-				};
-				name = Debug;
+		8B3E64CE23EAE62F00B28168 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconMobile;
+				CODE_SIGN_ENTITLEMENTS = Sources/ActionStatusMobile/Resources/ActionStatus.entitlements;
+				DEVELOPMENT_ASSET_PATHS = Sources/ActionStatus/Resources/PreviewContent;
+				DEVELOPMENT_TEAM = 2H48644JM2;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = Sources/ActionStatusMobile/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER)";
+				PRODUCT_NAME = "$(ACTION_STATUS_NAME)";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = Sources/ActionStatus/Resources/BridgingHeader.h;
 			};
-			8B3E64CF23EAE62F00B28168 /* Release */ = {
-				isa = XCBuildConfiguration;
-				baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
-				buildSettings = {
-					ASSETCATALOG_COMPILER_APPICON_NAME = AppIconMobile;
-					CODE_SIGN_ENTITLEMENTS = Sources/ActionStatusMobile/Resources/ActionStatus.entitlements;
-					DEVELOPMENT_ASSET_PATHS = "Sources/ActionStatus/Resources/PreviewContent";
-					ENABLE_HARDENED_RUNTIME = YES;
-					INFOPLIST_FILE = Sources/ActionStatusMobile/Resources/Info.plist;
-					LD_RUNPATH_SEARCH_PATHS = (
-						"$(inherited)",
-						"@executable_path/Frameworks",
-					);
-					PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER)";
-					PRODUCT_NAME = "$(ACTION_STATUS_NAME)";
-					SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-					SUPPORTS_MACCATALYST = YES;
-					SWIFT_OBJC_BRIDGING_HEADER = Sources/ActionStatus/Resources/BridgingHeader.h;
-				};
-				name = Release;
+			name = Debug;
+		};
+		8B3E64CF23EAE62F00B28168 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconMobile;
+				CODE_SIGN_ENTITLEMENTS = Sources/ActionStatusMobile/Resources/ActionStatus.entitlements;
+				DEVELOPMENT_ASSET_PATHS = Sources/ActionStatus/Resources/PreviewContent;
+				DEVELOPMENT_TEAM = 2H48644JM2;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = Sources/ActionStatusMobile/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER)";
+				PRODUCT_NAME = "$(ACTION_STATUS_NAME)";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = Sources/ActionStatus/Resources/BridgingHeader.h;
 			};
-			8B3E64D123EAE62F00B28168 /* Debug */ = {
-				isa = XCBuildConfiguration;
-				baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
-				buildSettings = {
-					ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-					BUNDLE_LOADER = "$(TEST_HOST)";
-					INFOPLIST_FILE = Tests/ActionStatusTests/Info.plist;
-					LD_RUNPATH_SEARCH_PATHS = (
-						"$(inherited)",
-						"@executable_path/Frameworks",
-						"@loader_path/Frameworks",
-					);
-					PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).tests";
-					TARGETED_DEVICE_FAMILY = "1,2";
-				};
-				name = Debug;
+			name = Release;
+		};
+		8B3E64D123EAE62F00B28168 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = Tests/ActionStatusTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).tests";
+				PRODUCT_NAME = "$(ACTION_STATUS_NAME) Tests";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			8B3E64D223EAE62F00B28168 /* Release */ = {
-				isa = XCBuildConfiguration;
-				baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
-				buildSettings = {
-					ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-					BUNDLE_LOADER = "$(TEST_HOST)";
-					INFOPLIST_FILE = Tests/ActionStatusTests/Info.plist;
-					LD_RUNPATH_SEARCH_PATHS = (
-						"$(inherited)",
-						"@executable_path/Frameworks",
-						"@loader_path/Frameworks",
-					);
-					PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).tests";
-					TARGETED_DEVICE_FAMILY = "1,2";
-				};
-				name = Release;
+			name = Debug;
+		};
+		8B3E64D223EAE62F00B28168 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = Tests/ActionStatusTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).tests";
+				PRODUCT_NAME = "$(ACTION_STATUS_NAME) Tests";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			8B3E64D423EAE62F00B28168 /* Debug */ = {
-				isa = XCBuildConfiguration;
-				baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
-				buildSettings = {
-					INFOPLIST_FILE = Tests/ActionStatusUITests/Info.plist;
-					PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).ui.tests";
-					TEST_TARGET_NAME = ActionStatusMobile;
-				};
-				name = Debug;
+			name = Release;
+		};
+		8B3E64D423EAE62F00B28168 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = Tests/ActionStatusUITests/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).ui.tests";
+				PRODUCT_NAME = "$(ACTION_STATUS_NAME) UI Tests Mobile";
+				TEST_TARGET_NAME = ActionStatusMobile;
 			};
-			8B3E64D523EAE62F00B28168 /* Release */ = {
-				isa = XCBuildConfiguration;
-				baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
-				buildSettings = {
-					INFOPLIST_FILE = Tests/ActionStatusUITests/Info.plist;
-					PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).ui.tests";
-					TEST_TARGET_NAME = ActionStatusMobile;
-				};
-				name = Release;
+			name = Debug;
+		};
+		8B3E64D523EAE62F00B28168 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = Tests/ActionStatusUITests/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).ui.tests";
+				PRODUCT_NAME = "$(ACTION_STATUS_NAME) UI Tests Mobile";
+				TEST_TARGET_NAME = ActionStatusMobile;
 			};
-			8B430E7A23F586110050BF2A /* Debug */ = {
-				isa = XCBuildConfiguration;
-				baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
-				buildSettings = {
-					ASSETCATALOG_COMPILER_APPICON_NAME = AppIconTV;
-					CODE_SIGN_IDENTITY = "Apple Development";
-					CODE_SIGN_ENTITLEMENTS = Sources/ActionStatusTV/Resources/ActionStatus.entitlements;
-					INFOPLIST_FILE = Sources/ActionStatusTV/Resources/Info.plist;
-					PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER)";
-					PRODUCT_NAME = "$(ACTION_STATUS_NAME)";
-					SDKROOT = appletvos;
-					TARGETED_DEVICE_FAMILY = 3;
-				};
-				name = Debug;
+			name = Release;
+		};
+		8B430E7A23F586110050BF2A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconTV;
+				CODE_SIGN_ENTITLEMENTS = Sources/ActionStatusTV/Resources/ActionStatus.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				DEVELOPMENT_TEAM = 2H48644JM2;
+				INFOPLIST_FILE = Sources/ActionStatusTV/Resources/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER)";
+				PRODUCT_NAME = "$(ACTION_STATUS_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
 			};
-			8B430E7B23F586110050BF2A /* Release */ = {
-				isa = XCBuildConfiguration;
-				baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
-				buildSettings = {
-					ASSETCATALOG_COMPILER_APPICON_NAME = AppIconTV;
-					CODE_SIGN_IDENTITY = "Apple Development";
-					CODE_SIGN_ENTITLEMENTS = Sources/ActionStatusTV/Resources/ActionStatus.entitlements;
-					INFOPLIST_FILE = Sources/ActionStatusTV/Resources/Info.plist;
-					PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER)";
-					PRODUCT_NAME = "$(ACTION_STATUS_NAME)";
-					SDKROOT = appletvos;
-					TARGETED_DEVICE_FAMILY = 3;
-				};
-				name = Release;
+			name = Debug;
+		};
+		8B430E7B23F586110050BF2A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconTV;
+				CODE_SIGN_ENTITLEMENTS = Sources/ActionStatusTV/Resources/ActionStatus.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				DEVELOPMENT_TEAM = 2H48644JM2;
+				INFOPLIST_FILE = Sources/ActionStatusTV/Resources/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER)";
+				PRODUCT_NAME = "$(ACTION_STATUS_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
 			};
-			8B5E7E8723F6BB3500087E15 /* Debug */ = {
-				isa = XCBuildConfiguration;
-				baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
-				buildSettings = {
-					CLANG_ENABLE_MODULES = YES;
-					ENABLE_HARDENED_RUNTIME = YES;
-					INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-					INFOPLIST_FILE = Sources/AppKitBridge/Resources/Info.plist;
-					LD_RUNPATH_SEARCH_PATHS = (
-						"$(inherited)",
-						"@executable_path/../Frameworks",
-						"@loader_path/../Frameworks",
-					);
-					PRODUCT_MODULE_NAME = "$(TARGET_NAME)";
-					PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).appkitbridge";
-					PRODUCT_NAME = "$(TARGET_NAME)";
-					SDKROOT = macosx;
-					SKIP_INSTALL = YES;
-					SUPPORTED_PLATFORMS = macosx;
-					SWIFT_OBJC_BRIDGING_HEADER = Sources/AppKitBridge/Resources/BridgingHeader.h;
-					SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-					SWIFT_VERSION = 5.0;
-				};
-				name = Debug;
+			name = Release;
+		};
+		8B5E7E8723F6BB3500087E15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = Sources/AppKitBridge/Resources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).appkitbridge";
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = Sources/AppKitBridge/Resources/BridgingHeader.h;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
-			8B5E7E8823F6BB3500087E15 /* Release */ = {
-				isa = XCBuildConfiguration;
-				baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
-				buildSettings = {
-					CLANG_ENABLE_MODULES = YES;
-					ENABLE_HARDENED_RUNTIME = YES;
-					INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-					INFOPLIST_FILE = Sources/AppKitBridge/Resources/Info.plist;
-					LD_RUNPATH_SEARCH_PATHS = (
-						"$(inherited)",
-						"@executable_path/../Frameworks",
-						"@loader_path/../Frameworks",
-					);
-					PRODUCT_MODULE_NAME = "$(TARGET_NAME)";
-					PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).appkitbridge";
-					PRODUCT_NAME = "$(TARGET_NAME)";
-					SDKROOT = macosx;
-					SKIP_INSTALL = YES;
-					SUPPORTED_PLATFORMS = macosx;
-					SWIFT_OBJC_BRIDGING_HEADER = Sources/AppKitBridge/Resources/BridgingHeader.h;
-					SWIFT_VERSION = 5.0;
-				};
-				name = Release;
+			name = Debug;
+		};
+		8B5E7E8823F6BB3500087E15 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = Sources/AppKitBridge/Resources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).appkitbridge";
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = Sources/AppKitBridge/Resources/BridgingHeader.h;
+				SWIFT_VERSION = 5.0;
 			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
