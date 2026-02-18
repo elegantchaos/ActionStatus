@@ -1,4 +1,1 @@
-#!/bin/bash
-
-source "bootstrap-tools"
-"$RT" "$@"
+../../../ReleaseTools/.build/debug/rt

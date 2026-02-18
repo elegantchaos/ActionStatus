@@ -1,18 +1,15 @@
 #!/bin/bash
+# Purpose: Submit iOS build using ReleaseTools and push tags.
+# Usage: Extras/Scripts/upload-iOS
 
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-#  Created by Sam Deane on 25/03/2020.
-#  All code (c) 2020 - present day, Elegant Chaos Limited.
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+set -euo pipefail
 
-source "bootstrap-tools"
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+RT="$ROOT/Extras/Scripts/rt"
 
 echo " "
-echo "*************"
-echo "Uploading iOS  "
-echo "*************"
-
-$RT set scheme ActionStatus --platform=iOS
-$RT archive --platform=iOS --show-output 2> /dev/null | xcpretty
-$RT export --platform=iOS
-$RT upload --platform=iOS
+echo "**************"
+echo "Submitting iOS"
+echo "**************"
+"$RT" submit --platform=iOS --scheme=ActionStatus
+git -C "$ROOT" push --tags --force

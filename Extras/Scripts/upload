@@ -1,20 +1,25 @@
 #!/bin/bash
+# Purpose: Submit iOS and tvOS builds using ReleaseTools and push tags.
+# Usage: Extras/Scripts/upload
 
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-#  Created by Sam Deane on 25/03/2020.
-#  All code (c) 2020 - present day, Elegant Chaos Limited.
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+set -euo pipefail
 
-source "bootstrap-tools"
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+RT="$ROOT/Extras/Scripts/rt"
 
 echo " "
-echo "*************"
-echo "Uploading iOS  "
-echo "*************"
+echo "**************"
+echo "Submitting iOS"
+echo "**************"
+"$RT" submit --platform=iOS --scheme=ActionStatus
 
-$RT set scheme ActionStatus --platform=iOS 
-$RT archive --platform=iOS --show-output 2> /dev/null | xcpretty
-$RT export --platform=iOS
-$RT upload --platform=iOS
+echo " "
+echo "***************"
+echo "Submitting tvOS"
+echo "***************"
+"$RT" submit --platform=tvOS --scheme=ActionStatus-tvOS
 
-#open "https://appstoreconnect.apple.com/apps/1519213388/testflight/ios/"
+echo "------------"
+echo "Pushing Tags"
+echo "------------"
+git -C "$ROOT" push --tags --force

@@ -5,24 +5,6 @@
    <BuildAction
       parallelizeBuildables = "NO"
       buildImplicitDependencies = "NO">
-      <PreActions>
-         <ExecutionAction
-            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
-            <ActionContent
-               title = "Run Script"
-               scriptText = "&quot;$RT_SHARED_SCRIPTS_PATH/pre-build&quot;&#10;">
-               <EnvironmentBuildable>
-                  <BuildableReference
-                     BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "8B3E64A223EAE62D00B28168"
-                     BuildableName = "Action Status.app"
-                     BlueprintName = "ActionStatusMobile"
-                     ReferencedContainer = "container:ActionStatus.xcodeproj">
-                  </BuildableReference>
-               </EnvironmentBuildable>
-            </ActionContent>
-         </ExecutionAction>
-      </PreActions>
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "NO"
@@ -130,7 +112,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8B3E64B823EAE62E00B28168"
-               BuildableName = "ActionStatusTests.xctest"
+               BuildableName = ".xctest"
                BlueprintName = "ActionStatusTests"
                ReferencedContainer = "container:ActionStatus.xcodeproj">
             </BuildableReference>
@@ -140,7 +122,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8B3E64C323EAE62F00B28168"
-               BuildableName = "ActionStatusUITestsMobile.xctest"
+               BuildableName = ".xctest"
                BlueprintName = "ActionStatusUITestsMobile"
                ReferencedContainer = "container:ActionStatus.xcodeproj">
             </BuildableReference>
@@ -193,23 +175,5 @@
    <ArchiveAction
       buildConfiguration = "Release"
       revealArchiveInOrganizer = "YES">
-      <PreActions>
-         <ExecutionAction
-            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
-            <ActionContent
-               title = "Run Script"
-               scriptText = "&quot;$RT_SHARED_SCRIPTS_PATH/pre-archive&quot;&#10;">
-               <EnvironmentBuildable>
-                  <BuildableReference
-                     BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "8B3E64A223EAE62D00B28168"
-                     BuildableName = "Action Status.app"
-                     BlueprintName = "ActionStatusMobile"
-                     ReferencedContainer = "container:ActionStatus.xcodeproj">
-                  </BuildableReference>
-               </EnvironmentBuildable>
-            </ActionContent>
-         </ExecutionAction>
-      </PreActions>
    </ArchiveAction>
 </Scheme>

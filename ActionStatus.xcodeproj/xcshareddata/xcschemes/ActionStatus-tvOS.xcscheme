@@ -39,7 +39,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "22E7783A2476A606009ED66A"
-               BuildableName = "ActionStatusUITestsTV.xctest"
+               BuildableName = ".xctest"
                BlueprintName = "ActionStatusUITestsTV"
                ReferencedContainer = "container:ActionStatus.xcodeproj">
             </BuildableReference>
@@ -90,23 +90,5 @@
    <ArchiveAction
       buildConfiguration = "Release"
       revealArchiveInOrganizer = "YES">
-      <PreActions>
-         <ExecutionAction
-            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
-            <ActionContent
-               title = "Run Pre Archive"
-               scriptText = "&quot;$RT_SHARED_SCRIPTS_PATH/pre-archive&quot;&#10;&#10;">
-               <EnvironmentBuildable>
-                  <BuildableReference
-                     BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "8B430E6923F586100050BF2A"
-                     BuildableName = "Action Status.app"
-                     BlueprintName = "ActionStatusTV"
-                     ReferencedContainer = "container:ActionStatus.xcodeproj">
-                  </BuildableReference>
-               </EnvironmentBuildable>
-            </ActionContent>
-         </ExecutionAction>
-      </PreActions>
    </ArchiveAction>
 </Scheme>

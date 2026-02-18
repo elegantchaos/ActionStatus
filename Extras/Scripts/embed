@@ -84,7 +84,7 @@ then
     do
         local xpcName=$(basename "$xpc")
         echo "Copying $xpcName"
-        ditto "$xpc" "$RT_BUILT_XPCSERVICES_DIR/$xpcName"
+        ditto "$xpc" "$BUILT_XPCSERVICES_DIR/$xpcName"
     done
 fi
 }
@@ -107,8 +107,13 @@ then
     IDENTITY="-"
 fi
 
-resign_bundles "$RT_BUILT_RESOURCES_DIR"
-resign_frameworks "$RT_BUILT_FRAMEWORKS_DIR"
-resign_xpcs "$RT_BUILT_XPCSERVICES_DIR"
+# Backwards-compatible with old RT_* variables, but default to native Xcode paths.
+BUILT_RESOURCES_DIR="${RT_BUILT_RESOURCES_DIR:-$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH}"
+BUILT_FRAMEWORKS_DIR="${RT_BUILT_FRAMEWORKS_DIR:-$TARGET_BUILD_DIR/$FRAMEWORKS_FOLDER_PATH}"
+BUILT_XPCSERVICES_DIR="${RT_BUILT_XPCSERVICES_DIR:-$TARGET_BUILD_DIR/$XPCSERVICES_FOLDER_PATH}"
 
-#/usr/bin/codesign -vvvv --deep "$RT_BUILT_FRAMEWORKS_DIR/SparkleBridgeClient.framework"
+resign_bundles "$BUILT_RESOURCES_DIR"
+resign_frameworks "$BUILT_FRAMEWORKS_DIR"
+resign_xpcs "$BUILT_XPCSERVICES_DIR"
+
+#/usr/bin/codesign -vvvv --deep "$BUILT_FRAMEWORKS_DIR/SparkleBridgeClient.framework"
