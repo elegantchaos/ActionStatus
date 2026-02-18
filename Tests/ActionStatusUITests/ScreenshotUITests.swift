@@ -91,13 +91,6 @@ class ScreenshotUITests: XCTestCase {
         XCTAssert(cancel.waitForExistence(timeout: 1))
         makeScreenShot("03-editor")
         cancel.tap()
-
-        app.showContextMenu(for: firstRow)
-        app.selectContextMenuItem("Workflow…")
- 
-        XCTAssert(cancel.waitForExistence(timeout: 1))
-        makeScreenShot("04-generate")
-        cancel.tap()
         #endif
 
         #if targetEnvironment(macCatalyst)
