@@ -4,26 +4,26 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import ApplicationExtensions
-import UIKit
 import SwiftUI
+import UIKit
 
 open class SceneDelegate: BasicScene {
-    override open func makeScene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        let app = Application.shared
-        let content = app.applyEnvironment(to: ContentView())
-        
-        if let windowScene = scene as? UIWindowScene {
-            setup(windowScene)
+  override open func makeScene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+    let app = Application.shared
+    let content = app.applyEnvironment(to: ContentView())
 
-            let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: content)
-            self.window = window
-            app.rootController = window.rootViewController
-            window.makeKeyAndVisible()
-        }
+    if let windowScene = scene as? UIWindowScene {
+      setup(windowScene)
+
+      let window = UIWindow(windowScene: windowScene)
+      window.rootViewController = UIHostingController(rootView: content)
+      self.window = window
+      app.rootController = window.rootViewController
+      window.makeKeyAndVisible()
     }
-    
-    open func setup(_ windowScene: UIWindowScene) {
-        
-    }
+  }
+
+  open func setup(_ windowScene: UIWindowScene) {
+
+  }
 }

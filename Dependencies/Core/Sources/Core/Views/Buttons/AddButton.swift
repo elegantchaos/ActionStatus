@@ -8,33 +8,32 @@ import SwiftUI
 import SwiftUIExtensions
 
 public struct AddButton: View {
-    @EnvironmentObject var context: ViewContext
-    @EnvironmentObject var model: Model
-    @EnvironmentObject var sheetController: SheetController
-    
-    public init() {
+  @EnvironmentObject var context: ViewContext
+  @EnvironmentObject var model: Model
+  @EnvironmentObject var sheetController: SheetController
+
+  public init() {
+  }
+
+  public var body: some View {
+    Button(action: addRepo) {
+      Text("Add")
+      //            Image(systemName: context.addRepoIcon)
     }
-    
-    public var body: some View {
-        Button(action: addRepo ) {
-            Text("Add")
-//            Image(systemName: context.addRepoIcon)
-        }
-        .accessibility(identifier: "addButton")
-        .foregroundColor(.black)
-        .animation(.easeInOut)
+    .accessibility(identifier: "addButton")
+    .foregroundColor(.black)
+    .animation(.easeInOut)
+  }
+
+  func addRepo() {
+    sheetController.show {
+      EditView(repo: nil)
     }
-    
-    func addRepo() {
-        sheetController.show() {
-            EditView(repo: nil)
-        }
-    }
+  }
 }
 
 struct AddButton_Previews: PreviewProvider {
-    static var previews: some View {
-        PreviewContext().inject(into: AddButton())
-    }
+  static var previews: some View {
+    PreviewContext().inject(into: AddButton())
+  }
 }
-

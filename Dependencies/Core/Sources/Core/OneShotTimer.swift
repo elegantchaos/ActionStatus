@@ -6,20 +6,20 @@
 import Foundation
 
 class OneShotTimer {
-    typealias Action = (Timer) -> ()
-    var timer: Timer?
-    
-    public func cancel() -> Bool {
-        let cancelled = timer != nil
-        timer?.invalidate()
-        timer = nil
-        return cancelled
-    }
+  typealias Action = (Timer) -> Void
+  var timer: Timer?
 
-    func schedule(after interval: TimeInterval, action: @escaping Action) {
-        _ = cancel()
-        modelChannel.log("Scheduled refresh for \(interval) seconds.")
-        timer = .scheduledTimer(withTimeInterval: interval, repeats: false, block: action)
-    }
+  public func cancel() -> Bool {
+    let cancelled = timer != nil
+    timer?.invalidate()
+    timer = nil
+    return cancelled
+  }
+
+  func schedule(after interval: TimeInterval, action: @escaping Action) {
+    _ = cancel()
+    modelChannel.log("Scheduled refresh for \(interval) seconds.")
+    timer = .scheduledTimer(withTimeInterval: interval, repeats: false, block: action)
+  }
 
 }

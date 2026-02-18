@@ -8,29 +8,29 @@ import SwiftUI
 import SwiftUIExtensions
 
 struct EditRepoButton: View {
-    @EnvironmentObject var context: ViewContext
-    @EnvironmentObject var sheetController: SheetController
-    
-    let repo: Repo
-    
-    var body: some View {
-        Button(action: handleTapped) {
-            SystemImage(context.editButtonIcon)
-        }
-        .accessibility(identifier: "editButton")
-        .foregroundColor(.black)
-    }
+  @EnvironmentObject var context: ViewContext
+  @EnvironmentObject var sheetController: SheetController
 
-    func handleTapped() {
-        sheetController.show() {
-            EditView(repo: self.repo)
-        }
+  let repo: Repo
+
+  var body: some View {
+    Button(action: handleTapped) {
+      SystemImage(context.editButtonIcon)
     }
+    .accessibility(identifier: "editButton")
+    .foregroundColor(.black)
+  }
+
+  func handleTapped() {
+    sheetController.show {
+      EditView(repo: self.repo)
+    }
+  }
 }
 
 struct EditButton_Previews: PreviewProvider {
-    static var previews: some View {
-        let context = PreviewContext()
-        return context.inject(into: EditRepoButton(repo: context.testRepo))
-    }
+  static var previews: some View {
+    let context = PreviewContext()
+    return context.inject(into: EditRepoButton(repo: context.testRepo))
+  }
 }

@@ -9,31 +9,30 @@ import SwiftUI
 import SwiftUIExtensions
 
 struct PreferencesButton: View {
-    @EnvironmentObject var context: ViewContext
-    @Environment(\.horizontalSizeClass) var horizontalSize
-    @EnvironmentObject var sheetController: SheetController
-    
-    var body: some View {
-        Button(action: showPreferences) {
-            if (horizontalSize == .compact) || Hardware.Platform.current.base == .tvOS {
-                Image(systemName: context.preferencesIcon)
-            } else {
-                Text("Settings")
-            }
-        }.accessibility(identifier: "preferencesButton")
-    }
+  @EnvironmentObject var context: ViewContext
+  @Environment(\.horizontalSizeClass) var horizontalSize
+  @EnvironmentObject var sheetController: SheetController
 
-    func showPreferences() {
-        sheetController.show() {
-            PreferencesView()
-        }
+  var body: some View {
+    Button(action: showPreferences) {
+      if (horizontalSize == .compact) || Hardware.Platform.current.base == .tvOS {
+        Image(systemName: context.preferencesIcon)
+      } else {
+        Text("Settings")
+      }
+    }.accessibility(identifier: "preferencesButton")
+  }
+
+  func showPreferences() {
+    sheetController.show {
+      PreferencesView()
     }
+  }
 }
 
 struct PreferencesButton_Previews: PreviewProvider {
-    static var previews: some View {
-        let context = PreviewContext()
-        return context.inject(into: PreferencesButton())
-    }
+  static var previews: some View {
+    let context = PreviewContext()
+    return context.inject(into: PreferencesButton())
+  }
 }
-

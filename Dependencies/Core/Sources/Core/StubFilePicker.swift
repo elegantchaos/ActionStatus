@@ -7,11 +7,11 @@ import UIKit
 import UniformTypeIdentifiers
 
 class StubFilePicker: UIViewController, FilePicker {
-    required init(forOpeningDocumentTypes: [UTType], startingIn: URL?, completion: FilePickerCompletion?) {
-        super.init(nibName: nil, bundle: nil)
-    }
+  required init(forOpeningDocumentTypes: [UTType], startingIn: URL?, completion: FilePickerCompletion?) {
+    super.init(nibName: nil, bundle: nil)
+  }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
+  required init?(coder: NSCoder) {
+    super.init(coder: coder)
+  }
 }

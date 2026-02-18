@@ -6,20 +6,19 @@
 import SwiftUI
 
 struct StatusIcon: View {
-    let name: String
-    
-    init(_ name: String) {
-        self.name = name
-    }
-    
-    var body: some View {
-        Image("\(name)Small")
-    }	
+  let name: String
+
+  init(_ name: String) {
+    self.name = name
+  }
+
+  var body: some View {
+    Image("\(name)Small")
+  }
 }
 
 struct StatusIcon_Previews: PreviewProvider {
-    static var previews: some View {
-        StatusIcon("StatusFailing")
-    }
+  static var previews: some View {
+    StatusIcon("StatusFailing")
+  }
 }
-

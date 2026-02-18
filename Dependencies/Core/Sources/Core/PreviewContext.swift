@@ -7,20 +7,21 @@ import SwiftUI
 
 struct PreviewContext {
 
-    @State var model = TestModel()
-    @State var state = ViewContext(host: PreviewHost())
-    
-    init(isEditing: Bool = true) {
-        state.settings.isEditing = isEditing
-    }
-    
-    var testRepo: Repo {
-        model.repos.first!
-    }
-    
-    func inject<Content>(into view: Content) -> some View where Content: View {
-        return view
-        .environmentObject(model)
-        .environmentObject(state)
-    }
+  @State var model = TestModel()
+  @State var state = ViewContext(host: PreviewHost())
+
+  init(isEditing: Bool = true) {
+    state.settings.isEditing = isEditing
+  }
+
+  var testRepo: Repo {
+    model.repos.first!
+  }
+
+  func inject<Content>(into view: Content) -> some View where Content: View {
+    return
+      view
+      .environmentObject(model)
+      .environmentObject(state)
+  }
 }

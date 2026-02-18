@@ -6,15 +6,14 @@
 import SwiftUI
 
 open class Updater: ObservableObject {
-    @Published public var progress: Double = 0
-    @Published public var status: String = ""
-    @Published public var hasUpdate: Bool = false
+  @Published public var progress: Double = 0
+  @Published public var status: String = ""
+  @Published public var hasUpdate: Bool = false
 
-    public init() {
-    }
-    
-    open func installUpdate() { }
-    open func skipUpdate() { }
-    open func ignoreUpdate() { }
+  public init() {
+  }
+
+  open func installUpdate() {}
+  open func skipUpdate() {}
+  open func ignoreUpdate() {}
 }
-

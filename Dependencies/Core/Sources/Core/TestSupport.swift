@@ -4,8 +4,8 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 public extension Dictionary where Key == String, Value == String {
-    var isTestingUI: Bool {
-        get { self["UITesting"] == "YES" }
-        set { self["UITesting"] = newValue ? "YES" : "NO" }
-    }
+  var isTestingUI: Bool {
+    get { self["UITesting"] == "YES" }
+    set { self["UITesting"] = newValue ? "YES" : "NO" }
+  }
 }

@@ -4,13 +4,12 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Core
-import UIKit
 import SwiftUI
+import UIKit
 
 @UIApplicationMain
 class TVApplication: Application {
-    override class var shared: TVApplication {
-        UIApplication.shared.delegate as! TVApplication
-    }
+  override class var shared: TVApplication {
+    UIApplication.shared.delegate as! TVApplication
+  }
 }
-
