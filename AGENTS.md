@@ -1,6 +1,6 @@
 # ActionStatus — AI coding agent guide (Swift / SwiftUI + Catalyst)
 
-This repository contains ActionStatus, an Xcode app for iOS, tvOS, and macCatalyst, with shared logic in the local Swift package under `Core/`.
+This repository contains ActionStatus, an Xcode app for iOS, tvOS, and macCatalyst, with shared logic in the local Swift package under `Dependencies/Core/`.
 
 See https://actionstatus.elegantchaos.com/ for product context.
 
@@ -24,7 +24,7 @@ See https://actionstatus.elegantchaos.com/ for product context.
 
 ## Code placement
 
-- Keep shared logic in `Core/Sources/Core` when possible.
+- Keep shared logic in `Dependencies/Core/Sources/Core` when possible.
 - Keep platform-specific behavior in `Sources/ActionStatusMobile`, `Sources/ActionStatusTV`, and `Sources/AppKitBridge`.
 - Prefer existing architecture and file boundaries unless there is a clear reason not to.
 

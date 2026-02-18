@@ -4,8 +4,9 @@
 
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-cd "$ROOT"
+cd "$(dirname "${BASH_SOURCE[0]}")"
+cd "$(readlink -f .)/../.."
+ROOT="$(pwd)"
 
 FORCE_CLEAN=0
 while [ "$#" -gt 0 ]; do
@@ -30,7 +31,8 @@ done
 CACHE_ROOT="$ROOT/.build/cache"
 VERIFY_ROOT="$ROOT/.build/verify"
 DERIVED_DATA_PATH="$ROOT/.build/derived-data"
-CORE_BUILD_PATH="$ROOT/Core/.build"
+CORE_PACKAGE_PATH="$ROOT/Dependencies/Core"
+CORE_BUILD_PATH="$CORE_PACKAGE_PATH/.build"
 
 if [ "$FORCE_CLEAN" -eq 1 ]; then
   echo "==> Clean mode enabled: removing local build artifacts and caches"
@@ -42,6 +44,17 @@ export HOME="$CACHE_ROOT/home"
 export CLANG_MODULE_CACHE_PATH="$CACHE_ROOT/clang-module-cache"
 export SWIFTPM_MODULECACHE_OVERRIDE="$CACHE_ROOT/swift-module-cache"
 export XDG_CACHE_HOME="$CACHE_ROOT/xdg-cache"
+
+CORE_PACKAGE_PATH_MARKER="$CACHE_ROOT/core-package-path.txt"
+PREVIOUS_CORE_PACKAGE_PATH=""
+if [ -f "$CORE_PACKAGE_PATH_MARKER" ]; then
+  PREVIOUS_CORE_PACKAGE_PATH="$(cat "$CORE_PACKAGE_PATH_MARKER")"
+fi
+if [ "$PREVIOUS_CORE_PACKAGE_PATH" != "$CORE_PACKAGE_PATH" ] && [ -d "$CORE_BUILD_PATH" ]; then
+  echo "==> Core package path changed; removing stale Core build artifacts"
+  rm -rf "$CORE_BUILD_PATH"
+fi
+echo "$CORE_PACKAGE_PATH" > "$CORE_PACKAGE_PATH_MARKER"
 
 echo "==> Validating changes in $ROOT"
 
@@ -72,12 +85,12 @@ fi
 
 if [ "$FORCE_CLEAN" -eq 1 ]; then
   echo "==> Running clean on Core package"
-  swift package clean --package-path Core
+  swift package clean --package-path "$CORE_PACKAGE_PATH"
 fi
 
 echo "==> Building Core package"
 HOST_ARCH="$(uname -m)"
-if ! swift build --package-path Core --disable-sandbox --triple "${HOST_ARCH}-apple-macosx10.15"; then
+if ! swift build --package-path "$CORE_PACKAGE_PATH" --disable-sandbox --triple "${HOST_ARCH}-apple-macosx10.15"; then
   echo "WARN: Standalone Core SwiftPM build failed; continuing with Xcode workspace validation."
 fi
 
