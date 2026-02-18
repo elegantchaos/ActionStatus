@@ -44,7 +44,7 @@ extension ItemStatus: CaseIterable {
     typealias ImageTable = [ImageMode:StatusImages]
     
     let images = setupImages()
-    let appName = Bundle.main.infoDictionary?["CFBundleName"] as! String
+    let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String ?? "Action Status"
     
     var delegate: AppKitBridgeDelegate?
     var windowInterceptor: InterceptingDelegate?
@@ -92,12 +92,12 @@ extension ItemStatus: CaseIterable {
     }
 
     func setupMenu() {
-        assert(statusItem == nil)
+        guard statusItem == nil else { return }
         let status = NSStatusBar.system
         let newItem = status.statusItem(withLength: 22)
         if let button = newItem.button {
             button.setAccessibilityIdentifier("ActionStatusStatusMenu")
-            button.title = "ActionStatus"
+            button.title = ""
         }
         
         let menu = NSMenu(title: "Repos")
@@ -108,9 +108,9 @@ extension ItemStatus: CaseIterable {
     }
     
     func tearDownMenu() {
-        assert(statusItem != nil)
-        NSStatusBar.system.removeStatusItem(statusItem!)
-        statusItem = nil
+        guard let statusItem else { return }
+        NSStatusBar.system.removeStatusItem(statusItem)
+        self.statusItem = nil
     }
     
     func updateImage() {
@@ -143,7 +143,13 @@ extension AppKitBridgeSingleton: AppKitBridge {
     }
         
     func updateWindow() {
-        if mainWindow == nil, let window = NSApp.mainWindow {
+        if mainWindow == nil {
+            let preferredWindowTitle = delegate?.windowToIntercept()
+            let window = NSApp.windows.first(where: { window in
+                guard let preferredWindowTitle = preferredWindowTitle else { return window.isVisible }
+                return window.title == preferredWindowTitle
+            }) ?? NSApp.mainWindow
+            guard let window else { return }
             originalDelegate = window.delegate
             windowInterceptor = InterceptingDelegate(window: window, interceptor: self)
             mainWindow = window
@@ -262,7 +268,7 @@ extension AppKitBridgeSingleton: NSWindowDelegate {
             // something in the Catalyst implementation of the Quit menu seems to get confused
             // if we intercept windowShouldClose, so we implement quit by disabling the interception
             // and then closing the window - which in turn should cause an orderly shutdown of the app
-            return (delegate.windowShouldClose!)(sender)
+            return delegate.windowShouldClose?(sender) ?? true
         } else {
             sender.setIsVisible(false)
             return false;

@@ -26,7 +26,7 @@ class MobileApplication: Application {
         UIApplication.shared.delegate as! MobileApplication
     }
 
-    lazy var appKitBridge: AppKitBridge? = loadBridge()
+    var appKitBridge: AppKitBridge?
     var editingSubscriber: AnyCancellable?
     var updateTimer: Timer?
     
@@ -34,6 +34,7 @@ class MobileApplication: Application {
 
     override func setUp(withOptions options: LaunchOptions, completion: @escaping SetupCompletion) {
         super.setUp(withOptions: options) { [self] options in
+            _ = ensureBridgeLoaded()
             
             let timer = Timer(timeInterval: .statusCycleInterval, repeats: true) { _ in
                 self.updateBridge()
@@ -65,12 +66,14 @@ class MobileApplication: Application {
         super.loadSettings()
         updateBridge()
         
-        settingsChannel.log("\(String.showInMenuKey) is \(appKitBridge?.showInMenu ?? false)")
-        settingsChannel.log("\(String.showInDockKey) is \(appKitBridge?.showInDock ?? false)")
+        if let bridge = appKitBridge {
+            settingsChannel.log("\(String.showInMenuKey) is \(bridge.showInMenu)")
+            settingsChannel.log("\(String.showInDockKey) is \(bridge.showInDock)")
+        }
     }
 
     override func reveal(url: URL) {
-        if let bridge = appKitBridge {
+        if let bridge = ensureBridgeLoaded() {
             bridge.reveal(inFinder: url)
         } else {
             super.reveal(url: url)
@@ -82,26 +85,65 @@ class MobileApplication: Application {
     }
 
     fileprivate func updateBridge() {
-        appKitBridge?.showInMenu = UserDefaults.standard.bool(forKey: .showInMenuKey)
-        appKitBridge?.showInDock = UserDefaults.standard.bool(forKey: .showInDockKey)
-        appKitBridge?.showAddButton = context.settings.isEditing
+        guard let bridge = ensureBridgeLoaded() else { return }
+        bridge.showInMenu = UserDefaults.standard.bool(forKey: .showInMenuKey)
+        bridge.showInDock = UserDefaults.standard.bool(forKey: .showInDockKey)
+        bridge.showAddButton = context.settings.isEditing
         
         let combined = status.combinedState
         let index = Int(Date.timeIntervalSinceReferenceDate / .statusCycleInterval) % combined.count
         let status = self.status(for: self.status.combinedState[index])
-        appKitBridge?.status = status
+        bridge.status = status
+    }
+
+    @discardableResult
+    fileprivate func ensureBridgeLoaded() -> AppKitBridge? {
+        if appKitBridge == nil {
+            appKitBridge = loadBridge()
+        }
+        return appKitBridge
     }
     
     fileprivate func loadBridge() -> AppKitBridge? {
-        if let bridgeURL = Bundle.main.url(forResource: "AppKitBridge", withExtension: "bundle"), let bundle = Bundle(url: bridgeURL) {
-            if let cls = bundle.principalClass as? NSObject.Type {
-                if let instance = cls.init() as? AppKitBridge {
-                    instance.setup(with: self)
-                    return instance
-                }
+        #if targetEnvironment(macCatalyst)
+        let principalClassName = "AppKitBridge.AppKitBridgeSingleton"
+        if let cls = NSClassFromString(principalClassName) as? NSObject.Type,
+           let instance = cls.init() as? AppKitBridge {
+            settingsChannel.log("Loaded bridge class directly: \(principalClassName)")
+            instance.setup(with: self)
+            return instance
+        }
+
+        let candidateURLs: [URL?] = [
+            Bundle.main.url(forResource: "AppKitBridge", withExtension: "bundle"),
+            Bundle.main.builtInPlugInsURL?.appendingPathComponent("AppKitBridge.bundle"),
+            Bundle.main.privateFrameworksURL?.appendingPathComponent("AppKitBridge.bundle"),
+            Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/AppKitBridge.bundle"),
+        ]
+
+        for bridgeURL in candidateURLs.compactMap({ $0 }) {
+            guard let bundle = Bundle(url: bridgeURL) else {
+                settingsChannel.log("Found bridge URL but couldn't create Bundle: \(bridgeURL.path)")
+                continue
+            }
+
+            if !bundle.isLoaded, !bundle.load() {
+                settingsChannel.log("Failed to load AppKitBridge bundle at \(bridgeURL.path)")
+                continue
+            }
+
+            if let cls = (bundle.principalClass ?? NSClassFromString(principalClassName)) as? NSObject.Type,
+               let instance = cls.init() as? AppKitBridge {
+                settingsChannel.log("Loaded bridge from bundle: \(bridgeURL.path)")
+                instance.setup(with: self)
+                return instance
+            } else {
+                settingsChannel.log("Bridge principal class missing or wrong type in bundle: \(bridgeURL.path)")
             }
         }
-        
+
+        settingsChannel.log("Failed to load AppKitBridge; menu extra and dock control are unavailable.")
+        #endif
         return nil
     }
     
@@ -129,7 +171,7 @@ class MobileApplication: Application {
     }
 
     func buildShowStatus(with builder: UIMenuBuilder) {
-        if let bridge = appKitBridge {
+        if let bridge = ensureBridgeLoaded() {
             let command = UIKeyCommand(title: "Show Status Window", image: nil, action: bridge.showWindowSelector, input: "0", modifierFlags: .command, propertyList: nil)
             let menu = UIMenu(title: "", image: nil, identifier: UIMenu.Identifier("\(info.id).show"), options: .displayInline, children: [command])
             builder.insertChild(menu, atEndOfMenu: .window)
@@ -155,7 +197,7 @@ class MobileApplication: Application {
     }
 
     @IBAction func handleQuit() {
-        appKitBridge?.handleQuit(self)
+        ensureBridgeLoaded()?.handleQuit(self)
     }
     
     @IBAction func showPreferences() {
