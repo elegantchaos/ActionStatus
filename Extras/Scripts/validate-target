@@ -1,0 +1,132 @@
+#!/bin/bash
+# Purpose: Validate a target by name, preferring Core package targets and falling back to Xcode targets/schemes.
+# Usage: Extras/Scripts/validate-target <target-name>
+
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$ROOT"
+
+if [ "$#" -eq 1 ] && { [ "$1" = "-h" ] || [ "$1" = "--help" ]; }; then
+  echo "Usage: Extras/Scripts/validate-target <target-name>"
+  echo "Example: Extras/Scripts/validate-target ActionStatusTests"
+  exit 0
+fi
+
+if [ "$#" -ne 1 ]; then
+  echo "Usage: Extras/Scripts/validate-target <target-name>"
+  echo "Example: Extras/Scripts/validate-target ActionStatusTests"
+  exit 1
+fi
+
+TARGET_NAME="$1"
+TARGET_SAFE_NAME="$(echo "$TARGET_NAME" | tr -cs '[:alnum:]' '_')"
+
+VERIFY_ROOT="$ROOT/.build/verify"
+CACHE_ROOT="$ROOT/.build/cache"
+DERIVED_DATA_PATH="$ROOT/.build/derived-data"
+mkdir -p "$VERIFY_ROOT" "$CACHE_ROOT/clang-module-cache" "$CACHE_ROOT/swift-module-cache" "$CACHE_ROOT/xdg-cache" "$CACHE_ROOT/home"
+export HOME="$CACHE_ROOT/home"
+export CLANG_MODULE_CACHE_PATH="$CACHE_ROOT/clang-module-cache"
+export SWIFTPM_MODULECACHE_OVERRIDE="$CACHE_ROOT/swift-module-cache"
+export XDG_CACHE_HOME="$CACHE_ROOT/xdg-cache"
+
+CORE_PACKAGE="$ROOT/Core"
+if [ -f "$CORE_PACKAGE/Package.swift" ]; then
+  CORE_TARGETS="$(swift package --package-path "$CORE_PACKAGE" describe --type json 2>/dev/null | jq -r '.targets[].name' || true)"
+  if echo "$CORE_TARGETS" | rg -q "^${TARGET_NAME}$"; then
+    echo "==> Validating Core package target: $TARGET_NAME"
+    BUILD_LOG="$VERIFY_ROOT/validate_target_${TARGET_SAFE_NAME}_core_build.log"
+    TEST_LOG="$VERIFY_ROOT/validate_target_${TARGET_SAFE_NAME}_core_test.log"
+
+    HOST_ARCH="$(uname -m)"
+    if ! swift build --package-path "$CORE_PACKAGE" --target "$TARGET_NAME" --disable-sandbox --triple "${HOST_ARCH}-apple-macosx10.15" >"$BUILD_LOG" 2>&1; then
+      echo "Core package target build failed. See: $BUILD_LOG"
+      exit 1
+    fi
+
+    TEST_TARGET_NAME=""
+    if echo "$TARGET_NAME" | rg -q 'Tests$'; then
+      TEST_TARGET_NAME="$TARGET_NAME"
+    elif echo "$CORE_TARGETS" | rg -q "^${TARGET_NAME}Tests$"; then
+      TEST_TARGET_NAME="${TARGET_NAME}Tests"
+    fi
+
+    if [ -n "$TEST_TARGET_NAME" ]; then
+      if ! swift test --package-path "$CORE_PACKAGE" --disable-sandbox --filter "$TEST_TARGET_NAME" >"$TEST_LOG" 2>&1; then
+        echo "Core package target tests failed. See: $TEST_LOG"
+        exit 1
+      fi
+    else
+      echo "No matching Core test target found; skipping swift test."
+    fi
+
+    echo "==> Core target validation complete"
+    echo "build log: $BUILD_LOG"
+    [ -f "$TEST_LOG" ] && echo "test log: $TEST_LOG"
+    exit 0
+  fi
+fi
+
+echo "==> Target not found in Core package, checking Xcode project targets/schemes"
+
+XCODE_PROJECT="$ROOT/ActionStatus.xcodeproj"
+XCODE_WORKSPACE="$ROOT/ActionStatus.xcworkspace"
+
+if [ ! -f "$XCODE_PROJECT/project.pbxproj" ]; then
+  echo "Xcode project file not found: $XCODE_PROJECT/project.pbxproj"
+  exit 1
+fi
+
+if ! awk '
+  /Begin PBXNativeTarget section/ { inTargets = 1; next }
+  /End PBXNativeTarget section/ { inTargets = 0 }
+  inTargets && /name = / {
+    line = $0
+    sub(/.*name = /, "", line)
+    sub(/;.*/, "", line)
+    print line
+  }
+' "$XCODE_PROJECT/project.pbxproj" | rg -q "^${TARGET_NAME}$"; then
+  echo "Target '$TARGET_NAME' was not found in Core package or Xcode native targets."
+  exit 1
+fi
+
+build_settings="$(xcodebuild -project "$XCODE_PROJECT" -target "$TARGET_NAME" -showBuildSettings 2>/dev/null || true)"
+supported_platforms="$(echo "$build_settings" | awk -F'= ' '/SUPPORTED_PLATFORMS =/{print $2; exit}')"
+
+destination="generic/platform=iOS"
+if echo "$supported_platforms" | rg -q "(^| )macosx( |$)"; then
+  destination="generic/platform=macOS"
+elif echo "$supported_platforms" | rg -q "(^| )iphoneos( |$)"; then
+  destination="generic/platform=iOS"
+elif echo "$supported_platforms" | rg -q "(^| )appletvos( |$)"; then
+  destination="generic/platform=tvOS"
+fi
+
+BUILD_LOG="$VERIFY_ROOT/validate_target_${TARGET_SAFE_NAME}_xcode_build.log"
+
+echo "==> Building Xcode target: $TARGET_NAME on $destination"
+rm -rf "$DERIVED_DATA_PATH"
+
+workspace_schemes_json="$(xcodebuild -workspace "$XCODE_WORKSPACE" -list -json 2>/dev/null || true)"
+if [ -n "$workspace_schemes_json" ] && echo "$workspace_schemes_json" | jq -e --arg target "$TARGET_NAME" '.workspace.schemes[] | select(. == $target)' >/dev/null; then
+  xcodebuild \
+    -workspace "$XCODE_WORKSPACE" \
+    -scheme "$TARGET_NAME" \
+    -destination "$destination" \
+    -derivedDataPath "$DERIVED_DATA_PATH" \
+    CODE_SIGNING_ALLOWED=NO \
+    build >"$BUILD_LOG" 2>&1
+else
+  xcodebuild \
+    -project "$XCODE_PROJECT" \
+    -target "$TARGET_NAME" \
+    -destination "$destination" \
+    -derivedDataPath "$DERIVED_DATA_PATH" \
+    CODE_SIGNING_ALLOWED=NO \
+    build >"$BUILD_LOG" 2>&1
+fi
+
+echo "==> Xcode target validation complete"
+echo "build log: $BUILD_LOG"

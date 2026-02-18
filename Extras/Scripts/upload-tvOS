@@ -1,18 +1,12 @@
 #!/bin/bash
+# Purpose: Submit tvOS build using ReleaseTools and push tags.
+# Usage: Extras/Scripts/upload-tvOS
 
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-#  Created by Sam Deane on 25/03/2020.
-#  All code (c) 2020 - present day, Elegant Chaos Limited.
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-source "bootstrap-tools"
+set -euo pipefail
 
 echo " "
-echo "**************"
-echo "Uploading tvOS"
-echo "**************"
-
-$RT set scheme ActionStatus-tvOS --platform=tvOS
-$RT archive --platform=tvOS --show-output 2> /dev/null | xcpretty
-$RT export --platform=tvOS
-$RT upload --platform=tvOS
+echo "***************"
+echo "Submitting tvOS"
+echo "***************"
+rt submit --platform=tvOS --scheme=ActionStatus-tvOS
+git push --tags --force

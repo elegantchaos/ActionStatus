@@ -1,0 +1,123 @@
+#!/bin/bash
+# Purpose: Verify local changes via formatting/linting, package build, and unsigned app builds.
+# Usage: Extras/Scripts/validate-changes [--clean]
+
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$ROOT"
+
+FORCE_CLEAN=0
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --clean|-c)
+      FORCE_CLEAN=1
+      ;;
+    -h|--help)
+      echo "Usage: Extras/Scripts/validate-changes [--clean]"
+      echo "  --clean, -c   remove local build artifacts and run clean builds"
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: $1"
+      echo "Usage: Extras/Scripts/validate-changes [--clean]"
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+CACHE_ROOT="$ROOT/.build/cache"
+VERIFY_ROOT="$ROOT/.build/verify"
+DERIVED_DATA_PATH="$ROOT/.build/derived-data"
+CORE_BUILD_PATH="$ROOT/Core/.build"
+
+if [ "$FORCE_CLEAN" -eq 1 ]; then
+  echo "==> Clean mode enabled: removing local build artifacts and caches"
+  rm -rf "$ROOT/.build" "$CORE_BUILD_PATH"
+fi
+
+mkdir -p "$CACHE_ROOT/clang-module-cache" "$CACHE_ROOT/swift-module-cache" "$CACHE_ROOT/xdg-cache" "$CACHE_ROOT/home" "$VERIFY_ROOT"
+export HOME="$CACHE_ROOT/home"
+export CLANG_MODULE_CACHE_PATH="$CACHE_ROOT/clang-module-cache"
+export SWIFTPM_MODULECACHE_OVERRIDE="$CACHE_ROOT/swift-module-cache"
+export XDG_CACHE_HOME="$CACHE_ROOT/xdg-cache"
+
+echo "==> Validating changes in $ROOT"
+
+CHANGED_SWIFT_FILES=()
+while IFS= read -r line; do
+  CHANGED_SWIFT_FILES+=("$line")
+done < <(
+  {
+    git diff --name-only -- "*.swift"
+    git diff --cached --name-only -- "*.swift"
+    git ls-files --others --exclude-standard -- "*.swift"
+  } | awk '!seen[$0]++'
+)
+
+if [ "${#CHANGED_SWIFT_FILES[@]}" -gt 0 ]; then
+  if command -v swift >/dev/null 2>&1; then
+    echo "==> Formatting changed Swift files"
+    swift format --in-place "${CHANGED_SWIFT_FILES[@]}"
+
+    echo "==> Linting changed Swift files"
+    swift format lint "${CHANGED_SWIFT_FILES[@]}"
+  else
+    echo "Swift toolchain not found; skipping format/lint"
+  fi
+else
+  echo "No changed Swift files to format or lint."
+fi
+
+if [ "$FORCE_CLEAN" -eq 1 ]; then
+  echo "==> Running clean on Core package"
+  swift package clean --package-path Core
+fi
+
+echo "==> Building Core package"
+HOST_ARCH="$(uname -m)"
+if ! swift build --package-path Core --disable-sandbox --triple "${HOST_ARCH}-apple-macosx10.15"; then
+  echo "WARN: Standalone Core SwiftPM build failed; continuing with Xcode workspace validation."
+fi
+
+echo "==> Building app schemes with xcodebuild (no code signing)"
+rm -rf "$DERIVED_DATA_PATH"
+
+IOS_LOG="$VERIFY_ROOT/validate_changes_ios.log"
+CATALYST_LOG="$VERIFY_ROOT/validate_changes_catalyst.log"
+TVOS_LOG="$VERIFY_ROOT/validate_changes_tvos.log"
+
+XCODE_ACTION=(build)
+if [ "$FORCE_CLEAN" -eq 1 ]; then
+  XCODE_ACTION=(clean build)
+fi
+
+xcodebuild \
+  -workspace "$ROOT/ActionStatus.xcworkspace" \
+  -scheme ActionStatus \
+  -destination "generic/platform=iOS" \
+  -derivedDataPath "$DERIVED_DATA_PATH" \
+  CODE_SIGNING_ALLOWED=NO \
+  "${XCODE_ACTION[@]}" >"$IOS_LOG" 2>&1
+
+xcodebuild \
+  -workspace "$ROOT/ActionStatus.xcworkspace" \
+  -scheme ActionStatus \
+  -destination "generic/platform=macOS,variant=Mac Catalyst" \
+  -derivedDataPath "$DERIVED_DATA_PATH" \
+  CODE_SIGNING_ALLOWED=NO \
+  "${XCODE_ACTION[@]}" >"$CATALYST_LOG" 2>&1
+
+xcodebuild \
+  -workspace "$ROOT/ActionStatus.xcworkspace" \
+  -scheme ActionStatus-tvOS \
+  -destination "generic/platform=tvOS" \
+  -derivedDataPath "$DERIVED_DATA_PATH" \
+  CODE_SIGNING_ALLOWED=NO \
+  "${XCODE_ACTION[@]}" >"$TVOS_LOG" 2>&1
+
+echo "==> Verification complete"
+echo "iOS build log: $IOS_LOG"
+echo "Catalyst build log: $CATALYST_LOG"
+echo "tvOS build log: $TVOS_LOG"

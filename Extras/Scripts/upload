@@ -1,20 +1,35 @@
 #!/bin/bash
+# Purpose: Submit iOS, tvOS, and macOS builds using ReleaseTools and push tags.
+# Usage: Extras/Scripts/upload
 
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-#  Created by Sam Deane on 25/03/2020.
-#  All code (c) 2020 - present day, Elegant Chaos Limited.
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-source "bootstrap-tools"
+set -euo pipefail
 
 echo " "
-echo "*************"
-echo "Uploading iOS  "
-echo "*************"
+echo "**********"
+echo "Submitting"
+echo "**********"
 
-$RT set scheme ActionStatus --platform=iOS 
-$RT archive --platform=iOS --show-output 2> /dev/null | xcpretty
-$RT export --platform=iOS
-$RT upload --platform=iOS
+rt tag
 
-#open "https://appstoreconnect.apple.com/apps/1519213388/testflight/ios/"
+echo " "
+echo "**************"
+echo "Submitting iOS"
+echo "**************"
+rt submit --platform=iOS --scheme=ActionStatus
+
+echo " "
+echo "***************"
+echo "Submitting tvOS"
+echo "***************"
+rt submit --platform=tvOS --scheme=ActionStatus-tvOS
+
+echo " "
+echo "****************"
+echo "Submitting macOS"
+echo "****************"
+rt submit --platform=macOS --scheme=ActionStatus
+
+echo "------------"
+echo "Pushing Tags"
+echo "------------"
+git push --tags --force

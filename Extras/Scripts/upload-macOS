@@ -1,18 +1,12 @@
 #!/bin/bash
+# Purpose: Submit macOS build using ReleaseTools and push tags.
+# Usage: Extras/Scripts/upload-macOS
 
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-#  Created by Sam Deane on 25/03/2020.
-#  All code (c) 2020 - present day, Elegant Chaos Limited.
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-source "bootstrap-tools"
+set -euo pipefail
 
 echo " "
-echo "***************"
-echo "Uploading macOS"
-echo "***************"
-
-$RT set scheme ActionStatus --platform macOS
-$RT archive --show-output 2> /dev/null | xcpretty
-$RT export --platform=macOS
-$RT upload --platform=macOS
+echo "****************"
+echo "Submitting macOS"
+echo "****************"
+rt submit --platform=macOS --scheme=ActionStatus
+git push --tags --force
