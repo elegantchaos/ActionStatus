@@ -13,7 +13,7 @@
 
     var body: some Scene {
       WindowGroup {
-        Engine.shared.applyEnvironment(to: ContentView())
+        application.applyEnvironment(to: ContentView())
       }
     }
   }

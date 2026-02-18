@@ -8,9 +8,7 @@
   import Core
   import SwiftUI
 
-  final class MacEngine: Engine, NSWindowDelegate {
-    private var mainWindow: NSWindow?
-    private var quitting = false
+  final class MacEngine: Engine {
 
     override func setupDefaultSettings() {
       super.setupDefaultSettings()
@@ -22,16 +20,10 @@
 
     override func setUp(withOptions options: LaunchOptions, completion: @escaping SetupCompletion) {
       super.setUp(withOptions: options) { [self] options in
-        makeMainWindowIfNeeded()
         applyWindowSettings()
 
         completion(options)
       }
-    }
-
-    override func makeWindow() {
-      makeMainWindowIfNeeded()
-      showWindow(self)
     }
 
     override func loadSettings() {
@@ -47,7 +39,7 @@
       sheetController.show {
         PreferencesView()
       }
-      showWindow(self)
+      showWindow(nil)
     }
 
     @objc func addLocalRepos() {
@@ -62,42 +54,18 @@
     }
 
     @objc func showWindow(_ sender: Any?) {
-      makeMainWindowIfNeeded()
-      mainWindow?.makeKeyAndOrderFront(sender)
+      if let window = NSApp.windows.first {
+        window.makeKeyAndOrderFront(sender)
+      }
       NSApp.activate(ignoringOtherApps: true)
     }
 
     @objc func handleQuit(_ sender: Any? = nil) {
-      quitting = true
       NSApp.terminate(sender)
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
       false
-    }
-
-    func windowShouldClose(_ sender: NSWindow) -> Bool {
-      if quitting {
-        return true
-      }
-
-      sender.orderOut(self)
-      return false
-    }
-
-    private func makeMainWindowIfNeeded() {
-      guard mainWindow == nil else { return }
-
-      let content = applyEnvironment(to: ContentView())
-      let controller = NSHostingController(rootView: content)
-      let window = NSWindow(contentViewController: controller)
-      window.title = info.name
-      window.setContentSize(NSSize(width: 820, height: 620))
-      window.minSize = NSSize(width: 420, height: 320)
-      window.delegate = self
-      window.center()
-      window.setFrameAutosaveName("MainWindow")
-      mainWindow = window
     }
 
     private func applyWindowSettings() {
