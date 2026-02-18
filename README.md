@@ -24,7 +24,7 @@ If you are contributing code, start with:
 
 Quick summary:
 
-- Keep changes small and in the correct layer, with shared logic in `Core/` where possible.
+- Keep changes small and in the correct layer, with shared logic in `Dependencies/Core/` where possible.
 - Prefer simple, maintainable Swift and SwiftUI patterns used in the existing codebase.
 - Add or update tests for behavior changes.
 - Localize all user-facing strings.

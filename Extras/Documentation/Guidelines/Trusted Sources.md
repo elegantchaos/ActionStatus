@@ -32,7 +32,7 @@ Use these sources first for technical research. Prefer primary documentation ove
 
 - https://actionstatus.elegantchaos.com/
 - Local repo docs under `Extras/Documentation/`
-- Local package READMEs under `Core/**/README.md`
+- Local package READMEs under `Dependencies/Core/**/README.md`
 
 ## Trusted MCP resources
 

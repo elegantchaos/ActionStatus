@@ -143,7 +143,7 @@
 		8B5E7E9123F6C0A100087E15 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		8B5E7E9223F6C0B600087E15 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		8B5E7E9323F6C0C200087E15 /* AppKitBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppKitBridge.h; sourceTree = "<group>"; };
-		8B9A812D25FA389900F44800 /* Core */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Core; sourceTree = "<group>"; };
+		8B9A812D25FA389900F44800 /* Core */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Dependencies/Core; sourceTree = "<group>"; };
 		8B9A813225FA49F600F44800 /* MobileApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileApplication.swift; sourceTree = "<group>"; };
 		8BA13D24260A5989007CB9CD /* MobileScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileScene.swift; sourceTree = "<group>"; };
 		8BA13D26260A6148007CB9CD /* TVScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVScene.swift; sourceTree = "<group>"; };

@@ -4,8 +4,9 @@
 
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-cd "$ROOT"
+cd "$(dirname "${BASH_SOURCE[0]}")"
+cd "$(readlink -f .)/../.."
+ROOT="$(pwd)"
 
 if [ "$#" -eq 1 ] && { [ "$1" = "-h" ] || [ "$1" = "--help" ]; }; then
   echo "Usage: Extras/Scripts/validate-target <target-name>"
@@ -31,7 +32,7 @@ export CLANG_MODULE_CACHE_PATH="$CACHE_ROOT/clang-module-cache"
 export SWIFTPM_MODULECACHE_OVERRIDE="$CACHE_ROOT/swift-module-cache"
 export XDG_CACHE_HOME="$CACHE_ROOT/xdg-cache"
 
-CORE_PACKAGE="$ROOT/Core"
+CORE_PACKAGE="$ROOT/Dependencies/Core"
 if [ -f "$CORE_PACKAGE/Package.swift" ]; then
   CORE_TARGETS="$(swift package --package-path "$CORE_PACKAGE" describe --type json 2>/dev/null | jq -r '.targets[].name' || true)"
   if echo "$CORE_TARGETS" | rg -q "^${TARGET_NAME}$"; then
