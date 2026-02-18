@@ -9,11 +9,22 @@
 
   @main
   struct MobileApp: App {
-    @UIApplicationDelegateAdaptor(MobileApplication.self) private var application
+    @UIApplicationDelegateAdaptor(MobileEngine.self) private var application
 
     var body: some Scene {
       WindowGroup {
-        Engine.shared.applyEnvironment(to: ContentView())
+        application.applyEnvironment(to: ContentView())
+      }
+      .commands {
+        CommandGroup(replacing: .appSettings) {
+          Button("Preferences…", action: application.showPreferences)
+            .keyboardShortcut(",", modifiers: .command)
+        }
+
+        CommandGroup(after: .newItem) {
+          Button("Add Local Repos", action: application.addLocalRepos)
+            .keyboardShortcut("o", modifiers: .command)
+        }
       }
     }
   }

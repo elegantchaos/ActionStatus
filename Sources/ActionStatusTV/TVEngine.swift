@@ -7,8 +7,8 @@ import Core
 import SwiftUI
 import UIKit
 
-class TVApplication: Engine {
-  override class var shared: TVApplication {
-    UIApplication.shared.delegate as! TVApplication
+class TVEngine: Engine {
+  override class var shared: TVEngine {
+    UIApplication.shared.delegate as! TVEngine
   }
 }

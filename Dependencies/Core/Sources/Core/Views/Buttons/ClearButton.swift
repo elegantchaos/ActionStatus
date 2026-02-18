@@ -17,7 +17,7 @@ struct ClearButton: ViewModifier {
         Button(action: {
           self.text = ""
         }) {
-          SystemImage("multiply.circle.fill")
+          Image(systemName: "multiply.circle.fill")
             .foregroundColor(.opaqueSeparator)
         }
         .padding(.trailing, 8)

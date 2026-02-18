@@ -15,7 +15,7 @@ struct EditRepoButton: View {
 
   var body: some View {
     Button(action: handleTapped) {
-      SystemImage(context.editButtonIcon)
+      Image(systemName: context.editButtonIcon)
     }
     .accessibility(identifier: "editButton")
     .foregroundColor(.black)

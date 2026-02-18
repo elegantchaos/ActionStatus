@@ -23,8 +23,19 @@ public let monitoringChannel = Channel("Monitoring")
 public let refreshControllerChannel = Channel("RefreshController")
 
 open class Engine: BasicApplication, ApplicationHost {
+  static var sharedEngine: Engine?
+
+  override init() {
+    super.init()
+    Engine.sharedEngine = self
+  }
+
+  public required init(coder: NSCoder) {
+    fatalError()
+  }
+
   override open class var shared: Engine {
-    BasicApplication.shared as! Engine
+    return Engine.sharedEngine!
   }
 
   #if DEBUG

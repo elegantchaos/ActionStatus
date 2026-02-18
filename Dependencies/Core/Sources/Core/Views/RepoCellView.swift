@@ -84,7 +84,7 @@ struct RepoCellView: View {
       return AnyView(
         Button(action: handleShowWorkflow) {
           HStack(alignment: .center, spacing: context.padding) {
-            SystemImage(repo.badgeName)
+            Image(systemName: repo.badgeName)
               .foregroundColor(repo.statusColor)
 
             Text(repo.name)

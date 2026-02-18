@@ -9,7 +9,7 @@
 
   @main
   struct TVApp: App {
-    @UIApplicationDelegateAdaptor(TVApplication.self) private var application
+    @UIApplicationDelegateAdaptor(TVEngine.self) private var application
 
     var body: some Scene {
       WindowGroup {
