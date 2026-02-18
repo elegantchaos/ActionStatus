@@ -3,7 +3,6 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import LabelledGrid
 import SwiftUI
 import SwiftUIExtensions
 
@@ -15,15 +14,13 @@ public enum DisplaySize: Int, CaseIterable {
   case huge = 4
 
   var font: Font {
-    let base: UIFont = UIFont.preferredFont(forTextStyle: .title1)
-    let scale: CGFloat
-    switch self {
-      case .small: scale = 0.6
-      case .medium: scale = 0.8
-      case .huge: scale = 1.2
-      default: scale = 1.0
+    switch normalised {
+      case .small: return .body
+      case .medium: return .title3
+      case .large: return .title2
+      case .huge: return .largeTitle
+      case .automatic: return .title2
     }
-    return Font(base.withSize(base.pointSize * scale))
   }
 
   var rowHeight: CGFloat { return 0 }
@@ -33,11 +30,7 @@ public enum DisplaySize: Int, CaseIterable {
   }
 }
 
-extension DisplaySize: LabelledPickerValue {
-  public var id: Int {
-    rawValue
-  }
-
+extension DisplaySize {
   public var labelName: String {
     switch self {
       case .automatic: return "Default (\(normalised.labelName))"

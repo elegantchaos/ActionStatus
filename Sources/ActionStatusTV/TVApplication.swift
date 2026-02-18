@@ -7,8 +7,7 @@ import Core
 import SwiftUI
 import UIKit
 
-@UIApplicationMain
-class TVApplication: Application {
+class TVApplication: Engine {
   override class var shared: TVApplication {
     UIApplication.shared.delegate as! TVApplication
   }

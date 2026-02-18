@@ -10,12 +10,11 @@ import SwiftUIExtensions
 
 struct PreferencesButton: View {
   @EnvironmentObject var context: ViewContext
-  @Environment(\.horizontalSizeClass) var horizontalSize
   @EnvironmentObject var sheetController: SheetController
 
   var body: some View {
     Button(action: showPreferences) {
-      if (horizontalSize == .compact) || Hardware.Platform.current.base == .tvOS {
+      if Hardware.Platform.current.base == .tvOS {
         Image(systemName: context.preferencesIcon)
       } else {
         Text("Settings")

@@ -12,14 +12,17 @@ public struct ContentView: View {
   @EnvironmentObject var context: ViewContext
   @EnvironmentObject var sheetController: SheetController
 
+  public init() {
+  }
+
   public var body: some View {
     return SheetControllerHost {
-      #if targetEnvironment(macCatalyst)
+      #if os(macOS)
         RootView()
       #else
         return NavigationView {
           RootView()
-            .navigationTitle(Application.shared.info.name)
+            .navigationTitle(Engine.shared.info.name)
             #if !os(tvOS)
               .navigationBarTitleDisplayMode(.inline)
               .iosToolbar(includeAddButton: context.settings.isEditing)
@@ -38,26 +41,23 @@ struct ContentView_Previews: PreviewProvider {
   }
 }
 
-extension View {
-  func iosToolbar(includeAddButton: Bool) -> some View {
-    self
-      .toolbar {
-        ToolbarItem(placement: .navigationBarLeading) {
-          if includeAddButton {
-            AddButton()
-          } else {
-            PreferencesButton()
+#if os(iOS)
+  extension View {
+    func iosToolbar(includeAddButton: Bool) -> some View {
+      self
+        .toolbar {
+          ToolbarItem(placement: .navigationBarLeading) {
+            if includeAddButton {
+              AddButton()
+            } else {
+              PreferencesButton()
+            }
+          }
+
+          ToolbarItem(placement: .navigationBarTrailing) {
+            ToggleEditingButton()
           }
         }
-        //
-        //            ToolbarItem(placement: .principal) {
-        //                Text(Application.shared.info.name)
-        //                    .font(.title)
-        //            }
-
-        ToolbarItem(placement: .navigationBarTrailing) {
-          ToggleEditingButton()
-        }
-      }
+    }
   }
-}
+#endif

@@ -4,7 +4,6 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Foundation
-import LabelledGrid
 import SwiftUIExtensions
 
 public enum SortMode: String, CaseIterable {
@@ -26,9 +25,7 @@ public enum SortMode: String, CaseIterable {
   }
 }
 
-extension SortMode: LabelledPickerValue {
-  public var id: String { rawValue }
-
+extension SortMode {
   public var labelName: String {
     switch self {
       case .name: return "Name"

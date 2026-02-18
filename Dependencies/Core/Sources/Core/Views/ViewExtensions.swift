@@ -7,11 +7,9 @@ import SwiftUI
 import SwiftUIExtensions
 
 internal struct StatusStyleModifier: ViewModifier {
-  @Environment(\.horizontalSizeClass) var horizontalSize
-
   func body(content: Content) -> some View {
     content
-      .font(horizontalSize == .compact ? .footnote : .title2)
+      .font(.title2)
   }
 }
 

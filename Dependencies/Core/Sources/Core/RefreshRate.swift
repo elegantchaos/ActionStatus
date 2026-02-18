@@ -4,8 +4,6 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Foundation
-import Labelled
-import LabelledGrid
 import SwiftUIExtensions
 
 public enum RefreshRate: Int, CaseIterable, Equatable {
@@ -24,11 +22,7 @@ public enum RefreshRate: Int, CaseIterable, Equatable {
   }
 }
 
-extension RefreshRate: LabelledPickerValue {
-  public var id: Int {
-    self.rawValue
-  }
-
+extension RefreshRate {
   public var labelName: String {
     if self == .automatic {
       return "Default (\(normalised.labelName))"

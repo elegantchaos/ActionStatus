@@ -110,24 +110,6 @@
         }
       },
       {
-        "package": "Labelled",
-        "repositoryURL": "https://github.com/elegantchaos/Labelled.git",
-        "state": {
-          "branch": null,
-          "revision": "19ff9ec3501a4ce27dda48ec49120dde998864d1",
-          "version": "1.0.7"
-        }
-      },
-      {
-        "package": "LabelledGrid",
-        "repositoryURL": "https://github.com/elegantchaos/LabelledGrid.git",
-        "state": {
-          "branch": null,
-          "revision": "f95965e2d877de73a4133306bd9c83bdef8972db",
-          "version": "1.0.3"
-        }
-      },
-      {
         "package": "Logger",
         "repositoryURL": "https://github.com/elegantchaos/Logger.git",
         "state": {
@@ -187,15 +169,6 @@
         "state": {
           "branch": null,
           "revision": "fbe5b091bb872055cd2448c8b39c80e0a84261e7",
-          "version": "1.0.1"
-        }
-      },
-      {
-        "package": "UserDefaultsExtensions",
-        "repositoryURL": "https://github.com/elegantchaos/UserDefaultsExtensions.git",
-        "state": {
-          "branch": null,
-          "revision": "bab30cfe8908918fa295460e51c5e80ad9fac7b6",
           "version": "1.0.1"
         }
       },

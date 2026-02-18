@@ -27,7 +27,7 @@ class ScreenshotUITests: XCTestCase {
   func cleanScreenshot() -> XCUIScreenshot {
     let screens = XCUIScreen.screens
     let screen: XCUIScreen
-    #if targetEnvironment(macCatalyst)
+    #if os(macOS)
       if let string = ProcessInfo.processInfo.environment["UITestScreen"], let index = Int(string), index < screens.count {
         screen = screens[index]
       } else {
@@ -93,7 +93,7 @@ class ScreenshotUITests: XCTestCase {
       cancel.tap()
     #endif
 
-    #if targetEnvironment(macCatalyst)
+    #if os(macOS)
       let status = app.statusItems["ActionStatusStatusMenu"]
       XCTAssert(status.waitForExistence(timeout: 1.0))
       status.tap()
@@ -121,7 +121,7 @@ class ScreenshotUITests: XCTestCase {
 extension XCUIApplication {
   func showContextMenu(for row: XCUIElement, highlighting: String? = nil) {
     #if !os(tvOS)
-      #if targetEnvironment(macCatalyst)
+      #if os(macOS)
         row.rightClick()
         if let name = highlighting {
           let item = menuItems[name].firstMatch
@@ -136,7 +136,7 @@ extension XCUIApplication {
 
   func selectContextMenuItem(_ name: String) {
     #if !os(tvOS)
-      #if targetEnvironment(macCatalyst)
+      #if os(macOS)
         let item = menuItems[name].firstMatch
       #else
         let item = buttons[name].firstMatch
@@ -147,7 +147,7 @@ extension XCUIApplication {
   }
 
   func hideOtherApplications() {
-    #if os(macOS) || targetEnvironment(macCatalyst)
+    #if os(macOS)
       let item = menuItems["hideOtherApplications:"]
       if item.waitForExistence(timeout: 1.0) {
         item.tap()
@@ -156,7 +156,7 @@ extension XCUIApplication {
   }
 
   func unhideApplications() {
-    #if os(macOS) || targetEnvironment(macCatalyst)
+    #if os(macOS)
       let item = menuItems["unhideAllApplications:"]
       if item.waitForExistence(timeout: 1.0) {
         item.tap()
@@ -165,7 +165,7 @@ extension XCUIApplication {
   }
 
   func quit() {
-    #if os(macOS) || targetEnvironment(macCatalyst)
+    #if os(macOS)
       let item = menuItems["handleQuit:"]
       if item.waitForExistence(timeout: 1.0) {
         item.tap()

@@ -11,15 +11,20 @@ import Logger
 import SheetController
 import SwiftUI
 import SwiftUIExtensions
-import UserDefaultsExtensions
+
+#if canImport(AppKit)
+  import AppKit
+#elseif canImport(UIKit)
+  import UIKit
+#endif
 
 public let settingsChannel = Channel("Settings")
 public let monitoringChannel = Channel("Monitoring")
 public let refreshControllerChannel = Channel("RefreshController")
 
-open class Application: BasicApplication, ApplicationHost {
-  override open class var shared: Application {
-    UIApplication.shared.delegate as! Application
+open class Engine: BasicApplication, ApplicationHost {
+  override open class var shared: Engine {
+    BasicApplication.shared as! Engine
   }
 
   #if DEBUG
@@ -33,9 +38,11 @@ open class Application: BasicApplication, ApplicationHost {
   public var status: RepoState = RepoState()
 
   public var refreshController: RefreshController? = nil
-  public var rootController: UIViewController?
-  public var filePicker: FilePicker?
-  open var filePickerClass: FilePicker.Type { return StubFilePicker.self }
+  #if canImport(UIKit)
+    public var rootController: UIViewController?
+    public var filePicker: FilePicker?
+    open var filePickerClass: FilePicker.Type { return StubFilePicker.self }
+  #endif
   public var model = makeModel()
   var observers: [AnyCancellable] = []
 
@@ -146,7 +153,7 @@ open class Application: BasicApplication, ApplicationHost {
     }
   }
 
-  public override func tearDown() {
+  open override func tearDown() {
     observers = []
   }
 
@@ -214,16 +221,35 @@ open class Application: BasicApplication, ApplicationHost {
   }
 
   public func open(url: URL) {
-    UIApplication.shared.open(url)
+    #if canImport(UIKit)
+      UIApplication.shared.open(url)
+    #elseif canImport(AppKit)
+      NSWorkspace.shared.open(url)
+    #endif
   }
 
   open func reveal(url: URL) {
-    UIApplication.shared.open(url)
+    #if canImport(UIKit)
+      UIApplication.shared.open(url)
+    #elseif canImport(AppKit)
+      NSWorkspace.shared.activateFileViewerSelecting([url])
+    #endif
   }
 
-  public func presentPicker(_ picker: FilePicker) {
-    rootController?.present(picker, animated: true) {
+  #if canImport(UIKit)
+    public func presentPicker(_ picker: FilePicker) {
+      rootController?.present(picker, animated: true) {
+      }
+      filePicker = picker
     }
-    filePicker = picker
+  #endif
+}
+
+public extension UserDefaults {
+  func onChanged(delay: TimeInterval = 1.0, _ action: @escaping () -> Void) -> AnyCancellable {
+    NotificationCenter.default
+      .publisher(for: UserDefaults.didChangeNotification, object: self)
+      .debounce(for: .seconds(delay), scheduler: RunLoop.main)
+      .sink { _ in action() }
   }
 }

@@ -8,8 +8,6 @@ import SwiftUI
 import SwiftUIExtensions
 
 public struct EditView: View {
-  static let fieldStyle = Shim.RoundedBorderTextFieldStyle()
-
   let repo: Repo?
 
   @Environment(\.presentationMode) var presentation
@@ -143,21 +141,31 @@ struct RepoEditView_Previews: PreviewProvider {
 
 struct NameOrgStyle: ViewModifier {
   func body(content: Content) -> some View {
-    content
-      .keyboardType(.namePhonePad)
-      .textContentType(.name)
-      .disableAutocorrection(true)
-      .autocapitalization(.none)
-      .modifier(DefaultFormFieldStyle())
+    #if os(macOS)
+      content
+        .textFieldStyle(.roundedBorder)
+    #else
+      content
+        .keyboardType(.namePhonePad)
+        .textContentType(.name)
+        .disableAutocorrection(true)
+        .autocapitalization(.none)
+        .modifier(DefaultFormFieldStyle())
+    #endif
   }
 }
 
 struct BranchListStyle: ViewModifier {
   func body(content: Content) -> some View {
-    content
-      .keyboardType(.alphabet)
-      .disableAutocorrection(true)
-      .autocapitalization(.none)
-      .modifier(DefaultFormFieldStyle())
+    #if os(macOS)
+      content
+        .textFieldStyle(.roundedBorder)
+    #else
+      content
+        .keyboardType(.alphabet)
+        .disableAutocorrection(true)
+        .autocapitalization(.none)
+        .modifier(DefaultFormFieldStyle())
+    #endif
   }
 }
