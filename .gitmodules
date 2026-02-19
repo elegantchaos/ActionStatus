@@ -3,7 +3,7 @@
 	url = https://github.com/elegantchaos/Sparkle.git
 [submodule "Dependencies/Website"]
 	path = Dependencies/Website
-	url = https://github.com/samdeane/actionstatus.elegantchaos.com.git
+	url = git@github.com:samdeane/actionstatus.elegantchaos.com.git
 [submodule "Dependencies/CatalystSparkle"]
 	path = Dependencies/CatalystSparkle
 	url = https://github.com/elegantchaos/CatalystSparkle
