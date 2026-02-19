@@ -26,51 +26,47 @@ struct ConnectionPrefsView: View {
   }
 
   var body: some View {
-    Form {
-      Section("Account") {
-        AuthStatusBanner(state: authState, currentUser: settings.githubUser, hasToken: !token.isEmpty)
+    Group {
+      Section {
+        VStack(alignment: .leading, spacing: 12) {
+          AuthStatusBanner(state: authState, currentUser: settings.githubUser, hasToken: !token.isEmpty)
 
-        HStack {
-          if !isSignedIn {
-            Toggle("Custom Server", isOn: $showCustomServerSettings)
-              .controlSize(.small)
-              #if os(macOS)
-                .toggleStyle(.checkbox)
-              #endif
-
-            if showCustomServerSettings {
-              TextField(defaultGithubServer, text: $settings.githubServer)
-                .labelsHidden()
-                #if !os(macOS)
-                  .textInputAutocapitalization(.never)
-                  .autocorrectionDisabled()
+          HStack {
+            if !isSignedIn {
+              Toggle("Custom Server", isOn: $showCustomServerSettings)
+                .controlSize(.small)
+                #if os(macOS)
+                  .toggleStyle(.checkbox)
                 #endif
+
+              if showCustomServerSettings {
+                TextField(defaultGithubServer, text: $settings.githubServer)
+                  .labelsHidden()
+                  #if !os(macOS)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                  #endif
+              }
+            }
+
+            Spacer()
+
+            if isSignedIn {
+              Button("Sign Out", role: .destructive, action: signOut)
+                .disabled(!isSignedIn)
+            } else {
+              Button(primaryAuthButtonTitle, action: primaryAuthButtonAction)
+                .buttonStyle(.borderedProminent)
+                .tint(primaryAuthButtonTint)
             }
           }
-
-          Spacer()
-
-          if isSignedIn {
-            Button("Sign Out", role: .destructive, action: signOut)
-              .disabled(!isSignedIn)
-          } else {
-            Button(primaryAuthButtonTitle, action: primaryAuthButtonAction)
-              .buttonStyle(.borderedProminent)
-              .tint(primaryAuthButtonTint)
-          }
         }
-
-      }
-
-      Section("Refresh") {
-        Picker("Refresh Rate", selection: $settings.refreshRate) {
-          ForEach(RefreshRate.allCases, id: \.rawValue) { rate in
-            Text(rate.labelName).tag(rate)
-          }
-        }
+      } header: {
+        Text("Account")
+          .font(.headline)
+          .foregroundStyle(.primary)
       }
     }
-    .formStyle(.columns)
     .onAppear {
       showCustomServerSettings = settings.githubServer != defaultGithubServer
       if let initialAuthState {
@@ -310,7 +306,9 @@ private struct ConnectionPrefsPreviewHarness: View {
   }
 
   var body: some View {
-    ConnectionPrefsView(settings: $settings, token: $token, initialAuthState: state)
+    Form {
+      ConnectionPrefsView(settings: $settings, token: $token, initialAuthState: state)
+    }
   }
 }
 

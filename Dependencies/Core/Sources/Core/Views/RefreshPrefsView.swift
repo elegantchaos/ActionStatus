@@ -3,23 +3,22 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import LoggerUI
 import SwiftUI
 
-struct DebugPrefsView: View {
+struct RefreshPrefsView: View {
   @Binding var settings: Settings
 
   var body: some View {
     Section {
       VStack(alignment: .leading, spacing: 12) {
-        Toggle("Use test refresh controller", isOn: $settings.testRefresh)
-        LoggerChannelsHeaderView()
-        ScrollView {
-          LoggerChannelsStackView()
+        Picker("Refresh Rate", selection: $settings.refreshRate) {
+          ForEach(RefreshRate.allCases, id: \.rawValue) { rate in
+            Text(rate.labelName).tag(rate)
+          }
         }
       }
     } header: {
-      Text("Debug")
+      Text("Refresh")
         .font(.headline)
         .foregroundStyle(.primary)
     }
