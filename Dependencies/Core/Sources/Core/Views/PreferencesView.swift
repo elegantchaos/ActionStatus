@@ -117,12 +117,18 @@ public struct PreferencesForm: View {
     #if os(macOS)
       List {
         ConnectionPrefsView(settings: $settings, token: $githubToken)
+          .listRowSeparator(.visible, edges: .bottom)
+          .listSectionSeparator(.hidden)
         RefreshPrefsView(settings: $settings)
+          .listRowSeparator(.visible, edges: .bottom)
+          .listSectionSeparator(.hidden)
         DisplayPrefsView(settings: $settings)
+          .listRowSeparator(.visible, edges: .bottom)
+          .listSectionSeparator(.hidden)
         DebugPrefsView(settings: $settings)
+          .listRowSeparator(.visible, edges: .bottom)
+          .listSectionSeparator(.hidden)
       }
-      .listStyle(.inset)
-      .listRowSeparator(.hidden)
     #else
       VStack {
         Picker("Panes", selection: $selectedPane) {

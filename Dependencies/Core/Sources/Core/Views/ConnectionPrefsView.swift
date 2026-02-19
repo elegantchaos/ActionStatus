@@ -26,46 +26,44 @@ struct ConnectionPrefsView: View {
   }
 
   var body: some View {
-    Group {
-      Section {
-        VStack(alignment: .leading, spacing: 12) {
-          AuthStatusBanner(state: authState, currentUser: settings.githubUser, hasToken: !token.isEmpty)
+    Section {
+      VStack(alignment: .leading, spacing: 12) {
+        AuthStatusBanner(state: authState, currentUser: settings.githubUser, hasToken: !token.isEmpty)
 
-          HStack {
-            if !isSignedIn {
-              Toggle("Custom Server", isOn: $showCustomServerSettings)
-                .controlSize(.small)
-                #if os(macOS)
-                  .toggleStyle(.checkbox)
+        HStack {
+          if !isSignedIn {
+            Toggle("Custom Server", isOn: $showCustomServerSettings)
+              .controlSize(.small)
+              #if os(macOS)
+                .toggleStyle(.checkbox)
+              #endif
+
+            if showCustomServerSettings {
+              TextField(defaultGithubServer, text: $settings.githubServer)
+                .labelsHidden()
+                #if !os(macOS)
+                  .textInputAutocapitalization(.never)
+                  .autocorrectionDisabled()
                 #endif
-
-              if showCustomServerSettings {
-                TextField(defaultGithubServer, text: $settings.githubServer)
-                  .labelsHidden()
-                  #if !os(macOS)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                  #endif
-              }
-            }
-
-            Spacer()
-
-            if isSignedIn {
-              Button("Sign Out", role: .destructive, action: signOut)
-                .disabled(!isSignedIn)
-            } else {
-              Button(primaryAuthButtonTitle, action: primaryAuthButtonAction)
-                .buttonStyle(.borderedProminent)
-                .tint(primaryAuthButtonTint)
             }
           }
+
+          Spacer()
+
+          if isSignedIn {
+            Button("Sign Out", role: .destructive, action: signOut)
+              .disabled(!isSignedIn)
+          } else {
+            Button(primaryAuthButtonTitle, action: primaryAuthButtonAction)
+              .buttonStyle(.borderedProminent)
+              .tint(primaryAuthButtonTint)
+          }
         }
-      } header: {
-        Text("Account")
-          .font(.headline)
-          .foregroundStyle(.primary)
       }
+    } header: {
+      Text("Account")
+        .font(.headline)
+        .foregroundStyle(.primary)
     }
     .onAppear {
       showCustomServerSettings = settings.githubServer != defaultGithubServer
