@@ -3,17 +3,9 @@
 //  All code (c) 2021 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import Core
-import UIKit
+#if os(iOS)
+  import Core
 
-class MobileScene: SceneDelegate {
-  override func setup(_ windowScene: UIWindowScene) {
-    #if targetEnvironment(macCatalyst)
-      if let titlebar = windowScene.titlebar {
-        let toolbar = Application.native.appKitBridge?.makeToolbar() as? NSToolbar
-        titlebar.titleVisibility = .hidden
-        titlebar.toolbar = toolbar
-      }
-    #endif
+  class MobileScene: SceneDelegate {
   }
-}
+#endif

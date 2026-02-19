@@ -19,8 +19,6 @@ public struct SheetView<Content>: View where Content: View {
     self.content = content
   }
 
-  @Environment(\.horizontalSizeClass) var horizontalSizeClass
-
   let title: String
   let shortTitle: String
   let cancelAction: Action?
@@ -34,21 +32,14 @@ public struct SheetView<Content>: View where Content: View {
       AlignedLabelContainer {
         content()
       }
-      #if !os(tvOS)
+      #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
       #endif
       .toolbar {
         ToolbarItem(placement: .principal) {
-          let title = (horizontalSizeClass == .compact) ? shortTitle : self.title
-          Text(title)
+          Text(displayTitle)
             .accessibility(identifier: "formHeader")
         }
-
-        #if targetEnvironment(macCatalyst)
-          ToolbarItem(placement: .bottomBar) {
-            Spacer()
-          }
-        #endif
 
         ToolbarItem(placement: cancelPlacement) {
           if let action = cancelAction {
@@ -59,44 +50,35 @@ public struct SheetView<Content>: View where Content: View {
         ToolbarItem(placement: confirmationPlacement) {
           Button(action: doneAction) { Text(doneLabel) }
             .accessibility(identifier: "done")
-            .shim.defaultShortcut()
+            #if !os(tvOS)
+              .keyboardShortcut(.defaultAction)
+            #endif
         }
       }
     }
   }
 
-  #if targetEnvironment(macCatalyst)
-    let cancelPlacement = ToolbarItemPlacement.bottomBar
-    let confirmationPlacement = ToolbarItemPlacement.bottomBar
+  let cancelPlacement = ToolbarItemPlacement.cancellationAction
+  let confirmationPlacement = ToolbarItemPlacement.confirmationAction
+  var displayTitle: String {
+    #if os(tvOS)
+      shortTitle
+    #else
+      title
+    #endif
+  }
 
-    struct CancelButton: View {
-      let label: String
-      let action: Action
+  struct CancelButton: View {
+    let label: String
+    let action: Action!
 
-      var body: some View {
-        Button(action: action) { Text(label) }
-          .accessibility(identifier: "cancel")
+    var body: some View {
+      Button(action: action!) { Text(label) }
+        .accessibility(identifier: "cancel")
+        #if !os(tvOS)
           .keyboardShortcut(.cancelAction)
-          .padding(.trailing)
-      }
+        #endif
     }
-
-  #else
-
-    let cancelPlacement = ToolbarItemPlacement.cancellationAction
-    let confirmationPlacement = ToolbarItemPlacement.confirmationAction
-
-    struct CancelButton: View {
-      let label: String
-      let action: Action!
-
-      var body: some View {
-        Button(action: action!) { Text(label) }
-          .accessibility(identifier: "cancel")
-          .shim.cancelShortcut()
-      }
-    }
-
-  #endif
+  }
 
 }

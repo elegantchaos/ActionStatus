@@ -101,10 +101,41 @@ public struct Settings {
 }
 
 public extension UserDefaults {
+  func read(_ value: inout Bool, fromKey key: String) {
+    value = bool(forKey: key)
+  }
+
+  func read(_ value: inout String, fromKey key: String, `default`: String = "") {
+    value = string(forKey: key) ?? `default`
+  }
+
+  func read<T>(_ value: inout T, fromKey key: String) where T: RawRepresentable, T.RawValue == Int {
+    if let resolved = T(rawValue: integer(forKey: key)) {
+      value = resolved
+    }
+  }
+
+  func read<T>(_ value: inout T, fromKey key: String) where T: RawRepresentable, T.RawValue == String {
+    if let raw = string(forKey: key), let resolved = T(rawValue: raw) {
+      value = resolved
+    }
+  }
 
   /// Write a value to the defaults if it has changed.
   /// We perform a comparison first to avoid triggering unnecessary
   /// notifications if the value is unchanged.
+  func write(_ value: Int, forKey key: String) {
+    if integer(forKey: key) != value {
+      set(value, forKey: key)
+    }
+  }
+
+  func write(_ value: String, forKey key: String) {
+    if string(forKey: key) != value {
+      set(value, forKey: key)
+    }
+  }
+
   func write(_ value: Bool, forKey key: String) {
     if bool(forKey: key) != value {
       set(value, forKey: key)

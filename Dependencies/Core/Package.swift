@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
   name: "Core",
   platforms: [
-    .macOS(.v11), .iOS(.v14), .tvOS(.v15),
+    .macOS("26.0"), .iOS("26.0"), .tvOS("26.0"),
   ],
   products: [
     // Products define the executables and libraries a package produces, and make them visible to other packages.
@@ -24,12 +24,10 @@ let package = Package(
     .package(url: "https://github.com/elegantchaos/Files.git", from: "1.2.1"),
     .package(url: "https://github.com/elegantchaos/Hardware.git", from: "1.0.1"),
     .package(url: "https://github.com/elegantchaos/Keychain.git", from: "1.0.0"),
-    .package(url: "https://github.com/elegantchaos/LabelledGrid.git", from: "1.0.3"),
     .package(url: "https://github.com/elegantchaos/Logger.git", from: "1.7.3"),
     .package(url: "https://github.com/elegantchaos/Octoid.git", from: "1.0.6"),
     .package(url: "https://github.com/elegantchaos/SheetController.git", from: "1.0.2"),
     .package(url: "https://github.com/elegantchaos/SwiftUIExtensions.git", from: "1.3.6"),
-    .package(url: "https://github.com/elegantchaos/UserDefaultsExtensions.git", from: "1.0.1"),
   ],
   targets: [
     // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -44,14 +42,12 @@ let package = Package(
         "DictionaryCoding",
         "Files",
         "Hardware",
-        "LabelledGrid",
         "Logger",
         .product(name: "LoggerUI", package: "Logger"),
         "Keychain",
         "Octoid",
         "SheetController",
         "SwiftUIExtensions",
-        "UserDefaultsExtensions",
       ]),
     .testTarget(
       name: "CoreTests",

@@ -3,7 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-#if !os(tvOS)
+#if canImport(UIKit) && !os(tvOS)
 
   import UIKit
   import UniformTypeIdentifiers
