@@ -19,7 +19,6 @@
   },
   "testTargets" : [
     {
-      "enabled" : true,
       "target" : {
         "containerPath" : "container:ActionStatus.xcodeproj",
         "identifier" : "8B3E64B823EAE62E00B28168",
@@ -27,14 +26,10 @@
       }
     },
     {
-      "enabled" : true,
-      "skippedTests" : [
-        "ScreenshotUITests"
-      ],
       "target" : {
-        "containerPath" : "container:ActionStatus.xcodeproj",
-        "identifier" : "8B3E64C323EAE62F00B28168",
-        "name" : "ActionStatusUITestsMobile"
+        "containerPath" : "container:Dependencies\/Core",
+        "identifier" : "CoreTests",
+        "name" : "CoreTests"
       }
     }
   ],
