@@ -1,62 +1,50 @@
-# Trusted Sources
+# Trusted Sources for Technical Decisions
 
-Use these sources first for technical research. Prefer primary documentation over summaries.
+Relevance: include this file whenever tasks involve uncertain facts, API behavior, tooling semantics, policy requirements, or external references.
 
-## Source selection rules
+## Why this file exists
 
-- Prefer official vendor docs, language specs, and primary proposals.
-- Prefer source repositories and package docs for project dependencies.
-- Prefer Apple docs and Swift evolution notes for platform/language behavior.
-- Treat community blogs as secondary and verify against primary sources.
-- If sources conflict, defer to official platform/language references.
+This module sets source-quality expectations so technical decisions rely on primary references rather than unverifiable summaries.
 
-## Trusted web sources
+## Source Selection Rules
 
-### Apple platform and API references
+- Prefer official vendor documentation, language specifications, and primary proposals.
+- Prefer first-party repositories and official package documentation for dependencies.
+- Treat blogs, forum posts, and community summaries as secondary context.
+- When sources conflict, defer to official references and note the conflict.
 
-- https://developer.apple.com/documentation/
-- https://developer.apple.com/design/human-interface-guidelines/
-- https://developer.apple.com/app-store/review/guidelines/
-- https://developer.apple.com/videos/
+## Recommended Primary Sources
+
+### Apple platforms and APIs
+
+- [developer.apple.com/documentation](https://developer.apple.com/documentation/)
+- [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
+- [App Store Review Guidelines](https://developer.apple.com/app-store/review/guidelines/)
 
 ### Swift language and tooling
 
-- https://www.swift.org/documentation/
-- https://www.swift.org/blog/
-- https://docs.swift.org/swift-book/documentation/the-swift-programming-language/
-- https://github.com/swiftlang/swift-evolution
-- https://github.com/swiftlang/swift-package-manager
-- https://github.com/swiftlang/swift-testing
+- [swift.org documentation](https://www.swift.org/documentation/)
+- [The Swift Programming Language](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/)
+- [swift-evolution repository](https://github.com/swiftlang/swift-evolution)
+- [swift-package-manager repository](https://github.com/swiftlang/swift-package-manager)
 
-### Codex Documentation
+### Agent host documentation
 
-- https://developers.openai.com/codex/app
+- [OpenAI Codex app docs](https://developers.openai.com/codex/app)
 
-### First-party project references
+## Local and Project Sources
 
-- https://actionstatus.elegantchaos.com/
-- Local repo docs under `Extras/Documentation/`
-- Local package READMEs under `Dependencies/Core/**/README.md`
+- local project docs in `Extras/Documentation/`
+- dependency READMEs and package docs included in the repository
 
-## Trusted MCP resources
+## MCP-Indexed Sources (when available)
 
-When available in session, prefer these MCP-backed sources before web search:
+Prefer indexed primary docs via MCP tools before broad web search.
 
-- `mcp__cupertino__search_docs`
-  - Apple docs, Swift docs, and Swift Evolution indexed via MCP.
-- `mcp__cupertino__read_document`
-  - Read the matched primary document directly.
-- `mcp__cupertino__search_samples`
-  - Apple sample code discovery for implementation patterns.
-- `mcp__cupertino__read_sample` and `mcp__cupertino__read_sample_file`
-  - Inspect sample README/code directly.
+## Secondary Sources (verify before relying)
 
-## Secondary sources (use with caution)
+- [Hacking with Swift](https://www.hackingwithswift.com/)
+- [Swift Forums](https://forums.swift.org/)
+- [Apple Developer Forums](https://developer.apple.com/forums/)
 
-These can help with context, but require verification:
-
-- Hacking With Swift (https://www.hackingwithswift.com/)
-- Swift Forums (https://forums.swift.org/)
-- Apple Developer Forums (https://developer.apple.com/forums/)
-
-Do not treat secondary sources as final authority for API contracts, platform policy, or language semantics.
+Do not treat secondary sources as final authority for API contracts, language semantics, or policy requirements.

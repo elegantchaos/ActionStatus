@@ -1,49 +1,93 @@
-# ActionStatus — AI coding agent guide (Swift / SwiftUI)
+# ActionStatus — AI Coding Agent Guide
 
 This repository contains ActionStatus, an Xcode app for iOS, tvOS, and macOS, with shared logic in the local Swift package under `Dependencies/Core/`.
 
 See https://actionstatus.elegantchaos.com/ for product context.
 
-## Agent workflow (fast path)
+## Project-Specific Rules
 
-1. Understand the request and scope.
-2. Prefer minimal, focused changes in the correct package.
-3. Add/update tests for behavior changes.
-4. Run `Extras/Scripts/validate-changes`.
-5. Summarize what changed, why, and any risks.
-
-## Core constraints
+### Core constraints
 
 - Target iOS 26.0+ and/or macOS 26.0+.
 - The codebase is currently Swift 5.x.
-- Changes should be made with migration to Swift 6 in mind (prefer modern concurrency-safe patterns where practical).
+- Implement changes with Swift 6 migration in mind (prefer modern concurrency-safe patterns where practical).
 - Prefer cross-platform and SwiftUI solutions when available.
 - UIKit/AppKit are acceptable when required for platform behavior (for example Catalyst integration).
 - Do not add third-party frameworks without approval.
 - Never add secrets (API keys, tokens) to the repo.
 
-## Code placement
+### Code placement
 
 - Keep shared logic in `Dependencies/Core/Sources/Core` when possible.
 - Keep platform-specific behavior in `Sources/ActionStatusMobile`, `Sources/ActionStatusTV`, and `Sources/ActionStatusMac`.
 - Prefer existing architecture and file boundaries unless there is a clear reason not to.
 
-## Required validation
+### Required validation
 
 - Run `Extras/Scripts/validate-changes` after edits.
 - Use `Extras/Scripts/validate-target <target-name>` for quick target checks.
 
-## Detailed guidelines
+## Shared Baseline Guidance
 
+These rules are refreshed from `~/.local/share/agents/COMMON.md` and related instruction modules.
+
+### Principles
+
+Apply these core principles:
+- Keep It Simple
+- Build What Is Needed
+- Avoid Duplication Thoughtfully
+- Single Source of Truth
+- Make Invalid States Hard to Represent
+- Explicit Dependencies
+- Composition Over Inheritance
+- Separate Commands From Queries
+- Least Knowledge
+- Concurrency by Design
+
+### Scope and change strategy
+
+- Prefer minimal, focused changes that solve the requested problem.
+- Preserve existing architecture/style unless change is requested or clearly needed.
+- Prefer fixing root causes over layered workarounds.
+
+### Workflow expectations
+
+1. Understand request boundaries.
+2. Inspect relevant code/docs before editing.
+3. Apply the smallest coherent change set.
+4. Add/update tests for behavior changes where feasible.
+5. Run relevant validation checks.
+6. Report changes, validation status, and residual risks.
+
+### Engineering, safety, and sources
+
+- Prioritize correctness, clarity, and maintainability.
+- Keep interfaces explicit and intentionally small.
+- Avoid hidden coupling and surprising side effects.
+- Do not add dependencies without clear justification.
+- Do not perform destructive actions without explicit approval.
+- Avoid unrelated refactors during focused tasks.
+- If unexpected workspace changes appear, pause and confirm direction.
+- Use trusted-source guidance for uncertain facts and external references.
+
+## Detailed Guidelines
+
+Managed copies live under `Extras/Documentation/Guidelines/`:
 - Overview/index: `Extras/Documentation/Guidelines/README.md`
-- Principles and tradeoff heuristics: `Extras/Documentation/Guidelines/Principles.md`
-- Swift language and file/type layout rules: `Extras/Documentation/Guidelines/Swift.md`
-- SwiftUI-specific conventions: `Extras/Documentation/Guidelines/SwiftUI.md`
-- Testing expectations: `Extras/Documentation/Guidelines/Testing.md`
-- Research references and source-of-truth policy: `Extras/Documentation/Guidelines/Trusted Sources.md`
+- Principles: `Extras/Documentation/Guidelines/Principles.md`
+- Swift: `Extras/Documentation/Guidelines/Swift.md`
+- SwiftUI: `Extras/Documentation/Guidelines/SwiftUI.md`
+- Testing: `Extras/Documentation/Guidelines/Testing.md`
+- Trusted sources: `Extras/Documentation/Guidelines/Trusted Sources.md`
+- GitHub workflow: `Extras/Documentation/Guidelines/GitHub.md`
 
 ## Project references
 
 - `README.md`
 - `Settings.xcconfig`
 - `ActionStatus.xcodeproj/project.pbxproj`
+
+---
+
+Refresh note: regenerate this file periodically using `~/.local/share/agents/REFRESH.md`, `~/.local/share/agents/COMMON.md`, and relevant files in `~/.local/share/agents/instructions/`.

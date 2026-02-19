@@ -1,25 +1,35 @@
-# Testing Guidelines
+# Testing and Validation
 
-## Baseline expectations
+Relevance: include this file for all projects where code changes can be validated by tests, linters, formatters, or build checks.
 
-- Add unit tests for new behavior.
-- Use the existing test style in the repository, and prefer migration-friendly test patterns.
-- Prefer unit tests over UI tests when feasible.
+## Why this file exists
 
-## Validation commands
+This module defines baseline expectations for proving behavior changes and reporting validation status clearly.
 
-- Full validation after changes: `Extras/Scripts/validate-changes`
-- Target-focused validation: `Extras/Scripts/validate-target <target-name>`
+## Baseline Expectations
 
-## Test design
+- Add tests for new behavior and bug fixes where practical.
+- Prefer focused unit/integration tests over heavy end-to-end tests unless the risk requires full-stack coverage.
+- Follow existing repository testing style unless there is a clear reason to improve it.
 
-- Test via public/internal interfaces; avoid `@testable import` where practical.
-- If needed, expose minimal test-support API and clearly label it as testing-only.
+## Validation Workflow
+
+1. Run narrow checks closest to the change first.
+2. Run broader project checks next.
+3. If project validation scripts exist, use them.
+4. If scripts are missing or fail, run equivalent manual checks.
+5. If validation cannot run, report exactly what was not validated and why.
+
+## Test Design Guidance
+
+- Test through stable interfaces where possible.
 - Keep tests explicit and readable.
-- Extract shared test helpers only when it reduces repetition without hiding intent.
+- Extract shared test helpers only when they improve clarity.
+- Cover edge cases and failure modes touched by the change.
 
-## Coverage guidance
+## Reporting Guidance
 
-- Prefer focused tests on changed behavior and edge cases.
-- For untested legacy code touched by a change, add tests where practical.
-- Document known gaps when a full test is not feasible.
+When summarizing work:
+- list what checks were run
+- list what checks were skipped
+- call out meaningful residual risk from skipped validation

@@ -1,132 +1,81 @@
-# Principles
+# Engineering Principles
 
-These principles are intended for anyone contributing code to ActionStatus (humans and coding agents).
+Relevance: include this file for most software projects. It defines shared design and implementation principles for humans and agents.
 
-This file does not override `AGENTS.md`; it explains the “why” behind coding guidance so tradeoffs stay consistent when the codebase does not provide an obvious answer.
+## Why this file exists
 
-## How to use this
+This module explains the reasoning style that should guide engineering decisions when project-specific rules are incomplete or ambiguous.
 
-- Apply these principles as heuristics, not strict rules.
-- When principles conflict, prefer the principle that best reduces user-visible risk and long-term maintenance cost.
-- If a change increases complexity, be explicit about why the complexity is necessary.
+## How to apply these principles
+
+- Use principles as decision heuristics, not rigid laws.
+- When principles conflict, prioritize user-visible correctness and long-term maintainability.
+- If a change increases complexity, state why the complexity is necessary.
 
 ## Principles
 
-### Occam’s Razor / KISS
+### Keep It Simple
 
-Prefer the simplest implementation that satisfies the requirements.
+Prefer the simplest implementation that satisfies current requirements.
 
-Signals you’re violating it:
-- You’re adding new abstractions “just in case”.
-- You’re creating generic infrastructure to solve a one-off.
+Signals of over-engineering:
+- abstractions introduced without repeated need
+- generic frameworks created for one-off behavior
 
-Good ActionStatus examples:
-- Keep feature wiring local until it repeats.
-- Don’t introduce a coordinator or router layer unless navigation/presentation requirements demand it.
+### Build What Is Needed
 
-### YAGNI
+Do not implement speculative flexibility.
 
-Don’t build optionality or extensibility until you have a concrete need.
+Practical use:
+- delay optional abstraction until concrete reuse appears
+- default to tighter visibility and narrower APIs
 
-Use it to decide:
-- Whether to add a protocol now vs. wait.
-- Whether a type should be `public` or remain `internal`.
+### Avoid Duplication Thoughtfully
 
-### DRY (balanced with clarity)
+Reduce duplicated behavior when it lowers defects and maintenance cost.
 
-Avoid duplication when it reduces bugs and maintenance.
-
-Practical guidance:
-- Deduplicate logic (behavior) sooner than you deduplicate presentation.
-- Avoid “DRYing” unrelated code into an abstraction that hides intent.
-- In tests, deduplicate expensive setup and repeated literals (but keep assertions explicit).
+Practical use:
+- deduplicate business logic before presentation details
+- avoid abstractions that hide intent across unrelated contexts
 
 ### Single Source of Truth
 
-Keep authoritative state in one place; compute derived state from it.
+Keep authoritative mutable state in one place and derive everything else.
 
-In SwiftUI:
-- Prefer storing the minimal mutable state in a model/view model.
-- Keep formatted strings and “isEnabled” style values derived.
+### Make Invalid States Hard to Represent
 
-### Make Invalid States Unrepresentable
+Use types, enums, and constrained interfaces to prevent illegal states.
 
-Use the type system to prevent illegal states.
+### Explicit Dependencies
 
-Techniques:
-- Use enums for state machines.
-- Use typed identifiers (enums, wrappers) instead of raw strings.
-- Use non-optional properties when a value must exist.
+Prefer constructor or parameter injection over hidden globals.
 
-### SOLID (focus: SRP + DIP)
+### Composition Over Inheritance
 
-- SRP (Single Responsibility Principle): types should have one reason to change.
-- DIP (Dependency Inversion Principle): high-level logic depends on abstractions, not concrete details.
+Prefer small composable types and protocol boundaries to deep hierarchies.
 
-In this repo:
-- View models depend on protocols for services (store, persistence, clock, etc.) when it improves testability.
-- UI-facing types remain `@MainActor` and avoid I/O directly.
+### Separate Commands From Queries
 
-### Dependency Injection
+Avoid methods that both mutate state and return complex derived outputs.
 
-Prefer explicit dependencies over hidden globals.
+### Least Knowledge
 
-Practical defaults:
-- Constructor injection for view models/services.
-- Protocol boundaries around I/O (networking, StoreKit, filesystem, time).
-- Avoid singletons unless the codebase already standardizes on one.
+Minimize coupling by avoiding deep dependency chains and leaky boundaries.
 
-### Composition over Inheritance
+### Concurrency by Design
 
-Prefer composing small types and protocol conformances over deep class hierarchies.
+Be explicit about actor/threading boundaries and shared mutable state ownership.
 
-In Swift:
-- Prefer protocols + extensions for behavior.
-- Prefer small helper types over base classes.
+## Decision Heuristics
 
-### Command–Query Separation
+When unsure:
+- prioritize correctness and safety over micro-optimization
+- prefer local changes over broad refactors
+- keep public surface area intentionally small
+- align with established project patterns unless there is strong reason to diverge
 
-Separate “doing” from “calculating”.
+## Guidance for Agent Outputs
 
-Guidance:
-- A method that mutates state should return `Void` (or a narrow result) rather than also returning complex derived values.
-- Use separate computed properties/functions for derived data.
-
-### Principle of Least Knowledge (Law of Demeter)
-
-Minimize how much one part of the code knows about another.
-
-In practice:
-- Pass value types across module boundaries.
-- Avoid leaking framework types (like StoreKit models) into view models/views unless the boundary requires it.
-
-### Pit of Success APIs
-
-Design APIs so the easiest path is the correct one.
-
-Examples:
-- Strongly typed product IDs.
-- Wrapper types that ensure verification ordering or prevent forgetting required steps.
-
-### Concurrency-by-Design
-
-Be explicit about concurrency boundaries.
-
-Guidance:
-- UI-facing types: `@MainActor`.
-- Shared mutable state: an actor.
-- Avoid shared global mutable state.
-- Prefer Swift concurrency primitives over GCD.
-
-## Decision heuristics (when unsure)
-
-- Prefer correctness and user safety over micro-optimizations.
-- Prefer a smaller surface area (`internal` by default; keep `public` APIs intentional).
-- Prefer local changes over cross-cutting refactors.
-- Prefer patterns already used in the codebase.
-
-## Writing guidance (for agent outputs)
-
-- Explain tradeoffs briefly when changing architecture.
-- Keep diffs small and focused.
-- If you introduce a new abstraction, point to the specific duplication/bug risk it addresses.
+- Keep diffs focused and easy to review.
+- Briefly explain architectural tradeoffs when changing structure.
+- If adding abstraction, name the concrete duplication or risk it resolves.

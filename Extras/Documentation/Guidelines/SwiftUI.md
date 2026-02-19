@@ -1,63 +1,47 @@
-# SwiftUI Guidelines
+# SwiftUI Guidance
 
-## Architecture and state
+Relevance: include this file when the project uses SwiftUI views, state wrappers, navigation APIs, or SwiftUI-specific architecture.
 
-- Back SwiftUI views with testable non-view logic where practical.
-- Prefer cross-platform SwiftUI approaches when available.
-- Use the existing state patterns in the codebase, and favor migration-friendly patterns for future Swift 6 work.
-- Keep mutable state minimal and derive display state when possible.
+## Why this file exists
 
-## Naming
+This module defines SwiftUI-specific guidance to keep view code maintainable, testable, and aligned with modern APIs.
 
-- General custom views: suffix with `View`.
-- Control-like custom views: suffix with control type (`Button`, `Picker`, etc.).
-- List/table rows: suffix with `Row`.
-- View models: suffix with `ViewModel`.
-- Protocols: descriptive nouns or capability names (`-able`/`-ible`).
+## Architecture and State
 
-## Property wrapper order in views
-
-1. `@Environment`
-2. `@Binding`
-3. plain stored inputs
-4. local `@State`
-
-Also:
-- Use `@Bindable` when binding into `@Observable` state.
-- Prefer `@State private var` for local view-owned mutable state.
+- Keep mutable view state minimal and derive display state where possible.
+- Prefer testable non-view logic for business behavior.
+- Follow existing project state patterns unless migration is intentional.
 
 ## Composition
 
-- Do not split subviews into computed properties; create dedicated `View` structs.
-- Avoid `AnyView` unless absolutely necessary.
-- Prefer `some View` return types.
+- Prefer small dedicated view types over large monolithic views.
+- Avoid `AnyView` unless type erasure is necessary.
+- Use `some View` where feasible.
 
-## Styling and layout
+## Property Wrapper Usage
 
-- Use `foregroundStyle()` over `foregroundColor()`.
-- Use `clipShape(.rect(cornerRadius:))` over `cornerRadius()`.
-- Avoid `UIScreen.main.bounds`.
-- Avoid `GeometryReader` when modern alternatives are sufficient.
-- Avoid hard-coded spacing/padding unless required.
+- Keep wrapper usage intentional and readable (`@Environment`, `@Binding`, inputs, local `@State`).
+- Use `@Bindable` with observable models when it improves correctness.
 
-## Navigation and interaction
+## Styling and Layout
 
-- Use `NavigationStack`.
-- Use `navigationDestination(for:)`.
-- Prefer `Button` to `onTapGesture()` unless tap count/location is required.
-- Use modern `Tab` APIs; do not use `tabItem()`.
-- Use 0-parameter or 2-parameter `onChange`; avoid the 1-parameter form.
+- Prefer modern SwiftUI styling APIs over deprecated/legacy forms.
+- Avoid device-size globals and layout hacks when native layout tools suffice.
+- Keep spacing and sizing consistent with project design conventions.
 
-## Assets and previews
+## Navigation and Interaction
 
-- If a button uses an icon, include text in the label.
-- Prefer `ImageRenderer` over `UIGraphicsImageRenderer`.
-- Add a `#Preview` for every custom `View`.
+- Prefer modern navigation APIs and explicit destinations.
+- Prefer semantic controls (`Button`) over generic gesture handlers when suitable.
+- Use modern API forms for change observation and tab/navigation constructs.
 
-## Platform specialization
+## Previews and Assets
 
-- Prefer cross-platform SwiftUI views.
-- Specialize only when necessary.
-- Prefer excluding at call sites for narrowly used platform-specific views.
-- Keep platform-specific branches isolated in small extensions/subviews.
-- UIKit/AppKit are acceptable when needed for platform-specific behavior (for example Catalyst bridge integrations).
+- Add meaningful previews for custom views where practical.
+- Ensure icon-only affordances remain accessible with descriptive labels.
+
+## Platform Specialization
+
+- Prefer cross-platform SwiftUI implementations.
+- Isolate platform-specific branches in focused helpers or extensions.
+- Use UIKit/AppKit interop only where required by behavior.

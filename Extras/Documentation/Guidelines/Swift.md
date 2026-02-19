@@ -1,80 +1,59 @@
-# Swift Guidelines
+# Swift Guidance
 
-## Platform and language
+Relevance: include this file when the project contains Swift code (`.swift`, `Package.swift`, Xcode targets, or SwiftPM packages).
 
-- Target iOS 26.0+ and/or macOS 26.0+.
-- Codebase language level is currently Swift 5.x.
-- Implement new changes with Swift 6 migration in mind (prefer modern concurrency-safe patterns where practical).
-- Default UI-facing types to `@MainActor` when it improves correctness; explicitly justify non-main-actor types.
+## Why this file exists
 
-## File organization
+This module provides Swift-specific coding, organization, concurrency, and validation guidance for both agents and human contributors.
+
+## Version and Platform Expectations
+
+- Follow the project's current Swift and platform targets.
+- For new Swift projects, prefer modern Swift 6 patterns where compatible with project constraints.
+- For mixed/legacy codebases, implement changes in a migration-friendly style.
+
+## File and Type Organization
 
 - Prefer one primary type per file.
-- Name files after the type (`MyType.swift`).
-- For focused extensions, use `MyType+Functionality.swift`.
-- For protocol-conformance files, use `MyType+ProtocolName.swift`.
-- Use PascalCase file names.
+- Name files after the primary type.
+- Use focused extension files for distinct responsibilities.
+- Keep visibility tight; broaden access only when needed.
 
-In each Swift file, prefer this order:
-1. imports
-2. log channels (if any)
-3. main type definition
-4. helper types/extensions
-5. `#Preview` at the bottom for SwiftUI view files
-
-## Type organization
-
-For classes/structs, prefer this order:
+Suggested type member order:
 1. stored properties
 2. initializers
 3. computed properties
-4. public methods
-5. private methods (often in private extensions)
+4. public/internal methods
+5. private helpers
 
-For enums, prefer:
-1. cases
-2. static constants/factories
-3. computed properties
+## Coding Conventions
 
-For protocols, prefer:
-1. properties
-2. methods
-
-## Documentation comments
-
-- Add `///` docs to all types and members, including private members.
-- Explain intent/behavior, not just the symbol name.
-- Add inline comments only where intent is not obvious.
-
-## Core coding conventions
-
-- Prefer Swift-native APIs over older Foundation patterns.
-- Prefer static member lookup where it improves readability.
-- Avoid force unwraps and `try!` unless failure is unrecoverable.
-- Prefer value types unless reference semantics are required.
+- Prefer Swift-native APIs and modern language features.
 - Mark classes `final` unless inheritance is intentional.
-- Keep visibility tight (`private` by default, `public` only when necessary).
-- Avoid private single-line wrappers unless they add clear value.
+- Avoid force unwraps and `try!` except in truly unrecoverable paths.
+- Use value semantics by default unless reference semantics are required.
 
 ## Concurrency
 
-- Prefer Swift concurrency (`Task`, `await`, actors) for new code.
-- Minimize new `DispatchQueue` usage unless required by existing APIs.
-- Use actors for shared mutable state when practical.
+- Prefer structured concurrency (`async/await`, `Task`, actors).
+- Minimize new `DispatchQueue` usage unless required for compatibility.
+- Define clear actor/thread ownership for shared mutable state.
+- Keep UI-facing logic on the main actor when appropriate.
 
-## Error handling
+## Errors and State Modeling
 
-- Use `throws` / `async throws` for failure paths.
-- Use `Result` when success/failure must be stored or passed as state.
-- Use optionals only when absence is a valid non-error outcome.
+- Use `throws`/`async throws` for fallible operations.
+- Use `Result` when failure must be stored or passed around explicitly.
 - Prefer domain-specific error enums.
+- Use types and enums to constrain invalid states.
 
-## String filtering
+## Localization and User Text
 
-- For user-input filtering, use `localizedStandardContains()`.
+- Localize user-facing strings.
+- Keep key naming consistent with project conventions.
+- Prefer generated localization accessors when available.
 
-## Localization
+## Validation Expectations
 
-- Localize all user-facing strings.
-- Use dot-separated localization keys.
-- Prefer generated string catalog symbols when available.
+- Run Swift-focused validation relevant to changed files (tests, lint, format, build).
+- If full validation is not possible, report what was skipped and why.

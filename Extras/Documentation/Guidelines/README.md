@@ -9,6 +9,9 @@ This folder contains detailed coding guidance for both humans and coding agents.
 - `SwiftUI.md`: SwiftUI naming, composition, state, navigation, and interaction conventions.
 - `Testing.md`: testing expectations, tooling, and test design preferences.
 - `Trusted Sources.md`: approved web and MCP-backed research sources.
+- `GitHub.md`: PR/issue workflow and `gh` CLI safety guidance.
+
+These files are managed copies from `~/.local/share/agents/instructions/` during agent-guidance refresh.
 
 ## Related project docs
 
