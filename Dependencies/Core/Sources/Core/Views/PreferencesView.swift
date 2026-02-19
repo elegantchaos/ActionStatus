@@ -3,19 +3,55 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import LoggerUI
 import SwiftUI
 import SwiftUIExtensions
 
-public struct PreferencesView: View {
-  @Environment(\.presentationMode) var presentation
+public struct AppSettingsView: View {
   @EnvironmentObject var context: ViewContext
   @EnvironmentObject var model: Model
 
   @State var settings = Settings()
-  @State var owner: String = ""
   @State var token: String = ""
-  @State var oldestNewest: Bool = false
+
+  public init() {
+  }
+
+  public var body: some View {
+    PreferencesForm(
+      settings: $settings,
+      githubToken: $token
+    )
+    #if os(macOS)
+      .frame(maxWidth: .infinity, alignment: .center)
+      .padding(.horizontal, 12)
+      .padding(.vertical, 16)
+    #endif
+    .onAppear(perform: handleAppear)
+    .onDisappear(perform: handleSave)
+  }
+
+  func handleAppear() {
+    settings = context.settings
+    token = settings.readToken()
+  }
+
+  func handleSave() {
+    let authenticationChanged = settings.authenticationChanged(from: context.settings)
+    context.settings = settings
+    context.settings.writeToken(token)
+
+    if authenticationChanged {
+      Engine.shared.resetRefresh()
+    }
+  }
+}
+
+public struct PreferencesView: View {
+  @Environment(\.presentationMode) var presentation
+  @EnvironmentObject var context: ViewContext
+
+  @State var settings = Settings()
+  @State var token: String = ""
 
   public init() {
   }
@@ -24,9 +60,7 @@ public struct PreferencesView: View {
     SheetView("ActionStatus Settings", shortTitle: "Settings", cancelAction: handleCancel, doneAction: handleSave) {
       PreferencesForm(
         settings: $settings,
-        githubToken: $token,
-        defaultOwner: $owner,
-        oldestNewest: $oldestNewest
+        githubToken: $token
       )
     }
     .onAppear(perform: handleAppear)
@@ -39,12 +73,10 @@ public struct PreferencesView: View {
   func handleAppear() {
     Engine.shared.pauseRefresh()
     settings = context.settings
-    owner = model.defaultOwner
     token = settings.readToken()
   }
 
   func handleSave() {
-    model.defaultOwner = owner
     let authenticationChanged = settings.authenticationChanged(from: context.settings)
     context.settings = settings
     context.settings.writeToken(token)
@@ -61,122 +93,94 @@ public struct PreferencesView: View {
 public struct PreferencesForm: View {
   @Binding var settings: Settings
   @Binding var githubToken: String
-  @Binding var defaultOwner: String
-  @Binding var oldestNewest: Bool
-  @AppStorage("selectedSettingsPanel") var selectedPane: PreferenceTabs = .connection
-
-  enum PreferenceTabs: Int, CaseIterable {
-    case connection
-    case display
-    case other
-    case debug
-
-    var label: String {
-      switch self {
-        case .connection: return "Connection"
-        case .display: return "Display"
-        case .other: return "Other"
-        case .debug: return "Debug"
-      }
-    }
-  }
 
   public var body: some View {
-    VStack {
-      Picker("Panes", selection: $selectedPane) {
-        ForEach(PreferenceTabs.allCases, id: \.self) { kind in
-          Text(kind.label).tag(kind)
-        }
+    #if os(macOS)
+      List {
+        ConnectionPrefsView(settings: $settings, token: $githubToken)
+          .listRowSeparator(.visible, edges: .bottom)
+          .listSectionSeparator(.hidden)
+        RefreshPrefsView(settings: $settings)
+          .listRowSeparator(.visible, edges: .bottom)
+          .listSectionSeparator(.hidden)
+        DisplayPrefsView(settings: $settings)
+          .listRowSeparator(.visible, edges: .bottom)
+          .listSectionSeparator(.hidden)
+        DebugPrefsView(settings: $settings)
+          .listRowSeparator(.visible, edges: .bottom)
+          .listSectionSeparator(.hidden)
       }
-      .pickerStyle(.segmented)
-      .padding(.horizontal)
-      .padding(.bottom, 12)
-
-      switch selectedPane {
-        case .connection:
-          ConnectionPrefsView(settings: $settings, token: $githubToken)
-        case .display:
-          DisplayPrefsView(settings: $settings)
-        case .other:
-          OtherPrefsView(owner: $defaultOwner, oldestNewest: $oldestNewest)
-        case .debug:
-          DebugPrefsView(settings: $settings)
+    #else
+      List {
+        ConnectionPrefsView(settings: $settings, token: $githubToken)
+        RefreshPrefsView(settings: $settings)
+        DisplayPrefsView(settings: $settings)
+        DebugPrefsView(settings: $settings)
       }
-    }
-    .padding()
-  }
-}
-
-struct ConnectionPrefsView: View {
-  @Binding var settings: Settings
-  @Binding var token: String
-
-  var body: some View {
-    Form {
-      Toggle("Use Github API", isOn: $settings.githubAuthentication)
-
-      if settings.githubAuthentication {
-        TextField("User", text: $settings.githubUser)
-        TextField("Server", text: $settings.githubServer)
-        SecureField("Token", text: $token)
-      }
-
-      Picker("Refresh Rate", selection: $settings.refreshRate) {
-        ForEach(RefreshRate.allCases, id: \.rawValue) { rate in
-          Text(rate.labelName).tag(rate)
-        }
-      }
-    }
-  }
-}
-
-struct DisplayPrefsView: View {
-  @Binding var settings: Settings
-
-  var body: some View {
-    Form {
-      Picker("Item Size", selection: $settings.displaySize) {
-        ForEach(DisplaySize.allCases, id: \.rawValue) { size in
-          Text(size.labelName).tag(size)
-        }
-      }
-
-      Picker("Sort By", selection: $settings.sortMode) {
-        ForEach(SortMode.allCases, id: \.rawValue) { mode in
-          Text(mode.labelName).tag(mode)
-        }
-      }
-
-      #if os(macOS)
-        Toggle("Show In Menubar", isOn: $settings.showInMenu)
-        Toggle("Show In Dock", isOn: $settings.showInDock)
+      #if os(iOS)
+        .listStyle(.insetGrouped)
       #endif
-    }
+    #endif
   }
 }
 
-struct OtherPrefsView: View {
-  @Binding var owner: String
-  @Binding var oldestNewest: Bool
+// MARK: - Previews
 
-  var body: some View {
-    Form {
-      TextField("Default Owner", text: $owner)
-      Toggle("Test lowest & highest Swift", isOn: $oldestNewest)
-    }
-  }
-}
-
-struct DebugPrefsView: View {
-  @Binding var settings: Settings
-
-  var body: some View {
-    VStack(alignment: .leading, spacing: 12) {
-      Toggle("Use test refresh controller", isOn: $settings.testRefresh)
-      LoggerChannelsHeaderView()
-      ScrollView {
-        LoggerChannelsStackView()
+#if DEBUG
+  struct PreferencesView_Previews: PreviewProvider {
+    static var previews: some View {
+      Group {
+        #if os(macOS)
+          PreferencesMacWindowPreview()
+            .previewDisplayName("macOS Settings Window")
+        #endif
+        #if os(iOS)
+          PreferencesIOSSheetPreview()
+            .previewDisplayName("iOS Full-Screen Sheet")
+        #endif
       }
     }
   }
-}
+
+  #if os(macOS)
+    private struct PreferencesMacWindowPreview: View {
+      var body: some View {
+        PreviewContext()
+          .inject(into: AppSettingsView())
+          .frame(width: 760, height: 640)
+          .background(Color(nsColor: .windowBackgroundColor))
+          .overlay {
+            RoundedRectangle(cornerRadius: 10)
+              .stroke(Color.secondary.opacity(0.25), lineWidth: 1)
+          }
+          .clipShape(.rect(cornerRadius: 10))
+          .padding()
+      }
+    }
+  #endif
+
+  #if os(iOS)
+    private struct PreferencesIOSSheetPreview: View {
+      var body: some View {
+        PreviewContext()
+          .inject(into: PreferencesIOSPreviewHarness())
+      }
+    }
+
+    private struct PreferencesIOSPreviewHarness: View {
+      @State private var settings = Settings()
+      @State private var token: String = ""
+
+      var body: some View {
+        NavigationStack {
+          PreferencesForm(settings: $settings, githubToken: $token)
+            .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+        .onAppear {
+          token = settings.readToken()
+        }
+      }
+    }
+  #endif
+#endif

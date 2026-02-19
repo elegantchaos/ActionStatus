@@ -12,7 +12,6 @@ public extension String {
   static let displaySizeKey = "TextSize"
   static let showInMenuKey = "ShowInMenu"
   static let showInDockKey = "ShowInDock"
-  static let githubAuthenticationKey = "GithubAuthentication"
   static let githubUserKey = "GithubUser"
   static let githubServerKey = "GithubServer"
   static let sortModeKey = "SortMode"
@@ -25,7 +24,6 @@ public struct Settings {
   var selectedID: UUID? = nil
   var displaySize: DisplaySize = .automatic
   var refreshRate: RefreshRate = .automatic
-  var githubAuthentication: Bool = false
   var githubUser: String = ""
   var githubServer: String = "api.github.com"
   var sortMode: SortMode = .state
@@ -40,7 +38,6 @@ public struct Settings {
 
   func authenticationChanged(from other: Settings) -> Bool {
     guard testRefresh == other.testRefresh else { return true }
-    guard githubAuthentication == other.githubAuthentication else { return true }
     guard githubUser == other.githubUser else { return true }
     guard githubServer == other.githubServer else { return true }
     return readToken() != other.readToken()
@@ -69,7 +66,6 @@ public struct Settings {
     let defaults = UserDefaults.standard
     defaults.read(&displaySize, fromKey: .displaySizeKey)
     defaults.read(&refreshRate, fromKey: .refreshIntervalKey)
-    defaults.read(&githubAuthentication, fromKey: .githubAuthenticationKey)
     defaults.read(&githubUser, fromKey: .githubUserKey, default: "")
     defaults.read(&githubServer, fromKey: .githubServerKey, default: "api.github.com")
     defaults.read(&sortMode, fromKey: .sortModeKey)
@@ -87,7 +83,6 @@ public struct Settings {
     let defaults = UserDefaults.standard
     defaults.write(refreshRate.rawValue, forKey: .refreshIntervalKey)
     defaults.write(displaySize.rawValue, forKey: .displaySizeKey)
-    defaults.write(githubAuthentication, forKey: .githubAuthenticationKey)
     defaults.write(githubUser, forKey: .githubUserKey)
     defaults.write(githubServer, forKey: .githubServerKey)
     defaults.write(sortMode.rawValue, forKey: .sortModeKey)

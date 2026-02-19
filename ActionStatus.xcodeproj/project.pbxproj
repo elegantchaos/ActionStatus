@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		226D6C89247590AE00B54967 /* ScreenshotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */; };
-		22E778472476D230009ED66A /* ActionStatusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */; };
-		22E778482476D234009ED66A /* ScreenshotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */; };
 		22AA00122F45F20000AA0001 /* MacEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AA00052F45F10000AA0001 /* MacEngine.swift */; };
 		22AA00132F45F20000AA0001 /* MobileApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AA00092F45F10000AA0001 /* MobileApp.swift */; };
 		22AA00142F45F20000AA0001 /* MacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AA000A2F45F10000AA0001 /* MacApp.swift */; };
 		22AA00152F45F20000AA0001 /* TVApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AA000B2F45F10000AA0001 /* TVApp.swift */; };
+		22E778472476D230009ED66A /* ActionStatusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */; };
+		22E778482476D234009ED66A /* ScreenshotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */; };
 		8B2133F4264C4CFC00BE3D8D /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = 8B2133F3264C4CFC00BE3D8D /* Core */; };
 		8B3E64B023EAE62E00B28168 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64AF23EAE62E00B28168 /* Preview Assets.xcassets */; };
 		8B3E64BE23EAE62E00B28168 /* ActionStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64BD23EAE62E00B28168 /* ActionStatusTests.swift */; };
@@ -123,7 +123,7 @@
 		8B451E1623F446BA0056EF3E /* ActionStatus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ActionStatus.entitlements; sourceTree = "<group>"; };
 		8B4893AC240D581200E3E112 /* SparkleBridgeClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SparkleBridgeClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B4893B4240D686200E3E112 /* ActionStatus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ActionStatus.entitlements; sourceTree = "<group>"; };
-		8B9A812D25FA389900F44800 /* Core */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Dependencies/Core; sourceTree = "<group>"; };
+		8B9A812D25FA389900F44800 /* Dependencies/Core */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Dependencies/Core; sourceTree = "<group>"; };
 		8B9A813225FA49F600F44800 /* MobileEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileEngine.swift; sourceTree = "<group>"; };
 		8BA13D24260A5989007CB9CD /* MobileScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileScene.swift; sourceTree = "<group>"; };
 		8BA13D26260A6148007CB9CD /* TVScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVScene.swift; sourceTree = "<group>"; };
@@ -168,6 +168,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		22AA00072F45F10000AA0001 /* ActionStatusMac */ = {
+			isa = PBXGroup;
+			children = (
+				22AA000A2F45F10000AA0001 /* MacApp.swift */,
+				22AA00052F45F10000AA0001 /* MacEngine.swift */,
+				22AA00082F45F10000AA0001 /* Resources */,
+			);
+			path = ActionStatusMac;
+			sourceTree = "<group>";
+		};
+		22AA00082F45F10000AA0001 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				22AA00062F45F10000AA0001 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		22F177C62F45E01F00583266 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -284,7 +302,7 @@
 			children = (
 				22F177C12F45DFD300583266 /* AGENTS.md */,
 				228D838C246AC10700943918 /* README.md */,
-				8B9A812D25FA389900F44800 /* Core */,
+				8B9A812D25FA389900F44800 /* Dependencies/Core */,
 				22AA000026B3A10000AA0001 /* Settings.xcconfig */,
 				8B3E64A523EAE62D00B28168 /* Sources */,
 				8B522FA223F6E7B40020AD36 /* Tests */,
@@ -414,24 +432,6 @@
 			path = ActionStatusCommon;
 			sourceTree = "<group>";
 		};
-		22AA00072F45F10000AA0001 /* ActionStatusMac */ = {
-			isa = PBXGroup;
-			children = (
-				22AA000A2F45F10000AA0001 /* MacApp.swift */,
-				22AA00052F45F10000AA0001 /* MacEngine.swift */,
-				22AA00082F45F10000AA0001 /* Resources */,
-			);
-			path = ActionStatusMac;
-			sourceTree = "<group>";
-		};
-		22AA00082F45F10000AA0001 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				22AA00062F45F10000AA0001 /* Info.plist */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		8B5E7E7823F6BA8400087E15 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -475,8 +475,6 @@
 				8B5AEB55240819F50065524B /* CopyFiles */,
 			);
 			buildRules = (
-			);
-			dependencies = (
 			);
 			name = ActionStatusMobile;
 			packageProductDependencies = (
@@ -700,6 +698,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 2H48644JM2;
 				INFOPLIST_FILE = Tests/ActionStatusUITests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).tv.ui.tests";
 				PRODUCT_NAME = "$(ACTION_STATUS_NAME) UI Tests TV";
@@ -712,6 +711,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 2H48644JM2;
 				INFOPLIST_FILE = Tests/ActionStatusUITests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).tv.ui.tests";
 				PRODUCT_NAME = "$(ACTION_STATUS_NAME) UI Tests TV";
@@ -901,6 +901,8 @@
 			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				DEVELOPMENT_TEAM = 2H48644JM2;
 				INFOPLIST_FILE = Tests/ActionStatusTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -918,6 +920,8 @@
 			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				DEVELOPMENT_TEAM = 2H48644JM2;
 				INFOPLIST_FILE = Tests/ActionStatusTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -934,6 +938,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				DEVELOPMENT_TEAM = 2H48644JM2;
 				INFOPLIST_FILE = Tests/ActionStatusUITests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).ui.tests";
 				PRODUCT_NAME = "$(ACTION_STATUS_NAME) UI Tests Mobile";
@@ -945,6 +951,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				DEVELOPMENT_TEAM = 2H48644JM2;
 				INFOPLIST_FILE = Tests/ActionStatusUITests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(ACTION_STATUS_IDENTIFIER).ui.tests";
 				PRODUCT_NAME = "$(ACTION_STATUS_NAME) UI Tests Mobile";

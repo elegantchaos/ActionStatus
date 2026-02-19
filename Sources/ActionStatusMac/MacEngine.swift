@@ -35,13 +35,6 @@
       NSWorkspace.shared.activateFileViewerSelecting([url])
     }
 
-    @objc func showPreferences() {
-      sheetController.show {
-        PreferencesView()
-      }
-      showWindow(nil)
-    }
-
     @objc func addLocalRepos() {
       let panel = NSOpenPanel()
       panel.canChooseFiles = false

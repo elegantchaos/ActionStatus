@@ -28,6 +28,10 @@ Use these sources first for technical research. Prefer primary documentation ove
 - https://github.com/swiftlang/swift-package-manager
 - https://github.com/swiftlang/swift-testing
 
+### Codex Documentation
+
+- https://developers.openai.com/codex/app
+
 ### First-party project references
 
 - https://actionstatus.elegantchaos.com/

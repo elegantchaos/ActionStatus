@@ -37,8 +37,9 @@
       Button("Show \(application.info.name)") {
         application.showWindow(nil)
       }
-      Button("Preferences…", action: application.showPreferences)
-        .keyboardShortcut(",", modifiers: .command)
+      SettingsLink {
+        Text("Settings…")
+      }
       Button("Add Local Repos", action: application.addLocalRepos)
         .keyboardShortcut("o", modifiers: .command)
       Button("Quit \(application.info.name)") {
@@ -67,12 +68,12 @@
       WindowGroup {
         application.applyEnvironment(to: ContentView())
       }
+      Settings {
+        application.applyEnvironment(to: AppSettingsView())
+      }
+      .defaultSize(width: 720, height: 620)
+      .windowResizability(.automatic)
       .commands {
-        CommandGroup(replacing: .appSettings) {
-          Button("Preferences…", action: application.showPreferences)
-            .keyboardShortcut(",", modifiers: .command)
-        }
-
         CommandGroup(after: .newItem) {
           Button("Add Local Repos", action: application.addLocalRepos)
             .keyboardShortcut("o", modifiers: .command)
