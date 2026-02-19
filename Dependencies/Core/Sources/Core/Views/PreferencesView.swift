@@ -108,24 +108,148 @@ public struct PreferencesForm: View {
 }
 
 struct ConnectionPrefsView: View {
+  @EnvironmentObject var context: ViewContext
   @Binding var settings: Settings
   @Binding var token: String
+  @State var authState: GithubAuthUIState = .idle
+  @State var authTask: Task<Void, Never>? = nil
 
   var body: some View {
     Form {
-      Toggle("Use Github API", isOn: $settings.githubAuthentication)
+      TextField("Server", text: $settings.githubServer)
 
-      if settings.githubAuthentication {
-        TextField("User", text: $settings.githubUser)
-        TextField("Server", text: $settings.githubServer)
-        SecureField("Token", text: $token)
+      if settings.githubUser.isEmpty || token.isEmpty {
+        Text("Not signed in")
+      } else {
+        Text("Signed in as \(settings.githubUser)")
       }
+
+      switch authState {
+        case .idle:
+          EmptyView()
+        case .authenticating:
+          Text("Waiting for GitHub authorization...")
+        case .awaitingApproval(let code, let url):
+          Text("Enter code \(code) at \(url.absoluteString)")
+        case .signedIn(let user):
+          Text("Signed in as \(user)")
+        case .error(let message):
+          Text(message)
+      }
+
+      if case .awaitingApproval(_, let url) = authState {
+        Button("Open GitHub Verification Page") {
+          context.host.open(url: url)
+        }
+      }
+
+      if authTask == nil {
+        Button("Sign In with GitHub", action: startSignIn)
+      } else {
+        Button("Cancel Sign-In", action: cancelSignIn)
+      }
+
+      Button("Sign Out", action: signOut)
+        .disabled(settings.githubUser.isEmpty && token.isEmpty)
 
       Picker("Refresh Rate", selection: $settings.refreshRate) {
         ForEach(RefreshRate.allCases, id: \.rawValue) { rate in
           Text(rate.labelName).tag(rate)
         }
       }
+    }
+    .onDisappear(perform: cancelSignIn)
+  }
+
+  func startSignIn() {
+    let server = settings.githubServer.trimmingCharacters(in: .whitespacesAndNewlines)
+    settings.githubServer = server
+
+    guard let clientID = GithubDeviceAuthenticator.clientID() else {
+      authState = .error("Missing Github OAuth client id. Set GithubOAuthClientID in Info.plist build settings.")
+      return
+    }
+
+    let authenticator = GithubDeviceAuthenticator(apiServer: server, clientID: clientID)
+    authState = .authenticating
+
+    authTask = Task {
+      do {
+        let authorization = try await authenticator.startAuthorization(scopes: [
+          "notifications",
+          "read:org",
+          "read:user",
+          "repo",
+          "workflow",
+        ])
+
+        await MainActor.run {
+          authState = .awaitingApproval(authorization.userCode, authorization.verificationURL)
+          context.host.open(url: authorization.verificationURL)
+        }
+
+        let authenticatedUser = try await authenticator.pollForUser(authorization: authorization)
+        await MainActor.run {
+          settings.githubUser = authenticatedUser.login
+          token = authenticatedUser.token
+          authState = .signedIn(authenticatedUser.login)
+          authTask = nil
+        }
+      } catch is CancellationError {
+        await MainActor.run {
+          authState = .idle
+          authTask = nil
+        }
+      } catch {
+        githubAuthChannel.log("Sign-in failed: \(error)")
+        await MainActor.run {
+          authState = .error(error.githubAuthMessage)
+          authTask = nil
+        }
+      }
+    }
+  }
+
+  func cancelSignIn() {
+    authTask?.cancel()
+    authTask = nil
+  }
+
+  func signOut() {
+    cancelSignIn()
+    token = ""
+    settings.githubUser = ""
+    authState = .idle
+  }
+}
+
+enum GithubAuthUIState {
+  case idle
+  case authenticating
+  case awaitingApproval(String, URL)
+  case signedIn(String)
+  case error(String)
+}
+
+private extension Error {
+  var githubAuthMessage: String {
+    guard let authError = self as? GithubDeviceAuthError else {
+      return localizedDescription
+    }
+
+    switch authError {
+      case .missingClientID:
+        return "Missing Github OAuth client id."
+      case .invalidServer:
+        return "The configured Github server is invalid."
+      case .invalidResponse:
+        return "Github returned an unexpected response."
+      case .accessDenied:
+        return "Github sign-in was cancelled."
+      case .expiredToken:
+        return "Github sign-in timed out. Please try again."
+      case .failed(let message):
+        return "Github sign-in failed: \(message)"
     }
   }
 }
