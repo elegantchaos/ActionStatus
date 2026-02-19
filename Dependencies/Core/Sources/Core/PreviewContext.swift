@@ -7,10 +7,12 @@ import SwiftUI
 
 struct PreviewContext {
 
-  @State var model = TestModel()
-  @State var state = ViewContext(host: PreviewHost())
+  let model: TestModel
+  let state: ViewContext
 
   init(isEditing: Bool = true) {
+    model = TestModel()
+    state = ViewContext(host: PreviewHost())
     state.settings.isEditing = isEditing
   }
 

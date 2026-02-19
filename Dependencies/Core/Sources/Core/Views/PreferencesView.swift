@@ -162,21 +162,23 @@ public struct PreferencesForm: View {
   #if os(iOS)
     private struct PreferencesIOSSheetPreview: View {
       var body: some View {
-        PreferencesIOSSheetHost()
+        PreviewContext()
+          .inject(into: PreferencesIOSPreviewHarness())
       }
     }
 
-    private struct PreferencesIOSSheetHost: View {
-      @State private var showSettings = true
+    private struct PreferencesIOSPreviewHarness: View {
+      @State private var settings = Settings()
+      @State private var token: String = ""
 
       var body: some View {
-        ZStack {
-          Color(uiColor: .systemGroupedBackground)
-            .ignoresSafeArea()
+        NavigationStack {
+          PreferencesForm(settings: $settings, githubToken: $token)
+            .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.inline)
         }
-        .fullScreenCover(isPresented: $showSettings) {
-          PreviewContext()
-            .inject(into: PreferencesView())
+        .onAppear {
+          token = settings.readToken()
         }
       }
     }
