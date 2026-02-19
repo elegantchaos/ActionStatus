@@ -1,6 +1,6 @@
 #!/bin/bash
 # Purpose: Verify local changes via formatting/linting, unsigned app builds across platforms, and tests.
-# Usage: Extras/Scripts/validate-changes [--clean] [--ui-tests]
+# Usage: Extras/Scripts/validate-changes [--clean] [--tests] [--ui-tests]
 
 set -euo pipefail
 
@@ -9,24 +9,30 @@ cd "$(readlink -f .)/../.."
 ROOT="$(pwd)"
 
 FORCE_CLEAN=0
+RUN_TESTS=1
 INCLUDE_UI_TESTS=0
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --clean|-c)
       FORCE_CLEAN=1
       ;;
+    --tests|-t)
+      RUN_TESTS=1
+      ;;
     --ui-tests|-u)
+      RUN_TESTS=1
       INCLUDE_UI_TESTS=1
       ;;
     -h|--help)
-      echo "Usage: Extras/Scripts/validate-changes [--clean] [--ui-tests]"
+      echo "Usage: Extras/Scripts/validate-changes [--clean] [--tests] [--ui-tests]"
       echo "  --clean, -c   remove local build artifacts and run clean builds"
-      echo "  --ui-tests, -u   include UI tests (default skips UI tests)"
+      echo "  --tests, -t   run tests (default runs non-UI tests)"
+      echo "  --ui-tests, -u   include UI tests (implies --tests)"
       exit 0
       ;;
     *)
       echo "Unknown argument: $1"
-      echo "Usage: Extras/Scripts/validate-changes [--clean] [--ui-tests]"
+      echo "Usage: Extras/Scripts/validate-changes [--clean] [--tests] [--ui-tests]"
       exit 1
       ;;
   esac
@@ -114,54 +120,136 @@ xcodebuild \
   CODE_SIGNING_ALLOWED=NO \
   "${XCODE_ACTION[@]}" >"$TVOS_LOG" 2>&1
 
-echo "==> Running tests"
-IOS_TEST_DESTINATION="$(
-  xcodebuild -workspace "$ROOT/ActionStatus.xcworkspace" -scheme ActionStatus -showdestinations 2>/dev/null \
-    | awk -F'[,}]' '
-        /platform:iOS Simulator/ && $0 !~ /placeholder/ {
-          os = ""
-          name = ""
-          for (i = 1; i <= NF; i++) {
-            gsub(/^[[:space:]]+|[[:space:]]+$/, "", $i)
-            if ($i ~ /^OS:/) {
-              sub(/^OS:/, "", $i)
-              os = $i
-            }
-            if ($i ~ /^name:/) {
-              sub(/^name:/, "", $i)
-              name = $i
+if [ "$RUN_TESTS" -eq 1 ]; then
+  echo "==> Running tests"
+  IOS_TEST_DESTINATION=""
+
+  # Prefer an already-booted iPhone simulator to avoid extra launch cost.
+  IOS_TEST_DESTINATION="$(
+    xcrun simctl list devices available 2>/dev/null \
+      | awk '
+          /^-- iOS / {
+            os = $0
+            gsub(/^-- iOS /, "", os)
+            gsub(/ --$/, "", os)
+          }
+          /\(Booted\)/ && /iPhone/ && $0 !~ /\(unavailable/ {
+            line = $0
+            sub(/^[[:space:]]+/, "", line)
+            sub(/[[:space:]]+\(.*/, "", line)
+            if (os != "") {
+              printf "platform=iOS Simulator,OS=%s,name=%s\n", os, line
+              exit
             }
           }
-          if (os != "" && name != "") {
-            printf "platform=iOS Simulator,OS=%s,name=%s\n", os, name
-            exit
-          }
-        }
-      '
-)"
+        '
+  )"
 
-if [ -z "$IOS_TEST_DESTINATION" ]; then
-  echo "No available iOS simulator found for test execution."
-  exit 1
+  # If no iPhone is booted, use any already-booted iOS simulator.
+  if [ -z "$IOS_TEST_DESTINATION" ]; then
+    IOS_TEST_DESTINATION="$(
+      xcrun simctl list devices available 2>/dev/null \
+        | awk '
+            /^-- iOS / {
+              os = $0
+              gsub(/^-- iOS /, "", os)
+              gsub(/ --$/, "", os)
+            }
+            /\(Booted\)/ && $0 !~ /\(unavailable/ {
+              line = $0
+              sub(/^[[:space:]]+/, "", line)
+              sub(/[[:space:]]+\(.*/, "", line)
+              if (os != "") {
+                printf "platform=iOS Simulator,OS=%s,name=%s\n", os, line
+                exit
+              }
+            }
+          '
+    )"
+  fi
+
+  # Otherwise prefer an iPhone simulator from Xcode destinations.
+  if [ -z "$IOS_TEST_DESTINATION" ]; then
+    IOS_TEST_DESTINATION="$(
+      xcodebuild -workspace "$ROOT/ActionStatus.xcworkspace" -scheme ActionStatus -showdestinations 2>/dev/null \
+        | awk -F'[,}]' '
+            /platform:iOS Simulator/ && $0 !~ /placeholder/ {
+              os = ""
+              name = ""
+              for (i = 1; i <= NF; i++) {
+                gsub(/^[[:space:]]+|[[:space:]]+$/, "", $i)
+                if ($i ~ /^OS:/) {
+                  sub(/^OS:/, "", $i)
+                  os = $i
+                }
+                if ($i ~ /^name:/) {
+                  sub(/^name:/, "", $i)
+                  name = $i
+                }
+              }
+              if (os != "" && name != "" && name ~ /^iPhone/) {
+                printf "platform=iOS Simulator,OS=%s,name=%s\n", os, name
+                exit
+              }
+            }
+          '
+    )"
+  fi
+
+  # Final fallback: first available iOS simulator.
+  if [ -z "$IOS_TEST_DESTINATION" ]; then
+    IOS_TEST_DESTINATION="$(
+      xcodebuild -workspace "$ROOT/ActionStatus.xcworkspace" -scheme ActionStatus -showdestinations 2>/dev/null \
+        | awk -F'[,}]' '
+            /platform:iOS Simulator/ && $0 !~ /placeholder/ {
+              os = ""
+              name = ""
+              for (i = 1; i <= NF; i++) {
+                gsub(/^[[:space:]]+|[[:space:]]+$/, "", $i)
+                if ($i ~ /^OS:/) {
+                  sub(/^OS:/, "", $i)
+                  os = $i
+                }
+                if ($i ~ /^name:/) {
+                  sub(/^name:/, "", $i)
+                  name = $i
+                }
+              }
+              if (os != "" && name != "") {
+                printf "platform=iOS Simulator,OS=%s,name=%s\n", os, name
+                exit
+              }
+            }
+          '
+    )"
+  fi
+
+  if [ -z "$IOS_TEST_DESTINATION" ]; then
+    echo "No available iOS simulator found for test execution."
+    exit 1
+  fi
+
+  echo "Using iOS test destination: $IOS_TEST_DESTINATION"
+
+  TEST_ARGS=()
+  if [ "$INCLUDE_UI_TESTS" -eq 1 ]; then
+    echo "Including UI tests."
+  else
+    echo "Skipping UI tests (use --ui-tests to include)."
+    TEST_ARGS+=("-only-testing:ActionStatusTests")
+    TEST_ARGS+=("-only-testing:CoreTests")
+  fi
+
+  xcodebuild \
+    -workspace "$ROOT/ActionStatus.xcworkspace" \
+    -scheme ActionStatus \
+    -testPlan ActionStatus \
+    -destination "$IOS_TEST_DESTINATION" \
+    -derivedDataPath "$DERIVED_DATA_PATH" \
+    CODE_SIGNING_ALLOWED=NO \
+    "${TEST_ARGS[@]}" \
+    test >"$TEST_LOG" 2>&1
 fi
-
-TEST_ARGS=()
-if [ "$INCLUDE_UI_TESTS" -eq 1 ]; then
-  echo "Including UI tests."
-else
-  echo "Skipping UI tests (use --ui-tests to include)."
-  TEST_ARGS+=("-skip-testing:ActionStatusUITestsMobile")
-fi
-
-xcodebuild \
-  -workspace "$ROOT/ActionStatus.xcworkspace" \
-  -scheme ActionStatus \
-  -testPlan ActionStatus \
-  -destination "$IOS_TEST_DESTINATION" \
-  -derivedDataPath "$DERIVED_DATA_PATH" \
-  CODE_SIGNING_ALLOWED=NO \
-  "${TEST_ARGS[@]}" \
-  test >"$TEST_LOG" 2>&1
 
 echo "==> Verification complete"
 echo "iOS build log: $IOS_LOG"
