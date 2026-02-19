@@ -93,25 +93,6 @@ public struct PreferencesView: View {
 public struct PreferencesForm: View {
   @Binding var settings: Settings
   @Binding var githubToken: String
-  #if !os(macOS)
-    @AppStorage("selectedSettingsPanel") var selectedPane: PreferenceTabs = .connection
-
-    enum PreferenceTabs: Int, CaseIterable {
-      case connection
-      case refresh
-      case display
-      case debug
-
-      var label: String {
-        switch self {
-          case .connection: return "Connection"
-          case .refresh: return "Refresh"
-          case .display: return "Display"
-          case .debug: return "Debug"
-        }
-      }
-    }
-  #endif
 
   public var body: some View {
     #if os(macOS)
@@ -130,30 +111,74 @@ public struct PreferencesForm: View {
           .listSectionSeparator(.hidden)
       }
     #else
-      VStack {
-        Picker("Panes", selection: $selectedPane) {
-          ForEach(PreferenceTabs.allCases, id: \.self) { kind in
-            Text(kind.label).tag(kind)
-          }
-        }
-        .pickerStyle(.segmented)
-        .padding(.horizontal)
-        .padding(.bottom, 12)
-
-        Form {
-          switch selectedPane {
-            case .connection:
-              ConnectionPrefsView(settings: $settings, token: $githubToken)
-            case .refresh:
-              RefreshPrefsView(settings: $settings)
-            case .display:
-              DisplayPrefsView(settings: $settings)
-            case .debug:
-              DebugPrefsView(settings: $settings)
-          }
-        }
+      List {
+        ConnectionPrefsView(settings: $settings, token: $githubToken)
+        RefreshPrefsView(settings: $settings)
+        DisplayPrefsView(settings: $settings)
+        DebugPrefsView(settings: $settings)
       }
-      .padding()
+      #if os(iOS)
+        .listStyle(.insetGrouped)
+      #endif
     #endif
   }
 }
+
+// MARK: - Previews
+
+#if DEBUG
+  struct PreferencesView_Previews: PreviewProvider {
+    static var previews: some View {
+      Group {
+        #if os(macOS)
+          PreferencesMacWindowPreview()
+            .previewDisplayName("macOS Settings Window")
+        #endif
+        #if os(iOS)
+          PreferencesIOSSheetPreview()
+            .previewDisplayName("iOS Full-Screen Sheet")
+        #endif
+      }
+    }
+  }
+
+  #if os(macOS)
+    private struct PreferencesMacWindowPreview: View {
+      var body: some View {
+        PreviewContext()
+          .inject(into: AppSettingsView())
+          .frame(width: 760, height: 640)
+          .background(Color(nsColor: .windowBackgroundColor))
+          .overlay {
+            RoundedRectangle(cornerRadius: 10)
+              .stroke(Color.secondary.opacity(0.25), lineWidth: 1)
+          }
+          .clipShape(.rect(cornerRadius: 10))
+          .padding()
+      }
+    }
+  #endif
+
+  #if os(iOS)
+    private struct PreferencesIOSSheetPreview: View {
+      var body: some View {
+        PreferencesIOSSheetHost()
+      }
+    }
+
+    private struct PreferencesIOSSheetHost: View {
+      @State private var showSettings = true
+
+      var body: some View {
+        ZStack {
+          Color(uiColor: .systemGroupedBackground)
+            .ignoresSafeArea()
+        }
+        .fullScreenCover(isPresented: $showSettings) {
+          PreviewContext()
+            .inject(into: PreferencesView())
+        }
+      }
+    }
+  #endif
+#endif

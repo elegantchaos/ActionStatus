@@ -27,7 +27,7 @@
       }
     },
     {
-      "enabled" : false,
+      "enabled" : true,
       "skippedTests" : [
         "ScreenshotUITests"
       ],

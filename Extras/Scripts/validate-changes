@@ -1,6 +1,6 @@
 #!/bin/bash
 # Purpose: Verify local changes via formatting/linting, unsigned app builds across platforms, and tests.
-# Usage: Extras/Scripts/validate-changes [--clean]
+# Usage: Extras/Scripts/validate-changes [--clean] [--ui-tests]
 
 set -euo pipefail
 
@@ -9,19 +9,24 @@ cd "$(readlink -f .)/../.."
 ROOT="$(pwd)"
 
 FORCE_CLEAN=0
+INCLUDE_UI_TESTS=0
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --clean|-c)
       FORCE_CLEAN=1
       ;;
+    --ui-tests|-u)
+      INCLUDE_UI_TESTS=1
+      ;;
     -h|--help)
-      echo "Usage: Extras/Scripts/validate-changes [--clean]"
+      echo "Usage: Extras/Scripts/validate-changes [--clean] [--ui-tests]"
       echo "  --clean, -c   remove local build artifacts and run clean builds"
+      echo "  --ui-tests, -u   include UI tests (default skips UI tests)"
       exit 0
       ;;
     *)
       echo "Unknown argument: $1"
-      echo "Usage: Extras/Scripts/validate-changes [--clean]"
+      echo "Usage: Extras/Scripts/validate-changes [--clean] [--ui-tests]"
       exit 1
       ;;
   esac
@@ -140,6 +145,14 @@ if [ -z "$IOS_TEST_DESTINATION" ]; then
   exit 1
 fi
 
+TEST_ARGS=()
+if [ "$INCLUDE_UI_TESTS" -eq 1 ]; then
+  echo "Including UI tests."
+else
+  echo "Skipping UI tests (use --ui-tests to include)."
+  TEST_ARGS+=("-skip-testing:ActionStatusUITestsMobile")
+fi
+
 xcodebuild \
   -workspace "$ROOT/ActionStatus.xcworkspace" \
   -scheme ActionStatus \
@@ -147,6 +160,7 @@ xcodebuild \
   -destination "$IOS_TEST_DESTINATION" \
   -derivedDataPath "$DERIVED_DATA_PATH" \
   CODE_SIGNING_ALLOWED=NO \
+  "${TEST_ARGS[@]}" \
   test >"$TEST_LOG" 2>&1
 
 echo "==> Verification complete"
