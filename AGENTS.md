@@ -9,23 +9,18 @@ See https://actionstatus.elegantchaos.com/ for product context.
 ### Core constraints
 
 - Target iOS 26.0+ and/or macOS 26.0+.
-- The codebase is currently Swift 5.x.
-- Implement changes with Swift 6 migration in mind (prefer modern concurrency-safe patterns where practical).
-- Prefer cross-platform and SwiftUI solutions when available.
-- UIKit/AppKit are acceptable when required for platform behavior (for example Catalyst integration).
-- Do not add third-party frameworks without approval.
-- Never add secrets (API keys, tokens) to the repo.
+- The codebase currently:
+  - is Swift 5.x; migration to 6+ is desirable.
+  - contains old UIKit/AppKit patterns; migration to cross-platform/SwiftUI is desirable.
 
 ### Code placement
 
 - Keep shared logic in `Dependencies/Core/Sources/Core` when possible.
 - Keep platform-specific behavior in `Sources/ActionStatusMobile`, `Sources/ActionStatusTV`, and `Sources/ActionStatusMac`.
-- Prefer existing architecture and file boundaries unless there is a clear reason not to.
 
 ### Required validation
 
-- Run `Extras/Scripts/validate-changes` after edits.
-- Use `Extras/Scripts/validate-target <target-name>` for quick target checks.
+- Run `Extras/Scripts/validate-changes` after code edits.
 
 ## Shared Baseline Guidance
 
