@@ -16,7 +16,6 @@ let package = Package(
   ],
   dependencies: [
     // Dependencies declare other packages that this package depends on.
-    .package(url: "https://github.com/elegantchaos/BindingsExtensions.git", from: "1.0.1"),
     .package(url: "https://github.com/elegantchaos/Bundles.git", from: "1.0.9"),
     .package(url: "https://github.com/elegantchaos/CollectionExtensions.git", from: "1.1.9"),
     .package(url: "https://github.com/elegantchaos/DictionaryCoding.git", from: "1.0.9"),
@@ -25,7 +24,6 @@ let package = Package(
     .package(url: "https://github.com/elegantchaos/Keychain.git", from: "1.0.0"),
     .package(url: "https://github.com/elegantchaos/Logger.git", from: "1.7.3"),
     .package(url: "https://github.com/elegantchaos/Octoid.git", from: "1.0.6"),
-    .package(url: "https://github.com/elegantchaos/SwiftUIExtensions.git", from: "1.3.6"),
   ],
   targets: [
     // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -33,7 +31,6 @@ let package = Package(
     .target(
       name: "Core",
       dependencies: [
-        "BindingsExtensions",
         "Bundles",
         "CollectionExtensions",
         "DictionaryCoding",
@@ -43,7 +40,6 @@ let package = Package(
         .product(name: "LoggerUI", package: "Logger"),
         "Keychain",
         "Octoid",
-        "SwiftUIExtensions",
       ]),
     .testTarget(
       name: "CoreTests",

@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "BindingsExtensions",
-        "repositoryURL": "https://github.com/elegantchaos/BindingsExtensions.git",
-        "state": {
-          "branch": null,
-          "revision": "7431f1c8e03d54f53ec4848818ee53bb0bf34411",
-          "version": "1.0.1"
-        }
-      },
-      {
         "package": "Coercion",
         "repositoryURL": "https://github.com/elegantchaos/Coercion.git",
         "state": {
@@ -116,15 +107,6 @@
           "branch": null,
           "revision": "6bda5a45a2f687a82a0fbb002bee8ad31e44f478",
           "version": "1.1.0"
-        }
-      },
-      {
-        "package": "SwiftUIExtensions",
-        "repositoryURL": "https://github.com/elegantchaos/SwiftUIExtensions.git",
-        "state": {
-          "branch": null,
-          "revision": "872dd8874c949719d27ea1ce1258c0cfe7d9bacc",
-          "version": "1.3.6"
         }
       },
       {
