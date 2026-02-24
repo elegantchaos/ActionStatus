@@ -4,4 +4,7 @@
    <FileRef
       location = "group:ActionStatus.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "container:../Bundles">
+   </FileRef>
 </Workspace>
