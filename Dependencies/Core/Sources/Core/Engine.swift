@@ -116,7 +116,7 @@ open class Engine: NSObject, ApplicationHost {
   }
 
   class func makeModel() -> Model {
-    let isSimulator = Device.main.platform.isSimulator
+    let isSimulator = Device().platform.isSimulator
     let isUITesting = ProcessInfo.processInfo.environment.isTestingUI
     return isSimulator || isUITesting ? TestModel() : Model([])
   }

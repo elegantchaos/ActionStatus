@@ -191,7 +191,7 @@ internal extension Model {
             repo = addRepo(name: name, owner: owner)
           }
 
-          if repo?.name == containerName, let identifier = Device.main.identifier, let repo = repo {
+          if repo?.name == containerName, let identifier = Device().identifier, let repo = repo {
             remember(url: containerURL, forDevice: identifier, inRepo: repo)
             modelChannel.log("Local path for \(repo.name) on machine \(identifier) is \(localGitFolderURL).")
           }
