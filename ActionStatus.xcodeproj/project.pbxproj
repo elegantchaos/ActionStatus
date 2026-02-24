@@ -848,8 +848,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconMobile;
-				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=macosx*]" = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Sources/ActionStatusMobile/Resources/ActionStatus.entitlements;
 				DEVELOPMENT_ASSET_PATHS = Sources/ActionStatusCommon/Resources/PreviewContent;
 				DEVELOPMENT_TEAM = 2H48644JM2;
@@ -877,8 +876,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 22AA000026B3A10000AA0001 /* Settings.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconMobile;
-				"ASSETCATALOG_COMPILER_APPICON_NAME[sdk=macosx*]" = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Sources/ActionStatusMobile/Resources/ActionStatus.entitlements;
 				DEVELOPMENT_ASSET_PATHS = Sources/ActionStatusCommon/Resources/PreviewContent;
 				DEVELOPMENT_TEAM = 2H48644JM2;
