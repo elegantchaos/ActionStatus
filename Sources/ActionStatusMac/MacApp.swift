@@ -5,6 +5,7 @@
 
 #if os(macOS)
   import Core
+  import CoreUI
   import SwiftUI
 
   private extension Repo.State {

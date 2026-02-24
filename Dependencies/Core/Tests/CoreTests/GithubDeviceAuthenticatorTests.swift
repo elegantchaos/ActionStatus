@@ -1,6 +1,6 @@
 import XCTest
 
-@testable import Core
+@testable import CoreUI
 
 final class GithubDeviceAuthenticatorTests: XCTestCase {
   func testNormalizesGithubAPIHost() throws {

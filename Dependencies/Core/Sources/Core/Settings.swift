@@ -3,11 +3,11 @@
 //  All code (c) 2021 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Core
 import Foundation
 import Keychain
 
 public extension String {
-  static let defaultOwnerKey = "DefaultOwner"
   static let refreshIntervalKey = "RefreshInterval"
   static let displaySizeKey = "TextSize"
   static let showInMenuKey = "ShowInMenu"
@@ -15,13 +15,11 @@ public extension String {
   static let githubUserKey = "GithubUser"
   static let githubServerKey = "GithubServer"
   static let sortModeKey = "SortMode"
-  static let testOldestNewestKey = "TestOldestNewest"
   static let testRefresh = "TestRefresh"
 }
 
 public struct Settings {
   public var isEditing: Bool = false
-  var selectedID: UUID? = nil
   var displaySize: DisplaySize = .automatic
   var refreshRate: RefreshRate = .automatic
   var githubUser: String = ""

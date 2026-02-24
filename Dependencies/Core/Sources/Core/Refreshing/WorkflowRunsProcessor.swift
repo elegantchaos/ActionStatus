@@ -15,7 +15,7 @@ struct WorkflowRunsProcessor: Processor {
   let name = "workflows"
 
   var processors: [ProcessorBase] {
-    return [self, MessageProcessor<RepoPollingSession>()]
+    return [self, RepoMessageProcessor<RepoPollingSession>()]
   }
 
   func process(_ runs: WorkflowRuns, response: HTTPURLResponse, for request: Request, in session: RepoPollingSession) -> RepeatStatus {
@@ -39,6 +39,6 @@ struct WorkflowGroupProcessor: ProcessorGroup {
   var processors: [ProcessorBase] = [
     WorkflowRunsProcessor(),
     UnchangedProcessor(),
-    MessageProcessor<RepoPollingSession>(),
+    RepoMessageProcessor<RepoPollingSession>(),
   ]
 }

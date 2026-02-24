@@ -4,12 +4,17 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 #if canImport(UIKit)
-  import ApplicationExtensions
   import SwiftUI
   import UIKit
 
-  open class SceneDelegate: BasicScene {
-    override open func makeScene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+  open class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    public var window: UIWindow?
+
+    open func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+      makeScene(scene, willConnectTo: session, options: connectionOptions)
+    }
+
+    open func makeScene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
       let app = Engine.shared
       let content = app.applyEnvironment(to: ContentView())
 

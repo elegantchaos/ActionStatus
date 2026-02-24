@@ -3,14 +3,14 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Core
 import Hardware
 import SwiftUI
-import SwiftUIExtensions
 
 public struct EditView: View {
   let repo: Repo?
 
-  @Environment(\.presentationMode) var presentation
+  @Environment(\.dismiss) private var dismissAction
   @EnvironmentObject var model: Model
   @EnvironmentObject var context: ViewContext
 
@@ -24,50 +24,72 @@ public struct EditView: View {
 
   public var body: some View {
     let localPath = repo?.url(forDevice: Device.main.identifier)?.path ?? ""
-    let detailStyle = NameOrgStyle()
 
     return
       SheetView(title, shortTitle: shortTitle, cancelAction: dismiss, doneAction: done) {
         Form {
-          FormSection(
-            header: "Details",
-            footer: "Enter the name and owner of the repository, and the name of the workflow file to test. Enter a list of specific branches to test, or leave blank to just test the default branch."
-          ) {
-            FormFieldRow(label: "name", placeholder: "github repo name", variable: $name, style: detailStyle, clearButton: true)
-            FormFieldRow(label: "owner", placeholder: "github user or organisation", variable: $owner, style: detailStyle, clearButton: true)
-            FormFieldRow(label: "workflow", placeholder: "Tests.yml", variable: $workflow, style: detailStyle, clearButton: true)
-            FormFieldRow(label: "branches", placeholder: "branch1, branch2, …", variable: $branches, style: BranchListStyle(), clearButton: true)
+          Section {
+            LabeledContent("name") {
+              TextField("github repo name", text: $name)
+                .modifier(NameOrgStyle())
+                .modifier(ClearButton(text: $name))
+            }
+            LabeledContent("owner") {
+              TextField("github user or organisation", text: $owner)
+                .modifier(NameOrgStyle())
+                .modifier(ClearButton(text: $owner))
+            }
+            LabeledContent("workflow") {
+              TextField("Tests.yml", text: $workflow)
+                .modifier(NameOrgStyle())
+                .modifier(ClearButton(text: $workflow))
+            }
+            LabeledContent("branches") {
+              TextField("branch1, branch2, …", text: $branches)
+                .modifier(BranchListStyle())
+                .modifier(ClearButton(text: $branches))
+            }
+          } header: {
+            Text("Details")
+          } footer: {
+            Text("Enter the name and owner of the repository, and the name of the workflow file to test. Enter a list of specific branches to test, or leave blank to just test the default branch.")
           }
 
-          FormSection(
-            header: "Locations",
-            footer: "Corresponding locations on Github."
-          ) {
-            FormRow(label: "repo") {
+          Section {
+            LabeledContent("repo") {
               HStack(alignment: .firstTextBaseline) {
                 Text("https://github.com/\(trimmedOwner)/\(trimmedName)")
+                  .lineLimit(1)
+                  .truncationMode(.middle)
                 Spacer()
                 LinkButton(url: updatedRepo.githubURL(for: .repo))
               }
             }
 
-            FormRow(label: "status") {
+            LabeledContent("status") {
               HStack(alignment: .firstTextBaseline) {
                 Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions?query=workflow%3A\(trimmedWorkflow)")
+                  .lineLimit(1)
+                  .truncationMode(.middle)
                 Spacer()
                 LinkButton(url: updatedRepo.githubURL(for: .workflow))
               }
             }
 
             if !localPath.isEmpty {
-              FormRow(label: "local") {
+              LabeledContent("local") {
                 Text(localPath)
+                  .lineLimit(1)
+                  .truncationMode(.middle)
               }
             }
+          } header: {
+            Text("Locations")
+          } footer: {
+            Text("Corresponding locations on Github.")
           }
         }
       }
-      .environmentObject(context.formStyle)
       .onAppear {
         context.host.pauseRefresh()
         self.load()
@@ -99,7 +121,7 @@ public struct EditView: View {
 
   func dismiss() {
     context.host.resumeRefresh()
-    presentation.wrappedValue.dismiss()
+    dismissAction()
   }
 
   func done() {
@@ -121,12 +143,14 @@ public struct EditView: View {
   }
 
   var updatedRepo: Repo {
-    var updated = self.repo ?? Repo(model: model)
+    var updated =
+      self.repo
+      ?? Repo()
     updated.name = trimmedName
     updated.owner = trimmedOwner
     updated.workflow = trimmedWorkflow
     updated.branches = trimmedBranches
-    updated.state = .unknown
+    updated.state = Repo.State.unknown
     return updated
   }
 }
@@ -147,10 +171,13 @@ struct NameOrgStyle: ViewModifier {
     #else
       content
         .keyboardType(.namePhonePad)
-        .textContentType(.name)
-        .disableAutocorrection(true)
-        .autocapitalization(.none)
-        .modifier(DefaultFormFieldStyle())
+        .textInputAutocapitalization(.never)
+        .autocorrectionDisabled(true)
+        #if os(tvOS)
+          .textFieldStyle(.automatic)
+        #else
+          .textFieldStyle(.roundedBorder)
+        #endif
     #endif
   }
 }
@@ -163,9 +190,13 @@ struct BranchListStyle: ViewModifier {
     #else
       content
         .keyboardType(.alphabet)
-        .disableAutocorrection(true)
-        .autocapitalization(.none)
-        .modifier(DefaultFormFieldStyle())
+        .textInputAutocapitalization(.never)
+        .autocorrectionDisabled(true)
+        #if os(tvOS)
+          .textFieldStyle(.automatic)
+        #else
+          .textFieldStyle(.roundedBorder)
+        #endif
     #endif
   }
 }

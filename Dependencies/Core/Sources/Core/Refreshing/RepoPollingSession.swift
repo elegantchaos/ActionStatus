@@ -3,13 +3,13 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import CollectionExtensions
+import Core
 import Foundation
 import JSONSession
 import Logger
 import Octoid
 
-public class RepoPollingSession: Octoid.Session {
+public class RepoPollingSession: JSONSession.Session {
   let repo: Repo
   let workflowProcessor = WorkflowGroupProcessor()
   let eventsProcessor = EventsGroupProcessor()
@@ -20,11 +20,12 @@ public class RepoPollingSession: Octoid.Session {
   var tagKey: String { return "\(fullName)-tag" }
   var lastEventKey: String { return "\(fullName)-lastEvent" }
 
-  public init(controller: OctoidRefreshController, repo: Repo, token: String) {
+  public init(controller: OctoidRefreshController, repo: Repo, token: String, apiServer: String) {
     self.refreshController = controller
     self.repo = repo
     self.lastEvent = Date(timeIntervalSinceReferenceDate: 0)
-    super.init(token: token)
+    let base = (try? GithubDeviceAuthenticator.normalizedAPIBaseURL(for: apiServer)) ?? URL(string: "https://api.github.com")!
+    super.init(base: base, token: token)
     load()
   }
 
@@ -55,7 +56,13 @@ public class RepoPollingSession: Octoid.Session {
 
 extension RepoPollingSession: MessageReceiver {
   public func received(_ message: Message, response: HTTPURLResponse, for request: Request) -> RepeatStatus {
-    // we got an error back from a request
+    if (request.resource is EventsResource) && (message.message == "Not Found") {
+      // Some repositories don't expose events to this token; keep polling workflow status.
+      refreshChannel.log("Events endpoint unavailable for \(fullName); cancelling events polling.")
+      return .cancel
+    }
+
+    // We got an API error back from a request.
     refreshController.update(repo: repo, message: message)
     if (request.resource is WorkflowResource) && (message.message == "Not Found") {
       // there's no workflow, so don't keep polling for it

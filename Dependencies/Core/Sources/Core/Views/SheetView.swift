@@ -4,7 +4,6 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import SwiftUI
-import SwiftUIExtensions
 
 public struct SheetView<Content>: View where Content: View {
   typealias Action = () -> Void
@@ -28,33 +27,31 @@ public struct SheetView<Content>: View where Content: View {
   let content: () -> Content
 
   public var body: some View {
-    NavigationView {
-      AlignedLabelContainer {
-        content()
-      }
-      #if os(iOS)
-        .navigationBarTitleDisplayMode(.inline)
-      #endif
-      .toolbar {
-        ToolbarItem(placement: .principal) {
-          Text(displayTitle)
-            .accessibility(identifier: "formHeader")
-        }
+    NavigationStack {
+      content()
+        #if os(iOS)
+          .navigationBarTitleDisplayMode(.inline)
+        #endif
+        .toolbar {
+          ToolbarItem(placement: .principal) {
+            Text(displayTitle)
+              .accessibility(identifier: "formHeader")
+          }
 
-        ToolbarItem(placement: cancelPlacement) {
-          if let action = cancelAction {
-            CancelButton(label: cancelLabel, action: action)
+          ToolbarItem(placement: cancelPlacement) {
+            if let action = cancelAction {
+              CancelButton(label: cancelLabel, action: action)
+            }
+          }
+
+          ToolbarItem(placement: confirmationPlacement) {
+            Button(action: doneAction) { Text(doneLabel) }
+              .accessibility(identifier: "done")
+              #if !os(tvOS)
+                .keyboardShortcut(.defaultAction)
+              #endif
           }
         }
-
-        ToolbarItem(placement: confirmationPlacement) {
-          Button(action: doneAction) { Text(doneLabel) }
-            .accessibility(identifier: "done")
-            #if !os(tvOS)
-              .keyboardShortcut(.defaultAction)
-            #endif
-        }
-      }
     }
   }
 

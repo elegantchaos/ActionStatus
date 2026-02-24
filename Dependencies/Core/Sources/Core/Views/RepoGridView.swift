@@ -3,9 +3,7 @@
 //  All code (c) 2021 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import SheetController
 import SwiftUI
-import SwiftUIExtensions
 
 public struct RepoGridView: View {
   @EnvironmentObject var context: ViewContext

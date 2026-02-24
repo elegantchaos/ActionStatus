@@ -3,14 +3,12 @@
 //  All code (c) 2021 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Core
 import Hardware
-import SheetController
 import SwiftUI
-import SwiftUIExtensions
 
 struct RepoCellView: View {
   @EnvironmentObject var context: ViewContext
-  @EnvironmentObject var sheetController: SheetController
   @EnvironmentObject var model: Model
 
   let repo: Repo
@@ -23,45 +21,48 @@ struct RepoCellView: View {
 
   var body: some View {
     let cell = cell(for: repo)
-    return cell
-      .shim
-      .contextMenu {
-        Text("\(repo.name)")
+    return cell.contextMenu(menuItems: contextMenuContent)
+  }
 
-        Button(action: handleEdit) {
-          Label("Settings…", systemImage: context.editButtonIcon)
-            .accessibility(identifier: "editLabel")
-        }
+  @ViewBuilder
+  func contextMenuContent() -> some View {
+    Text("\(repo.name)")
 
-        Button(action: handleShowRepo) {
-          Label("Open In Github…", systemImage: context.linkIcon)
-        }
+    Button(action: handleEdit) {
+      Label("Settings…", systemImage: context.editButtonIcon)
+        .accessibility(identifier: "editLabel")
+    }
 
-        Button(action: handleShowWorkflow) {
-          Label("Open Workflow In Github…", systemImage: context.linkIcon)
-        }
+    Button(action: handleShowRepo) {
+      Label("Open In Github…", systemImage: context.linkIcon)
+    }
 
-        if let url = repo.url(forDevice: Device.main.identifier) {
-          Button(action: { handleReveal(url: url) }) {
-            Label("Reveal In Finder…", systemImage: context.linkIcon)
-          }
-        }
+    Button(action: handleShowWorkflow) {
+      Label("Open Workflow In Github…", systemImage: context.linkIcon)
+    }
 
+    if let url = repo.url(forDevice: Device.main.identifier) {
+      Button(
+        action: { handleReveal(url: url) },
+        label: {
+          Label("Reveal In Finder…", systemImage: context.linkIcon)
+        })
+    }
+
+    Divider()
+
+    Button(action: handleDelete) {
+      Label("Delete", systemImage: context.deleteRepoIcon)
+    }
+    #if DEBUG
+
+      if !ProcessInfo.processInfo.environment.isTestingUI {
         Divider()
-
-        Button(action: handleDelete) {
-          Label("Delete", systemImage: context.deleteRepoIcon)
+        Button(action: handleToggleState) {
+          Text("DEBUG: Advance State")
         }
-        #if DEBUG
-
-          if !ProcessInfo.processInfo.environment.isTestingUI {
-            Divider()
-            Button(action: handleToggleState) {
-              Text("DEBUG: Advance State")
-            }
-          }
-        #endif
       }
+    #endif
   }
 
   func cell(for repo: Repo) -> some View {
@@ -118,9 +119,7 @@ struct RepoCellView: View {
   }
 
   func handleEdit() {
-    sheetController.show {
-      EditView(repo: repo)
-    }
+    context.presentedSheet = .editRepo(repo)
   }
 
   func handleDelete() {

@@ -113,6 +113,11 @@ public struct GithubDeviceAuthenticator {
     throw GithubDeviceAuthError.expiredToken
   }
 
+  public func validateToken(_ token: String) async throws -> String {
+    guard !token.isEmpty else { throw GithubDeviceAuthError.failed("Missing token") }
+    return try await fetchUserLogin(token: token)
+  }
+
   private func fetchUserLogin(token: String) async throws -> String {
     let endpoint = try Self.normalizedAPIBaseURL(for: apiServer).appending(path: "user")
     var request = URLRequest(url: endpoint)

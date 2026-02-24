@@ -4,7 +4,6 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Foundation
-import SwiftUIExtensions
 
 public enum RefreshRate: Int, CaseIterable, Equatable {
   case automatic = 0
@@ -13,11 +12,11 @@ public enum RefreshRate: Int, CaseIterable, Equatable {
   case fiveMinute = 300
   case tenMinute = 600
 
-  var normalised: RefreshRate {
+  public var normalised: RefreshRate {
     self == .automatic ? RefreshRate.minute : self
   }
 
-  var rate: TimeInterval {
+  public var rate: TimeInterval {
     return TimeInterval(self.normalised.rawValue)
   }
 }

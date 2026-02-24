@@ -3,16 +3,19 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Core
 import Foundation
 import Octoid
 
 public class OctoidRefreshController: RefreshController {
   internal var sessions: [RepoPollingSession]
   internal let token: String
+  internal let apiServer: String
 
-  public init(model: Model, token: String) {
+  public init(model: Model, token: String, apiServer: String) {
     self.sessions = []
     self.token = token
+    self.apiServer = apiServer
     super.init(model: model)
   }
 
@@ -22,7 +25,7 @@ public class OctoidRefreshController: RefreshController {
     var deadline = DispatchTime.now()
     for repo in model.items.values {
       if filter == nil || filter == repo.name {
-        let session = RepoPollingSession(controller: self, repo: repo, token: token)
+        let session = RepoPollingSession(controller: self, repo: repo, token: token, apiServer: apiServer)
         session.scheduleEvents(for: deadline)
         session.scheduleWorkflow(for: deadline)
         sessions.append(session)

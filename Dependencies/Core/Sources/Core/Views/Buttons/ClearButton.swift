@@ -4,7 +4,6 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import SwiftUI
-import SwiftUIExtensions
 
 struct ClearButton: ViewModifier {
   @Binding var text: String
@@ -18,7 +17,7 @@ struct ClearButton: ViewModifier {
           self.text = ""
         }) {
           Image(systemName: "multiply.circle.fill")
-            .foregroundColor(.opaqueSeparator)
+            .foregroundColor(.secondary)
         }
         .padding(.trailing, 8)
       }

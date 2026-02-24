@@ -1,6 +1,6 @@
 import XCTest
 
-@testable import Core
+@testable import CoreUI
 
 final class CoreTests: XCTestCase {
   func testExample() {

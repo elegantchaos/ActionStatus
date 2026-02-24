@@ -3,14 +3,13 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import ApplicationExtensions
+import Bundles
 import Combine
+import Core
 import Hardware
 import Keychain
 import Logger
-import SheetController
 import SwiftUI
-import SwiftUIExtensions
 
 #if canImport(AppKit)
   import AppKit
@@ -22,8 +21,23 @@ public let settingsChannel = Channel("Settings")
 public let monitoringChannel = Channel("Monitoring")
 public let refreshControllerChannel = Channel("RefreshController")
 
-open class Engine: BasicApplication, ApplicationHost {
+open class Engine: NSObject, ApplicationHost {
+  enum SetupState {
+    case launching
+    case ready
+  }
+
+  public typealias SetupCompletion = (LaunchOptions) -> Void
+
+  #if canImport(UIKit)
+    public typealias LaunchOptions = [UIApplication.LaunchOptionsKey: Any]
+  #elseif canImport(AppKit)
+    public typealias LaunchOptions = [String: Any]
+  #endif
+
   static var sharedEngine: Engine?
+  var setupState: SetupState = .launching
+  public let info = BundleInfo()
 
   override init() {
     super.init()
@@ -34,7 +48,7 @@ open class Engine: BasicApplication, ApplicationHost {
     fatalError()
   }
 
-  override open class var shared: Engine {
+  open class var shared: Engine {
     return Engine.sharedEngine!
   }
 
@@ -60,8 +74,6 @@ open class Engine: BasicApplication, ApplicationHost {
   var settings: Settings {
     context.settings
   }
-
-  public let sheetController = SheetController()
 
   func makeViewState() -> ViewContext {
     return ViewContext(host: self)
@@ -95,7 +107,7 @@ open class Engine: BasicApplication, ApplicationHost {
         return nil
       }
 
-      let controller = OctoidRefreshController(model: model, token: token)
+      let controller = OctoidRefreshController(model: model, token: token, apiServer: settings.githubServer)
       refreshChannel.log("Using github refresh controller for \(settings.githubUser)/\(settings.githubServer)")
       return controller
     } catch {
@@ -111,54 +123,49 @@ open class Engine: BasicApplication, ApplicationHost {
   }
 
   public func editNewRepo() {
-    sheetController.show {
-      EditView(repo: nil)
-    }
+    context.presentedSheet = .editRepo(nil)
   }
 
 
-  open override func setUp(withOptions options: BasicApplication.LaunchOptions, completion: @escaping BasicApplication.SetupCompletion) {
-    super.setUp(withOptions: options) { [self] options in
-      DispatchQueue.main.async { [self] in
-        sheetController.environmentSetter = { view in AnyView(self.applyEnvironment(to: view)) }
+  open func setUp(withOptions options: LaunchOptions, completion: @escaping SetupCompletion) {
+    DispatchQueue.main.async { [self] in
+      registerDefaultsFromSettingsBundle()
+      setupDefaultSettings()
+      loadSettings()
+      restoreState()
 
-        setupDefaultSettings()
-        loadSettings()
-        restoreState()
+      observers.append(
+        UserDefaults.standard.onChanged {
+          assert(Thread.isMainThread)
+          monitoringChannel.log("user defaults changed")
+          self.loadSettings()
+          self.updateRepoState()
+        })
 
-        observers.append(
-          UserDefaults.standard.onChanged {
+      observers.append(
+        model
+          .objectWillChange
+          .debounce(for: 0.1, scheduler: RunLoop.main)
+          .sink {
             assert(Thread.isMainThread)
-            monitoringChannel.log("user defaults changed")
-            self.loadSettings()
+            monitoringChannel.log("model changed")
+            self.saveState()
             self.updateRepoState()
           })
 
-        observers.append(
-          model
-            .objectWillChange
-            .debounce(for: 0.1, scheduler: RunLoop.main)
-            .sink {
-              assert(Thread.isMainThread)
-              monitoringChannel.log("model changed")
-              self.saveState()
-              self.updateRepoState()
-            })
+      observers.append(
+        context
+          .objectWillChange
+          .debounce(for: 0.1, scheduler: RunLoop.main)
+          .sink { value in
+            assert(Thread.isMainThread)
+            monitoringChannel.log("view state changed")
+            self.saveSettings()
+            self.updateRepoState()
+          })
 
-        observers.append(
-          context
-            .objectWillChange
-            .debounce(for: 0.1, scheduler: RunLoop.main)
-            .sink { value in
-              assert(Thread.isMainThread)
-              monitoringChannel.log("view state changed")
-              self.saveSettings()
-              self.updateRepoState()
-            })
-
-        updateRepoState()
-        completion(options)
-      }
+      updateRepoState()
+      completion(options)
     }
   }
 
@@ -168,7 +175,7 @@ open class Engine: BasicApplication, ApplicationHost {
     }
   }
 
-  open override func tearDown() {
+  open func tearDown() {
     observers = []
   }
 
@@ -203,7 +210,6 @@ open class Engine: BasicApplication, ApplicationHost {
       .environmentObject(context)
       .environmentObject(model)
       .environmentObject(updater)
-      .environmentObject(sheetController)
       .environmentObject(status)
   }
 
@@ -235,6 +241,10 @@ open class Engine: BasicApplication, ApplicationHost {
     refreshController = nil
   }
 
+  open func refreshState(completion: @escaping () -> Void = {}) {
+    completion()
+  }
+
   public func open(url: URL) {
     #if canImport(UIKit)
       UIApplication.shared.open(url)
@@ -258,7 +268,60 @@ open class Engine: BasicApplication, ApplicationHost {
       filePicker = picker
     }
   #endif
+
+  func setUpIfNeeded(withOptions options: LaunchOptions) {
+    guard setupState == .launching else { return }
+    setupState = .ready
+    setUp(withOptions: options) { _ in
+    }
+  }
+
+  /// Loads defaults from `Settings.bundle/Root.plist` when available.
+  /// This mirrors the previous behavior from `BasicApplication`.
+  func registerDefaultsFromSettingsBundle() {
+    guard let bundleURL = Bundle.main.url(forResource: "Settings", withExtension: "bundle") else { return }
+    let settingsURL = bundleURL.appendingPathComponent("Root.plist")
+    guard let settingsPlist = NSDictionary(contentsOf: settingsURL) else { return }
+    guard let preferences = settingsPlist["PreferenceSpecifiers"] as? [NSDictionary] else { return }
+
+    var defaultsToRegister: [String: Any] = [:]
+    for item in preferences {
+      guard let key = item["Key"] as? String else { continue }
+      defaultsToRegister[key] = item["DefaultValue"]
+    }
+    UserDefaults.standard.register(defaults: defaultsToRegister)
+  }
 }
+
+#if canImport(UIKit)
+  extension Engine: UIApplicationDelegate {
+    open func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: LaunchOptions? = nil) -> Bool {
+      setUpIfNeeded(withOptions: launchOptions ?? [:])
+      return true
+    }
+
+    open func applicationWillTerminate(_ application: UIApplication) {
+      tearDown()
+    }
+
+    open func applicationWillEnterForeground(_ application: UIApplication) {
+      refreshState {
+      }
+    }
+
+  }
+#elseif canImport(AppKit)
+  extension Engine: NSApplicationDelegate {
+    open func applicationDidFinishLaunching(_ notification: Notification) {
+      let options = (notification.userInfo as? LaunchOptions) ?? [:]
+      setUpIfNeeded(withOptions: options)
+    }
+
+    open func applicationWillTerminate(_ notification: Notification) {
+      tearDown()
+    }
+  }
+#endif
 
 public extension UserDefaults {
   func onChanged(delay: TimeInterval = 1.0, _ action: @escaping () -> Void) -> AnyCancellable {

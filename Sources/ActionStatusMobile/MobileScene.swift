@@ -4,7 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 #if os(iOS)
-  import Core
+  import CoreUI
 
   class MobileScene: SceneDelegate {
   }

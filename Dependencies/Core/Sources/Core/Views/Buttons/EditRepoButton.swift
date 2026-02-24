@@ -3,13 +3,11 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import SheetController
+import Core
 import SwiftUI
-import SwiftUIExtensions
 
 struct EditRepoButton: View {
   @EnvironmentObject var context: ViewContext
-  @EnvironmentObject var sheetController: SheetController
 
   let repo: Repo
 
@@ -22,9 +20,7 @@ struct EditRepoButton: View {
   }
 
   func handleTapped() {
-    sheetController.show {
-      EditView(repo: self.repo)
-    }
+    context.presentedSheet = .editRepo(repo)
   }
 }
 

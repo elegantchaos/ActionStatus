@@ -4,7 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 #if os(iOS)
-  import Core
+  import CoreUI
   import SwiftUI
   import UIKit
 
@@ -22,9 +22,7 @@
     }
 
     @IBAction func showPreferences() {
-      sheetController.show {
-        PreferencesView()
-      }
+      context.presentedSheet = .preferences
     }
 
     @IBAction func addLocalRepos() {

@@ -4,13 +4,10 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Hardware
-import SheetController
 import SwiftUI
-import SwiftUIExtensions
 
 struct PreferencesButton: View {
   @EnvironmentObject var context: ViewContext
-  @EnvironmentObject var sheetController: SheetController
 
   var body: some View {
     Button(action: showPreferences) {
@@ -23,9 +20,7 @@ struct PreferencesButton: View {
   }
 
   func showPreferences() {
-    sheetController.show {
-      PreferencesView()
-    }
+    context.presentedSheet = .preferences
   }
 }
 

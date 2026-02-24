@@ -3,6 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Core
 import SwiftUI
 
 struct PreviewContext {
@@ -17,7 +18,7 @@ struct PreviewContext {
   }
 
   var testRepo: Repo {
-    model.repos.first!
+    model.repos(sortedBy: .name).first!
   }
 
   func inject<Content>(into view: Content) -> some View where Content: View {

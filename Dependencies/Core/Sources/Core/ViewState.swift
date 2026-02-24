@@ -4,46 +4,45 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Bundles
+import Core
 import SwiftUI
-import SwiftUIExtensions
 
 struct PreviewHost: ApplicationHost {
   let info = BundleInfo(for: Bundle.main)
   var refreshController: RefreshController? { return nil }
 }
 
+public enum PresentedSheet: Identifiable {
+  case editRepo(Repo?)
+  case preferences
+
+  public var id: String {
+    switch self {
+      case .editRepo(let repo):
+        if let repo {
+          return "edit-\(repo.id.uuidString)"
+        }
+        return "edit-new"
+      case .preferences:
+        return "preferences"
+    }
+  }
+}
 
 public class ViewContext: ObservableObject {
   @Published public var settings = Settings()
+  @Published public var presentedSheet: PresentedSheet?
 
   public let host: ApplicationHost
   public let padding: CGFloat = 10
-  public let spacing = CGFloat(tvOS: 640, other: 256)
 
   let linkIcon = "arrow.right.circle.fill"
-  let startEditingIcon = "lock.fill"
-  let stopEditingIcon = "lock.open.fill"
   let preferencesIcon = "gearshape"
   let editButtonIcon = "ellipsis.circle"
   let deleteRepoIcon = "minus.circle"
-  let addRepoIcon = "plus.circle"
-
-  let formStyle = FormStyle(
-    headerFont: .headline,
-    footerFont: Font.body.italic(),
-    labelOpacity: 0.5,
-    contentFont: Font.body
-  )
 
   public init(host: ApplicationHost) {
     self.host = host
-  }
-
-  @discardableResult func addRepo(to model: Model) -> Repo {
-    let newRepo = model.addRepo(context: self)
-    host.saveState()
-    settings.selectedID = newRepo.id
-    return newRepo
   }
 
   var repoGridColumns: [GridItem] {

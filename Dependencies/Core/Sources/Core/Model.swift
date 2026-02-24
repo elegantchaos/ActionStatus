@@ -3,6 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Core
 import DictionaryCoding
 import Hardware
 import Logger
@@ -10,22 +11,12 @@ import SwiftUI
 
 public let modelChannel = Channel("com.elegantchaos.actionstatus.Model")
 
-public enum ActionStatusError: Error {
-  case couldntAccessSecurityScope
-}
-
 public class Model: ObservableObject {
   public typealias RepoList = [Repo]
 
   internal let store: NSUbiquitousKeyValueStore
   internal let key: String = "State"
   internal var items: [UUID: Repo]
-
-  @Published public var defaultOwner = ""
-  @Published public var defaultName = ""
-  @Published public var defaultWorkflow = "Tests"
-  @Published public var defaultBranches: [String] = []
-  @Published public var testOldestNewest = true
 
   public var count: Int {
     items.count
@@ -37,11 +28,9 @@ public class Model: ObservableObject {
     store.synchronize()
 
     var index: [UUID: Repo] = [:]
-    var identifiers: [UUID] = []
     for repo in repos {
       let id = repo.id
       index[id] = repo
-      identifiers.append(id)
     }
 
     self.items = index
@@ -70,12 +59,6 @@ public class Model: ObservableObject {
       items = loadedRepos
     }
 
-    DispatchQueue.main.async { [self] in
-      if let key = store.string(forKey: .defaultOwnerKey) ?? UserDefaults.standard.string(forKey: .defaultOwnerKey) {
-        defaultOwner = key
-      }
-      testOldestNewest = store.bool(forKey: .testOldestNewestKey)
-    }
   }
 
   public func save(toDefaultsKey key: String) {
@@ -99,8 +82,6 @@ public class Model: ObservableObject {
     }
 
     store.set(repoIDs, forKey: key)
-    store.set(defaultOwner, forKey: .defaultOwnerKey)
-    store.set(testOldestNewest, forKey: .testOldestNewestKey)
   }
 
   public func repo(withIdentifier id: UUID) -> Repo? {
@@ -126,14 +107,14 @@ public class Model: ObservableObject {
     }
   }
 
-  public func update(repo: Repo, addIfMissing: Bool = true) {
+  public func update(repo: Repo) {
     assert(Thread.isMainThread)
     let item = items[repo.id]
     let update: Bool
-    if let existing = item, !repo.identical(to: existing) {
+    if let existing = item, repo != existing {
       update = true
     } else {
-      update = (item == nil) && addIfMissing
+      update = item == nil
     }
 
     if update {
@@ -150,8 +131,8 @@ public class Model: ObservableObject {
     }
   }
 
-  @discardableResult public func addRepo(context: ViewContext) -> Repo {
-    let repo = Repo(model: self)
+  @discardableResult public func addRepo() -> Repo {
+    let repo = Repo()
     items[repo.id] = repo
 
     return repo

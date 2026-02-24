@@ -3,16 +3,13 @@
 //  All code (c) 2021 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import Foundation
-import SwiftUIExtensions
-
 public enum SortMode: String, CaseIterable {
   case name
   case state
 
-  func sort<T>(_ repos: T) -> [Repo] where T: Collection, T.Element == Repo {
+  public func sort<T>(_ repos: T) -> [Repo] where T: Collection, T.Element == Repo {
     switch self {
-      case .name: return repos.sorted(by: \.name)
+      case .name: return repos.sorted { $0.name < $1.name }
       case .state:
         return repos.sorted { r1, r2 in
           if r1.state == r2.state {

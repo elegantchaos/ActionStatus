@@ -3,9 +3,6 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import SwiftUI
-import SwiftUIExtensions
-
 public enum DisplaySize: Int, CaseIterable {
   case automatic = 0
   case small = 1
@@ -13,19 +10,7 @@ public enum DisplaySize: Int, CaseIterable {
   case large = 3
   case huge = 4
 
-  var font: Font {
-    switch normalised {
-      case .small: return .body
-      case .medium: return .title3
-      case .large: return .title2
-      case .huge: return .largeTitle
-      case .automatic: return .title2
-    }
-  }
-
-  var rowHeight: CGFloat { return 0 }
-
-  var normalised: DisplaySize {
+  public var normalised: DisplaySize {
     return self == .automatic ? .large : self
   }
 }

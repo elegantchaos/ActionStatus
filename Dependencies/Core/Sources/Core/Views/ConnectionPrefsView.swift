@@ -14,6 +14,8 @@ struct ConnectionPrefsView: View {
   @Binding var token: String
   @State private var authState: GithubAuthUIState
   @State private var authTask: Task<Void, Never>? = nil
+  @State private var healthTask: Task<Void, Never>? = nil
+  @State private var authHealth: GithubAuthHealth = .unknown
   @State private var showCustomServerSettings = false
 
   private let initialAuthState: GithubAuthUIState?
@@ -28,7 +30,7 @@ struct ConnectionPrefsView: View {
   var body: some View {
     Section {
       VStack(alignment: .leading, spacing: 12) {
-        AuthStatusBanner(state: authState, currentUser: settings.githubUser, hasToken: !token.isEmpty)
+        AuthStatusBanner(state: authState, health: authHealth, currentUser: settings.githubUser, hasToken: !token.isEmpty)
 
         HStack {
           if !isSignedIn {
@@ -70,13 +72,30 @@ struct ConnectionPrefsView: View {
       if let initialAuthState {
         authState = initialAuthState
       }
+      refreshAuthHealth()
     }
     .onChange(of: showCustomServerSettings) { _, useCustomServer in
       if !useCustomServer {
         settings.githubServer = defaultGithubServer
       }
+      refreshAuthHealth()
     }
-    .onDisappear(perform: cancelSignIn)
+    .onChange(of: authState) { _, _ in
+      refreshAuthHealth()
+    }
+    .onChange(of: token) { _, _ in
+      refreshAuthHealth()
+    }
+    .onChange(of: settings.githubUser) { _, _ in
+      refreshAuthHealth()
+    }
+    .onChange(of: settings.githubServer) { _, _ in
+      refreshAuthHealth()
+    }
+    .onDisappear {
+      cancelSignIn()
+      cancelHealthCheck()
+    }
   }
 
   private var isSignedIn: Bool {
@@ -120,11 +139,7 @@ struct ConnectionPrefsView: View {
     authTask = Task {
       do {
         let authorization = try await authenticator.startAuthorization(scopes: [
-          "notifications",
-          "read:org",
-          "read:user",
-          "repo",
-          "workflow",
+          "repo"
         ])
 
         await MainActor.run {
@@ -136,6 +151,7 @@ struct ConnectionPrefsView: View {
         await MainActor.run {
           settings.githubUser = authenticatedUser.login
           token = authenticatedUser.token
+          authHealth = .healthy(authenticatedUser.login)
           authState = .signedIn(authenticatedUser.login)
           authTask = nil
         }
@@ -162,14 +178,68 @@ struct ConnectionPrefsView: View {
 
   func signOut() {
     cancelSignIn()
+    cancelHealthCheck()
     token = ""
     settings.githubUser = ""
+    authHealth = .unknown
     authState = .idle
+  }
+
+  func cancelHealthCheck() {
+    healthTask?.cancel()
+    healthTask = nil
+  }
+
+  func refreshAuthHealth() {
+    cancelHealthCheck()
+    guard isSignedIn else {
+      authHealth = .unknown
+      return
+    }
+
+    switch authState {
+      case .authenticating, .awaitingApproval:
+        return
+      case .idle, .signedIn, .error:
+        break
+    }
+
+    let serverInput = settings.githubServer.trimmingCharacters(in: .whitespacesAndNewlines)
+    let server = serverInput.isEmpty ? defaultGithubServer : serverInput
+    let currentToken = token
+    let currentUser = settings.githubUser
+
+    authHealth = .checking
+    let authenticator = GithubDeviceAuthenticator(apiServer: server, clientID: "")
+    healthTask = Task {
+      do {
+        let login = try await authenticator.validateToken(currentToken)
+        await MainActor.run {
+          if token == currentToken, settings.githubUser == currentUser {
+            authHealth = .healthy(login)
+          }
+          healthTask = nil
+        }
+      } catch is CancellationError {
+        await MainActor.run {
+          healthTask = nil
+        }
+      } catch {
+        githubAuthChannel.log("Stored token check failed: \(error)")
+        await MainActor.run {
+          if token == currentToken, settings.githubUser == currentUser {
+            authHealth = .unhealthy(error.githubAuthMessage)
+          }
+          healthTask = nil
+        }
+      }
+    }
   }
 }
 
 private struct AuthStatusBanner: View {
   let state: GithubAuthUIState
+  let health: GithubAuthHealth
   let currentUser: String
   let hasToken: Bool
 
@@ -201,7 +271,17 @@ private struct AuthStatusBanner: View {
   private var statusTitle: String {
     switch state {
       case .idle:
-        return isSignedIn ? "Signed In" : "Not Signed In"
+        if isSignedIn {
+          switch health {
+            case .unknown, .checking:
+              return "Signed In"
+            case .healthy:
+              return "Signed In"
+            case .unhealthy:
+              return "Signed In (Needs Attention)"
+          }
+        }
+        return "Not Signed In"
       case .authenticating:
         return "Authorizing with GitHub"
       case .awaitingApproval:
@@ -216,11 +296,24 @@ private struct AuthStatusBanner: View {
   private var statusDetail: Text? {
     switch state {
       case .idle:
-        return Text(isSignedIn ? currentUser : "Sign in to enable private repositories and notifications.")
+        guard isSignedIn else {
+          return Text("Sign in to enable private repositories and notifications.")
+        }
+
+        switch health {
+          case .unknown:
+            return Text(currentUser)
+          case .checking:
+            return Text("Checking API access for stored credentials.")
+          case .healthy(let login):
+            return Text("Token is valid for \(login).")
+          case .unhealthy(let message):
+            return Text("Stored credentials are not currently usable: \(message)")
+        }
       case .authenticating:
         return Text("Waiting for GitHub authorization to start.")
       case .awaitingApproval(let code, let url):
-        return Text("Enter code ") + Text(code).font(.subheadline.monospaced().bold()) + Text(" [to complete sign-in](\(url)).")
+        return Text("Enter code \(code) [to complete sign-in](\(url)).")
       case .signedIn:
         return Text("Authentication is complete.")
       case .error(let message):
@@ -231,7 +324,13 @@ private struct AuthStatusBanner: View {
   private var statusSymbol: String {
     switch state {
       case .idle:
-        return isSignedIn ? "checkmark.circle.fill" : "person.crop.circle.badge.exclamationmark"
+        guard isSignedIn else { return "person.crop.circle.badge.exclamationmark" }
+        switch health {
+          case .unknown, .checking, .healthy:
+            return "checkmark.circle.fill"
+          case .unhealthy:
+            return "exclamationmark.triangle.fill"
+        }
       case .authenticating:
         return "hourglass.circle.fill"
       case .awaitingApproval:
@@ -246,7 +345,15 @@ private struct AuthStatusBanner: View {
   private var statusColor: Color {
     switch state {
       case .idle:
-        return isSignedIn ? .green : .secondary
+        guard isSignedIn else { return .secondary }
+        switch health {
+          case .unknown, .healthy:
+            return .green
+          case .checking:
+            return .orange
+          case .unhealthy:
+            return .red
+        }
       case .authenticating, .awaitingApproval:
         return .orange
       case .signedIn:
@@ -261,7 +368,14 @@ private struct AuthStatusBanner: View {
   }
 }
 
-enum GithubAuthUIState {
+enum GithubAuthHealth: Equatable {
+  case unknown
+  case checking
+  case healthy(String)
+  case unhealthy(String)
+}
+
+enum GithubAuthUIState: Equatable {
   case idle
   case authenticating
   case awaitingApproval(String, URL)

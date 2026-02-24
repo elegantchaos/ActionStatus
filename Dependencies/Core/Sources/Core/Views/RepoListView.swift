@@ -3,9 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import SheetController
 import SwiftUI
-import SwiftUIExtensions
 
 public struct RepoListView: View {
   @EnvironmentObject var model: Model
@@ -19,7 +17,7 @@ public struct RepoListView: View {
   #endif
 
   public var body: some View {
-    List {
+    let list = List {
       ForEach(status.sortedRepos) { repo in
         #if os(tvOS)
           RepoCellView(repo: repo, selectable: true, namespace: namespace, focus: focus)
@@ -30,7 +28,12 @@ public struct RepoListView: View {
       .onDelete(perform: delete)
     }
     .environment(\.defaultMinListRowHeight, context.settings.displaySize.rowHeight)
-    .bindEditing(to: $context.settings.isEditing)
+
+    #if os(macOS)
+      return list
+    #else
+      return list.environment(\.editMode, .constant(context.settings.isEditing ? .active : .inactive))
+    #endif
   }
 
   func delete(at offsets: IndexSet) {
