@@ -56,7 +56,7 @@ public class ViewContext: ObservableObject {
   }
 
   @discardableResult func addRepo(to model: Model) -> Repo {
-    let newRepo = model.addRepo(context: self)
+    let newRepo = model.addRepo()
     host.saveState()
     settings.selectedID = newRepo.id
     return newRepo
