@@ -107,14 +107,14 @@ public class Model: ObservableObject {
     }
   }
 
-  public func update(repo: Repo, addIfMissing: Bool = true) {
+  public func update(repo: Repo) {
     assert(Thread.isMainThread)
     let item = items[repo.id]
     let update: Bool
     if let existing = item, repo != existing {
       update = true
     } else {
-      update = (item == nil) && addIfMissing
+      update = item == nil
     }
 
     if update {
