@@ -60,18 +60,6 @@ public struct Repo: Identifiable, Equatable, Hashable {
     id.hash(into: &hasher)
   }
 
-  public func identical(to other: Repo) -> Bool {
-    return id == other.id
-      && name == other.name
-      && owner == other.owner
-      && workflow == other.workflow
-      && branches == other.branches
-      && state == other.state
-      && paths == other.paths
-      && lastFailed == other.lastFailed
-      && lastSucceeded == other.lastSucceeded
-  }
-
   public static var dictionaryDecoder: DictionaryDecoder {
     let decoder = DictionaryDecoder()
     let defaults: [String: Any] = [
