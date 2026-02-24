@@ -3,12 +3,12 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import Bundles
 import Core
+import Runtime
 import SwiftUI
 
 struct PreviewHost: ApplicationHost {
-  let info = BundleInfo(for: Bundle.main)
+  let info = Bundle.main.runtimeInfo
   var refreshController: RefreshController? { return nil }
 }
 

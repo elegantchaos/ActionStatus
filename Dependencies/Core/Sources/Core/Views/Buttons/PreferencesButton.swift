@@ -3,7 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import Hardware
+import Runtime
 import SwiftUI
 
 struct PreferencesButton: View {
@@ -11,7 +11,7 @@ struct PreferencesButton: View {
 
   var body: some View {
     Button(action: showPreferences) {
-      if Hardware.Platform.current.base == .tvOS {
+      if Platform.current.base == .tvOS {
         Image(systemName: context.preferencesIcon)
       } else {
         Text("Settings")

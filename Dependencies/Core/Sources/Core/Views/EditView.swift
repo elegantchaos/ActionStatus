@@ -4,7 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Core
-import Hardware
+import Runtime
 import SwiftUI
 
 public struct EditView: View {
@@ -23,7 +23,7 @@ public struct EditView: View {
   @State var branches: String = ""
 
   public var body: some View {
-    let localPath = repo?.url(forDevice: Device.main.identifier)?.path ?? ""
+    let localPath = repo?.url(forDevice: Device().identifier)?.path ?? ""
 
     return
       SheetView(title, shortTitle: shortTitle, cancelAction: dismiss, doneAction: done) {

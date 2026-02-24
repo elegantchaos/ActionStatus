@@ -4,7 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Core
-import Hardware
+import Runtime
 import SwiftUI
 
 struct RepoCellView: View {
@@ -41,7 +41,7 @@ struct RepoCellView: View {
       Label("Open Workflow In Github…", systemImage: context.linkIcon)
     }
 
-    if let url = repo.url(forDevice: Device.main.identifier) {
+    if let url = repo.url(forDevice: Device().identifier) {
       Button(
         action: { handleReveal(url: url) },
         label: {

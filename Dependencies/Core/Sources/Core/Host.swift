@@ -3,11 +3,11 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import Bundles
 import Foundation
+import Runtime
 
 public protocol ApplicationHost {
-  var info: BundleInfo { get }
+  var info: AppInfo { get }
   func saveState()
   func open(url: URL)
   func reveal(url: URL)
@@ -16,8 +16,8 @@ public protocol ApplicationHost {
 }
 
 extension ApplicationHost {
-  var info: BundleInfo {
-    BundleInfo(for: Bundle.main)
+  var info: AppInfo {
+    Bundle.main.runtimeInfo
   }
 
   func saveState() {
