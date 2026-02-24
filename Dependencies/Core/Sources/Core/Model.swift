@@ -18,8 +18,6 @@ public class Model: ObservableObject {
   internal let key: String = "State"
   internal var items: [UUID: Repo]
 
-  @Published public var defaultOwner = ""
-
   public var count: Int {
     items.count
   }
@@ -61,11 +59,6 @@ public class Model: ObservableObject {
       items = loadedRepos
     }
 
-    DispatchQueue.main.async { [self] in
-      if let key = store.string(forKey: .defaultOwnerKey) ?? UserDefaults.standard.string(forKey: .defaultOwnerKey) {
-        defaultOwner = key
-      }
-    }
   }
 
   public func save(toDefaultsKey key: String) {
@@ -89,7 +82,6 @@ public class Model: ObservableObject {
     }
 
     store.set(repoIDs, forKey: key)
-    store.set(defaultOwner, forKey: .defaultOwnerKey)
   }
 
   public func repo(withIdentifier id: UUID) -> Repo? {
@@ -140,7 +132,7 @@ public class Model: ObservableObject {
   }
 
   @discardableResult public func addRepo() -> Repo {
-    let repo = Repo(defaultOwner: defaultOwner)
+    let repo = Repo()
     items[repo.id] = repo
 
     return repo

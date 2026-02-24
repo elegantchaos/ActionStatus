@@ -11,12 +11,6 @@ private extension URL {
   var bookmarkKey: String { "bookmark:\(absoluteURL.path)" }
 }
 
-extension Comparable {
-  public static func < (lhs: Self, rhs: Self) -> Bool where Self: RawRepresentable, Self.RawValue: Comparable {
-    lhs.rawValue < rhs.rawValue
-  }
-}
-
 public struct Repo: Identifiable, Equatable, Hashable {
   public enum State: UInt, Codable, Comparable, CaseIterable {
     case unknown = 0
@@ -24,6 +18,10 @@ public struct Repo: Identifiable, Equatable, Hashable {
     case failing = 2
     case queued = 3
     case running = 4
+
+    public static func < (lhs: State, rhs: State) -> Bool {
+      lhs.rawValue < rhs.rawValue
+    }
   }
 
   public typealias LocalPathDictionary = [String: String]
@@ -38,10 +36,10 @@ public struct Repo: Identifiable, Equatable, Hashable {
   public var lastFailed: Date?
   public var lastSucceeded: Date?
 
-  public init(defaultOwner: String = "") {
+  public init() {
     id = UUID()
     name = ""
-    owner = defaultOwner
+    owner = ""
     workflow = "Tests"
     branches = []
     state = .unknown

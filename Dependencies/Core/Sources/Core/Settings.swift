@@ -8,7 +8,6 @@ import Foundation
 import Keychain
 
 public extension String {
-  static let defaultOwnerKey = "DefaultOwner"
   static let refreshIntervalKey = "RefreshInterval"
   static let displaySizeKey = "TextSize"
   static let showInMenuKey = "ShowInMenu"
