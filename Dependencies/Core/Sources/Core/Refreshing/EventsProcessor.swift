@@ -7,6 +7,17 @@ import Foundation
 import JSONSession
 import Octoid
 
+struct RepoMessageProcessor<S>: Processor where S: JSONSession.Session, S: MessageReceiver {
+  let name = "message"
+  let codes = [400, 401, 403, 404]
+  var processors: [ProcessorBase] { [self] }
+
+  func process(_ message: Message, response: HTTPURLResponse, for request: Request, in session: S) -> RepeatStatus {
+    octoidChannel.log("\(request.resource) \(message)")
+    return session.received(message, response: response, for: request)
+  }
+}
+
 struct EventsProcessor: Processor {
   typealias SessionType = RepoPollingSession
   typealias Payload = Events
@@ -44,6 +55,6 @@ struct EventsGroupProcessor: ProcessorGroup {
   var processors: [ProcessorBase] = [
     EventsProcessor(),
     UnchangedProcessor(),
-    MessageProcessor<RepoPollingSession>(),
+    RepoMessageProcessor<RepoPollingSession>(),
   ]
 }
