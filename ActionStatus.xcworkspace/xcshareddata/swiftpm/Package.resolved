@@ -1,115 +1,105 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "Coercion",
-        "repositoryURL": "https://github.com/elegantchaos/Coercion.git",
-        "state": {
-          "branch": null,
-          "revision": "0481b6c80b0d50cb3c532d8bd87101140a20bade",
-          "version": "1.1.1"
-        }
-      },
-      {
-        "package": "CollectionExtensions",
-        "repositoryURL": "https://github.com/elegantchaos/CollectionExtensions.git",
-        "state": {
-          "branch": null,
-          "revision": "52b3547475730a2b6bafc17dc1df31ad2ca53200",
-          "version": "1.1.9"
-        }
-      },
-      {
-        "package": "DataFetcher",
-        "repositoryURL": "https://github.com/elegantchaos/DataFetcher.git",
-        "state": {
-          "branch": null,
-          "revision": "88550e5207654ad19237a578188e4757c919970b",
-          "version": "1.0.2"
-        }
-      },
-      {
-        "package": "DictionaryCoding",
-        "repositoryURL": "https://github.com/elegantchaos/DictionaryCoding.git",
-        "state": {
-          "branch": null,
-          "revision": "ae19e456bd550fed8f341e5bae4318333c53a5b4",
-          "version": "1.0.9"
-        }
-      },
-      {
-        "package": "Files",
-        "repositoryURL": "https://github.com/elegantchaos/Files.git",
-        "state": {
-          "branch": null,
-          "revision": "ccb417b5b4f2d473964594a7c906a50a62c8530c",
-          "version": "1.2.2"
-        }
-      },
-      {
-        "package": "Hardware",
-        "repositoryURL": "https://github.com/elegantchaos/Hardware.git",
-        "state": {
-          "branch": null,
-          "revision": "ad16325e879052c73c8226399ea177e993059fcf",
-          "version": "1.0.1"
-        }
-      },
-      {
-        "package": "JSONSession",
-        "repositoryURL": "https://github.com/elegantchaos/JSONSession.git",
-        "state": {
-          "branch": null,
-          "revision": "636fdf1fc8050f619e5299892c1ac0b95fd6677f",
-          "version": "1.1.1"
-        }
-      },
-      {
-        "package": "Keychain",
-        "repositoryURL": "https://github.com/elegantchaos/Keychain.git",
-        "state": {
-          "branch": null,
-          "revision": "d99aec1183eeca2ece08d1b2974562a9ff8c46b1",
-          "version": "1.0.0"
-        }
-      },
-      {
-        "package": "Logger",
-        "repositoryURL": "https://github.com/elegantchaos/Logger.git",
-        "state": {
-          "branch": null,
-          "revision": "50da0037cd25c2f9444effbb2afe15bb00f70a98",
-          "version": "1.7.3"
-        }
-      },
-      {
-        "package": "Matchable",
-        "repositoryURL": "https://github.com/elegantchaos/Matchable.git",
-        "state": {
-          "branch": null,
-          "revision": "0f523c77bf4b0dbbdc0838b952262ed45fab17f8",
-          "version": "1.0.6"
-        }
-      },
-      {
-        "package": "SemanticVersion",
-        "repositoryURL": "https://github.com/elegantchaos/SemanticVersion.git",
-        "state": {
-          "branch": null,
-          "revision": "6bda5a45a2f687a82a0fbb002bee8ad31e44f478",
-          "version": "1.1.0"
-        }
-      },
-      {
-        "package": "XCTestExtensions",
-        "repositoryURL": "https://github.com/elegantchaos/XCTestExtensions.git",
-        "state": {
-          "branch": null,
-          "revision": "695ac254d74387c8ec1796e2299a7d8bdc33822d",
-          "version": "1.4.2"
-        }
+  "originHash" : "448657028475d919cad1d866a869fa54825760b893d2014fc735c4036428edc0",
+  "pins" : [
+    {
+      "identity" : "coercion",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/Coercion.git",
+      "state" : {
+        "revision" : "0481b6c80b0d50cb3c532d8bd87101140a20bade",
+        "version" : "1.1.1"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "collectionextensions",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/CollectionExtensions.git",
+      "state" : {
+        "revision" : "52b3547475730a2b6bafc17dc1df31ad2ca53200",
+        "version" : "1.1.9"
+      }
+    },
+    {
+      "identity" : "datafetcher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/DataFetcher.git",
+      "state" : {
+        "revision" : "88550e5207654ad19237a578188e4757c919970b",
+        "version" : "1.0.2"
+      }
+    },
+    {
+      "identity" : "dictionarycoding",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/DictionaryCoding.git",
+      "state" : {
+        "revision" : "ae19e456bd550fed8f341e5bae4318333c53a5b4",
+        "version" : "1.0.9"
+      }
+    },
+    {
+      "identity" : "files",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/Files.git",
+      "state" : {
+        "revision" : "ccb417b5b4f2d473964594a7c906a50a62c8530c",
+        "version" : "1.2.2"
+      }
+    },
+    {
+      "identity" : "jsonsession",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/JSONSession.git",
+      "state" : {
+        "revision" : "636fdf1fc8050f619e5299892c1ac0b95fd6677f",
+        "version" : "1.1.1"
+      }
+    },
+    {
+      "identity" : "keychain",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/Keychain.git",
+      "state" : {
+        "revision" : "d99aec1183eeca2ece08d1b2974562a9ff8c46b1",
+        "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "logger",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/Logger.git",
+      "state" : {
+        "revision" : "50da0037cd25c2f9444effbb2afe15bb00f70a98",
+        "version" : "1.7.3"
+      }
+    },
+    {
+      "identity" : "matchable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/Matchable.git",
+      "state" : {
+        "revision" : "0f523c77bf4b0dbbdc0838b952262ed45fab17f8",
+        "version" : "1.0.6"
+      }
+    },
+    {
+      "identity" : "octoid",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/Octoid.git",
+      "state" : {
+        "revision" : "7640765e7587b8654c4df78f2ce5e37f45380f96",
+        "version" : "1.0.6"
+      }
+    },
+    {
+      "identity" : "xctestextensions",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/XCTestExtensions.git",
+      "state" : {
+        "revision" : "695ac254d74387c8ec1796e2299a7d8bdc33822d",
+        "version" : "1.4.2"
+      }
+    }
+  ],
+  "version" : 3
 }

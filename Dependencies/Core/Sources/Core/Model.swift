@@ -5,8 +5,8 @@
 
 import Core
 import DictionaryCoding
-import Hardware
 import Logger
+import Runtime
 import SwiftUI
 
 public let modelChannel = Channel("com.elegantchaos.actionstatus.Model")

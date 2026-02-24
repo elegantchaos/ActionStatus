@@ -3,12 +3,11 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import Bundles
 import Combine
 import Core
-import Hardware
 import Keychain
 import Logger
+import Runtime
 import SwiftUI
 
 #if canImport(AppKit)
@@ -37,7 +36,7 @@ open class Engine: NSObject, ApplicationHost {
 
   static var sharedEngine: Engine?
   var setupState: SetupState = .launching
-  public let info = BundleInfo()
+  public let info = Bundle.main.runtimeInfo
 
   override init() {
     super.init()
@@ -117,7 +116,7 @@ open class Engine: NSObject, ApplicationHost {
   }
 
   class func makeModel() -> Model {
-    let isSimulator = Device.main.system.platform.isSimulator
+    let isSimulator = Device.main.platform.isSimulator
     let isUITesting = ProcessInfo.processInfo.environment.isTestingUI
     return isSimulator || isUITesting ? TestModel() : Model([])
   }
