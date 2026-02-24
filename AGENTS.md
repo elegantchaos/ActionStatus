@@ -28,7 +28,11 @@ These rules are refreshed from `~/.local/share/agents/COMMON.md` and related ins
 
 ### Principles
 
-Apply these core principles:
+Prefer red/green TDD unless impractical; otherwise follow `Extras/Documentation/Guidelines/Testing.md` validation workflow and report gaps.
+
+Always write good code; see `Extras/Documentation/Guidelines/Good Code.md` for a definition.
+
+Apply these core principles when writing code:
 - Keep It Simple
 - Build What Is Needed
 - Avoid Duplication Thoughtfully
@@ -39,6 +43,8 @@ Apply these core principles:
 - Separate Commands From Queries
 - Least Knowledge
 - Concurrency by Design
+- Design by Contract
+- Idempotency
 
 ### Scope and change strategy
 
@@ -61,15 +67,26 @@ Apply these core principles:
 - Keep interfaces explicit and intentionally small.
 - Avoid hidden coupling and surprising side effects.
 - Do not add dependencies without clear justification.
+- Never expose or commit credentials/secrets.
 - Do not perform destructive actions without explicit approval.
 - Avoid unrelated refactors during focused tasks.
 - If unexpected workspace changes appear, pause and confirm direction.
-- Use trusted-source guidance for uncertain facts and external references.
+- Use trusted-source guidance for uncertain facts and external references (`Extras/Documentation/Guidelines/Trusted Sources.md`).
+
+### Code comments
+
+- Add compact documentation comments for each type, method/function, and member/property describing purpose.
+- Comments should add intent and context, not restate the symbol name.
+- For the primary type in a source file, add a larger top-level documentation comment with design and implementation detail.
+- Prefer files to center on one key type when practical.
+- Keep inline/block comments sparse; use them for subtle logic, non-obvious constraints, or code that could be misread.
+- Favor comments that improve IDE hover/help output while staying concise.
 
 ## Detailed Guidelines
 
 Managed copies live under `Extras/Documentation/Guidelines/`:
 - Overview/index: `Extras/Documentation/Guidelines/README.md`
+- Good code: `Extras/Documentation/Guidelines/Good Code.md`
 - Principles: `Extras/Documentation/Guidelines/Principles.md`
 - Swift: `Extras/Documentation/Guidelines/Swift.md`
 - SwiftUI: `Extras/Documentation/Guidelines/SwiftUI.md`

@@ -96,29 +96,69 @@ if [ "$FORCE_CLEAN" -eq 1 ]; then
   XCODE_ACTION=(clean build)
 fi
 
-xcodebuild \
-  -workspace "$ROOT/ActionStatus.xcworkspace" \
+WORKSPACE_PATH="$ROOT/ActionStatus.xcworkspace"
+WORKSPACE_CONTENTS="$WORKSPACE_PATH/contents.xcworkspacedata"
+
+if [ ! -d "$WORKSPACE_PATH" ] || [ ! -f "$WORKSPACE_CONTENTS" ]; then
+  echo "Workspace is missing or invalid: $WORKSPACE_PATH"
+  exit 1
+fi
+
+run_xcodebuild_step() {
+  local name="$1"
+  local log="$2"
+  shift 2
+
+  xcodebuild "$@" >"$log" 2>&1
+  local status=$?
+  if [ "$status" -ne 0 ]; then
+    echo "xcodebuild failed for $name (exit $status)."
+    echo "Log: $log"
+
+    if grep -q "is not a workspace file" "$log"; then
+      if grep -Eq "CoreSimulatorService connection became invalid|Operation not permitted|Failed to start fs event stream|Connection refused" "$log"; then
+        echo "Likely environment issue: xcodebuild could not access required simulator/system services and misreported the workspace as invalid."
+        echo "Try rerunning outside a restricted sandbox."
+      else
+        echo "xcodebuild reported an invalid workspace. Checked path: $WORKSPACE_PATH"
+      fi
+    fi
+
+    echo "Last 40 lines of $log:"
+    tail -n 40 "$log" || true
+    exit "$status"
+  fi
+}
+
+run_xcodebuild_step \
+  "iOS build" \
+  "$IOS_LOG" \
+  -workspace "$WORKSPACE_PATH" \
   -scheme ActionStatus \
   -destination "generic/platform=iOS" \
   -derivedDataPath "$DERIVED_DATA_PATH" \
   CODE_SIGNING_ALLOWED=NO \
-  "${XCODE_ACTION[@]}" >"$IOS_LOG" 2>&1
+  "${XCODE_ACTION[@]}"
 
-xcodebuild \
-  -workspace "$ROOT/ActionStatus.xcworkspace" \
+run_xcodebuild_step \
+  "macOS build" \
+  "$MACOS_LOG" \
+  -workspace "$WORKSPACE_PATH" \
   -scheme ActionStatus \
   -destination "generic/platform=macOS" \
   -derivedDataPath "$DERIVED_DATA_PATH" \
   CODE_SIGNING_ALLOWED=NO \
-  "${XCODE_ACTION[@]}" >"$MACOS_LOG" 2>&1
+  "${XCODE_ACTION[@]}"
 
-xcodebuild \
-  -workspace "$ROOT/ActionStatus.xcworkspace" \
+run_xcodebuild_step \
+  "tvOS build" \
+  "$TVOS_LOG" \
+  -workspace "$WORKSPACE_PATH" \
   -scheme ActionStatus-tvOS \
   -destination "generic/platform=tvOS" \
   -derivedDataPath "$DERIVED_DATA_PATH" \
   CODE_SIGNING_ALLOWED=NO \
-  "${XCODE_ACTION[@]}" >"$TVOS_LOG" 2>&1
+  "${XCODE_ACTION[@]}"
 
 if [ "$RUN_TESTS" -eq 1 ]; then
   echo "==> Running tests"
