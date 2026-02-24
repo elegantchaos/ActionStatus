@@ -157,8 +157,6 @@ public struct Repo: Identifiable, Equatable, Hashable {
   public enum GithubLocation {
     case repo
     case workflow
-    case releases
-    case actions
     case badge(String)
   }
 
@@ -166,8 +164,6 @@ public struct Repo: Identifiable, Equatable, Hashable {
     let suffix: String
     switch location {
       case .workflow: suffix = "/actions?query=workflow%3A\(workflow)"
-      case .releases: suffix = "/releases"
-      case .actions: suffix = "/actions"
       case .badge(let branch):
         let query = branch.isEmpty ? "" : "?branch=\(branch)"
         suffix = "/workflows/\(workflow)/badge.svg\(query)"
@@ -177,33 +173,6 @@ public struct Repo: Identifiable, Equatable, Hashable {
 
     return URL(string: "https://github.com/\(owner)/\(name)\(suffix)")!
   }
-
-  public enum ImgShieldLocation {
-    case release
-  }
-
-  public func imgSheildURL(suffix: String) -> URL {
-    return URL(string: "https://img.shields.io/\(suffix)")!
-  }
-
-  public func imgShieldURL(for type: ImgShieldLocation) -> URL {
-    let suffix: String
-    switch type {
-      case .release: suffix = "github/v/release/\(owner)/\(name)"
-    }
-
-    return imgSheildURL(suffix: suffix)
-  }
-
-  public func imgShieldURL(for compiler: Compiler) -> URL {
-    return imgSheildURL(suffix: "badge/swift-\(compiler.short)-F05138.svg")
-  }
-
-  public func imgShieldURL(forPlatforms platforms: [String]) -> URL {
-    let platformBadges = platforms.joined(separator: "_")
-    return imgSheildURL(suffix: "badge/platforms-\(platformBadges)-lightgrey.svg?style=flat")
-  }
-
 }
 
 extension Repo: Codable {
