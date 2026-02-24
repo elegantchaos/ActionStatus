@@ -30,6 +30,10 @@ let package = Package(
   targets: [
     .target(
       name: "Core",
+      dependencies: [
+        "DictionaryCoding",
+        "Files",
+      ],
       path: "Sources/CoreRuntime",
       swiftSettings: [
         .swiftLanguageMode(.v6)

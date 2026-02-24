@@ -3,6 +3,7 @@
 //  All code (c) 2021 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Core
 import Foundation
 
 /// Randomly changes the state of repos. Useful for testing the UI.

@@ -3,6 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Core
 import DictionaryCoding
 import Hardware
 import Logger
@@ -151,7 +152,12 @@ public class Model: ObservableObject {
   }
 
   @discardableResult public func addRepo(context: ViewContext) -> Repo {
-    let repo = Repo(model: self)
+    let repo = Repo(
+      defaultName: defaultName,
+      defaultOwner: defaultOwner,
+      defaultWorkflow: defaultWorkflow,
+      defaultBranches: defaultBranches
+    )
     items[repo.id] = repo
 
     return repo

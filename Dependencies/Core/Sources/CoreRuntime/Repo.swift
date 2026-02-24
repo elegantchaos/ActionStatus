@@ -3,10 +3,9 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import Core
 import DictionaryCoding
 import Files
-import SwiftUI
+import Foundation
 
 @dynamicMemberLookup public struct WorkflowSettings: Codable, Equatable {
   public var options: [String] = []
@@ -53,12 +52,12 @@ public struct Repo: Identifiable, Equatable, Hashable {
   public var lastFailed: Date?
   public var lastSucceeded: Date?
 
-  public init(model: Model) {
+  public init(defaultName: String = "", defaultOwner: String = "", defaultWorkflow: String = "Tests", defaultBranches: [String] = []) {
     id = UUID()
-    name = model.defaultName
-    owner = model.defaultOwner
-    workflow = model.defaultWorkflow
-    branches = model.defaultBranches
+    name = defaultName
+    owner = defaultOwner
+    workflow = defaultWorkflow
+    branches = defaultBranches
     state = .unknown
     settings = WorkflowSettings()
     paths = [:]
@@ -92,7 +91,7 @@ public struct Repo: Identifiable, Equatable, Hashable {
       && lastSucceeded == other.lastSucceeded
   }
 
-  static var dictionaryDecoder: DictionaryDecoder {
+  public static var dictionaryDecoder: DictionaryDecoder {
     let decoder = DictionaryDecoder()
     let defaults: [String: Any] = [
       String(describing: LocalPathDictionary.self): LocalPathDictionary()
@@ -119,28 +118,21 @@ public struct Repo: Identifiable, Equatable, Hashable {
   func storeBookmark(for url: URL) {
     if let bookmark = url.secureBookmark() {
       UserDefaults.standard.set(bookmark, forKey: url.bookmarkKey)
-      modelChannel.log("Stored local bookmark data for \(url.lastPathComponent).")
-    } else {
-      modelChannel.log("Couldn't make bookmark for \(url.lastPathComponent)")
     }
   }
 
   func restoreBookmark(for url: URL) -> URL {
     guard let data = UserDefaults.standard.data(forKey: url.bookmarkKey) else {
-      modelChannel.log("No bookmark stored for \(url.lastPathComponent)")
       return url
     }
 
     guard let resolved = URL.resolveSecureBookmark(data) else {
-      modelChannel.log("Couldn't resolve bookmark for \(url.lastPathComponent)")
       return url
     }
-
-    modelChannel.log("Resolved local bookmark data for \(url.lastPathComponent).")
     return resolved
   }
 
-  func state(fromSVG svg: String) -> State {
+  public func state(fromSVG svg: String) -> State {
     if svg.contains("failing") {
       return .failing
     } else if svg.contains("passing") {
@@ -160,14 +152,6 @@ public struct Repo: Identifiable, Equatable, Hashable {
       case .queued: name = "clock.arrow.circlepath"
     }
     return name
-  }
-
-  public var statusColor: Color {
-    switch state {
-      case .failing: return .red
-      case .passing: return .green
-      default: return .primary
-    }
   }
 
   public enum GithubLocation {

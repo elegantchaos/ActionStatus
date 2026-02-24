@@ -3,6 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Core
 import Hardware
 import SwiftUI
 
@@ -142,12 +143,19 @@ public struct EditView: View {
   }
 
   var updatedRepo: Repo {
-    var updated = self.repo ?? Repo(model: model)
+    var updated =
+      self.repo
+      ?? Repo(
+        defaultName: model.defaultName,
+        defaultOwner: model.defaultOwner,
+        defaultWorkflow: model.defaultWorkflow,
+        defaultBranches: model.defaultBranches
+      )
     updated.name = trimmedName
     updated.owner = trimmedOwner
     updated.workflow = trimmedWorkflow
     updated.branches = trimmedBranches
-    updated.state = .unknown
+    updated.state = Repo.State.unknown
     return updated
   }
 }

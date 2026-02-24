@@ -5,6 +5,7 @@
 
 #if os(macOS)
   import AppKit
+  import Core
   import CoreUI
   import SwiftUI
 
