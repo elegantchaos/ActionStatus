@@ -49,8 +49,19 @@ public class RepoPollingSession: JSONSession.Session {
 
   public func scheduleWorkflow(for deadline: DispatchTime = DispatchTime.now()) {
     refreshChannel.log("scheduling workflow request for \(fullName)")
-    let resource = WorkflowResource(name: repo.name, owner: repo.owner, workflow: repo.workflow)
+    let resource = WorkflowResource(name: repo.name, owner: repo.owner, workflow: normalizedWorkflowName(from: repo.workflow))
     poll(target: resource, processors: workflowProcessor, for: deadline, repeatingEvery: 30.0)
+  }
+
+  private func normalizedWorkflowName(from raw: String) -> String {
+    let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+    if trimmed.hasSuffix(".yml") {
+      return String(trimmed.dropLast(4))
+    }
+    if trimmed.hasSuffix(".yaml") {
+      return String(trimmed.dropLast(5))
+    }
+    return trimmed
   }
 }
 
@@ -63,6 +74,7 @@ extension RepoPollingSession: MessageReceiver {
     }
 
     // We got an API error back from a request.
+    refreshChannel.log("API error \(response.statusCode) for \(fullName) [\(type(of: request.resource))]: \(message.message)")
     refreshController.update(repo: repo, message: message)
     if (request.resource is WorkflowResource) && (message.message == "Not Found") {
       // there's no workflow, so don't keep polling for it

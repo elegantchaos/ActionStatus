@@ -57,18 +57,24 @@ public class OctoidRefreshController: RefreshController {
     switch run.status {
       case "queued":
         state = .queued
+      case "pending", "requested", "waiting":
+        state = .queued
       case "in_progress":
         state = .running
       case "completed":
         switch run.conclusion {
           case "success":
             state = .passing
-          case "failure":
+          case "neutral", "skipped", "cancelled":
+            state = .passing
+          case "failure", "timed_out", "action_required", "startup_failure", "stale":
             state = .failing
           default:
+            refreshChannel.log("Unmapped completed conclusion for \(repo.name): \(run.conclusion ?? "<nil>")")
             state = .unknown
         }
       default:
+        refreshChannel.log("Unmapped workflow status for \(repo.name): \(run.status)")
         state = .unknown
     }
 
