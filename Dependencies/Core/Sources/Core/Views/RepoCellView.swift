@@ -6,7 +6,6 @@
 import Hardware
 import SheetController
 import SwiftUI
-import SwiftUIExtensions
 
 struct RepoCellView: View {
   @EnvironmentObject var context: ViewContext
@@ -23,11 +22,7 @@ struct RepoCellView: View {
 
   var body: some View {
     let cell = cell(for: repo)
-    #if os(macOS)
-      return cell.contextMenu(menuItems: contextMenuContent)
-    #else
-      return cell.shim.contextMenu(menuItems: contextMenuContent)
-    #endif
+    return cell.contextMenu(menuItems: contextMenuContent)
   }
 
   @ViewBuilder
