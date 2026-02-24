@@ -46,7 +46,7 @@ public struct AppSettingsView: View {
 }
 
 public struct PreferencesView: View {
-  @Environment(\.presentationMode) var presentation
+  @Environment(\.dismiss) private var dismissAction
   @EnvironmentObject var context: ViewContext
 
   @State var settings = Settings()
@@ -66,7 +66,7 @@ public struct PreferencesView: View {
   }
 
   func handleCancel() {
-    presentation.wrappedValue.dismiss()
+    dismissAction()
   }
 
   func handleAppear() {
@@ -85,7 +85,7 @@ public struct PreferencesView: View {
     }
 
     Engine.shared.resumeRefresh()
-    presentation.wrappedValue.dismiss()
+    dismissAction()
   }
 }
 

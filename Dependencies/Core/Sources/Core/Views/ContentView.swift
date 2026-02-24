@@ -18,7 +18,7 @@ public struct ContentView: View {
           sheetView(for: sheet)
         }
     #else
-      NavigationView {
+      NavigationStack {
         RootView()
           .navigationTitle(Engine.shared.info.name)
           #if !os(tvOS)
@@ -26,7 +26,6 @@ public struct ContentView: View {
             .iosToolbar(includeAddButton: context.settings.isEditing)
           #endif
       }
-      .navigationViewStyle(StackNavigationViewStyle())
       .sheet(item: $context.presentedSheet) { sheet in
         sheetView(for: sheet)
       }

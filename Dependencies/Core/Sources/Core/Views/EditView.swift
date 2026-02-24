@@ -9,7 +9,7 @@ import SwiftUI
 public struct EditView: View {
   let repo: Repo?
 
-  @Environment(\.presentationMode) var presentation
+  @Environment(\.dismiss) private var dismissAction
   @EnvironmentObject var model: Model
   @EnvironmentObject var context: ViewContext
 
@@ -120,7 +120,7 @@ public struct EditView: View {
 
   func dismiss() {
     context.host.resumeRefresh()
-    presentation.wrappedValue.dismiss()
+    dismissAction()
   }
 
   func done() {
