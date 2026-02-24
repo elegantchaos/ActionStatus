@@ -1,14 +1,8 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-//  Created by Sam Deane on 02/03/20.
+//  Created by Sam Deane on 26/05/2020.
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import CoreUI
-import SwiftUI
-import UIKit
+import Foundation
 
-class TVEngine: Engine {
-  override class var shared: TVEngine {
-    UIApplication.shared.delegate as! TVEngine
-  }
-}
+public typealias JSONDictionary = [String: Any]

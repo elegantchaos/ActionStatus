@@ -92,15 +92,6 @@
         }
       },
       {
-        "package": "Octoid",
-        "repositoryURL": "https://github.com/elegantchaos/Octoid.git",
-        "state": {
-          "branch": null,
-          "revision": "7640765e7587b8654c4df78f2ce5e37f45380f96",
-          "version": "1.0.6"
-        }
-      },
-      {
         "package": "SemanticVersion",
         "repositoryURL": "https://github.com/elegantchaos/SemanticVersion.git",
         "state": {

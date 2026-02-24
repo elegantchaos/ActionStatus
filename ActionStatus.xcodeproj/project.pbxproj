@@ -68,6 +68,7 @@
 
 /* Begin PBXFileReference section */
 		2257D7F62F4DAEAF00DBD569 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
+		2257D7F82F4DF92400DBD569 /* UI Refresh.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "UI Refresh.md"; sourceTree = "<group>"; };
 		226D6C8524758F1500B54967 /* Screenshots.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Screenshots.xctestplan; sourceTree = "<group>"; };
 		226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotUITests.swift; sourceTree = "<group>"; };
 		228D838C246AC10700943918 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -162,6 +163,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2257D7F92F4DF92400DBD569 /* Planning */ = {
+			isa = PBXGroup;
+			children = (
+				2257D7F82F4DF92400DBD569 /* UI Refresh.md */,
+			);
+			path = Planning;
+			sourceTree = "<group>";
+		};
 		22AA00072F45F10000AA0001 /* ActionStatusMac */ = {
 			isa = PBXGroup;
 			children = (
@@ -207,6 +216,7 @@
 		22F177CE2F45E01F00583266 /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
+				2257D7F92F4DF92400DBD569 /* Planning */,
 				22F177CD2F45E01F00583266 /* Guidelines */,
 			);
 			path = Documentation;
@@ -1040,19 +1050,19 @@
 /* Begin XCSwiftPackageProductDependency section */
 		8B2133F3264C4CFC00BE3D8D /* Core */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Core;
+			productName = CoreUI;
 		};
 		8B9A813625FA508F00F44800 /* Core */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Core;
+			productName = CoreUI;
 		};
 		8BA073A2260103E800F962B5 /* Core */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Core;
+			productName = CoreUI;
 		};
 		8BC2753126134B350015A8DA /* Core */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = Core;
+			productName = CoreUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
