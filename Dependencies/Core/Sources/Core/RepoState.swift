@@ -31,21 +31,8 @@ public class RepoState: ObservableObject {
     unreachable = set.count(for: Repo.State.unknown)
   }
 
-  public func repo(withIndex index: Int) -> Repo {
-    return sortedRepos[index]
-  }
-
-  public func name(forRepoWithIndex index: Int) -> String {
-    return sortedRepos[index].name
-  }
-
-  public func state(forRepoWithIndex index: Int) -> Repo.State {
-    return sortedRepos[index].state
-  }
-
   public func repoIDs(atOffets offsets: IndexSet) -> [UUID] {
-    let ids = offsets.map({ self.sortedRepos[$0] })
-    return ids.map({ $0.id })
+    offsets.map { sortedRepos[$0].id }
   }
 
   public var combinedState: [Repo.State] {
