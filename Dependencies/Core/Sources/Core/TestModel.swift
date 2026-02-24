@@ -9,11 +9,8 @@ public class TestModel: Model {
   public let repos: [Repo]
 
   public init() {
-    var datastoreRepo = Repo("Datastore", owner: "elegantchaos", workflow: "Swift", state: .passing)
-    datastoreRepo.settings = WorkflowSettings(options: ["macOS", "iOS", "linux", "swift-52", "swift-53", "release", "build", "test", "header"])
-
-    var collection = Repo("CollectionExtensions", owner: "elegantchaos", workflow: "Tests", state: .passing)
-    collection.settings.options = ["swift-52", "swift-53", "swift-nightly", "macOS", "iOS", "linux", "release", "build", "test", "firstlast", "upload", "header"]
+    let datastoreRepo = Repo("Datastore", owner: "elegantchaos", workflow: "Swift", state: .passing)
+    let collection = Repo("CollectionExtensions", owner: "elegantchaos", workflow: "Tests", state: .passing)
 
     repos = [
       Repo("Actions", owner: "elegantchaos", workflow: "Tests", state: .passing),

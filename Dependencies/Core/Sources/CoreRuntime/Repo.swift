@@ -7,19 +7,6 @@ import DictionaryCoding
 import Files
 import Foundation
 
-@dynamicMemberLookup public struct WorkflowSettings: Codable, Equatable {
-  public var options: [String] = []
-
-  public subscript(dynamicMember option: String) -> Bool {
-    return options.contains(option)
-  }
-
-  public init(options: [String] = []) {
-    self.options = options
-  }
-}
-
-
 private extension URL {
   var bookmarkKey: String { "bookmark:\(absoluteURL.path)" }
 }
@@ -47,7 +34,6 @@ public struct Repo: Identifiable, Equatable, Hashable {
   public var workflow: String
   public var branches: [String]
   public var state: State
-  public var settings: WorkflowSettings
   public var paths: LocalPathDictionary
   public var lastFailed: Date?
   public var lastSucceeded: Date?
@@ -59,18 +45,16 @@ public struct Repo: Identifiable, Equatable, Hashable {
     workflow = defaultWorkflow
     branches = defaultBranches
     state = .unknown
-    settings = WorkflowSettings()
     paths = [:]
   }
 
-  public init(_ name: String, owner: String, workflow: String, id: UUID? = nil, state: State = .unknown, branches: [String] = [], settings: WorkflowSettings = WorkflowSettings()) {
+  public init(_ name: String, owner: String, workflow: String, id: UUID? = nil, state: State = .unknown, branches: [String] = []) {
     self.id = id ?? UUID()
     self.name = name
     self.owner = owner
     self.workflow = workflow
     self.branches = branches
     self.state = state
-    self.settings = settings
     self.paths = [:]
   }
 
@@ -85,7 +69,6 @@ public struct Repo: Identifiable, Equatable, Hashable {
       && workflow == other.workflow
       && branches == other.branches
       && state == other.state
-      && settings == other.settings
       && paths == other.paths
       && lastFailed == other.lastFailed
       && lastSucceeded == other.lastSucceeded
