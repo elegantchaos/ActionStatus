@@ -4,7 +4,6 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Foundation
-import SwiftUIExtensions
 
 public enum RefreshRate: Int, CaseIterable, Equatable {
   case automatic = 0

@@ -10,7 +10,6 @@ import Keychain
 import Logger
 import SheetController
 import SwiftUI
-import SwiftUIExtensions
 
 #if canImport(AppKit)
   import AppKit
@@ -95,7 +94,7 @@ open class Engine: BasicApplication, ApplicationHost {
         return nil
       }
 
-      let controller = OctoidRefreshController(model: model, token: token)
+      let controller = OctoidRefreshController(model: model, token: token, apiServer: settings.githubServer)
       refreshChannel.log("Using github refresh controller for \(settings.githubUser)/\(settings.githubServer)")
       return controller
     } catch {

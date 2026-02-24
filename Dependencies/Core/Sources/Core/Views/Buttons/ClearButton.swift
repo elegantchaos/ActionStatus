@@ -4,7 +4,6 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import SwiftUI
-import SwiftUIExtensions
 
 struct ClearButton: ViewModifier {
   @Binding var text: String

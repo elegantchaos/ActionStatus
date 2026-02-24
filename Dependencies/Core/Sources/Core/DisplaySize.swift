@@ -4,7 +4,6 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import SwiftUI
-import SwiftUIExtensions
 
 public enum DisplaySize: Int, CaseIterable {
   case automatic = 0

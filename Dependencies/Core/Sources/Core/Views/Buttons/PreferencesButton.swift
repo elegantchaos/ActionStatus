@@ -6,7 +6,6 @@
 import Hardware
 import SheetController
 import SwiftUI
-import SwiftUIExtensions
 
 struct PreferencesButton: View {
   @EnvironmentObject var context: ViewContext

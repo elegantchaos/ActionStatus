@@ -3,10 +3,8 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import BindingsExtensions
 import SheetController
 import SwiftUI
-import SwiftUIExtensions
 
 public struct ContentView: View {
   @EnvironmentObject var context: ViewContext

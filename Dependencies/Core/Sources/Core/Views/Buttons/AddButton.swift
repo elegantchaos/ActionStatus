@@ -5,7 +5,6 @@
 
 import SheetController
 import SwiftUI
-import SwiftUIExtensions
 
 public struct AddButton: View {
   @EnvironmentObject var context: ViewContext

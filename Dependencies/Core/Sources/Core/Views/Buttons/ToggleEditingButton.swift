@@ -4,7 +4,6 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import SwiftUI
-import SwiftUIExtensions
 
 public struct ToggleEditingButton: View {
   @EnvironmentObject var context: ViewContext

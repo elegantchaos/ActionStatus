@@ -5,7 +5,6 @@
 
 import SheetController
 import SwiftUI
-import SwiftUIExtensions
 
 struct EditRepoButton: View {
   @EnvironmentObject var context: ViewContext

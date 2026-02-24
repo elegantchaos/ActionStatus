@@ -3,14 +3,12 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import SheetController
 import SwiftUI
 import SwiftUIExtensions
 
 public struct FooterView: View {
   @EnvironmentObject var updater: Updater
   @EnvironmentObject var status: RepoState
-  @EnvironmentObject var sheetController: SheetController
 
   let namespace: Namespace.ID
 

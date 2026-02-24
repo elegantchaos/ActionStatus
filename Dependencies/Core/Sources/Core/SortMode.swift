@@ -4,7 +4,6 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Foundation
-import SwiftUIExtensions
 
 public enum SortMode: String, CaseIterable {
   case name
