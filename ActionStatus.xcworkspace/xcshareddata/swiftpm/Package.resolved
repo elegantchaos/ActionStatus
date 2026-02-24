@@ -128,15 +128,6 @@
         }
       },
       {
-        "package": "SheetController",
-        "repositoryURL": "https://github.com/elegantchaos/SheetController.git",
-        "state": {
-          "branch": null,
-          "revision": "93fde2600bd0764388154c2bee23770c1b351362",
-          "version": "1.0.2"
-        }
-      },
-      {
         "package": "SwiftUIExtensions",
         "repositoryURL": "https://github.com/elegantchaos/SwiftUIExtensions.git",
         "state": {

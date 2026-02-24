@@ -3,32 +3,43 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import SheetController
 import SwiftUI
 
 public struct ContentView: View {
   @EnvironmentObject var context: ViewContext
-  @EnvironmentObject var sheetController: SheetController
 
   public init() {
   }
 
   public var body: some View {
-    return SheetControllerHost {
-      #if os(macOS)
-        RootView()
-      #else
-        return NavigationView {
-          RootView()
-            .navigationTitle(Engine.shared.info.name)
-            #if !os(tvOS)
-              .navigationBarTitleDisplayMode(.inline)
-              .iosToolbar(includeAddButton: context.settings.isEditing)
-            #endif
+    #if os(macOS)
+      RootView()
+        .sheet(item: $context.presentedSheet) { sheet in
+          sheetView(for: sheet)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
-      #endif
+    #else
+      NavigationView {
+        RootView()
+          .navigationTitle(Engine.shared.info.name)
+          #if !os(tvOS)
+            .navigationBarTitleDisplayMode(.inline)
+            .iosToolbar(includeAddButton: context.settings.isEditing)
+          #endif
+      }
+      .navigationViewStyle(StackNavigationViewStyle())
+      .sheet(item: $context.presentedSheet) { sheet in
+        sheetView(for: sheet)
+      }
+    #endif
+  }
 
+  @ViewBuilder
+  func sheetView(for sheet: PresentedSheet) -> some View {
+    switch sheet {
+      case .editRepo(let repo):
+        EditView(repo: repo)
+      case .preferences:
+        PreferencesView()
     }
   }
 }

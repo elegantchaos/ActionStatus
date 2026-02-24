@@ -22,9 +22,7 @@
     }
 
     @IBAction func showPreferences() {
-      sheetController.show {
-        PreferencesView()
-      }
+      context.presentedSheet = .preferences
     }
 
     @IBAction func addLocalRepos() {

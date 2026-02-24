@@ -8,7 +8,6 @@ import Combine
 import Hardware
 import Keychain
 import Logger
-import SheetController
 import SwiftUI
 
 #if canImport(AppKit)
@@ -60,8 +59,6 @@ open class Engine: BasicApplication, ApplicationHost {
     context.settings
   }
 
-  public let sheetController = SheetController()
-
   func makeViewState() -> ViewContext {
     return ViewContext(host: self)
   }
@@ -110,17 +107,13 @@ open class Engine: BasicApplication, ApplicationHost {
   }
 
   public func editNewRepo() {
-    sheetController.show {
-      EditView(repo: nil)
-    }
+    context.presentedSheet = .editRepo(nil)
   }
 
 
   open override func setUp(withOptions options: BasicApplication.LaunchOptions, completion: @escaping BasicApplication.SetupCompletion) {
     super.setUp(withOptions: options) { [self] options in
       DispatchQueue.main.async { [self] in
-        sheetController.environmentSetter = { view in AnyView(self.applyEnvironment(to: view)) }
-
         setupDefaultSettings()
         loadSettings()
         restoreState()
@@ -202,7 +195,6 @@ open class Engine: BasicApplication, ApplicationHost {
       .environmentObject(context)
       .environmentObject(model)
       .environmentObject(updater)
-      .environmentObject(sheetController)
       .environmentObject(status)
   }
 

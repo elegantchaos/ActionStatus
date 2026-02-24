@@ -11,9 +11,26 @@ struct PreviewHost: ApplicationHost {
   var refreshController: RefreshController? { return nil }
 }
 
+public enum PresentedSheet: Identifiable {
+  case editRepo(Repo?)
+  case preferences
+
+  public var id: String {
+    switch self {
+      case .editRepo(let repo):
+        if let repo {
+          return "edit-\(repo.id.uuidString)"
+        }
+        return "edit-new"
+      case .preferences:
+        return "preferences"
+    }
+  }
+}
 
 public class ViewContext: ObservableObject {
   @Published public var settings = Settings()
+  @Published public var presentedSheet: PresentedSheet?
 
   public let host: ApplicationHost
   public let padding: CGFloat = 10

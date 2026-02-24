@@ -4,12 +4,10 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Hardware
-import SheetController
 import SwiftUI
 
 struct RepoCellView: View {
   @EnvironmentObject var context: ViewContext
-  @EnvironmentObject var sheetController: SheetController
   @EnvironmentObject var model: Model
 
   let repo: Repo
@@ -120,9 +118,7 @@ struct RepoCellView: View {
   }
 
   func handleEdit() {
-    sheetController.show {
-      EditView(repo: repo)
-    }
+    context.presentedSheet = .editRepo(repo)
   }
 
   func handleDelete() {
