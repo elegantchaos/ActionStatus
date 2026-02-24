@@ -30,10 +30,8 @@ open class Engine: NSObject, ApplicationHost {
 
   #if canImport(UIKit)
     public typealias LaunchOptions = [UIApplication.LaunchOptionsKey: Any]
-    public typealias OpenOptions = [UIApplication.OpenURLOptionsKey: Any]
   #elseif canImport(AppKit)
     public typealias LaunchOptions = [String: Any]
-    public typealias OpenOptions = [String: Any]
   #endif
 
   static var sharedEngine: Engine?
@@ -301,14 +299,6 @@ open class Engine: NSObject, ApplicationHost {
       return true
     }
 
-    open func application(_ app: UIApplication, open inputURL: URL, options: OpenOptions = [:]) -> Bool {
-      if inputURL.isFileURL {
-        return open(file: inputURL, options: options)
-      } else {
-        return open(url: inputURL, options: options)
-      }
-    }
-
     open func applicationWillTerminate(_ application: UIApplication) {
       tearDown()
     }
@@ -318,13 +308,6 @@ open class Engine: NSObject, ApplicationHost {
       }
     }
 
-    open func open(file url: URL, options: OpenOptions) -> Bool {
-      false
-    }
-
-    open func open(url: URL, options: OpenOptions) -> Bool {
-      false
-    }
   }
 #elseif canImport(AppKit)
   extension Engine: NSApplicationDelegate {
