@@ -5,7 +5,6 @@
 
 import Bundles
 import SwiftUI
-import SwiftUIExtensions
 
 struct PreviewHost: ApplicationHost {
   let info = BundleInfo(for: Bundle.main)
@@ -27,13 +26,6 @@ public class ViewContext: ObservableObject {
   let editButtonIcon = "ellipsis.circle"
   let deleteRepoIcon = "minus.circle"
   let addRepoIcon = "plus.circle"
-
-  let formStyle = FormStyle(
-    headerFont: .headline,
-    footerFont: Font.body.italic(),
-    labelOpacity: 0.5,
-    contentFont: Font.body
-  )
 
   public init(host: ApplicationHost) {
     self.host = host
