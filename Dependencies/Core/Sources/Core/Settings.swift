@@ -16,7 +16,6 @@ public extension String {
   static let githubUserKey = "GithubUser"
   static let githubServerKey = "GithubServer"
   static let sortModeKey = "SortMode"
-  static let testOldestNewestKey = "TestOldestNewest"
   static let testRefresh = "TestRefresh"
 }
 

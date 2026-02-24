@@ -38,12 +38,12 @@ public struct Repo: Identifiable, Equatable, Hashable {
   public var lastFailed: Date?
   public var lastSucceeded: Date?
 
-  public init(defaultName: String = "", defaultOwner: String = "", defaultWorkflow: String = "Tests", defaultBranches: [String] = []) {
+  public init(defaultOwner: String = "") {
     id = UUID()
-    name = defaultName
+    name = ""
     owner = defaultOwner
-    workflow = defaultWorkflow
-    branches = defaultBranches
+    workflow = "Tests"
+    branches = []
     state = .unknown
     paths = [:]
   }

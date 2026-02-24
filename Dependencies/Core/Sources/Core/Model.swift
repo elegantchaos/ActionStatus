@@ -19,9 +19,6 @@ public class Model: ObservableObject {
   internal var items: [UUID: Repo]
 
   @Published public var defaultOwner = ""
-  @Published public var defaultName = ""
-  @Published public var defaultWorkflow = "Tests"
-  @Published public var defaultBranches: [String] = []
 
   public var count: Int {
     items.count
@@ -145,12 +142,7 @@ public class Model: ObservableObject {
   }
 
   @discardableResult public func addRepo() -> Repo {
-    let repo = Repo(
-      defaultName: defaultName,
-      defaultOwner: defaultOwner,
-      defaultWorkflow: defaultWorkflow,
-      defaultBranches: defaultBranches
-    )
+    let repo = Repo(defaultOwner: defaultOwner)
     items[repo.id] = repo
 
     return repo

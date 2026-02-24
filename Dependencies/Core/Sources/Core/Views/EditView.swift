@@ -145,12 +145,7 @@ public struct EditView: View {
   var updatedRepo: Repo {
     var updated =
       self.repo
-      ?? Repo(
-        defaultName: model.defaultName,
-        defaultOwner: model.defaultOwner,
-        defaultWorkflow: model.defaultWorkflow,
-        defaultBranches: model.defaultBranches
-      )
+      ?? Repo(defaultOwner: model.defaultOwner)
     updated.name = trimmedName
     updated.owner = trimmedOwner
     updated.workflow = trimmedWorkflow
