@@ -30,11 +30,9 @@ public class Model: ObservableObject {
     store.synchronize()
 
     var index: [UUID: Repo] = [:]
-    var identifiers: [UUID] = []
     for repo in repos {
       let id = repo.id
       index[id] = repo
-      identifiers.append(id)
     }
 
     self.items = index

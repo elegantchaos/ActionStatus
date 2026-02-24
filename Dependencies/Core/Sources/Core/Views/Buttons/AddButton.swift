@@ -14,7 +14,6 @@ public struct AddButton: View {
   public var body: some View {
     Button(action: addRepo) {
       Text("Add")
-      //            Image(systemName: context.addRepoIcon)
     }
     .accessibility(identifier: "addButton")
     .foregroundColor(.black)

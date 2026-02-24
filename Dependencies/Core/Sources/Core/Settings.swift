@@ -21,7 +21,6 @@ public extension String {
 
 public struct Settings {
   public var isEditing: Bool = false
-  var selectedID: UUID? = nil
   var displaySize: DisplaySize = .automatic
   var refreshRate: RefreshRate = .automatic
   var githubUser: String = ""

@@ -42,7 +42,8 @@ public struct NoReposView: View {
   }
 
   func makeInitialView() {
-    context.addRepo(to: model)
+    _ = model.addRepo()
+    context.host.saveState()
   }
 
 }

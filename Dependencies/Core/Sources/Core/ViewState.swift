@@ -35,31 +35,14 @@ public class ViewContext: ObservableObject {
 
   public let host: ApplicationHost
   public let padding: CGFloat = 10
-  public let spacing: CGFloat = {
-    #if os(tvOS)
-      640
-    #else
-      256
-    #endif
-  }()
 
   let linkIcon = "arrow.right.circle.fill"
-  let startEditingIcon = "lock.fill"
-  let stopEditingIcon = "lock.open.fill"
   let preferencesIcon = "gearshape"
   let editButtonIcon = "ellipsis.circle"
   let deleteRepoIcon = "minus.circle"
-  let addRepoIcon = "plus.circle"
 
   public init(host: ApplicationHost) {
     self.host = host
-  }
-
-  @discardableResult func addRepo(to model: Model) -> Repo {
-    let newRepo = model.addRepo()
-    host.saveState()
-    settings.selectedID = newRepo.id
-    return newRepo
   }
 
   var repoGridColumns: [GridItem] {
