@@ -1,13 +1,31 @@
 {
-  "originHash" : "448657028475d919cad1d866a869fa54825760b893d2014fc735c4036428edc0",
+  "originHash" : "42c8275f98151a7d78d4bf70d5d9bc642c80837d03a570c898faf58fc9970b98",
   "pins" : [
     {
-      "identity" : "coercion",
+      "identity" : "actionbuildercore",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/elegantchaos/Coercion.git",
+      "location" : "https://github.com/elegantchaos/ActionBuilderCore.git",
       "state" : {
-        "revision" : "0481b6c80b0d50cb3c532d8bd87101140a20bade",
-        "version" : "1.1.1"
+        "revision" : "be27f0c4b0f3f95390b8bf0f7b9346357e0c9880",
+        "version" : "2.1.2"
+      }
+    },
+    {
+      "identity" : "actionbuilderplugin",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/ActionBuilderPlugin.git",
+      "state" : {
+        "revision" : "7c2f45813e5172534c6ab5ca0ddc64c53f6fc869",
+        "version" : "2.1.0"
+      }
+    },
+    {
+      "identity" : "chaosbytestreams",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/ChaosByteStreams.git",
+      "state" : {
+        "revision" : "01cc58b8d9a01d67ee6669b67db41b2060ea467b",
+        "version" : "1.0.7"
       }
     },
     {
@@ -17,15 +35,6 @@
       "state" : {
         "revision" : "52b3547475730a2b6bafc17dc1df31ad2ca53200",
         "version" : "1.1.9"
-      }
-    },
-    {
-      "identity" : "datafetcher",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/elegantchaos/DataFetcher.git",
-      "state" : {
-        "revision" : "88550e5207654ad19237a578188e4757c919970b",
-        "version" : "1.0.2"
       }
     },
     {
@@ -47,15 +56,6 @@
       }
     },
     {
-      "identity" : "jsonsession",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/elegantchaos/JSONSession.git",
-      "state" : {
-        "revision" : "636fdf1fc8050f619e5299892c1ac0b95fd6677f",
-        "version" : "1.1.1"
-      }
-    },
-    {
       "identity" : "keychain",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/elegantchaos/Keychain.git",
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/elegantchaos/Logger.git",
       "state" : {
-        "revision" : "50da0037cd25c2f9444effbb2afe15bb00f70a98",
-        "version" : "1.7.3"
+        "revision" : "6957a21c4e02fc03734a460fb8bfcd36dbe8aba8",
+        "version" : "2.0.1"
       }
     },
     {
@@ -83,12 +83,48 @@
       }
     },
     {
-      "identity" : "octoid",
+      "identity" : "runner",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/elegantchaos/Octoid.git",
+      "location" : "https://github.com/elegantchaos/Runner.git",
       "state" : {
-        "revision" : "7640765e7587b8654c4df78f2ce5e37f45380f96",
-        "version" : "1.0.6"
+        "revision" : "ba4b7d5b995d33c82fc1aa51054202caf0aa7297",
+        "version" : "2.1.5"
+      }
+    },
+    {
+      "identity" : "semanticversion",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/SemanticVersion.git",
+      "state" : {
+        "revision" : "2637309c72c1415cc3d1ea27ae6ddb2a2b66ecf0",
+        "version" : "1.1.2"
+      }
+    },
+    {
+      "identity" : "swift-subprocess",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-subprocess.git",
+      "state" : {
+        "revision" : "ba5888ad7758cbcbe7abebac37860b1652af2d9c",
+        "version" : "0.3.0"
+      }
+    },
+    {
+      "identity" : "swift-system",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-system",
+      "state" : {
+        "revision" : "7c6ad0fc39d0763e0b699210e4124afd5041c5df",
+        "version" : "1.6.4"
+      }
+    },
+    {
+      "identity" : "versionator",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/Versionator.git",
+      "state" : {
+        "revision" : "b5f925adb48a08f33281713cb48c51a9cead21ee",
+        "version" : "2.1.1"
       }
     },
     {
