@@ -20,10 +20,11 @@ let package = Package(
     // Dependencies declare other packages that this package depends on.
     .package(url: "https://github.com/elegantchaos/CollectionExtensions.git", from: "1.1.9"),
     .package(url: "https://github.com/elegantchaos/DictionaryCoding.git", from: "1.0.9"),
-    .package(url: "https://github.com/elegantchaos/Files.git", from: "1.2.1"),
+    .package(url: "https://github.com/elegantchaos/Files.git", from: "1.2.2"),
+    .package(url: "https://github.com/elegantchaos/JSONSession.git", from: "2.0.0"),
     .package(url: "https://github.com/elegantchaos/Keychain.git", from: "1.0.0"),
     .package(url: "https://github.com/elegantchaos/Logger.git", from: "2.0.1"),
-    .package(url: "https://github.com/elegantchaos/Octoid.git", from: "1.0.6"),
+    .package(url: "https://github.com/elegantchaos/Octoid.git", from: "2.0.0"),
     .package(path: "../Runtime"),
   ],
   targets: [
@@ -33,7 +34,6 @@ let package = Package(
         "DictionaryCoding",
         "Files",
       ],
-      path: "Sources/CoreRuntime",
       swiftSettings: [
         .swiftLanguageMode(.v6)
       ]),
@@ -46,11 +46,11 @@ let package = Package(
         "Files",
         "Logger",
         .product(name: "LoggerUI", package: "Logger"),
+        "JSONSession",
         "Keychain",
         "Octoid",
         "Runtime",
-      ],
-      path: "Sources/Core"),
+      ]),
     .testTarget(
       name: "CoreTests",
       dependencies: ["Core", "CoreUI"]),

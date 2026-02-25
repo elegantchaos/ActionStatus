@@ -4,10 +4,4 @@
    <FileRef
       location = "group:ActionStatus.xcodeproj">
    </FileRef>
-   <FileRef
-      location = "container:../Octoid">
-   </FileRef>
-   <FileRef
-      location = "container:../JSONSession">
-   </FileRef>
 </Workspace>
