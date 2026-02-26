@@ -25,7 +25,7 @@ public class RepoState: ObservableObject {
     let set = NSCountedSet()
     sortedRepos.forEach({ set.add($0.state) })
     passing = set.count(for: Repo.State.passing)
-    failing = set.count(for: Repo.State.failing)
+    failing = set.count(for: Repo.State.failing) + set.count(for: Repo.State.partiallyFailing)
     running = set.count(for: Repo.State.running)
     queued = set.count(for: Repo.State.queued)
     unreachable = set.count(for: Repo.State.unknown)

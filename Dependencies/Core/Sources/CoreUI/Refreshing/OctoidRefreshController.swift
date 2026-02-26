@@ -78,36 +78,70 @@ public class OctoidRefreshController: RefreshController {
     }
   }
 
-  func update(repo: Repo, with run: WorkflowRun) {
+  func state(for run: WorkflowRun, in repo: Repo) -> Repo.State {
     refreshChannel.log("\(repo.name) status: \(run.status), conclusion: \(run.conclusion ?? "")")
-    let state: Repo.State
 
     switch run.status {
       case "queued":
-        state = .queued
+        return .queued
       case "pending", "requested", "waiting":
-        state = .queued
+        return .queued
       case "in_progress":
-        state = .running
+        return .running
       case "completed":
         switch run.conclusion {
           case "success":
-            state = .passing
+            return .passing
           case "neutral", "skipped", "cancelled":
-            state = .passing
+            return .passing
           case "failure", "timed_out", "action_required", "startup_failure", "stale":
-            state = .failing
+            return .failing
           default:
             refreshChannel.log("Unmapped completed conclusion for \(repo.name): \(run.conclusion ?? "<nil>")")
-            state = .unknown
+            return .unknown
         }
       default:
         refreshChannel.log("Unmapped workflow status for \(repo.name): \(run.status)")
-        state = .unknown
+        return .unknown
     }
+  }
 
+  func aggregateState(for states: [Repo.State]) -> Repo.State {
+    guard !states.isEmpty else { return .unknown }
+
+    let failingCount = states.filter { $0 == .failing }.count
+    if failingCount == states.count {
+      return .failing
+    }
+    if failingCount > 0 {
+      return .partiallyFailing
+    }
+    if states.contains(.running) {
+      return .running
+    }
+    if states.contains(.queued) {
+      return .queued
+    }
+    if states.allSatisfy({ $0 == .passing }) {
+      return .passing
+    }
+    return .unknown
+  }
+
+  func update(repo: Repo, with state: Repo.State) {
     DispatchQueue.main.async {
       self.model.update(repoWithID: repo.id, state: state)
+    }
+  }
+
+  @discardableResult
+  func merge(repo: Repo, discovered workflows: [Repo.WorkflowSelection]) async -> Repo {
+    await MainActor.run {
+      guard var current = self.model.repo(withIdentifier: repo.id) else { return repo }
+      if current.mergeDiscoveredWorkflows(workflows) {
+        self.model.update(repo: current)
+      }
+      return current
     }
   }
 }
@@ -127,7 +161,8 @@ private actor RepoPoller {
 
   private var lastEvent: Date
   private var shouldPollEvents = true
-  private var shouldPollWorkflow = true
+  private var shouldPollWorkflows = true
+  private var shouldPollWorkflowRuns = true
 
   private var fullName: String { "\(repo.owner)/\(repo.name)" }
   private var lastEventKey: String { "\(fullName)-lastEvent" }
@@ -155,8 +190,12 @@ private actor RepoPoller {
         await pollEvents()
       }
 
-      if shouldPollWorkflow {
-        await pollWorkflow()
+      if shouldPollWorkflows {
+        await pollWorkflows()
+      }
+
+      if shouldPollWorkflowRuns {
+        await pollWorkflowRuns()
       }
 
       if Task.isCancelled { break }
@@ -185,8 +224,13 @@ private actor RepoPoller {
         lastEvent = latestEvent
         Self.saveLastEvent(latestEvent, forKey: lastEventKey)
 
-        if wasPushed && shouldPollWorkflow {
-          await pollWorkflow()
+        if wasPushed {
+          if shouldPollWorkflows {
+            await pollWorkflows()
+          }
+          if shouldPollWorkflowRuns {
+            await pollWorkflowRuns()
+          }
         }
 
       case .apiMessage(let message):
@@ -203,34 +247,70 @@ private actor RepoPoller {
     }
   }
 
-  private func pollWorkflow() async {
-    let workflow = repo.workflow.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !workflow.isEmpty else {
-      refreshChannel.log("Skipping workflow polling for \(fullName) because workflow name is empty.")
-      return
-    }
-
-    refreshChannel.log("polling workflow for \(fullName): \(workflow)")
-    let resource = WorkflowResource(name: repo.name, owner: repo.owner, workflow: workflow)
-    switch await request(target: resource, as: WorkflowRuns.self) {
-      case .payload(let runs):
-        guard !runs.isEmpty else {
-          shouldPollWorkflow = false
-          return
+  private func pollWorkflows() async {
+    refreshChannel.log("polling workflows for \(fullName)")
+    let resource = WorkflowsResource(name: repo.name, owner: repo.owner)
+    switch await request(target: resource, as: Workflows.self) {
+      case .payload(let response):
+        let discovered = response.workflows.map {
+          Repo.WorkflowSelection(workflowID: $0.id, name: $0.name, path: $0.path)
         }
-
-        refreshController.update(repo: repo, with: runs.latestRun)
+        let updated = await refreshController.merge(repo: repo, discovered: discovered)
+        if updated.enabledWorkflows.isEmpty {
+          refreshController.update(repo: updated, with: .unknown)
+        }
 
       case .apiMessage(let message):
         refreshController.update(repo: repo, message: message)
         if message.message == "Not Found" {
-          // No matching workflow for this repo; stop querying it repeatedly.
-          shouldPollWorkflow = false
+          // Repository doesn't expose Actions workflows for this token.
+          shouldPollWorkflows = false
+          shouldPollWorkflowRuns = false
         }
 
       case .timedOut:
-        refreshChannel.log("Timed out polling workflow for \(fullName)")
+        refreshChannel.log("Timed out polling workflows for \(fullName)")
     }
+  }
+
+  private func pollWorkflowRuns() async {
+    guard let latestRepo = await MainActor.run(resultType: Repo?.self, body: { refreshController.model.repo(withIdentifier: repo.id) }) else {
+      return
+    }
+
+    let enabledWorkflows = latestRepo.enabledWorkflows
+    guard !enabledWorkflows.isEmpty else {
+      refreshChannel.log("Skipping workflow run polling for \(fullName) because no workflows are enabled.")
+      refreshController.update(repo: latestRepo, with: .unknown)
+      return
+    }
+
+    var workflowStates: [Repo.State] = []
+
+    for workflow in enabledWorkflows {
+      let resource: WorkflowResource
+      if let workflowID = workflow.workflowID {
+        resource = WorkflowResource(name: repo.name, owner: repo.owner, workflowID: workflowID)
+      } else {
+        resource = WorkflowResource(name: repo.name, owner: repo.owner, workflow: workflow.normalizedWorkflowName)
+      }
+
+      switch await request(target: resource, as: WorkflowRuns.self) {
+        case .payload(let runs):
+          guard !runs.isEmpty else { continue }
+          let state = refreshController.state(for: runs.latestRun, in: repo)
+          workflowStates.append(state)
+
+        case .apiMessage(let message):
+          refreshChannel.log("Workflow runs unavailable for \(fullName) (\(workflow.name)): \(message.message)")
+
+        case .timedOut:
+          refreshChannel.log("Timed out polling workflow run for \(fullName) (\(workflow.name))")
+      }
+    }
+
+    let aggregate = refreshController.aggregateState(for: workflowStates)
+    refreshController.update(repo: latestRepo, with: aggregate)
   }
 
   private func request<Payload: Decodable>(

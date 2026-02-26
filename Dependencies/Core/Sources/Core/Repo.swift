@@ -18,18 +18,74 @@ public struct Repo: Identifiable, Equatable, Hashable {
     case failing = 2
     case queued = 3
     case running = 4
+    case partiallyFailing = 5
 
     public static func < (lhs: State, rhs: State) -> Bool {
-      lhs.rawValue < rhs.rawValue
+      lhs.sortOrder < rhs.sortOrder
+    }
+
+    var sortOrder: Int {
+      switch self {
+        case .unknown: 0
+        case .passing: 1
+        case .queued: 2
+        case .running: 3
+        case .partiallyFailing: 4
+        case .failing: 5
+      }
     }
   }
 
   public typealias LocalPathDictionary = [String: String]
 
+  public struct WorkflowSelection: Codable, Hashable, Identifiable {
+    public var workflowID: Int?
+    public var name: String
+    public var path: String
+    public var enabled: Bool
+
+    public init(workflowID: Int? = nil, name: String, path: String, enabled: Bool = true) {
+      self.workflowID = workflowID
+      self.name = name
+      self.path = path
+      self.enabled = enabled
+    }
+
+    public var id: String {
+      if let workflowID {
+        return "id:\(workflowID)"
+      }
+      return "path:\(path.lowercased())"
+    }
+
+    public var lookupKey: String {
+      if let workflowID {
+        return "id:\(workflowID)"
+      }
+      return "path:\(path.lowercased())"
+    }
+
+    public var normalizedWorkflowName: String {
+      let fileName = URL(fileURLWithPath: path).deletingPathExtension().lastPathComponent
+      if !fileName.isEmpty {
+        return fileName
+      }
+      let lowered = name.lowercased()
+      if lowered.hasSuffix(".yml") {
+        return String(name.dropLast(4))
+      }
+      if lowered.hasSuffix(".yaml") {
+        return String(name.dropLast(5))
+      }
+      return name
+    }
+  }
+
   public let id: UUID
   public var name: String
   public var owner: String
   public var workflow: String
+  public var workflows: [WorkflowSelection]
   public var branches: [String]
   public var state: State
   public var paths: LocalPathDictionary
@@ -41,6 +97,7 @@ public struct Repo: Identifiable, Equatable, Hashable {
     name = ""
     owner = ""
     workflow = "Tests"
+    workflows = []
     branches = []
     state = .unknown
     paths = [:]
@@ -51,6 +108,7 @@ public struct Repo: Identifiable, Equatable, Hashable {
     self.name = name
     self.owner = owner
     self.workflow = workflow
+    self.workflows = []
     self.branches = branches
     self.state = state
     self.paths = [:]
@@ -63,12 +121,44 @@ public struct Repo: Identifiable, Equatable, Hashable {
   public static var dictionaryDecoder: DictionaryDecoder {
     let decoder = DictionaryDecoder()
     let defaults: [String: Any] = [
-      String(describing: LocalPathDictionary.self): LocalPathDictionary()
+      String(describing: LocalPathDictionary.self): LocalPathDictionary(),
+      String(describing: [WorkflowSelection].self): [WorkflowSelection](),
     ]
     decoder.missingValueDecodingStrategy = .useDefault(defaults: defaults)
     return decoder
 
 
+  }
+
+  public var enabledWorkflows: [WorkflowSelection] {
+    let selected = workflows.filter(\.enabled)
+    if !selected.isEmpty {
+      return selected
+    }
+
+    let trimmedLegacy = workflow.trimmingCharacters(in: .whitespacesAndNewlines)
+    if workflows.isEmpty, !trimmedLegacy.isEmpty {
+      return [WorkflowSelection(name: trimmedLegacy, path: ".github/workflows/\(trimmedLegacy).yml")]
+    }
+
+    return []
+  }
+
+  @discardableResult mutating public func mergeDiscoveredWorkflows(_ discovered: [WorkflowSelection]) -> Bool {
+    let existingByKey = Dictionary(uniqueKeysWithValues: workflows.map { ($0.lookupKey, $0) })
+    let merged = discovered.map { workflow in
+      var updated = workflow
+      if let existing = existingByKey[workflow.lookupKey] {
+        updated.enabled = existing.enabled
+      } else {
+        updated.enabled = true
+      }
+      return updated
+    }
+
+    guard merged != workflows else { return false }
+    workflows = merged
+    return true
   }
 
   mutating public func remember(url: URL, forDevice device: String) {
@@ -116,6 +206,7 @@ public struct Repo: Identifiable, Equatable, Hashable {
     switch state {
       case .unknown: name = "questionmark.circle"
       case .failing: name = "xmark.circle"
+      case .partiallyFailing: name = "xmark.circle"
       case .passing: name = "checkmark.circle"
       case .running: name = "arrow.triangle.2.circlepath"
       case .queued: name = "clock.arrow.circlepath"
@@ -132,10 +223,11 @@ public struct Repo: Identifiable, Equatable, Hashable {
   public func githubURL(for location: GithubLocation = .workflow) -> URL {
     let suffix: String
     switch location {
-      case .workflow: suffix = "/actions?query=workflow%3A\(workflow)"
+      case .workflow: suffix = "/actions"
       case .badge(let branch):
         let query = branch.isEmpty ? "" : "?branch=\(branch)"
-        suffix = "/workflows/\(workflow)/badge.svg\(query)"
+        let workflowName = enabledWorkflows.first?.normalizedWorkflowName ?? workflow
+        suffix = "/workflows/\(workflowName)/badge.svg\(query)"
 
       default: suffix = ""
     }
