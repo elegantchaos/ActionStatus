@@ -2,9 +2,9 @@
 
 This repository contains ActionStatus, an Xcode app for iOS, tvOS, and macOS, with shared logic in the local Swift package under `Dependencies/Core/`.
 
-See https://actionstatus.elegantchaos.com/ for product context.
+See <https://actionstatus.elegantchaos.com/> for product context.
 
-## Project-Specific Rules
+## Project Specific Rules
 
 ### Core constraints
 
@@ -22,29 +22,24 @@ See https://actionstatus.elegantchaos.com/ for product context.
 
 - Run `Extras/Scripts/validate-changes` after code edits.
 
-## Shared Baseline Guidance
+### Project references
 
-These rules are refreshed from `~/.local/share/agents/COMMON.md` and related instruction modules.
+- `README.md`
+- `Settings.xcconfig`
+- `ActionStatus.xcodeproj/project.pbxproj`
+- Local guideline docs: `Extras/Documentation/Guidelines/README.md`
 
-### Principles
+## Standard Rules
 
-Prefer red/green TDD unless impractical; otherwise follow `Extras/Documentation/Guidelines/Testing.md` validation workflow and report gaps.
+### Baseline methodology
 
-Always write good code; see `Extras/Documentation/Guidelines/Good Code.md` for a definition.
+- Prefer red/green TDD unless impractical; otherwise follow the testing workflow and report gaps.
+- Always write good code and keep behavior, tests, and docs aligned.
+- Apply KISS, YAGNI, DRY thoughtfully, explicit dependencies, composition over inheritance, command-query separation, least knowledge, structured concurrency, design by contract, and idempotency.
 
-Apply these core principles when writing code:
-- Keep It Simple
-- Build What Is Needed
-- Avoid Duplication Thoughtfully
-- Single Source of Truth
-- Make Invalid States Hard to Represent
-- Explicit Dependencies
-- Composition Over Inheritance
-- Separate Commands From Queries
-- Least Knowledge
-- Concurrency by Design
-- Design by Contract
-- Idempotency
+Reference:
+- `Extras/Documentation/Guidelines/Principles.md`
+- `Extras/Documentation/Guidelines/Good Code.md`
 
 ### Scope and change strategy
 
@@ -61,7 +56,10 @@ Apply these core principles when writing code:
 5. Run relevant validation checks.
 6. Report changes, validation status, and residual risks.
 
-### Engineering, safety, and sources
+Reference:
+- `Extras/Documentation/Guidelines/Testing.md`
+
+### Engineering, safety, and source quality
 
 - Prioritize correctness, clarity, and maintainability.
 - Keep interfaces explicit and intentionally small.
@@ -71,35 +69,35 @@ Apply these core principles when writing code:
 - Do not perform destructive actions without explicit approval.
 - Avoid unrelated refactors during focused tasks.
 - If unexpected workspace changes appear, pause and confirm direction.
-- Use trusted-source guidance for uncertain facts and external references (`Extras/Documentation/Guidelines/Trusted Sources.md`).
+- Use trusted, primary sources for uncertain facts and external references.
+
+Reference:
+- `Extras/Documentation/Guidelines/Trusted Sources.md`
+
+### Swift and SwiftUI expectations
+
+- Follow project Swift/platform targets and prefer migration-friendly modern Swift patterns.
+- Keep Swift files focused, visibility tight, and concurrency ownership explicit.
+- Prefer structured concurrency and clear state modeling.
+- Keep SwiftUI state intentional, views composable, and platform specialization isolated.
+
+Reference:
+- `Extras/Documentation/Guidelines/Swift.md`
+- `Extras/Documentation/Guidelines/SwiftUI.md`
+
+### GitHub workflow safety
+
+- For `gh` commands with Markdown bodies, use `--body-file` rather than inline `--body`.
+- Keep PR summaries factual, scoped to the diff, and include validation/gaps.
+
+Reference:
+- `Extras/Documentation/Guidelines/GitHub.md`
 
 ### Code comments
 
 - Add compact documentation comments for each type, method/function, and member/property describing purpose.
-- Comments should add intent and context, not restate the symbol name.
-- For the primary type in a source file, add a larger top-level documentation comment with design and implementation detail.
-- Prefer files to center on one key type when practical.
-- Keep inline/block comments sparse; use them for subtle logic, non-obvious constraints, or code that could be misread.
-- Favor comments that improve IDE hover/help output while staying concise.
+- Comments should add intent/context, not restate names.
+- For the primary type in a source file, add a top-level documentation comment with design/implementation detail.
+- Keep inline comments sparse and focused on subtle logic or constraints.
 
-## Detailed Guidelines
-
-Managed copies live under `Extras/Documentation/Guidelines/`:
-- Overview/index: `Extras/Documentation/Guidelines/README.md`
-- Good code: `Extras/Documentation/Guidelines/Good Code.md`
-- Principles: `Extras/Documentation/Guidelines/Principles.md`
-- Swift: `Extras/Documentation/Guidelines/Swift.md`
-- SwiftUI: `Extras/Documentation/Guidelines/SwiftUI.md`
-- Testing: `Extras/Documentation/Guidelines/Testing.md`
-- Trusted sources: `Extras/Documentation/Guidelines/Trusted Sources.md`
-- GitHub workflow: `Extras/Documentation/Guidelines/GitHub.md`
-
-## Project references
-
-- `README.md`
-- `Settings.xcconfig`
-- `ActionStatus.xcodeproj/project.pbxproj`
-
----
-
-Refresh note: regenerate this file periodically using `~/.local/share/agents/REFRESH.md`, `~/.local/share/agents/COMMON.md`, and relevant files in `~/.local/share/agents/instructions/`.
+To refresh this file, use the refresh-agents skill.
