@@ -1,15 +1,6 @@
 {
-  "originHash" : "448657028475d919cad1d866a869fa54825760b893d2014fc735c4036428edc0",
+  "originHash" : "edf9f4d8d9e38a3e110ac627d539145e1b2d7f708b3270033e68163264f91878",
   "pins" : [
-    {
-      "identity" : "coercion",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/elegantchaos/Coercion.git",
-      "state" : {
-        "revision" : "df699ebd4707bcfd99fcad4b9f6c09ddc1208af9",
-        "version" : "1.1.3"
-      }
-    },
     {
       "identity" : "collectionextensions",
       "kind" : "remoteSourceControl",
@@ -17,15 +8,6 @@
       "state" : {
         "revision" : "52b3547475730a2b6bafc17dc1df31ad2ca53200",
         "version" : "1.1.9"
-      }
-    },
-    {
-      "identity" : "datafetcher",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/elegantchaos/DataFetcher.git",
-      "state" : {
-        "revision" : "88550e5207654ad19237a578188e4757c919970b",
-        "version" : "1.0.2"
       }
     },
     {
@@ -51,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/elegantchaos/JSONSession.git",
       "state" : {
-        "revision" : "636fdf1fc8050f619e5299892c1ac0b95fd6677f",
-        "version" : "1.1.1"
+        "revision" : "50d07644d67bfc997877a682972867cc4bbd965b",
+        "version" : "2.0.0"
       }
     },
     {
@@ -69,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/elegantchaos/Logger.git",
       "state" : {
-        "revision" : "50da0037cd25c2f9444effbb2afe15bb00f70a98",
-        "version" : "1.7.3"
+        "revision" : "6957a21c4e02fc03734a460fb8bfcd36dbe8aba8",
+        "version" : "2.0.1"
       }
     },
     {
@@ -79,15 +61,6 @@
       "location" : "https://github.com/elegantchaos/Matchable.git",
       "state" : {
         "revision" : "0f523c77bf4b0dbbdc0838b952262ed45fab17f8",
-        "version" : "1.0.6"
-      }
-    },
-    {
-      "identity" : "octoid",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/elegantchaos/Octoid.git",
-      "state" : {
-        "revision" : "7640765e7587b8654c4df78f2ce5e37f45380f96",
         "version" : "1.0.6"
       }
     },

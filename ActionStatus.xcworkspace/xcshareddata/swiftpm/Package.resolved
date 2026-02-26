@@ -1,15 +1,6 @@
 {
-  "originHash" : "448657028475d919cad1d866a869fa54825760b893d2014fc735c4036428edc0",
+  "originHash" : "75b4ee004f005bcdd64e87da43d51838b354f89ffc4e9430c364ef4b5a99988a",
   "pins" : [
-    {
-      "identity" : "coercion",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/elegantchaos/Coercion.git",
-      "state" : {
-        "revision" : "0481b6c80b0d50cb3c532d8bd87101140a20bade",
-        "version" : "1.1.1"
-      }
-    },
     {
       "identity" : "collectionextensions",
       "kind" : "remoteSourceControl",
@@ -17,15 +8,6 @@
       "state" : {
         "revision" : "52b3547475730a2b6bafc17dc1df31ad2ca53200",
         "version" : "1.1.9"
-      }
-    },
-    {
-      "identity" : "datafetcher",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/elegantchaos/DataFetcher.git",
-      "state" : {
-        "revision" : "88550e5207654ad19237a578188e4757c919970b",
-        "version" : "1.0.2"
       }
     },
     {
@@ -51,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/elegantchaos/JSONSession.git",
       "state" : {
-        "revision" : "636fdf1fc8050f619e5299892c1ac0b95fd6677f",
-        "version" : "1.1.1"
+        "revision" : "50d07644d67bfc997877a682972867cc4bbd965b",
+        "version" : "2.0.0"
       }
     },
     {
@@ -69,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/elegantchaos/Logger.git",
       "state" : {
-        "revision" : "50da0037cd25c2f9444effbb2afe15bb00f70a98",
-        "version" : "1.7.3"
+        "revision" : "6957a21c4e02fc03734a460fb8bfcd36dbe8aba8",
+        "version" : "2.0.1"
       }
     },
     {
@@ -87,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/elegantchaos/Octoid.git",
       "state" : {
-        "revision" : "7640765e7587b8654c4df78f2ce5e37f45380f96",
-        "version" : "1.0.6"
+        "branch" : "integration/action-status",
+        "revision" : "c89b71ddfaa8651ae6f4fff5a1da07ba5e3b05b0"
       }
     },
     {

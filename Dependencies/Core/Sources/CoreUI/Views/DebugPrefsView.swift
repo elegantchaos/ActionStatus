@@ -13,10 +13,8 @@ struct DebugPrefsView: View {
     Section {
       VStack(alignment: .leading, spacing: 12) {
         Toggle("Use test refresh controller", isOn: $settings.testRefresh)
-        LoggerChannelsHeaderView()
-        ScrollView {
-          LoggerChannelsStackView()
-        }
+        LoggerChannelsView()
+          .frame(minHeight: 220)
       }
     } header: {
       Text("Debug")
