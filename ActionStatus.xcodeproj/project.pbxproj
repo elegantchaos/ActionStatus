@@ -96,8 +96,6 @@
 		2257D8192F4DFCE300DBD569 /* upload-iOS */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-iOS"; sourceTree = "<group>"; };
 		2257D81A2F4DFCE300DBD569 /* upload-macOS */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-macOS"; sourceTree = "<group>"; };
 		2257D81B2F4DFCE300DBD569 /* upload-tvOS */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "upload-tvOS"; sourceTree = "<group>"; };
-		2257D81C2F4DFCE300DBD569 /* validate-changes */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "validate-changes"; sourceTree = "<group>"; };
-		2257D81D2F4DFCE300DBD569 /* validate-target */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "validate-target"; sourceTree = "<group>"; };
 		226D6C8524758F1500B54967 /* Screenshots.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Screenshots.xctestplan; sourceTree = "<group>"; };
 		226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotUITests.swift; sourceTree = "<group>"; };
 		228D838C246AC10700943918 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -244,8 +242,6 @@
 				2257D8192F4DFCE300DBD569 /* upload-iOS */,
 				2257D81A2F4DFCE300DBD569 /* upload-macOS */,
 				2257D81B2F4DFCE300DBD569 /* upload-tvOS */,
-				2257D81C2F4DFCE300DBD569 /* validate-changes */,
-				2257D81D2F4DFCE300DBD569 /* validate-target */,
 			);
 			path = Scripts;
 			sourceTree = "<group>";
