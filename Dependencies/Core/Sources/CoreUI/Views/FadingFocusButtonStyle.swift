@@ -3,10 +3,11 @@
 //  All code (c) 2021 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Observation
 import SwiftUI
 
 struct FadingFocusButtonStyle: ButtonStyle {
-  @EnvironmentObject var focus: FadingFocusState
+  @Environment(FadingFocusState.self) var focus
   @Environment(\.isFocused) var isFocused: Bool
 
   func makeBody(configuration: Configuration) -> some View {
@@ -15,8 +16,9 @@ struct FadingFocusButtonStyle: ButtonStyle {
   }
 }
 
-class FadingFocusState: ObservableObject {
-  @Published var alpha: Double = 1.0
+@Observable
+class FadingFocusState {
+  var alpha: Double = 1.0
 
   func handleFocusChanged() {
     alpha = 1.0

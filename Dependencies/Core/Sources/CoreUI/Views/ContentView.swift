@@ -3,15 +3,18 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Observation
 import SwiftUI
 
 public struct ContentView: View {
-  @EnvironmentObject var context: ViewContext
+  @Environment(ViewContext.self) var context
 
   public init() {
   }
 
   public var body: some View {
+    @Bindable var context = context
+
     #if os(macOS)
       RootView()
         .sheet(item: $context.presentedSheet) { sheet in

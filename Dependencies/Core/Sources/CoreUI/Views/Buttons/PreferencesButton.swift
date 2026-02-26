@@ -7,7 +7,7 @@ import Runtime
 import SwiftUI
 
 struct PreferencesButton: View {
-  @EnvironmentObject var context: ViewContext
+  @Environment(ViewContext.self) var context
 
   var body: some View {
     Button(action: showPreferences) {

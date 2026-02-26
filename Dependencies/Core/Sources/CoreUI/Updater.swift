@@ -3,12 +3,14 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Observation
 import SwiftUI
 
-open class Updater: ObservableObject {
-  @Published public var progress: Double = 0
-  @Published public var status: String = ""
-  @Published public var hasUpdate: Bool = false
+@Observable
+open class Updater {
+  public var progress: Double = 0
+  public var status: String = ""
+  public var hasUpdate: Bool = false
 
   public init() {
   }

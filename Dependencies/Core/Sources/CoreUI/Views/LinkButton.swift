@@ -6,7 +6,7 @@
 import SwiftUI
 
 struct LinkButton: View {
-  @EnvironmentObject var context: ViewContext
+  @Environment(ViewContext.self) var context
 
   let url: URL
 

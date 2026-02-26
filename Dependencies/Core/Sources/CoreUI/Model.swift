@@ -6,12 +6,14 @@
 import Core
 import DictionaryCoding
 import Logger
+import Observation
 import Runtime
 import SwiftUI
 
 public let modelChannel = Channel("com.elegantchaos.actionstatus.Model")
 
-public class Model: ObservableObject {
+@Observable
+public class Model {
   public typealias RepoList = [Repo]
 
   internal let store: NSUbiquitousKeyValueStore
@@ -96,7 +98,6 @@ public class Model: ObservableObject {
     assert(Thread.isMainThread)
     if var repo = items[id] {
       modelChannel.log("Updated state of \(repo) to \(state)")
-      objectWillChange.send()
       repo.state = state
       switch state {
         case .passing: repo.lastSucceeded = Date()
@@ -119,7 +120,6 @@ public class Model: ObservableObject {
 
     if update {
       modelChannel.log(items[repo.id] == nil ? "Added \(repo)" : "Updated \(repo)")
-      objectWillChange.send()
       items[repo.id] = repo
     }
   }
@@ -161,7 +161,6 @@ public class Model: ObservableObject {
   }
 
   public func remove(reposWithIDs: [UUID]) {
-    objectWillChange.send()
     for id in reposWithIDs {
       items.removeValue(forKey: id)
     }

@@ -7,6 +7,7 @@ import Combine
 import Core
 import Keychain
 import Logger
+import Observation
 import Runtime
 import SwiftUI
 
@@ -69,6 +70,7 @@ open class Engine: NSObject, ApplicationHost {
   #endif
   public var model = makeModel()
   var observers: [AnyCancellable] = []
+  var modelChangeWorkItem: DispatchWorkItem?
 
   var settings: Settings {
     context.settings
@@ -141,28 +143,8 @@ open class Engine: NSObject, ApplicationHost {
           self.updateRepoState()
         })
 
-      observers.append(
-        model
-          .objectWillChange
-          .debounce(for: 0.1, scheduler: RunLoop.main)
-          .sink {
-            assert(Thread.isMainThread)
-            monitoringChannel.log("model changed")
-            self.saveState()
-            self.updateRepoState()
-          })
-
-      observers.append(
-        context
-          .$settings
-          .removeDuplicates()
-          .dropFirst()
-          .sink { _ in
-            assert(Thread.isMainThread)
-            monitoringChannel.log("settings changed")
-            self.saveSettings()
-            self.updateRepoState()
-          })
+      observeModelChanges()
+      observeSettingsChanges()
 
       updateRepoState()
       completion(options)
@@ -177,6 +159,52 @@ open class Engine: NSObject, ApplicationHost {
 
   open func tearDown() {
     observers = []
+    modelChangeWorkItem?.cancel()
+    modelChangeWorkItem = nil
+  }
+
+  func observeModelChanges() {
+    withObservationTracking(
+      {
+        _ = model.items
+      },
+      onChange: { [weak self] in
+        DispatchQueue.main.async { [weak self] in
+          guard let self else { return }
+          self.modelDidChange()
+          self.observeModelChanges()
+        }
+      })
+  }
+
+  func observeSettingsChanges() {
+    withObservationTracking(
+      {
+        _ = context.settings
+      },
+      onChange: { [weak self] in
+        DispatchQueue.main.async { [weak self] in
+          guard let self else { return }
+          monitoringChannel.log("settings changed")
+          self.saveSettings()
+          self.updateRepoState()
+          self.observeSettingsChanges()
+        }
+      })
+  }
+
+  func modelDidChange() {
+    modelChangeWorkItem?.cancel()
+    let workItem = DispatchWorkItem { [weak self] in
+      guard let self else { return }
+      monitoringChannel.log("model changed")
+      self.saveState()
+      self.updateRepoState()
+      self.modelChangeWorkItem = nil
+    }
+
+    modelChangeWorkItem = workItem
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: workItem)
   }
 
   open func setupDefaultSettings() {
@@ -212,10 +240,10 @@ open class Engine: NSObject, ApplicationHost {
   public func applyEnvironment<T>(to view: T) -> some View where T: View {
     return
       view
-      .environmentObject(context)
-      .environmentObject(model)
-      .environmentObject(updater)
-      .environmentObject(status)
+      .environment(context)
+      .environment(model)
+      .environment(updater)
+      .environment(status)
   }
 
   public func saveState() {

@@ -6,7 +6,7 @@
 import SwiftUI
 
 public struct ToggleEditingButton: View {
-  @EnvironmentObject var context: ViewContext
+  @Environment(ViewContext.self) var context
 
   public init() {
   }

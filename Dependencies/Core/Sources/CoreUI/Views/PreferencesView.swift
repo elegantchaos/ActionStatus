@@ -6,8 +6,8 @@
 import SwiftUI
 
 public struct AppSettingsView: View {
-  @EnvironmentObject var context: ViewContext
-  @EnvironmentObject var model: Model
+  @Environment(ViewContext.self) var context
+  @Environment(Model.self) var model
 
   @State var settings = Settings()
   @State var token: String = ""
@@ -47,7 +47,7 @@ public struct AppSettingsView: View {
 
 public struct PreferencesView: View {
   @Environment(\.dismiss) private var dismissAction
-  @EnvironmentObject var context: ViewContext
+  @Environment(ViewContext.self) var context
 
   @State var settings = Settings()
   @State var token: String = ""

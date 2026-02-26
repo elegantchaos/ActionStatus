@@ -8,8 +8,8 @@ import Runtime
 import SwiftUI
 
 struct RepoCellView: View {
-  @EnvironmentObject var context: ViewContext
-  @EnvironmentObject var model: Model
+  @Environment(ViewContext.self) var context
+  @Environment(Model.self) var model
 
   let repo: Repo
   let selectable: Bool

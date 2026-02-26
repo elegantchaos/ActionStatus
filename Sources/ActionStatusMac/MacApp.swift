@@ -23,7 +23,7 @@
 
   private struct StatusMenuContent: View {
     let application: MacEngine
-    @ObservedObject var status: RepoState
+    let status: RepoState
 
     var body: some View {
       ForEach(status.sortedRepos) { repo in
@@ -53,7 +53,7 @@
 
   private struct StatusMenuLabel: View {
     let application: MacEngine
-    @ObservedObject var status: RepoState
+    let status: RepoState
 
     var body: some View {
       let _ = status.combinedState

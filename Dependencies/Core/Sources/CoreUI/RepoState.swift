@@ -6,16 +6,18 @@
 import Core
 import Foundation
 import Logger
+import Observation
 
 let repoStateChannel = Channel("RepoState")
 
-public class RepoState: ObservableObject {
-  @Published public var sortedRepos: [Repo] = []
-  @Published public var passing: Int = 0
-  @Published public var failing: Int = 0
-  @Published public var running: Int = 0
-  @Published public var queued: Int = 0
-  @Published public var unreachable: Int = 0
+@Observable
+public class RepoState {
+  public var sortedRepos: [Repo] = []
+  public var passing: Int = 0
+  public var failing: Int = 0
+  public var running: Int = 0
+  public var queued: Int = 0
+  public var unreachable: Int = 0
 
   public func update(with model: Model, context: ViewContext) {
     repoStateChannel.log("updated")
