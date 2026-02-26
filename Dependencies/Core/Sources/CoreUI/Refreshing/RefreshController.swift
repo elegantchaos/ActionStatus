@@ -23,6 +23,7 @@ public class RefreshController {
 
   internal func startRefresh() { fatalError("needs overriding") }
   internal func cancelRefresh() { fatalError("needs overriding") }
+  internal func refreshRateDidChange(to _: Double) {}
 }
 
 public extension RefreshController {
@@ -49,8 +50,10 @@ public extension RefreshController {
           } else {
             state = .paused(level - 1)
           }
-        case .running:
-          break
+        case .running(let currentRate):
+          guard currentRate != rate else { break }
+          state = .running(rate)
+          refreshRateDidChange(to: rate)
       }
     }
   }

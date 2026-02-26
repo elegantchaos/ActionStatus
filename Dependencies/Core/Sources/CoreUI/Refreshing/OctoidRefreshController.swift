@@ -17,7 +17,7 @@ import Octoid
 public class OctoidRefreshController: RefreshController {
   internal let token: String
   internal let apiServer: String
-  internal let refreshInterval: TimeInterval
+  internal let fallbackRefreshInterval: TimeInterval
 
   private var repoTasks: [UUID: Task<Void, Never>] = [:]
 
@@ -25,27 +25,35 @@ public class OctoidRefreshController: RefreshController {
     model: Model,
     token: String,
     apiServer: String,
-    refreshInterval: TimeInterval = 30.0
+    refreshInterval: TimeInterval = RefreshRate.minute.rate
   ) {
     self.token = token
     self.apiServer = apiServer
-    self.refreshInterval = refreshInterval
+    self.fallbackRefreshInterval = refreshInterval
     super.init(model: model)
   }
 
   override func startRefresh() {
     cancelRefresh()
+    let interval = activeRefreshInterval
 
     let repos = Array(model.items.values)
+    refreshChannel.log("Starting refresh for \(repos.count) repos at \(interval)s interval.")
     for (index, repo) in repos.enumerated() {
       repoTasks[repo.id] = Task { [weak self] in
         guard let self else { return }
         let initialDelay = UInt64(index) * 1_000_000_000
         if initialDelay > 0 {
+          let delaySeconds = Double(initialDelay) / 1_000_000_000
+          refreshChannel.log("Scheduling first poll for \(repo.owner)/\(repo.name) in \(delaySeconds)s.")
+        } else {
+          refreshChannel.log("Scheduling first poll for \(repo.owner)/\(repo.name) immediately.")
+        }
+        if initialDelay > 0 {
           try? await Task.sleep(nanoseconds: initialDelay)
         }
 
-        await self.runPollingLoop(for: repo)
+        await self.runPollingLoop(for: repo, refreshInterval: interval)
       }
     }
   }
@@ -57,7 +65,19 @@ public class OctoidRefreshController: RefreshController {
     repoTasks.removeAll()
   }
 
-  private func runPollingLoop(for repo: Repo) async {
+  override func refreshRateDidChange(to _: Double) {
+    cancelRefresh()
+    startRefresh()
+  }
+
+  private var activeRefreshInterval: TimeInterval {
+    if case .running(let rate) = state {
+      return rate
+    }
+    return fallbackRefreshInterval
+  }
+
+  private func runPollingLoop(for repo: Repo, refreshInterval: TimeInterval) async {
     let baseURL =
       (try? GithubDeviceAuthenticator.normalizedAPIBaseURL(for: apiServer))
       ?? URL(string: "https://api.github.com")!
@@ -185,7 +205,10 @@ private actor RepoPoller {
   }
 
   func run() async {
+    var cycle = 0
     while !Task.isCancelled {
+      cycle += 1
+      refreshChannel.log("Starting poll cycle \(cycle) for \(fullName) (interval \(refreshInterval)s).")
       if shouldPollEvents {
         await pollEvents()
       }
@@ -199,6 +222,8 @@ private actor RepoPoller {
       }
 
       if Task.isCancelled { break }
+      let nextPollAt = Date().addingTimeInterval(refreshInterval)
+      refreshChannel.log("Completed poll cycle \(cycle) for \(fullName); next poll at \(nextPollAt).")
       try? await Task.sleep(nanoseconds: UInt64(refreshInterval * 1_000_000_000))
     }
 

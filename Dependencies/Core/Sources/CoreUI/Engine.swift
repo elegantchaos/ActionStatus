@@ -106,7 +106,7 @@ open class Engine: NSObject, ApplicationHost {
         return nil
       }
 
-      let controller = OctoidRefreshController(model: model, token: token, apiServer: settings.githubServer)
+      let controller = OctoidRefreshController(model: model, token: token, apiServer: settings.githubServer, refreshInterval: settings.refreshRate.rate)
       refreshChannel.log("Using github refresh controller for \(settings.githubUser)/\(settings.githubServer)")
       return controller
     } catch {
@@ -154,11 +154,12 @@ open class Engine: NSObject, ApplicationHost {
 
       observers.append(
         context
-          .objectWillChange
-          .debounce(for: 0.1, scheduler: RunLoop.main)
-          .sink { value in
+          .$settings
+          .removeDuplicates()
+          .dropFirst()
+          .sink { _ in
             assert(Thread.isMainThread)
-            monitoringChannel.log("view state changed")
+            monitoringChannel.log("settings changed")
             self.saveSettings()
             self.updateRepoState()
           })
@@ -188,11 +189,16 @@ open class Engine: NSObject, ApplicationHost {
 
   open func loadSettings() {
     settingsChannel.debug("Loading settings")
-    pauseRefresh()
+    switch context.settings.readSettings() {
+      case .unchanged:
+        settingsChannel.debug("Settings unchanged")
 
-    if context.settings.readSettings() == .authenticationChanged {
-      // we've changed authentication method, so reset the refresh controller
-      resetRefresh()
+      case .authenticationChanged:
+        // we've changed authentication method, so reset the refresh controller
+        resetRefresh()
+
+      case .changed:
+        break
     }
 
     resumeRefresh()
