@@ -18,7 +18,7 @@ public extension String {
   static let testRefresh = "TestRefresh"
 }
 
-public struct Settings {
+public struct Settings: Equatable {
   public var isEditing: Bool = false
   var displaySize: DisplaySize = .automatic
   var refreshRate: RefreshRate = .automatic
@@ -30,7 +30,8 @@ public struct Settings {
   var testRefresh = false
 
   enum ReadResult {
-    case authenticationUnchanged
+    case unchanged
+    case changed
     case authenticationChanged
   }
 
@@ -74,7 +75,8 @@ public struct Settings {
     settingsChannel.debug("\(String.refreshIntervalKey) is \(refreshRate)")
     settingsChannel.debug("\(String.displaySizeKey) is \(displaySize)")
 
-    return authenticationChanged(from: oldSettings) ? .authenticationChanged : .authenticationUnchanged
+    guard self != oldSettings else { return .unchanged }
+    return authenticationChanged(from: oldSettings) ? .authenticationChanged : .changed
   }
 
   func writeSettings() {

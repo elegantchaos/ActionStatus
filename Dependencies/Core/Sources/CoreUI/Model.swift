@@ -100,7 +100,7 @@ public class Model: ObservableObject {
       repo.state = state
       switch state {
         case .passing: repo.lastSucceeded = Date()
-        case .failing: repo.lastFailed = Date()
+        case .failing, .partiallyFailing: repo.lastFailed = Date()
         default: break
       }
       items[id] = repo

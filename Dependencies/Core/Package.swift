@@ -1,4 +1,4 @@
-// swift-tools-version:6.0
+// swift-tools-version:6.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -17,7 +17,6 @@ let package = Package(
       targets: ["Core"]),
   ],
   dependencies: [
-    // Dependencies declare other packages that this package depends on.
     .package(url: "https://github.com/elegantchaos/CollectionExtensions.git", from: "1.1.9"),
     .package(url: "https://github.com/elegantchaos/DictionaryCoding.git", from: "1.0.9"),
     .package(url: "https://github.com/elegantchaos/Files.git", from: "1.2.2"),

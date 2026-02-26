@@ -1,5 +1,5 @@
 {
-  "originHash" : "75b4ee004f005bcdd64e87da43d51838b354f89ffc4e9430c364ef4b5a99988a",
+  "originHash" : "04caadd358f0ada492a8ebbe1c054062369f36a29815d71f1dc932727ba35e09",
   "pins" : [
     {
       "identity" : "collectionextensions",
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/elegantchaos/Octoid.git",
       "state" : {
-        "branch" : "integration/action-status",
-        "revision" : "c89b71ddfaa8651ae6f4fff5a1da07ba5e3b05b0"
+        "revision" : "c75a7a7966d4b5e0b303861958a78c31b142dedb",
+        "version" : "2.0.0"
       }
     },
     {

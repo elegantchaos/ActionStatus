@@ -19,7 +19,7 @@ public struct EditView: View {
 
   @State var name = ""
   @State var owner = ""
-  @State var workflow = ""
+  @State var workflows: [Repo.WorkflowSelection] = []
   @State var branches: String = ""
 
   public var body: some View {
@@ -39,11 +39,6 @@ public struct EditView: View {
                 .modifier(NameOrgStyle())
                 .modifier(ClearButton(text: $owner))
             }
-            LabeledContent("workflow") {
-              TextField("Tests.yml", text: $workflow)
-                .modifier(NameOrgStyle())
-                .modifier(ClearButton(text: $workflow))
-            }
             LabeledContent("branches") {
               TextField("branch1, branch2, …", text: $branches)
                 .modifier(BranchListStyle())
@@ -52,7 +47,29 @@ public struct EditView: View {
           } header: {
             Text("Details")
           } footer: {
-            Text("Enter the name and owner of the repository, and the name of the workflow file to test. Enter a list of specific branches to test, or leave blank to just test the default branch.")
+            Text("Enter the name and owner of the repository. Select which workflows to monitor when they have been discovered, and optionally enter specific branches to test.")
+          }
+
+          Section {
+            if workflows.isEmpty {
+              Text("No workflows have been discovered yet for this repository.")
+                .foregroundStyle(.secondary)
+            } else {
+              ForEach($workflows) { $workflow in
+                Toggle(isOn: $workflow.enabled) {
+                  VStack(alignment: .leading, spacing: 2) {
+                    Text(workflow.name)
+                    Text(workflow.path)
+                      .font(.caption)
+                      .foregroundStyle(.secondary)
+                  }
+                }
+              }
+            }
+          } header: {
+            Text("Workflows")
+          } footer: {
+            Text("Newly discovered workflows are enabled by default.")
           }
 
           Section {
@@ -68,7 +85,7 @@ public struct EditView: View {
 
             LabeledContent("status") {
               HStack(alignment: .firstTextBaseline) {
-                Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions?query=workflow%3A\(trimmedWorkflow)")
+                Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions")
                   .lineLimit(1)
                   .truncationMode(.middle)
                 Spacer()
@@ -94,17 +111,6 @@ public struct EditView: View {
         context.host.pauseRefresh()
         self.load()
       }
-  }
-
-  var trimmedWorkflow: String {
-    var stripped = workflow.trimmingCharacters(in: .whitespaces)
-    if let range = stripped.range(of: ".yml") {
-      stripped.removeSubrange(range)
-    }
-    if stripped.isEmpty {
-      stripped = "Tests"
-    }
-    return stripped
   }
 
   var trimmedName: String {
@@ -133,7 +139,7 @@ public struct EditView: View {
     if let repo = repo {
       name = repo.name
       owner = repo.owner
-      workflow = repo.workflow
+      workflows = repo.workflows.sorted(by: { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending })
       branches = repo.branches.joined(separator: ", ")
     }
   }
@@ -148,7 +154,7 @@ public struct EditView: View {
       ?? Repo()
     updated.name = trimmedName
     updated.owner = trimmedOwner
-    updated.workflow = trimmedWorkflow
+    updated.workflows = workflows
     updated.branches = trimmedBranches
     updated.state = Repo.State.unknown
     return updated

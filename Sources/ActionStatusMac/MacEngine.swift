@@ -83,6 +83,7 @@
         case .unknown: return "questionmark.circle"
         case .passing: return "checkmark.circle"
         case .failing: return "xmark.circle"
+        case .partiallyFailing: return "xmark.circle"
         case .queued: return "clock.arrow.circlepath"
         case .running: return "arrow.triangle.2.circlepath"
       }
