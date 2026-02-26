@@ -75,19 +75,16 @@
       open(url: repo.githubURL())
     }
 
-    func statusSymbolName(at date: Date = Date()) -> String {
-      let combined = status.combinedState
-      guard !combined.isEmpty else { return "questionmark.circle" }
-      let index = Int(date.timeIntervalSinceReferenceDate / 1.5) % combined.count
-      switch combined[index] {
-        case .unknown: return "questionmark.circle"
-        case .dormant: return "moon.zzz"
-        case .passing: return "checkmark.circle"
-        case .failing: return "xmark.circle"
-        case .partiallyFailing: return "xmark.circle"
-        case .queued: return "clock.arrow.circlepath"
-        case .running: return "arrow.triangle.2.circlepath"
+    func statusSymbolName() -> String {
+      if status.running > 0 || status.queued > 0 {
+        return "arrow.triangle.2.circlepath"
       }
+
+      if status.failing > 0 {
+        return "xmark.circle"
+      }
+
+      return "checkmark.circle"
     }
   }
 #endif
