@@ -19,6 +19,7 @@ public struct Repo: Identifiable, Equatable, Hashable {
     case queued = 3
     case running = 4
     case partiallyFailing = 5
+    case dormant = 6
 
     public static func < (lhs: State, rhs: State) -> Bool {
       lhs.sortOrder < rhs.sortOrder
@@ -27,11 +28,12 @@ public struct Repo: Identifiable, Equatable, Hashable {
     var sortOrder: Int {
       switch self {
         case .unknown: 0
-        case .passing: 1
-        case .queued: 2
-        case .running: 3
-        case .partiallyFailing: 4
-        case .failing: 5
+        case .dormant: 1
+        case .passing: 2
+        case .queued: 3
+        case .running: 4
+        case .partiallyFailing: 5
+        case .failing: 6
       }
     }
   }
@@ -205,6 +207,7 @@ public struct Repo: Identifiable, Equatable, Hashable {
     let name: String
     switch state {
       case .unknown: name = "questionmark.circle"
+      case .dormant: name = "moon.zzz"
       case .failing: name = "xmark.circle"
       case .partiallyFailing: name = "xmark.circle"
       case .passing: name = "checkmark.circle"

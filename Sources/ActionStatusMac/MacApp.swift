@@ -12,6 +12,7 @@
     var symbolName: String {
       switch self {
         case .unknown: return "questionmark.circle"
+        case .dormant: return "moon.zzz"
         case .passing: return "checkmark.circle"
         case .failing: return "xmark.circle"
         case .partiallyFailing: return "xmark.circle"

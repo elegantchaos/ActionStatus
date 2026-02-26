@@ -81,6 +81,7 @@
       let index = Int(date.timeIntervalSinceReferenceDate / 1.5) % combined.count
       switch combined[index] {
         case .unknown: return "questionmark.circle"
+        case .dormant: return "moon.zzz"
         case .passing: return "checkmark.circle"
         case .failing: return "xmark.circle"
         case .partiallyFailing: return "xmark.circle"
