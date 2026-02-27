@@ -44,7 +44,7 @@
       panel.canCreateDirectories = false
 
       guard panel.runModal() == .OK else { return }
-      model.add(fromFolders: panel.urls)
+      modelService.model.add(fromFolders: panel.urls)
     }
 
     @objc func showWindow(_ sender: Any?) {

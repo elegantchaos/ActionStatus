@@ -42,6 +42,8 @@ public let refreshControllerChannel = Channel("RefreshController")
   override init() {
     super.init()
     Engine.sharedEngine = self
+    let model = Engine.makeModel()
+    modelService = ModelService(model: model)
     refreshService = RefreshService(settings: settings, model: model)
   }
   
@@ -64,13 +66,11 @@ public let refreshControllerChannel = Channel("RefreshController")
   public var filePicker: FilePicker?
   open var filePickerClass: FilePicker.Type { return StubFilePicker.self }
 #endif
-  public var model = makeModel()
+  public let modelService: ModelService
   var observers: [AnyCancellable] = []
   var modelChangeWorkItem: DispatchWorkItem?
   
-  var settings: Settings {
-    context.settings
-  }
+  public let settingsService: SettingsService
   
   func makeViewState() -> ViewContext {
     return ViewContext(host: self)
@@ -81,7 +81,7 @@ public let refreshControllerChannel = Channel("RefreshController")
   }
   
   @objc func changed() {
-    model.load()
+    modelService.model.load()
   }
   
   class func makeModel() -> Model {
@@ -105,7 +105,7 @@ public let refreshControllerChannel = Channel("RefreshController")
     registerDefaultsFromSettingsBundle()
     setupDefaultSettings()
     loadSettings()
-    model.load()
+    modelService.model.load()
     
     observers.append(
       UserDefaults.standard.onChanged {
@@ -121,7 +121,7 @@ public let refreshControllerChannel = Channel("RefreshController")
   
   open func updateRepoState() {
     withAnimation {
-      status.update(with: model, context: context)
+      status.update(with: modelService.model, context: context)
     }
   }
   
@@ -136,7 +136,7 @@ public let refreshControllerChannel = Channel("RefreshController")
     let workItem = DispatchWorkItem { [weak self] in
       guard let self else { return }
       monitoringChannel.log("model changed")
-      model.save()
+      modelService.model.save()
       self.updateRepoState()
       self.modelChangeWorkItem = nil
     }
@@ -185,7 +185,9 @@ public let refreshControllerChannel = Channel("RefreshController")
     return
       view
       .environment(context)
-      .environment(model)
+      .environment(modelService)
+      .environment(modelService.model)
+      .environment(settings)
       .environment(updater)
       .environment(status)
       .environment(refreshService)
@@ -344,3 +346,22 @@ public extension UserDefaults {
     }
   }
 }
+
+@Observable
+class ModelService {
+  init(model: Model) {
+    self.model = model
+  }
+  
+  public let model: Model
+}
+
+@Observable class SettingsService {
+  init(settings: Settings) {
+    self.settings = settings
+  }
+  
+  var settings: Settings
+}
+
+
