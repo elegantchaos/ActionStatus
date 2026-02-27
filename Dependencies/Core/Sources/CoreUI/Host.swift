@@ -6,12 +6,14 @@
 import Foundation
 import Runtime
 
-public protocol ApplicationHost {
+@MainActor public protocol ApplicationHost {
   var info: AppInfo { get }
   func open(url: URL)
   func reveal(url: URL)
   func pauseRefresh()
   func resumeRefresh()
+  func modelDidChange()
+  func settingsDidChange()
 }
 
 extension ApplicationHost {

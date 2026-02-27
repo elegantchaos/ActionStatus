@@ -21,87 +21,87 @@ public let settingsChannel = Channel("Settings")
 public let monitoringChannel = Channel("Monitoring")
 public let refreshControllerChannel = Channel("RefreshController")
 
-open class Engine: NSObject, ApplicationHost {
+@MainActor open class Engine: NSObject, ApplicationHost {
   enum SetupState {
     case launching
     case ready
   }
-
+  
   public typealias SetupCompletion = (LaunchOptions) -> Void
-
-  #if canImport(UIKit)
-    public typealias LaunchOptions = [UIApplication.LaunchOptionsKey: Any]
-  #elseif canImport(AppKit)
-    public typealias LaunchOptions = [String: Any]
-  #endif
-
+  
+#if canImport(UIKit)
+  public typealias LaunchOptions = [UIApplication.LaunchOptionsKey: Any]
+#elseif canImport(AppKit)
+  public typealias LaunchOptions = [String: Any]
+#endif
+  
   static var sharedEngine: Engine?
   var setupState: SetupState = .launching
   public let info = Bundle.main.runtimeInfo
-
+  
   override init() {
     super.init()
     Engine.sharedEngine = self
   }
-
+  
   public required init(coder: NSCoder) {
     fatalError()
   }
-
+  
   open class var shared: Engine {
     return Engine.sharedEngine!
   }
-
+  
   public lazy var updater: Updater = makeUpdater()
   public lazy var context = makeViewState()
   public var status: RepoState = RepoState()
-
+  
   public var refreshController: RefreshController? = nil
-  #if canImport(UIKit)
-    public var rootController: UIViewController?
-    public var filePicker: FilePicker?
-    open var filePickerClass: FilePicker.Type { return StubFilePicker.self }
-  #endif
+#if canImport(UIKit)
+  public var rootController: UIViewController?
+  public var filePicker: FilePicker?
+  open var filePickerClass: FilePicker.Type { return StubFilePicker.self }
+#endif
   public var model = makeModel()
   var observers: [AnyCancellable] = []
   var modelChangeWorkItem: DispatchWorkItem?
-
+  
   var settings: Settings {
     context.settings
   }
-
+  
   func makeViewState() -> ViewContext {
     return ViewContext(host: self)
   }
-
+  
   open func makeUpdater() -> Updater {
     return Updater()
   }
-
+  
   @objc func changed() {
     model.load()
   }
-
+  
   func makeRefreshController() -> RefreshController? {
     // disable refreshing for UI testing
     guard !ProcessInfo.processInfo.environment.isTestingUI else { return nil }
-
+    
     if settings.testRefresh {
       return RandomisingRefreshController(model: model)
     }
-
+    
     guard !settings.githubUser.isEmpty else {
       refreshChannel.log("No GitHub account configured. Refresh is disabled until sign-in completes.")
       return nil
     }
-
+    
     do {
       let token = try Keychain.default.password(for: settings.githubUser, on: settings.githubServer)
       guard !token.isEmpty else {
         refreshChannel.log("No GitHub token configured. Refresh is disabled until sign-in completes.")
         return nil
       }
-
+      
       let controller = OctoidRefreshController(model: model, token: token, apiServer: settings.githubServer, refreshInterval: settings.refreshRate.rate)
       refreshChannel.log("Using github refresh controller for \(settings.githubUser)/\(settings.githubServer)")
       return controller
@@ -110,84 +110,55 @@ open class Engine: NSObject, ApplicationHost {
       return nil
     }
   }
-
+  
   class func makeModel() -> Model {
     let isSimulator = Device().platform.isSimulator
     let isUITesting = ProcessInfo.processInfo.environment.isTestingUI
     return isSimulator || isUITesting ? TestModel() : Model([])
   }
-
+  
   public func editNewRepo() {
     context.presentedSheet = .editRepo(nil)
   }
-
-
+  
+  
   open func setUp(withOptions options: LaunchOptions, completion: @escaping SetupCompletion) {
-    DispatchQueue.main.async { [self] in
-      registerDefaultsFromSettingsBundle()
-      setupDefaultSettings()
-      loadSettings()
-      model.load()
-
-      observers.append(
-        UserDefaults.standard.onChanged {
-          assert(Thread.isMainThread)
-          monitoringChannel.log("user defaults changed")
-          self.loadSettings()
-          self.updateRepoState()
-        })
-
-      observeModelChanges()
-      observeSettingsChanges()
-
-      updateRepoState()
-      completion(options)
+    Task {
+      await _setup(withOptions: options, completion: completion)
     }
   }
-
+  
+  func _setup(withOptions options: LaunchOptions, completion: @escaping SetupCompletion) async {
+    registerDefaultsFromSettingsBundle()
+    setupDefaultSettings()
+    loadSettings()
+    model.load()
+    
+    observers.append(
+      UserDefaults.standard.onChanged {
+        assert(Thread.isMainThread)
+        monitoringChannel.log("user defaults changed")
+        self.loadSettings()
+        self.updateRepoState()
+      })
+    
+    updateRepoState()
+    completion(options)
+  }
+  
   open func updateRepoState() {
     withAnimation {
       status.update(with: model, context: context)
     }
   }
-
+  
   open func tearDown() {
     observers = []
     modelChangeWorkItem?.cancel()
     modelChangeWorkItem = nil
   }
-
-  func observeModelChanges() {
-    withObservationTracking(
-      {
-        _ = model.items
-      },
-      onChange: { [weak self] in
-        DispatchQueue.main.async { [weak self] in
-          guard let self else { return }
-          self.modelDidChange()
-          self.observeModelChanges()
-        }
-      })
-  }
-
-  func observeSettingsChanges() {
-    withObservationTracking(
-      {
-        _ = context.settings
-      },
-      onChange: { [weak self] in
-        DispatchQueue.main.async { [weak self] in
-          guard let self else { return }
-          monitoringChannel.log("settings changed")
-          self.saveSettings()
-          self.updateRepoState()
-          self.observeSettingsChanges()
-        }
-      })
-  }
-
-  func modelDidChange() {
+  
+  public func modelDidChange() {
     modelChangeWorkItem?.cancel()
     let workItem = DispatchWorkItem { [weak self] in
       guard let self else { return }
@@ -201,6 +172,12 @@ open class Engine: NSObject, ApplicationHost {
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: workItem)
   }
 
+  public func settingsDidChange() {
+    monitoringChannel.log("settings changed")
+    saveSettings()
+    updateRepoState()
+  }
+  
   open func setupDefaultSettings() {
     UserDefaults.standard.register(defaults: [
       .refreshIntervalKey: RefreshRate.automatic.rawValue,

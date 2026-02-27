@@ -185,7 +185,7 @@ internal extension Model {
   func add(fromGitRepo localGitFolderURL: URL, detector: NSDataDetector) {
     let containerURL = localGitFolderURL.deletingLastPathComponent()
     let containerName = containerURL.lastPathComponent
-    if let config = try? String(contentsOf: localGitFolderURL.appendingPathComponent("config")) {
+    if let config = try? String(contentsOf: localGitFolderURL.appendingPathComponent("config"), encoding: .utf8) {
       let tweaked = config.replacingOccurrences(of: "git@github.com:", with: "https://github.com/")
       let range = NSRange(location: 0, length: tweaked.count)
       for result in detector.matches(in: tweaked, options: [], range: range) {

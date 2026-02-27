@@ -8,7 +8,13 @@ import Observation
 import Runtime
 import SwiftUI
 
-struct PreviewHost: ApplicationHost {
+@MainActor struct PreviewHost: ApplicationHost {
+  func modelDidChange() {
+  }
+
+  func settingsDidChange() {
+  }
+
   let info = Bundle.main.runtimeInfo
   var refreshController: RefreshController? { return nil }
 }

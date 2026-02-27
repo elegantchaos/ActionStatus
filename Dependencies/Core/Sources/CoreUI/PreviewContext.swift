@@ -11,7 +11,7 @@ struct PreviewContext {
   let model: TestModel
   let state: ViewContext
 
-  init(isEditing: Bool = true) {
+  @MainActor init(isEditing: Bool = true) {
     model = TestModel()
     state = ViewContext(host: PreviewHost())
     state.settings.isEditing = isEditing

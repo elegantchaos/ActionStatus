@@ -8,6 +8,7 @@ import SwiftUI
 
 public struct ContentView: View {
   @Environment(ViewContext.self) var context
+  @Environment(Model.self) var model
 
   public init() {
   }
@@ -19,6 +20,12 @@ public struct ContentView: View {
       RootView()
         .sheet(item: $context.presentedSheet) { sheet in
           sheetView(for: sheet)
+        }
+        .onChange(of: model.items, initial: false) { _,_ in
+          context.host.modelDidChange()
+        }
+        .onChange(of: context.settings, initial: false) { _,_ in
+          context.host.settingsDidChange()
         }
     #else
       NavigationStack {
@@ -53,6 +60,12 @@ public struct ContentView: View {
                 }
                 .accessibility(identifier: "toggleEditing")
               }
+            }
+            .onChange(of: model.items, initial: false) { _,_ in
+              context.host.modelDidChange()
+            }
+            .onChange(of: context.settings, initial: false) { _,_ in
+              context.host.settingsDidChange()
             }
           #endif
       }
