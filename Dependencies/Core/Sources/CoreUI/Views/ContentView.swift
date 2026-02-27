@@ -36,8 +36,9 @@ public struct ContentView: View {
                   .foregroundColor(.black)
                 } else {
                   Button(action: { context.presentedSheet = .preferences }) {
-                    Text("Settings")
+                    Image(systemName: context.preferencesIcon)
                   }
+                  .accessibility(label: Text("Settings"))
                   .accessibility(identifier: "preferencesButton")
                 }
               }
