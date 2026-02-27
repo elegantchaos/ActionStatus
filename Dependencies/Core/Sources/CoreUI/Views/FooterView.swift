@@ -8,6 +8,7 @@ import SwiftUI
 public struct FooterView: View {
   @Environment(Updater.self) var updater
   @Environment(RepoState.self) var status
+  @Environment(ViewContext.self) var context
 
   let namespace: Namespace.ID
 
@@ -35,39 +36,42 @@ public struct FooterView: View {
           Text("Monitoring \(status.sortedRepos.count) repos.")
           if status.failing > 0 {
             HStack(spacing: 4) {
-              StatusIcon("StatusFailing")
+              Image(systemName: "xmark.circle")
               Text("\(status.failing) failing.")
             }
           }
 
           if status.queued > 0 {
             HStack(spacing: 4) {
-              StatusIcon("StatusQueued")
+              Image(systemName: "clock.arrow.circlepath")
               Text("\(status.queued) queued.")
             }
           }
 
           if status.running > 0 {
             HStack(spacing: 4) {
-              StatusIcon("StatusRunning")
+              Image(systemName: "arrow.triangle.2.circlepath")
               Text("\(status.running) running.")
             }
           }
 
           if status.unreachable > 0 {
             HStack(spacing: 4) {
-              StatusIcon("StatusUnknown")
+              Image(systemName: "questionmark.circle")
               Text("\(status.unreachable) unreachable.")
             }
           }
 
           #if os(tvOS)
             Spacer()
-            PreferencesButton()
-              .prefersDefaultFocus(in: namespace)
-              .focused(focus, equals: .prefs)
-              .buttonStyle(FadingFocusButtonStyle())
-              .frame(width: 32)
+            Button(action: { context.presentedSheet = .preferences }) {
+              Image(systemName: context.preferencesIcon)
+            }
+            .accessibility(identifier: "preferencesButton")
+            .prefersDefaultFocus(in: namespace)
+            .focused(focus, equals: .prefs)
+            .buttonStyle(FadingFocusButtonStyle())
+            .frame(width: 32)
           #endif
 
         }
