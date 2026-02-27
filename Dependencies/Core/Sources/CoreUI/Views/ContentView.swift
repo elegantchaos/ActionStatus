@@ -26,7 +26,34 @@ public struct ContentView: View {
           .navigationTitle(Engine.shared.info.name)
           #if !os(tvOS)
             .navigationBarTitleDisplayMode(.inline)
-            .iosToolbar(includeAddButton: context.settings.isEditing)
+            .toolbar {
+              ToolbarItem(placement: .navigationBarLeading) {
+                if context.settings.isEditing {
+                  Button(action: { context.presentedSheet = .editRepo(nil) }) {
+                    Text("Add")
+                  }
+                  .accessibility(identifier: "addButton")
+                  .foregroundColor(.black)
+                } else {
+                  Button(action: { context.presentedSheet = .preferences }) {
+                    Image(systemName: context.preferencesIcon)
+                  }
+                  .accessibility(label: Text("Settings"))
+                  .accessibility(identifier: "preferencesButton")
+                }
+              }
+
+              ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                  withAnimation {
+                    context.settings.isEditing.toggle()
+                  }
+                }) {
+                  Text(context.settings.isEditing ? "Done" : "Edit")
+                }
+                .accessibility(identifier: "toggleEditing")
+              }
+            }
           #endif
       }
       .sheet(item: $context.presentedSheet) { sheet in
@@ -51,24 +78,3 @@ struct ContentView_Previews: PreviewProvider {
     ContentView()
   }
 }
-
-#if os(iOS)
-  extension View {
-    func iosToolbar(includeAddButton: Bool) -> some View {
-      self
-        .toolbar {
-          ToolbarItem(placement: .navigationBarLeading) {
-            if includeAddButton {
-              AddButton()
-            } else {
-              PreferencesButton()
-            }
-          }
-
-          ToolbarItem(placement: .navigationBarTrailing) {
-            ToggleEditingButton()
-          }
-        }
-    }
-  }
-#endif

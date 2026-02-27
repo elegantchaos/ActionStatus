@@ -8,6 +8,7 @@ import SwiftUI
 public struct FooterView: View {
   @Environment(Updater.self) var updater
   @Environment(RepoState.self) var status
+  @Environment(ViewContext.self) var context
 
   let namespace: Namespace.ID
 
@@ -23,55 +24,108 @@ public struct FooterView: View {
     VStack(spacing: 10) {
       if !updater.status.isEmpty {
         Text(updater.status)
-          .statusStyle()
-      } else {
-        HStack(spacing: 8) {
-          #if os(tvOS)
-            Spacer()
-              .frame(width: 32)
-            Spacer()
+          #if os(iOS)
+            .font(.footnote)
+          #else
+            .statusStyle()
           #endif
+      } else {
+        #if os(iOS)
+          VStack(spacing: 4) {
+            Text("Monitoring \(status.sortedRepos.count) repos.")
+              .frame(maxWidth: .infinity, alignment: .center)
 
-          Text("Monitoring \(status.sortedRepos.count) repos.")
-          if status.failing > 0 {
-            HStack(spacing: 4) {
-              StatusIcon("StatusFailing")
-              Text("\(status.failing) failing.")
+            HStack(spacing: 8) {
+              if status.failing > 0 {
+                HStack(spacing: 3) {
+                  Image(systemName: "xmark.circle")
+                    .foregroundStyle(.red)
+                  Text("\(status.failing) failing")
+                }
+              }
+
+              if status.queued > 0 {
+                HStack(spacing: 3) {
+                  Image(systemName: "clock.arrow.circlepath")
+                    .foregroundStyle(.secondary)
+                  Text("\(status.queued) queued")
+                }
+              }
+
+              if status.running > 0 {
+                HStack(spacing: 3) {
+                  Image(systemName: "arrow.triangle.2.circlepath")
+                    .foregroundStyle(.secondary)
+                  Text("\(status.running) running")
+                }
+              }
+
+              if status.unreachable > 0 {
+                HStack(spacing: 3) {
+                  Image(systemName: "questionmark.circle")
+                  Text("\(status.unreachable) unreachable")
+                }
+              }
             }
+            .lineLimit(1)
+            .minimumScaleFactor(0.85)
           }
+          .font(.footnote)
+        #else
+          HStack(spacing: 8) {
+            #if os(tvOS)
+              Spacer()
+                .frame(width: 32)
+              Spacer()
+            #endif
 
-          if status.queued > 0 {
-            HStack(spacing: 4) {
-              StatusIcon("StatusQueued")
-              Text("\(status.queued) queued.")
+            Text("Monitoring \(status.sortedRepos.count) repos.")
+            if status.failing > 0 {
+              HStack(spacing: 4) {
+                Image(systemName: "xmark.circle")
+                  .foregroundStyle(.red)
+                Text("\(status.failing) failing.")
+              }
             }
-          }
 
-          if status.running > 0 {
-            HStack(spacing: 4) {
-              StatusIcon("StatusRunning")
-              Text("\(status.running) running.")
+            if status.queued > 0 {
+              HStack(spacing: 4) {
+                Image(systemName: "clock.arrow.circlepath")
+                  .foregroundStyle(.secondary)
+                Text("\(status.queued) queued.")
+              }
             }
-          }
 
-          if status.unreachable > 0 {
-            HStack(spacing: 4) {
-              StatusIcon("StatusUnknown")
-              Text("\(status.unreachable) unreachable.")
+            if status.running > 0 {
+              HStack(spacing: 4) {
+                Image(systemName: "arrow.triangle.2.circlepath")
+                  .foregroundStyle(.secondary)
+                Text("\(status.running) running.")
+              }
             }
-          }
 
-          #if os(tvOS)
-            Spacer()
-            PreferencesButton()
+            if status.unreachable > 0 {
+              HStack(spacing: 4) {
+                Image(systemName: "questionmark.circle")
+                Text("\(status.unreachable) unreachable.")
+              }
+            }
+
+            #if os(tvOS)
+              Spacer()
+              Button(action: { context.presentedSheet = .preferences }) {
+                Image(systemName: context.preferencesIcon)
+              }
+              .accessibility(identifier: "preferencesButton")
               .prefersDefaultFocus(in: namespace)
               .focused(focus, equals: .prefs)
               .buttonStyle(FadingFocusButtonStyle())
               .frame(width: 32)
-          #endif
+            #endif
 
-        }
-        .statusStyle()
+          }
+          .statusStyle()
+        #endif
       }
     }
     .padding()

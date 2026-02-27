@@ -79,7 +79,10 @@ public struct EditView: View {
                   .lineLimit(1)
                   .truncationMode(.middle)
                 Spacer()
-                LinkButton(url: updatedRepo.githubURL(for: .repo))
+                Button(action: { context.host.open(url: updatedRepo.githubURL(for: .repo)) }) {
+                  Image(systemName: context.linkIcon)
+                    .foregroundColor(.gray)
+                }
               }
             }
 
@@ -89,7 +92,10 @@ public struct EditView: View {
                   .lineLimit(1)
                   .truncationMode(.middle)
                 Spacer()
-                LinkButton(url: updatedRepo.githubURL(for: .workflow))
+                Button(action: { context.host.open(url: updatedRepo.githubURL(for: .workflow)) }) {
+                  Image(systemName: context.linkIcon)
+                    .foregroundColor(.gray)
+                }
               }
             }
 

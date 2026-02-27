@@ -75,7 +75,11 @@ struct RepoCellView: View {
             .lineLimit(1)
 
           Spacer()
-          EditRepoButton(repo: repo)
+          Button(action: handleEdit) {
+            Image(systemName: context.editButtonIcon)
+          }
+          .accessibility(identifier: "editButton")
+          .foregroundColor(.black)
         }
         .matchedGeometryEffect(id: repo.id, in: namespace)
         .padding(cellPadding)
