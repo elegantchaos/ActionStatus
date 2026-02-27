@@ -8,7 +8,6 @@ import Runtime
 
 public protocol ApplicationHost {
   var info: AppInfo { get }
-  func saveState()
   func open(url: URL)
   func reveal(url: URL)
   func pauseRefresh()
@@ -18,10 +17,6 @@ public protocol ApplicationHost {
 extension ApplicationHost {
   var info: AppInfo {
     Bundle.main.runtimeInfo
-  }
-
-  func saveState() {
-
   }
 
   func open(url: URL) {

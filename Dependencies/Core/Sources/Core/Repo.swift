@@ -96,8 +96,8 @@ public struct Repo: Identifiable, Equatable, Hashable {
 
   public init() {
     id = UUID()
-    name = ""
-    owner = ""
+    name = "SomeRepo"
+    owner = "someone"
     workflow = "Tests"
     workflows = []
     branches = []

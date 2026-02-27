@@ -79,7 +79,7 @@ open class Engine: NSObject, ApplicationHost {
   }
 
   @objc func changed() {
-    restoreState()
+    model.load()
   }
 
   func makeRefreshController() -> RefreshController? {
@@ -127,7 +127,7 @@ open class Engine: NSObject, ApplicationHost {
       registerDefaultsFromSettingsBundle()
       setupDefaultSettings()
       loadSettings()
-      restoreState()
+      model.load()
 
       observers.append(
         UserDefaults.standard.onChanged {
@@ -192,7 +192,7 @@ open class Engine: NSObject, ApplicationHost {
     let workItem = DispatchWorkItem { [weak self] in
       guard let self else { return }
       monitoringChannel.log("model changed")
-      self.saveState()
+      model.save()
       self.updateRepoState()
       self.modelChangeWorkItem = nil
     }
@@ -238,14 +238,6 @@ open class Engine: NSObject, ApplicationHost {
       .environment(model)
       .environment(updater)
       .environment(status)
-  }
-
-  public func saveState() {
-    model.save()
-  }
-
-  func restoreState() {
-    model.load()
   }
 
   public func pauseRefresh() {
