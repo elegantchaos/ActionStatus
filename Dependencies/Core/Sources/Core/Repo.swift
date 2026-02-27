@@ -11,8 +11,8 @@ private extension URL {
   var bookmarkKey: String { "bookmark:\(absoluteURL.path)" }
 }
 
-public struct Repo: Identifiable, Equatable, Hashable {
-  public enum State: UInt, Codable, Comparable, CaseIterable {
+public struct Repo: Identifiable, Equatable, Hashable, Sendable {
+  public enum State: UInt, Codable, Comparable, CaseIterable, Sendable {
     case unknown = 0
     case passing = 1
     case failing = 2
@@ -40,7 +40,7 @@ public struct Repo: Identifiable, Equatable, Hashable {
 
   public typealias LocalPathDictionary = [String: String]
 
-  public struct WorkflowSelection: Codable, Hashable, Identifiable {
+  public struct WorkflowSelection: Codable, Hashable, Identifiable, Sendable {
     public var workflowID: Int?
     public var name: String
     public var path: String
