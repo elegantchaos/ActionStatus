@@ -166,14 +166,13 @@ public class OctoidRefreshController: RefreshController {
   }
 }
 
-private enum RequestResult<Payload> {
-  case payload(Payload)
-  case apiMessage(Message)
-  case timedOut
-}
-
 /// Per-repository task runner for events and workflow polling.
 private actor RepoPoller {
+  private enum WorkflowKey: Hashable {
+    case id(Int)
+    case name(String)
+  }
+
   private let repo: Repo
   private let session: JSONSession.Session
   private unowned let refreshController: OctoidRefreshController
@@ -182,7 +181,8 @@ private actor RepoPoller {
   private var lastEvent: Date
   private var shouldPollEvents = true
   private var shouldPollWorkflows = true
-  private var shouldPollWorkflowRuns = true
+  private var shouldRestartStream = false
+  private var workflowStates: [WorkflowKey: Repo.State] = [:]
 
   private var fullName: String { "\(repo.owner)/\(repo.name)" }
   private var lastEventKey: String { "\(fullName)-lastEvent" }
@@ -200,173 +200,148 @@ private actor RepoPoller {
     self.lastEvent = Self.loadLastEvent(forKey: "\(repo.owner)/\(repo.name)-lastEvent")
   }
 
-  deinit {
-    session.cancel()
-  }
-
   func run() async {
-    var cycle = 0
     while !Task.isCancelled {
-      cycle += 1
-      refreshChannel.log("Starting poll cycle \(cycle) for \(fullName) (interval \(refreshInterval)s).")
-      if shouldPollEvents {
-        await pollEvents()
+      shouldRestartStream = false
+      let stream = session.repositoryUpdates(
+        for: RepositoryReference(owner: repo.owner, name: repo.name),
+        configuration: RepositoryPollConfiguration(
+          interval: .seconds(refreshInterval),
+          pollEvents: shouldPollEvents,
+          pollWorkflows: shouldPollWorkflows
+        )
+      )
+
+      for await update in stream {
+        if Task.isCancelled || shouldRestartStream {
+          break
+        }
+        await handle(update)
       }
 
-      if shouldPollWorkflows {
-        await pollWorkflows()
+      if Task.isCancelled {
+        break
       }
 
-      if shouldPollWorkflowRuns {
-        await pollWorkflowRuns()
+      if !shouldRestartStream {
+        try? await Task.sleep(nanoseconds: 500_000_000)
       }
-
-      if Task.isCancelled { break }
-      let nextPollAt = Date().addingTimeInterval(refreshInterval)
-      refreshChannel.log("Completed poll cycle \(cycle) for \(fullName); next poll at \(nextPollAt).")
-      try? await Task.sleep(nanoseconds: UInt64(refreshInterval * 1_000_000_000))
-    }
-
-    session.cancel()
-  }
-
-  private func pollEvents() async {
-    refreshChannel.log("polling events for \(fullName)")
-    let resource = EventsResource(name: repo.name, owner: repo.owner)
-    switch await request(target: resource, as: Events.self) {
-      case .payload(let events):
-        var wasPushed = false
-        var latestEvent = lastEvent
-
-        for event in events where event.created_at > lastEvent {
-          if event.type == "PushEvent" {
-            refreshChannel.log("Found new event: \(event.type) \(event.id) \(event.created_at)")
-            wasPushed = true
-          }
-          latestEvent = max(latestEvent, event.created_at)
-        }
-
-        lastEvent = latestEvent
-        Self.saveLastEvent(latestEvent, forKey: lastEventKey)
-
-        if wasPushed {
-          if shouldPollWorkflows {
-            await pollWorkflows()
-          }
-          if shouldPollWorkflowRuns {
-            await pollWorkflowRuns()
-          }
-        }
-
-      case .apiMessage(let message):
-        if message.message == "Not Found" {
-          // Some repositories don't expose events to this token.
-          refreshChannel.log("Events endpoint unavailable for \(fullName); stopping events polling.")
-          shouldPollEvents = false
-        } else {
-          refreshController.update(repo: repo, message: message)
-        }
-
-      case .timedOut:
-        refreshChannel.log("Timed out polling events for \(fullName)")
     }
   }
 
-  private func pollWorkflows() async {
-    refreshChannel.log("polling workflows for \(fullName)")
-    let resource = WorkflowsResource(name: repo.name, owner: repo.owner)
-    switch await request(target: resource, as: Workflows.self) {
-      case .payload(let response):
-        let discovered = response.workflows.map {
-          Repo.WorkflowSelection(workflowID: $0.id, name: $0.name, path: $0.path)
-        }
-        let updated = await refreshController.merge(repo: repo, discovered: discovered)
-        if updated.enabledWorkflows.isEmpty {
-          refreshController.update(repo: updated, with: .unknown)
-        }
+  private func handle(_ update: RepositoryUpdate) async {
+    switch update {
+    case .events(let events):
+      await handleEvents(events)
 
-      case .apiMessage(let message):
-        refreshController.update(repo: repo, message: message)
-        if message.message == "Not Found" {
-          // Repository doesn't expose Actions workflows for this token.
-          shouldPollWorkflows = false
-          shouldPollWorkflowRuns = false
-        }
+    case .workflows(let workflows):
+      await handleWorkflows(workflows)
 
-      case .timedOut:
-        refreshChannel.log("Timed out polling workflows for \(fullName)")
+    case .workflowRuns(let target, let runs):
+      await handleWorkflowRuns(target: target, runs: runs)
+
+    case .message(let source, let message):
+      await handleMessage(source: source, message: message)
+
+    case .transportError(let source, let description):
+      refreshChannel.log("Transport error for \(fullName) (\(source)): \(description)")
     }
   }
 
-  private func pollWorkflowRuns() async {
+  private func handleEvents(_ events: Events) async {
+    var latestEvent = lastEvent
+    for event in events where event.created_at > lastEvent {
+      latestEvent = max(latestEvent, event.created_at)
+    }
+
+    guard latestEvent != lastEvent else {
+      return
+    }
+
+    lastEvent = latestEvent
+    Self.saveLastEvent(latestEvent, forKey: lastEventKey)
+  }
+
+  private func handleWorkflows(_ response: Workflows) async {
+    let discovered = response.workflows.map {
+      Repo.WorkflowSelection(workflowID: $0.id, name: $0.name, path: $0.path)
+    }
+    let updated = await refreshController.merge(repo: repo, discovered: discovered)
+    if updated.enabledWorkflows.isEmpty {
+      refreshController.update(repo: updated, with: .unknown)
+    }
+  }
+
+  private func handleWorkflowRuns(target: RepositoryWorkflowTarget, runs: WorkflowRuns) async {
     guard let latestRepo = await MainActor.run(resultType: Repo?.self, body: { refreshController.model.repo(withIdentifier: repo.id) }) else {
       return
     }
 
-    let enabledWorkflows = latestRepo.enabledWorkflows
-    guard !enabledWorkflows.isEmpty else {
-      refreshChannel.log("Skipping workflow run polling for \(fullName) because no workflows are enabled.")
+    let enabled = latestRepo.enabledWorkflows
+    guard !enabled.isEmpty else {
       refreshController.update(repo: latestRepo, with: .unknown)
       return
     }
 
-    var workflowStates: [Repo.State] = []
-    var payloadCount = 0
-
-    for workflow in enabledWorkflows {
-      let resource: WorkflowResource
-      if let workflowID = workflow.workflowID {
-        resource = WorkflowResource(name: repo.name, owner: repo.owner, workflowID: workflowID)
-      } else {
-        resource = WorkflowResource(name: repo.name, owner: repo.owner, workflow: workflow.normalizedWorkflowName)
+    let idKey = WorkflowKey.id(target.workflowID)
+    let nameKey = WorkflowKey.name(target.normalizedName)
+    let isEnabled = enabled.contains { selection in
+      if let workflowID = selection.workflowID {
+        return workflowID == target.workflowID
       }
-
-      switch await request(target: resource, as: WorkflowRuns.self) {
-        case .payload(let runs):
-          payloadCount += 1
-          guard !runs.isEmpty else { continue }
-          let state = refreshController.state(for: runs.latestRun, in: repo)
-          workflowStates.append(state)
-
-        case .apiMessage(let message):
-          refreshChannel.log("Workflow runs unavailable for \(fullName) (\(workflow.name)): \(message.message)")
-
-        case .timedOut:
-          refreshChannel.log("Timed out polling workflow run for \(fullName) (\(workflow.name))")
-      }
+      return selection.normalizedWorkflowName == target.normalizedName
+    }
+    guard isEnabled else {
+      return
     }
 
-    if payloadCount == enabledWorkflows.count, workflowStates.isEmpty {
+    if runs.isEmpty {
+      workflowStates.removeValue(forKey: idKey)
+      workflowStates.removeValue(forKey: nameKey)
+    } else {
+      let state = refreshController.state(for: runs.latestRun, in: repo)
+      workflowStates[idKey] = state
+      workflowStates[nameKey] = state
+    }
+
+    let relevantStates: [Repo.State] = enabled.compactMap { selection in
+      if let workflowID = selection.workflowID {
+        return workflowStates[.id(workflowID)]
+      }
+      return workflowStates[.name(selection.normalizedWorkflowName)]
+    }
+
+    if relevantStates.isEmpty {
       refreshController.update(repo: latestRepo, with: .dormant)
       return
     }
 
-    let aggregate = refreshController.aggregateState(for: workflowStates)
+    let aggregate = refreshController.aggregateState(for: relevantStates)
     refreshController.update(repo: latestRepo, with: aggregate)
   }
 
-  private func request<Payload: Decodable>(
-    target: ResourceResolver,
-    as _: Payload.Type,
-    timeout: TimeInterval = 30
-  ) async -> RequestResult<Payload> {
-    let context = ResponseContext<Payload>()
-    let group = AnyProcessorGroup<ResponseContext<Payload>>(
-      name: "\(Payload.self)",
-      processors: [
-        PayloadCaptureProcessor<Payload>().eraseToAnyProcessor(),
-        MessageProcessor<ResponseContext<Payload>>().eraseToAnyProcessor(),
-      ]
-    )
+  private func handleMessage(source: RepositoryUpdateSource, message: Message) async {
+    switch source {
+    case .events:
+      if message.message == "Not Found" {
+        refreshChannel.log("Events endpoint unavailable for \(fullName); stopping events polling.")
+        shouldPollEvents = false
+        shouldRestartStream = true
+      } else {
+        refreshController.update(repo: repo, message: message)
+      }
 
-    session.poll(
-      target: target,
-      context: context,
-      processors: group,
-      for: .now()
-    )
+    case .workflows:
+      refreshController.update(repo: repo, message: message)
+      if message.message == "Not Found" {
+        shouldPollWorkflows = false
+        workflowStates.removeAll()
+        shouldRestartStream = true
+      }
 
-    return await context.awaitResult(timeout: timeout)
+    case .workflowRuns(let target):
+      refreshChannel.log("Workflow runs unavailable for \(fullName) (\(target.name)): \(message.message)")
+    }
   }
 
   private static func loadLastEvent(forKey key: String) -> Date {
@@ -380,59 +355,5 @@ private actor RepoPoller {
 
   private static func saveLastEvent(_ date: Date, forKey key: String) {
     UserDefaults.standard.set(date.timeIntervalSinceReferenceDate, forKey: key)
-  }
-}
-
-/// Polling context that captures either a typed payload or GitHub API message.
-private actor ResponseContext<Payload>: MessageReceiver {
-  private var payload: Payload?
-  private var message: Message?
-
-  func capture(_ payload: Payload) {
-    self.payload = payload
-  }
-
-  func received(
-    _ message: Message,
-    response _: HTTPURLResponse,
-    for _: Request<ResponseContext<Payload>>
-  ) async -> RepeatStatus {
-    self.message = message
-    return .cancel
-  }
-
-  func awaitResult(timeout: TimeInterval) async -> RequestResult<Payload> {
-    let expiry = Date().addingTimeInterval(timeout)
-    while Date() < expiry {
-      if let payload {
-        return .payload(payload)
-      }
-
-      if let message {
-        return .apiMessage(message)
-      }
-
-      try? await Task.sleep(nanoseconds: 100_000_000)
-    }
-
-    return .timedOut
-  }
-}
-
-/// Processor that stores a decoded payload in the response context.
-private struct PayloadCaptureProcessor<Payload: Decodable>: Processor {
-  typealias Context = ResponseContext<Payload>
-
-  let name = "payload capture"
-  let codes = [200]
-
-  func process(
-    _ payload: Payload,
-    response _: HTTPURLResponse,
-    for _: Request<ResponseContext<Payload>>,
-    in context: ResponseContext<Payload>
-  ) async throws -> RepeatStatus {
-    await context.capture(payload)
-    return .cancel
   }
 }

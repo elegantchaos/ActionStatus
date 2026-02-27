@@ -1,5 +1,5 @@
 {
-  "originHash" : "0d6e22575b0a50b3380ef3b97dd77f810d085bc1aa1c920b9e83ea70c119da12",
+  "originHash" : "f3564d5b30acb2a502588db6fea1c98a8beabd2cd533d1563f2a0b0142587bac",
   "pins" : [
     {
       "identity" : "collectionextensions",
@@ -29,15 +29,6 @@
       }
     },
     {
-      "identity" : "jsonsession",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/elegantchaos/JSONSession.git",
-      "state" : {
-        "revision" : "50d07644d67bfc997877a682972867cc4bbd965b",
-        "version" : "2.0.0"
-      }
-    },
-    {
       "identity" : "keychain",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/elegantchaos/Keychain.git",
@@ -62,15 +53,6 @@
       "state" : {
         "revision" : "0f523c77bf4b0dbbdc0838b952262ed45fab17f8",
         "version" : "1.0.6"
-      }
-    },
-    {
-      "identity" : "octoid",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/elegantchaos/Octoid.git",
-      "state" : {
-        "revision" : "c75a7a7966d4b5e0b303861958a78c31b142dedb",
-        "version" : "2.0.0"
       }
     },
     {

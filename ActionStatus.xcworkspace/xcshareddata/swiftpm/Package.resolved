@@ -1,6 +1,33 @@
 {
-  "originHash" : "04caadd358f0ada492a8ebbe1c054062369f36a29815d71f1dc932727ba35e09",
+  "originHash" : "fc6de2806453863c5e41e26fa9e59d832943f8ac30b69f9d935e2fe12c196d70",
   "pins" : [
+    {
+      "identity" : "actionbuildercore",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/ActionBuilderCore.git",
+      "state" : {
+        "revision" : "29e291e23f4663561850fff5e697d22e16beaf89",
+        "version" : "2.1.6"
+      }
+    },
+    {
+      "identity" : "actionbuilderplugin",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/ActionBuilderPlugin.git",
+      "state" : {
+        "revision" : "ab922ba25d0e576ba20744936d9e6a992b127f0b",
+        "version" : "2.1.2"
+      }
+    },
+    {
+      "identity" : "chaosbytestreams",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/ChaosByteStreams",
+      "state" : {
+        "revision" : "01cc58b8d9a01d67ee6669b67db41b2060ea467b",
+        "version" : "1.0.7"
+      }
+    },
     {
       "identity" : "collectionextensions",
       "kind" : "remoteSourceControl",
@@ -26,15 +53,6 @@
       "state" : {
         "revision" : "ccb417b5b4f2d473964594a7c906a50a62c8530c",
         "version" : "1.2.2"
-      }
-    },
-    {
-      "identity" : "jsonsession",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/elegantchaos/JSONSession.git",
-      "state" : {
-        "revision" : "50d07644d67bfc997877a682972867cc4bbd965b",
-        "version" : "2.0.0"
       }
     },
     {
@@ -65,12 +83,48 @@
       }
     },
     {
-      "identity" : "octoid",
+      "identity" : "runner",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/elegantchaos/Octoid.git",
+      "location" : "https://github.com/elegantchaos/Runner.git",
       "state" : {
-        "revision" : "c75a7a7966d4b5e0b303861958a78c31b142dedb",
-        "version" : "2.0.0"
+        "revision" : "ba4b7d5b995d33c82fc1aa51054202caf0aa7297",
+        "version" : "2.1.5"
+      }
+    },
+    {
+      "identity" : "semanticversion",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/SemanticVersion.git",
+      "state" : {
+        "revision" : "2637309c72c1415cc3d1ea27ae6ddb2a2b66ecf0",
+        "version" : "1.1.2"
+      }
+    },
+    {
+      "identity" : "swift-subprocess",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-subprocess.git",
+      "state" : {
+        "revision" : "ba5888ad7758cbcbe7abebac37860b1652af2d9c",
+        "version" : "0.3.0"
+      }
+    },
+    {
+      "identity" : "swift-system",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-system",
+      "state" : {
+        "revision" : "7c6ad0fc39d0763e0b699210e4124afd5041c5df",
+        "version" : "1.6.4"
+      }
+    },
+    {
+      "identity" : "versionator",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/Versionator.git",
+      "state" : {
+        "revision" : "b5f925adb48a08f33281713cb48c51a9cead21ee",
+        "version" : "2.1.1"
       }
     },
     {
