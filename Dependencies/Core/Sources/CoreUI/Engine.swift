@@ -42,6 +42,7 @@ public let refreshControllerChannel = Channel("RefreshController")
   override init() {
     super.init()
     Engine.sharedEngine = self
+    refreshService = RefreshService(settings: settings, model: model)
   }
   
   public required init(coder: NSCoder) {
@@ -56,7 +57,8 @@ public let refreshControllerChannel = Channel("RefreshController")
   public lazy var context = makeViewState()
   public var status: RepoState = RepoState()
   
-  public var refreshController: RefreshController? = nil
+  var refreshService: RefreshService!
+  
 #if canImport(UIKit)
   public var rootController: UIViewController?
   public var filePicker: FilePicker?
@@ -80,35 +82,6 @@ public let refreshControllerChannel = Channel("RefreshController")
   
   @objc func changed() {
     model.load()
-  }
-  
-  func makeRefreshController() -> RefreshController? {
-    // disable refreshing for UI testing
-    guard !ProcessInfo.processInfo.environment.isTestingUI else { return nil }
-    
-    if settings.testRefresh {
-      return RandomisingRefreshController(model: model)
-    }
-    
-    guard !settings.githubUser.isEmpty else {
-      refreshChannel.log("No GitHub account configured. Refresh is disabled until sign-in completes.")
-      return nil
-    }
-    
-    do {
-      let token = try Keychain.default.password(for: settings.githubUser, on: settings.githubServer)
-      guard !token.isEmpty else {
-        refreshChannel.log("No GitHub token configured. Refresh is disabled until sign-in completes.")
-        return nil
-      }
-      
-      let controller = OctoidRefreshController(model: model, token: token, apiServer: settings.githubServer, refreshInterval: settings.refreshRate.rate)
-      refreshChannel.log("Using github refresh controller for \(settings.githubUser)/\(settings.githubServer)")
-      return controller
-    } catch {
-      refreshChannel.log("Couldn't get token: \(error). Refresh is disabled until sign-in completes.")
-      return nil
-    }
   }
   
   class func makeModel() -> Model {
@@ -194,13 +167,13 @@ public let refreshControllerChannel = Channel("RefreshController")
 
       case .authenticationChanged:
         // we've changed authentication method, so reset the refresh controller
-        resetRefresh()
+        refreshService.resetRefresh()
 
       case .changed:
         break
     }
 
-    resumeRefresh()
+    refreshService.resumeRefresh()
   }
 
   func saveSettings() {
@@ -215,27 +188,9 @@ public let refreshControllerChannel = Channel("RefreshController")
       .environment(model)
       .environment(updater)
       .environment(status)
+      .environment(refreshService)
   }
 
-  public func pauseRefresh() {
-    refreshControllerChannel.log("Paused")
-    refreshController?.pause()
-  }
-
-  public func resumeRefresh() {
-    if refreshController == nil {
-      refreshController = makeRefreshController()
-    }
-
-    refreshControllerChannel.log("Resumed")
-    refreshController?.resume(rate: settings.refreshRate.rate)
-  }
-
-  func resetRefresh() {
-    refreshControllerChannel.log("Reset")
-    refreshController?.pause()
-    refreshController = nil
-  }
 
   open func refreshState(completion: @escaping () -> Void = {}) {
     completion()
@@ -325,5 +280,67 @@ public extension UserDefaults {
       .publisher(for: UserDefaults.didChangeNotification, object: self)
       .debounce(for: .seconds(delay), scheduler: RunLoop.main)
       .sink { _ in action() }
+  }
+}
+
+@Observable
+@MainActor class RefreshService {
+  init(settings: Settings, model: Model) {
+    self.settings = settings
+    self.model = model
+  }
+  
+  let settings: Settings
+  let model: Model
+
+  public var refreshController: RefreshController? = nil
+  
+  func resetRefresh() {
+    refreshControllerChannel.log("Reset")
+    refreshController?.pause()
+    refreshController = nil
+  }
+
+  func pauseRefresh() {
+    refreshControllerChannel.log("Paused")
+    refreshController?.pause()
+  }
+  
+  func resumeRefresh() {
+    if refreshController == nil {
+      refreshController = makeRefreshController()
+    }
+    
+    refreshControllerChannel.log("Resumed")
+    refreshController?.resume(rate: settings.refreshRate.rate)
+  }
+  
+  func makeRefreshController() -> RefreshController? {
+    // disable refreshing for UI testing
+    guard !ProcessInfo.processInfo.environment.isTestingUI else { return nil }
+    
+    if settings.testRefresh {
+      return RandomisingRefreshController(model: model)
+    }
+    
+    guard !settings.githubUser.isEmpty else {
+      refreshChannel.log("No GitHub account configured. Refresh is disabled until sign-in completes.")
+      return nil
+    }
+    
+    do {
+      let token = try Keychain.default.password(for: settings.githubUser, on: settings.githubServer)
+      guard !token.isEmpty else {
+        refreshChannel.log("No GitHub token configured. Refresh is disabled until sign-in completes.")
+        return nil
+      }
+      
+      let controller = OctoidRefreshController(model: model, token: token, apiServer: settings.githubServer, refreshInterval: settings.refreshRate.rate)
+      refreshChannel.log("Using github refresh controller for \(settings.githubUser)/\(settings.githubServer)")
+      return controller
+    } catch {
+      refreshChannel.log("Couldn't get token: \(error). Refresh is disabled until sign-in completes.")
+      return nil
+    }
   }
 }

@@ -8,6 +8,7 @@ import SwiftUI
 public struct AppSettingsView: View {
   @Environment(ViewContext.self) var context
   @Environment(Model.self) var model
+  @Environment(RefreshService.self) var refreshService
 
   @State var settings = Settings()
   @State var token: String = ""
@@ -40,7 +41,7 @@ public struct AppSettingsView: View {
     context.settings.writeToken(token)
 
     if authenticationChanged {
-      Engine.shared.resetRefresh()
+      refreshService.resetRefresh()
     }
   }
 }
@@ -48,6 +49,7 @@ public struct AppSettingsView: View {
 public struct PreferencesView: View {
   @Environment(\.dismiss) private var dismissAction
   @Environment(ViewContext.self) var context
+  @Environment(RefreshService.self) var refreshService
 
   @State var settings = Settings()
   @State var token: String = ""
@@ -70,7 +72,7 @@ public struct PreferencesView: View {
   }
 
   func handleAppear() {
-    Engine.shared.pauseRefresh()
+    refreshService.pauseRefresh()
     settings = context.settings
     token = settings.readToken()
   }
@@ -81,10 +83,10 @@ public struct PreferencesView: View {
     context.settings.writeToken(token)
 
     if authenticationChanged {
-      Engine.shared.resetRefresh()
+      refreshService.resetRefresh()
     }
 
-    Engine.shared.resumeRefresh()
+    refreshService.resumeRefresh()
     dismissAction()
   }
 }

@@ -13,6 +13,7 @@ public struct EditView: View {
   @Environment(\.dismiss) private var dismissAction
   @Environment(Model.self) var model
   @Environment(ViewContext.self) var context
+  @Environment(RefreshService.self) var refreshService
 
   var title: String { "\(shortTitle) Repository" }
   var shortTitle: String { return repo == nil ? "Add" : "Edit" }
@@ -114,7 +115,7 @@ public struct EditView: View {
         }
       }
       .onAppear {
-        context.host.pauseRefresh()
+        refreshService.pauseRefresh()
         self.load()
       }
   }
@@ -132,7 +133,7 @@ public struct EditView: View {
   }
 
   func dismiss() {
-    context.host.resumeRefresh()
+    refreshService.resumeRefresh()
     dismissAction()
   }
 

@@ -21,12 +21,6 @@ public struct ContentView: View {
         .sheet(item: $context.presentedSheet) { sheet in
           sheetView(for: sheet)
         }
-        .onChange(of: model.items, initial: false) { _,_ in
-          context.host.modelDidChange()
-        }
-        .onChange(of: context.settings, initial: false) { _,_ in
-          context.host.settingsDidChange()
-        }
     #else
       NavigationStack {
         RootView()
@@ -60,12 +54,6 @@ public struct ContentView: View {
                 }
                 .accessibility(identifier: "toggleEditing")
               }
-            }
-            .onChange(of: model.items, initial: false) { _,_ in
-              context.host.modelDidChange()
-            }
-            .onChange(of: context.settings, initial: false) { _,_ in
-              context.host.settingsDidChange()
             }
           #endif
       }

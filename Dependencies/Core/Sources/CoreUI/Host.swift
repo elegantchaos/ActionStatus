@@ -10,8 +10,6 @@ import Runtime
   var info: AppInfo { get }
   func open(url: URL)
   func reveal(url: URL)
-  func pauseRefresh()
-  func resumeRefresh()
   func modelDidChange()
   func settingsDidChange()
 }
@@ -25,14 +23,6 @@ extension ApplicationHost {
   }
 
   func reveal(url: URL) {
-
-  }
-
-  func pauseRefresh() {
-
-  }
-
-  func resumeRefresh() {
 
   }
 }
