@@ -67,6 +67,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2231B64D2F51F5C500AB890D /* Streaming.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Streaming.md; sourceTree = "<group>"; };
 		2257D7F62F4DAEAF00DBD569 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		2257D7FA2F4DFCE300DBD569 /* AppIconMac.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppIconMac.png; sourceTree = "<group>"; };
 		2257D7FB2F4DFCE300DBD569 /* AppIconMac.svg */ = {isa = PBXFileReference; lastKnownFileType = text; path = AppIconMac.svg; sourceTree = "<group>"; };
@@ -210,6 +211,7 @@
 			children = (
 				2257D80B2F4DFCE300DBD569 /* Guidelines */,
 				2257D80E2F4DFCE300DBD569 /* Planning */,
+				2231B64D2F51F5C500AB890D /* Streaming.md */,
 			);
 			path = Documentation;
 			sourceTree = "<group>";
