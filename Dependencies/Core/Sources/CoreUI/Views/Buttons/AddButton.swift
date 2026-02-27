@@ -6,7 +6,7 @@
 import SwiftUI
 
 public struct AddButton: View {
-  @EnvironmentObject var context: ViewContext
+  @Environment(ViewContext.self) var context
 
   public init() {
   }

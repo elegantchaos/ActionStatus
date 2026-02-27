@@ -7,7 +7,7 @@ import Core
 import SwiftUI
 
 struct EditRepoButton: View {
-  @EnvironmentObject var context: ViewContext
+  @Environment(ViewContext.self) var context
 
   let repo: Repo
 

@@ -6,16 +6,19 @@
 import Core
 import Foundation
 import Logger
+import Observation
 
 let repoStateChannel = Channel("RepoState")
 
-public class RepoState: ObservableObject {
-  @Published public var sortedRepos: [Repo] = []
-  @Published public var passing: Int = 0
-  @Published public var failing: Int = 0
-  @Published public var running: Int = 0
-  @Published public var queued: Int = 0
-  @Published public var unreachable: Int = 0
+@Observable
+public class RepoState {
+  public var sortedRepos: [Repo] = []
+  public var passing: Int = 0
+  public var failing: Int = 0
+  public var running: Int = 0
+  public var queued: Int = 0
+  public var dormant: Int = 0
+  public var unreachable: Int = 0
 
   public func update(with model: Model, context: ViewContext) {
     repoStateChannel.log("updated")
@@ -28,6 +31,7 @@ public class RepoState: ObservableObject {
     failing = set.count(for: Repo.State.failing) + set.count(for: Repo.State.partiallyFailing)
     running = set.count(for: Repo.State.running)
     queued = set.count(for: Repo.State.queued)
+    dormant = set.count(for: Repo.State.dormant)
     unreachable = set.count(for: Repo.State.unknown)
   }
 
@@ -45,12 +49,22 @@ public class RepoState: ObservableObject {
       state.append(.queued)
     }
 
+    if dormant > 0 {
+      state.append(.dormant)
+    }
+
     if failing > 0 {
       state.append(.failing)
     }
 
     if state.count == 0 {
-      state = (passing > 0) ? [.passing] : [.unknown]
+      if passing > 0 {
+        state = [.passing]
+      } else if dormant > 0 {
+        state = [.dormant]
+      } else {
+        state = [.unknown]
+      }
     }
     return state
   }

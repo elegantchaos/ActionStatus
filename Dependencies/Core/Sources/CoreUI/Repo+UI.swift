@@ -11,6 +11,7 @@ extension Repo {
     switch state {
       case .failing, .partiallyFailing: return .red
       case .passing: return .green
+      case .dormant: return .secondary
       default: return .primary
     }
   }

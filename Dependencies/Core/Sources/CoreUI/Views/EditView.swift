@@ -11,8 +11,8 @@ public struct EditView: View {
   let repo: Repo?
 
   @Environment(\.dismiss) private var dismissAction
-  @EnvironmentObject var model: Model
-  @EnvironmentObject var context: ViewContext
+  @Environment(Model.self) var model
+  @Environment(ViewContext.self) var context
 
   var title: String { "\(shortTitle) Repository" }
   var shortTitle: String { return repo == nil ? "Add" : "Edit" }

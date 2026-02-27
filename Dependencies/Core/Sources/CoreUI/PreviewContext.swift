@@ -24,7 +24,7 @@ struct PreviewContext {
   func inject<Content>(into view: Content) -> some View where Content: View {
     return
       view
-      .environmentObject(model)
-      .environmentObject(state)
+      .environment(model)
+      .environment(state)
   }
 }

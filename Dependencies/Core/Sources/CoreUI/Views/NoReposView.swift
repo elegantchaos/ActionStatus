@@ -6,8 +6,8 @@
 import SwiftUI
 
 public struct NoReposView: View {
-  @EnvironmentObject var model: Model
-  @EnvironmentObject var context: ViewContext
+  @Environment(Model.self) var model
+  @Environment(ViewContext.self) var context
 
   public init() {
   }

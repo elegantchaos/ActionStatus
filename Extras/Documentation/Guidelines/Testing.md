@@ -16,9 +16,8 @@ This module defines baseline expectations for proving behavior changes and repor
 
 1. Run narrow checks closest to the change first.
 2. Run broader project checks next.
-3. If project validation scripts exist, use them.
-4. If scripts are missing or fail, run equivalent manual checks.
-5. If validation cannot run, report exactly what was not validated and why.
+3. Use the shared `validation-flow` skill (`codex/skills/validation-flow`) for standard validation (`rt validate`).
+4. If validation cannot run, report exactly what was not validated and why.
 
 ## Test Design Guidance
 

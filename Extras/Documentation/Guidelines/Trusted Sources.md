@@ -48,3 +48,9 @@ Prefer indexed primary docs via MCP tools before broad web search.
 - [Apple Developer Forums](https://developer.apple.com/forums/)
 
 Do not treat secondary sources as final authority for API contracts, language semantics, or policy requirements.
+
+## Trusted Authors
+
+- Martin Fowler
+- Kent Beck
+- Hunt & Thomas (Pragmatic Programmer)

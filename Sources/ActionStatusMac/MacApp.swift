@@ -12,6 +12,7 @@
     var symbolName: String {
       switch self {
         case .unknown: return "questionmark.circle"
+        case .dormant: return "moon.zzz"
         case .passing: return "checkmark.circle"
         case .failing: return "xmark.circle"
         case .partiallyFailing: return "xmark.circle"
@@ -23,7 +24,7 @@
 
   private struct StatusMenuContent: View {
     let application: MacEngine
-    @ObservedObject var status: RepoState
+    let status: RepoState
 
     var body: some View {
       ForEach(status.sortedRepos) { repo in
@@ -53,7 +54,7 @@
 
   private struct StatusMenuLabel: View {
     let application: MacEngine
-    @ObservedObject var status: RepoState
+    let status: RepoState
 
     var body: some View {
       let _ = status.combinedState

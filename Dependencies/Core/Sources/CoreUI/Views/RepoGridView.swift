@@ -6,8 +6,8 @@
 import SwiftUI
 
 public struct RepoGridView: View {
-  @EnvironmentObject var context: ViewContext
-  @EnvironmentObject var status: RepoState
+  @Environment(ViewContext.self) var context
+  @Environment(RepoState.self) var status
 
   let namespace: Namespace.ID
 

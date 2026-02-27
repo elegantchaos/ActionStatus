@@ -13,8 +13,8 @@ public enum Focus: Hashable, Equatable {
 
 struct RootView: View {
   @Namespace() var defaultNamespace
-  @EnvironmentObject var context: ViewContext
-  @EnvironmentObject var model: Model
+  @Environment(ViewContext.self) var context
+  @Environment(Model.self) var model
   @State var focusState = FadingFocusState()
 
   #if os(tvOS)
@@ -49,7 +49,7 @@ struct RootView: View {
     .onAppear(perform: handleAppear)
     #if os(tvOS)
       .focusScope(defaultNamespace)
-      .environmentObject(focusState)
+      .environment(focusState)
       .onChange(of: focus) { value in
         focusState.handleFocusChanged()
       }

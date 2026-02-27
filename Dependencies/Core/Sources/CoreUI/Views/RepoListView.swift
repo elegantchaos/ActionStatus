@@ -6,9 +6,9 @@
 import SwiftUI
 
 public struct RepoListView: View {
-  @EnvironmentObject var model: Model
-  @EnvironmentObject var context: ViewContext
-  @EnvironmentObject var status: RepoState
+  @Environment(Model.self) var model
+  @Environment(ViewContext.self) var context
+  @Environment(RepoState.self) var status
 
   let namespace: Namespace.ID
 

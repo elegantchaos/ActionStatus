@@ -9,7 +9,7 @@ import SwiftUI
 struct ConnectionPrefsView: View {
   private let defaultGithubServer = "api.github.com"
 
-  @EnvironmentObject var context: ViewContext
+  @Environment(ViewContext.self) var context
   @Binding var settings: Settings
   @Binding var token: String
   @State private var authState: GithubAuthUIState

@@ -4,6 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Core
+import Observation
 import Runtime
 import SwiftUI
 
@@ -29,9 +30,10 @@ public enum PresentedSheet: Identifiable {
   }
 }
 
-public class ViewContext: ObservableObject {
-  @Published public var settings = Settings()
-  @Published public var presentedSheet: PresentedSheet?
+@Observable
+public class ViewContext {
+  public var settings = Settings()
+  public var presentedSheet: PresentedSheet?
 
   public let host: ApplicationHost
   public let padding: CGFloat = 10

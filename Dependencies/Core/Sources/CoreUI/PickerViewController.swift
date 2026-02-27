@@ -28,7 +28,7 @@ import SwiftUI
       Coordinator(self)
     }
 
-    class Coordinator: NSObject, ObservableObject {
+    class Coordinator: NSObject {
       var parent: DocumentPickerViewController
 
       init(_ documentPickerController: DocumentPickerViewController) {

@@ -311,6 +311,7 @@ private actor RepoPoller {
     }
 
     var workflowStates: [Repo.State] = []
+    var payloadCount = 0
 
     for workflow in enabledWorkflows {
       let resource: WorkflowResource
@@ -322,6 +323,7 @@ private actor RepoPoller {
 
       switch await request(target: resource, as: WorkflowRuns.self) {
         case .payload(let runs):
+          payloadCount += 1
           guard !runs.isEmpty else { continue }
           let state = refreshController.state(for: runs.latestRun, in: repo)
           workflowStates.append(state)
@@ -332,6 +334,11 @@ private actor RepoPoller {
         case .timedOut:
           refreshChannel.log("Timed out polling workflow run for \(fullName) (\(workflow.name))")
       }
+    }
+
+    if payloadCount == enabledWorkflows.count, workflowStates.isEmpty {
+      refreshController.update(repo: latestRepo, with: .dormant)
+      return
     }
 
     let aggregate = refreshController.aggregateState(for: workflowStates)
