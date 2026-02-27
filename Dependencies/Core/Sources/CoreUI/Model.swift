@@ -17,7 +17,7 @@ public class Model {
   public typealias RepoList = [Repo]
 
   internal let store: NSUbiquitousKeyValueStore
-  internal let key: String = "State"
+  internal var key: String
   internal var items: [UUID: Repo]
 
   public var count: Int {
@@ -25,9 +25,16 @@ public class Model {
   }
 
 
-  public init(_ repos: [Repo], store: NSUbiquitousKeyValueStore = NSUbiquitousKeyValueStore.default) {
+  public init(_ repos: [Repo], store: NSUbiquitousKeyValueStore = NSUbiquitousKeyValueStore.default, stateKey: String? = nil) {
     self.store = store
     store.synchronize()
+
+#if DEBUG
+    key = stateKey ?? "StateDebug"
+#else
+    key = stateKey ?? "State"
+#endif
+    
 
     var index: [UUID: Repo] = [:]
     for repo in repos {
@@ -41,7 +48,7 @@ public class Model {
 
   // MARK: Public
 
-  public func load(fromDefaultsKey key: String) {
+  public func load() {
     modelChannel.log("Loading from key \(key)")
     let decoder = Repo.dictionaryDecoder
     if let repoIDs = store.array(forKey: key) as? [String] {
@@ -63,7 +70,7 @@ public class Model {
 
   }
 
-  public func save(toDefaultsKey key: String) {
+  public func save() {
     modelChannel.log("Saving to key \(key)")
     let encoder = DictionaryEncoder()
     var repoIDs: [String] = []
@@ -172,7 +179,7 @@ public class Model {
 internal extension Model {
 
   @objc func modelChangedExternally() {
-    load(fromDefaultsKey: key)
+    load()
   }
 
   func add(fromGitRepo localGitFolderURL: URL, detector: NSDataDetector) {
@@ -200,3 +207,8 @@ internal extension Model {
   }
 
 }
+
+#Preview {
+    Text("activeDefaultsKey")
+}
+

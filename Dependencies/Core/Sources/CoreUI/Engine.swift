@@ -52,12 +52,6 @@ open class Engine: NSObject, ApplicationHost {
     return Engine.sharedEngine!
   }
 
-  #if DEBUG
-    let stateKey = "StateDebug"
-  #else
-    let stateKey = "State"
-  #endif
-
   public lazy var updater: Updater = makeUpdater()
   public lazy var context = makeViewState()
   public var status: RepoState = RepoState()
@@ -247,11 +241,11 @@ open class Engine: NSObject, ApplicationHost {
   }
 
   public func saveState() {
-    model.save(toDefaultsKey: stateKey)
+    model.save()
   }
 
   func restoreState() {
-    model.load(fromDefaultsKey: stateKey)
+    model.load()
   }
 
   public func pauseRefresh() {

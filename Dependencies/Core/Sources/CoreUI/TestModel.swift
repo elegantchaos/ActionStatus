@@ -29,9 +29,9 @@ public class TestModel: Model {
     super.init(repos)
   }
 
-  public override func load(fromDefaultsKey key: String) {
+  public override func load() {
   }
 
-  public override func save(toDefaultsKey key: String) {
+  public override func save() {
   }
 }
