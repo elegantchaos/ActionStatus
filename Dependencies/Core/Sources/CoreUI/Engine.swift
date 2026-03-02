@@ -21,7 +21,7 @@ public let settingsChannel = Channel("Settings")
 public let monitoringChannel = Channel("Monitoring")
 public let refreshControllerChannel = Channel("RefreshController")
 
-@MainActor open class Engine: NSObject, ApplicationHost {
+@MainActor open class Engine: NSObject {
   enum SetupState {
     case launching
     case ready
@@ -40,11 +40,15 @@ public let refreshControllerChannel = Channel("RefreshController")
   public let info = Bundle.main.runtimeInfo
   
   override init() {
-    super.init()
-    Engine.sharedEngine = self
     let model = Engine.makeModel()
     modelService = ModelService(model: model)
-    refreshService = RefreshService(settings: settings, model: model)
+    context = ViewContext()
+    settingsService = SettingsService(settings: context.settings)
+    refreshService = RefreshService(settings: context.settings, model: model)
+    launchService = LaunchService()
+    super.init()
+    context.host = self
+    Engine.sharedEngine = self
   }
   
   public required init(coder: NSCoder) {
@@ -56,7 +60,7 @@ public let refreshControllerChannel = Channel("RefreshController")
   }
   
   public lazy var updater: Updater = makeUpdater()
-  public lazy var context = makeViewState()
+  public var context: ViewContext
   public var status: RepoState = RepoState()
   
   var refreshService: RefreshService!
@@ -71,11 +75,7 @@ public let refreshControllerChannel = Channel("RefreshController")
   var modelChangeWorkItem: DispatchWorkItem?
   
   public let settingsService: SettingsService
-  
-  func makeViewState() -> ViewContext {
-    return ViewContext(host: self)
-  }
-  
+  public let launchService: LaunchService
   open func makeUpdater() -> Updater {
     return Updater()
   }
@@ -187,7 +187,8 @@ public let refreshControllerChannel = Channel("RefreshController")
       .environment(context)
       .environment(modelService)
       .environment(modelService.model)
-      .environment(settings)
+      .environment(settingsService)
+      .environment(launchService)
       .environment(updater)
       .environment(status)
       .environment(refreshService)
@@ -348,7 +349,7 @@ public extension UserDefaults {
 }
 
 @Observable
-class ModelService {
+public class ModelService {
   init(model: Model) {
     self.model = model
   }
@@ -356,7 +357,8 @@ class ModelService {
   public let model: Model
 }
 
-@Observable class SettingsService {
+@Observable
+public class SettingsService {
   init(settings: Settings) {
     self.settings = settings
   }
@@ -365,3 +367,14 @@ class ModelService {
 }
 
 
+@Observable
+public class LaunchService {
+  func open(url: URL) {
+    
+  }
+  
+  func reveal(url: URL) {
+    
+  }
+
+}

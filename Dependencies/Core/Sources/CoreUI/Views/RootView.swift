@@ -48,10 +48,10 @@ struct RootView: View {
     }
     .onAppear(perform: handleAppear)
     .onChange(of: model.items, initial: false) { _,_ in
-      context.host.modelDidChange()
+      context.host?.modelDidChange()
     }
     .onChange(of: context.settings, initial: false) { _,_ in
-      context.host.settingsDidChange()
+      context.host?.settingsDidChange()
     }
     #if os(tvOS)
       .focusScope(defaultNamespace)

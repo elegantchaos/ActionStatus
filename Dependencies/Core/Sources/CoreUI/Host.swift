@@ -7,7 +7,6 @@ import Foundation
 import Runtime
 
 @MainActor public protocol ApplicationHost {
-  var info: AppInfo { get }
   func open(url: URL)
   func reveal(url: URL)
   func modelDidChange()
@@ -15,10 +14,6 @@ import Runtime
 }
 
 extension ApplicationHost {
-  var info: AppInfo {
-    Bundle.main.runtimeInfo
-  }
-
   func open(url: URL) {
   }
 

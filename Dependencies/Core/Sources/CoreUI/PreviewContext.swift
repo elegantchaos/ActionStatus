@@ -13,7 +13,7 @@ struct PreviewContext {
 
   @MainActor init(isEditing: Bool = true) {
     model = TestModel()
-    state = ViewContext(host: PreviewHost())
+    state = ViewContext()
     state.settings.isEditing = isEditing
   }
 

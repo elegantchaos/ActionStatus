@@ -40,8 +40,8 @@ public enum PresentedSheet: Identifiable {
 public class ViewContext {
   public var settings = Settings()
   public var presentedSheet: PresentedSheet?
-
-  public let host: ApplicationHost
+  public let info = AppInfo()
+  public var host: Engine?
   public let padding: CGFloat = 10
 
   let linkIcon = "arrow.right.circle.fill"
@@ -49,8 +49,7 @@ public class ViewContext {
   let editButtonIcon = "ellipsis.circle"
   let deleteRepoIcon = "minus.circle"
 
-  public init(host: ApplicationHost) {
-    self.host = host
+  public init() {
   }
 
   var repoGridColumns: [GridItem] {
