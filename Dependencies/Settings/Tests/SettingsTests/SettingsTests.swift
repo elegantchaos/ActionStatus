@@ -92,7 +92,7 @@ struct SettingsTests {
     testReadDefault(key: .testEnum)
   }
 
-  @Test func testWrite() async throws {
+  @Test func testWrite() {
     testWrite(key: .testString, value: "foo bar")
     testWrite(key: .testInt, value: 987)
     testWrite(key: .testDouble, value: 654.321)
@@ -100,5 +100,41 @@ struct SettingsTests {
     testWrite(key: .testEnum, value: .b)
   }
 
+}
+
+#if canImport(SwiftUI)
+import SwiftUI
+
+struct SettingsAppStorageTests {
+  @Test func testAppStorageString() {
+    let settings = UserDefaults(suiteName: UUID().uuidString)!
+    settings.set("foo bar", forKey: .testString)
+    @AppStorage(.testString, store: settings) var testString
+    #expect(testString == "foo bar")
+    #expect(settings.string(forKey: "testString") == "foo bar")
+  }
+  
+  @Test func testAppStorageEnum() {
+    let settings = UserDefaults(suiteName: UUID().uuidString)!
+    settings.set(TestEnum.b, forKey: .testEnum)
+    @AppStorage(.testEnum, store: settings) var testEnum
+    #expect(testEnum == .b)
+    #expect(settings.string(forKey: "testEnum") == "b")
+  }
+
+  @Test func testAppStorageStringDefault() {
+    let settings = UserDefaults(suiteName: UUID().uuidString)!
+    @AppStorage(.testString, store: settings) var testString
+    #expect(testString == AppSettingKey.testString.defaultValue)
+    #expect(settings.object(forKey: "testString") == nil)
+  }
+  
+  @Test func testAppStorageEnumDefault() {
+    let settings = UserDefaults(suiteName: UUID().uuidString)!
+    @AppStorage(.testEnum, store: settings) var testEnum
+    #expect(testEnum == .a)
+    #expect(settings.object(forKey: "testEnum") == nil)
+  }
 
 }
+#endif
