@@ -7,7 +7,7 @@ import Core
 import Foundation
 import Keychain
 
-public extension String {
+public extension String { // TODO: make these private
   static let refreshIntervalKey = "RefreshInterval"
   static let displaySizeKey = "TextSize"
   static let showInMenuKey = "ShowInMenu"
@@ -35,6 +35,16 @@ public struct Settings: Equatable {
     case authenticationChanged
   }
 
+  static func registerDefaults() {
+    UserDefaults.standard.register(defaults: [
+      .refreshIntervalKey: RefreshRate.automatic.rawValue,
+      .displaySizeKey: DisplaySize.automatic.rawValue,
+      .sortModeKey: SortMode.state.rawValue,
+      .showInMenuKey: true,
+      .showInDockKey: true,
+    ])
+  }
+  
   func authenticationChanged(from other: Settings) -> Bool {
     guard testRefresh == other.testRefresh else { return true }
     guard githubUser == other.githubUser else { return true }

@@ -65,6 +65,7 @@
   @main
   struct MacApp: App {
     @NSApplicationDelegateAdaptor(MacEngine.self) private var application
+    @Environment(SettingsService.self) private var settingsService
     @AppStorage(.showInMenuKey) private var showInMenu = true
 
     var body: some Scene {

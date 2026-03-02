@@ -11,14 +11,6 @@
 
   final class MacEngine: Engine {
 
-    override func setupDefaultSettings() {
-      super.setupDefaultSettings()
-      UserDefaults.standard.register(defaults: [
-        .showInMenuKey: true,
-        .showInDockKey: true,
-      ])
-    }
-
     override func setUp(withOptions options: LaunchOptions, completion: @escaping SetupCompletion) {
       super.setUp(withOptions: options) { [self] options in
         applyWindowSettings()
