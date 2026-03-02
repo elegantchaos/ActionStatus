@@ -14,7 +14,7 @@ struct PreviewContext {
   @MainActor init(isEditing: Bool = true) {
     model = TestModel()
     settings = SettingsService()
-    settings.settings.isEditing = isEditing
+    settings.isEditing = isEditing
   }
 
   var testRepo: Repo {

@@ -5,10 +5,35 @@
 
 import Combine
 import Foundation
+import Keychain
 
 @Observable
+@MainActor
 public class SettingsService {
-  var settings = Settings()
+  var isEditing = false
+  
+  func readToken() -> String {
+    let user = UserDefaults.standard.value(forKey: .githubUser)
+    let server = UserDefaults.standard.value(forKey: .githubServer)
+    let token = try? Keychain.default.password(for: user, on: server)
+    return token ?? ""
+  }
+
+  public func toggleEditing() -> Bool {
+    isEditing = !isEditing
+    return isEditing
+  }
+
+  func writeToken(_ token: String) {
+    do {
+      let user = UserDefaults.standard.value(forKey: .githubUser)
+      let server = UserDefaults.standard.value(forKey: .githubServer)
+      try Keychain.default.update(password: token, for: user, on: server)
+    } catch {
+      print("Failed to save token \(error)")
+    }
+  }
+
 }
 
 

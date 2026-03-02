@@ -23,6 +23,8 @@ public let refreshControllerChannel = Channel("RefreshController")
 
 @Observable
 @MainActor open class Engine: NSObject {
+  @ObservationIgnored @AppStorage(.sortModeKey) public var sortMode
+
   enum SetupState {
     case launching
     case ready
@@ -45,7 +47,7 @@ public let refreshControllerChannel = Channel("RefreshController")
     self.sheetService = SheetService()
     self.modelService = ModelService(model: model)
     self.settingsService = SettingsService()
-    self.refreshService = RefreshService(settings: settingsService, model: model)
+    self.refreshService = RefreshService(model: model)
     self.launchService = LaunchService()
     super.init()
   }
@@ -94,15 +96,12 @@ public let refreshControllerChannel = Channel("RefreshController")
   
   func _setup(withOptions options: LaunchOptions, completion: @escaping SetupCompletion) async {
     registerDefaultsFromSettingsBundle()
-    Settings.registerDefaults()
-    loadSettings()
     modelService.model.load()
     
     observers.append(
       UserDefaults.standard.onChanged {
         assert(Thread.isMainThread)
         monitoringChannel.log("user defaults changed")
-        self.loadSettings()
         self.updateRepoState()
       })
     
@@ -111,8 +110,9 @@ public let refreshControllerChannel = Channel("RefreshController")
   }
   
   open func updateRepoState() {
+    let sorted = modelService.model.repos(sortedBy: sortMode)
     withAnimation {
-      status.update(with: modelService.model, settings: settingsService.settings)
+      status.update(with: sorted)
     }
   }
   
@@ -136,37 +136,9 @@ public let refreshControllerChannel = Channel("RefreshController")
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: workItem)
   }
 
-  public func settingsDidChange() {
-    monitoringChannel.log("settings changed")
-    saveSettings()
-    updateRepoState()
-  }
-  
-  open func loadSettings() {
-    settingsChannel.debug("Loading settings")
-    switch settingsService.settings.readSettings() {
-      case .unchanged:
-        settingsChannel.debug("Settings unchanged")
-
-      case .authenticationChanged:
-        // we've changed authentication method, so reset the refresh controller
-        refreshService.resetRefresh()
-
-      case .changed:
-        break
-    }
-
-    refreshService.resumeRefresh()
-  }
-
-  func saveSettings() {
-    settingsChannel.debug("Saving settings")
-    settingsService.settings.writeSettings()
-  }
-
-  public func applyEnvironment<T>(to view: T) -> some View where T: View {
+  public func applyEnvironment<T>(@ViewBuilder to view: () -> T) -> some View where T: View {
     return
-      view
+      view()
       .environment(modelService)
       .environment(modelService.model)
       .environment(settingsService)
@@ -180,22 +152,6 @@ public let refreshControllerChannel = Channel("RefreshController")
 
   open func refreshState(completion: @escaping () -> Void = {}) {
     completion()
-  }
-
-  public func open(url: URL) {
-    #if canImport(UIKit)
-      UIApplication.shared.open(url)
-    #elseif canImport(AppKit)
-      NSWorkspace.shared.open(url)
-    #endif
-  }
-
-  open func reveal(url: URL) {
-    #if canImport(UIKit)
-      UIApplication.shared.open(url)
-    #elseif canImport(AppKit)
-      NSWorkspace.shared.activateFileViewerSelecting([url])
-    #endif
   }
 
   #if canImport(UIKit)

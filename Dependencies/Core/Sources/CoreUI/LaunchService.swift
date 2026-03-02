@@ -4,15 +4,40 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Foundation
+import Core
 
 @Observable
 public class LaunchService {
-  func open(url: URL) {
-    
+  public func openWorkflow(for repo: Repo) {
+    open(url: repo.githubURL(for: .workflow))
   }
-  
-  func reveal(url: URL) {
-    
-  }
-  
 }
+
+#if canImport(UIKit)
+  import UIKit
+  extension LaunchService {
+    func open(url: URL) {
+      UIApplication.shared.open(url)
+    }
+    open func reveal(url: URL) {
+      UIApplication.shared.open(url)
+    }
+  }
+#elseif canImport(AppKit)
+  import AppKit
+  extension LaunchService {
+    func open(url: URL) {
+      NSWorkspace.shared.open(url)
+    }
+    func reveal(url: URL) {
+      NSWorkspace.shared.activateFileViewerSelecting([url])
+    }
+  }
+#else
+extension LaunchService {
+  func open(url: URL) {
+  }
+  open func reveal(url: URL) {
+  }
+}
+#endif

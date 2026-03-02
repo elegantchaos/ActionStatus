@@ -7,12 +7,12 @@ import LoggerUI
 import SwiftUI
 
 struct DebugPrefsView: View {
-  @Binding var settings: Settings
+  @AppStorage(.testRefresh) var testRefresh
 
   var body: some View {
     Section {
       VStack(alignment: .leading, spacing: 12) {
-        Toggle("Use test refresh controller", isOn: $settings.testRefresh)
+        Toggle("Use test refresh controller", isOn: $testRefresh)
         LoggerChannelsView()
           .frame(minHeight: 220)
       }

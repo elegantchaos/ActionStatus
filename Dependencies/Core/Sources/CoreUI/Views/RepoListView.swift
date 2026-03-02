@@ -9,6 +9,7 @@ public struct RepoListView: View {
   @Environment(Model.self) var model
   @Environment(RepoState.self) var status
   @Environment(SettingsService.self) private var settingsService
+  @AppStorage(.displaySize) var displaySize
   
   let namespace: Namespace.ID
 
@@ -27,7 +28,7 @@ public struct RepoListView: View {
       }
       .onDelete(perform: delete)
     }
-    .environment(\.defaultMinListRowHeight, settingsService.settings.displaySize.rowHeight)
+    .environment(\.defaultMinListRowHeight, displaySize.rowHeight)
 
     #if os(macOS)
       return list

@@ -8,8 +8,9 @@ import SwiftUI
 public struct RepoGridView: View {
   @Environment(RepoState.self) var status
   @Environment(SettingsService.self) var settings
-
-  let namespace: Namespace.ID
+  @AppStorage(.displaySize) var displaySize
+  
+   let namespace: Namespace.ID
 
   #if os(tvOS)
     let focus: FocusState<Focus?>.Binding
@@ -32,7 +33,7 @@ public struct RepoGridView: View {
   
   var repoGridColumns: [GridItem] {
     let count: Int
-    switch settings.settings.displaySize {
+    switch displaySize {
       case .small: count = 4
       case .medium: count = 3
       default: count = 2

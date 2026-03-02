@@ -7,12 +7,12 @@ import Core
 import SwiftUI
 
 struct RefreshPrefsView: View {
-  @Binding var settings: Settings
+  @AppStorage(.refreshInterval) var refreshInterval
 
   var body: some View {
     Section {
       VStack(alignment: .leading, spacing: 12) {
-        Picker("Refresh Rate", selection: $settings.refreshRate) {
+        Picker("Refresh Rate", selection: $refreshInterval) {
           ForEach(RefreshRate.allCases, id: \.rawValue) { rate in
             Text(rate.labelName).tag(rate)
           }

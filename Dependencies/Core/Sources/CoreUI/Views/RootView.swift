@@ -27,7 +27,7 @@ struct RootView: View {
     VStack(alignment: .center) {
       if model.count == 0 {
         NoReposView()
-      } else if settingsService.settings.isEditing {
+      } else if settingsService.isEditing {
         #if os(tvOS)
           RepoListView(namespace: defaultNamespace, focus: $focus)
         #else
@@ -51,9 +51,6 @@ struct RootView: View {
     .onAppear(perform: handleAppear)
     .onChange(of: model.items, initial: false) { _,_ in
       engine.modelDidChange()
-    }
-    .onChange(of: settingsService.settings, initial: false) { _,_ in
-      engine.settingsDidChange()
     }
     #if os(tvOS)
       .focusScope(defaultNamespace)

@@ -7,26 +7,29 @@ import Core
 import SwiftUI
 
 struct DisplayPrefsView: View {
-  @Binding var settings: Settings
-
+  @AppStorage(.showInMenu) var showInMenu
+  @AppStorage(.showInDock) var showInDock
+  @AppStorage(.sortModeKey) var sortMode
+  @AppStorage(.displaySize) var displaySize
+  
   var body: some View {
     Section {
       VStack(alignment: .leading, spacing: 12) {
-        Picker("Item Size", selection: $settings.displaySize) {
+        Picker("Item Size", selection: $displaySize) {
           ForEach(DisplaySize.allCases, id: \.rawValue) { size in
             Text(size.labelName).tag(size)
           }
         }
 
-        Picker("Sort By", selection: $settings.sortMode) {
+        Picker("Sort By", selection: $sortMode) {
           ForEach(SortMode.allCases, id: \.rawValue) { mode in
             Text(mode.labelName).tag(mode)
           }
         }
 
         #if os(macOS)
-          Toggle("Show In Menubar", isOn: $settings.showInMenu)
-          Toggle("Show In Dock", isOn: $settings.showInDock)
+          Toggle("Show In Menubar", isOn: $showInMenu)
+          Toggle("Show In Dock", isOn: $showInDock)
         #endif
       }
     } header: {

@@ -9,10 +9,10 @@ import SwiftUI
 
 struct RepoCellView: View {
   @Environment(LaunchService.self) private var launchService
-  @Environment(SettingsService.self) private var settingsService
   @Environment(SheetService.self) private var sheetService
   @Environment(Model.self) var model
-
+  @AppStorage(.displaySize) var displaySize
+  
   let repo: Repo
   let selectable: Bool
   let namespace: Namespace.ID
@@ -85,7 +85,7 @@ struct RepoCellView: View {
         }
         .matchedGeometryEffect(id: repo.id, in: namespace)
         .padding(cellPadding)
-        .font(settingsService.settings.displaySize.font)
+        .font(displaySize.font)
         .foregroundColor(.primary))
     } else {
       return AnyView(
@@ -104,7 +104,7 @@ struct RepoCellView: View {
           .matchedGeometryEffect(id: repo.id, in: namespace)
         }
         .padding(cellPadding)
-        .font(settingsService.settings.displaySize.font)
+        .font(displaySize.font)
         .foregroundColor(.primary)
         #if os(tvOS)
           .buttonStyle(FadingFocusButtonStyle())

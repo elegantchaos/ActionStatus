@@ -70,7 +70,9 @@ public struct ContentView: View {
       case .editRepo(let repo):
         EditView(repo: repo)
       case .preferences:
-        PreferencesView()
+        SheetView("ActionStatus Settings", shortTitle: "Settings", cancelAction: {}, doneAction: {}) {
+          PreferencesForm()
+        }
     }
   }
 }

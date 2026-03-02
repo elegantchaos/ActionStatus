@@ -10,171 +10,37 @@ import Keychain
 import Settings
 
 /// Boolean setting keys.
-@MainActor extension AppSettingKey where Value == Bool {
+@MainActor public extension AppSettingKey where Value == Bool {
   /// UserDefaults key for the setting that controls whether we register a global hotkey.
-  static let showInMenuKey = AppSettingKey("ShowInMenu")
-  static let showInDockKey = AppSettingKey("ShowInDock")
+  static let showInMenu = AppSettingKey("ShowInMenu", defaultValue: true)
+  static let showInDock = AppSettingKey("ShowInDock", defaultValue: true)
   static let testRefresh = AppSettingKey("TestRefresh")
 
 }
 
-/// Int setting keys.
-@MainActor extension AppSettingKey where Value == Int {
-  static let refreshIntervalKey = AppSettingKey("RefreshInterval", defaultValue: RefreshRate.automatic)
+@MainActor public extension AppSettingKey where Value == RefreshRate {
+  static let refreshInterval = AppSettingKey("RefreshInterval", defaultValue: RefreshRate.automatic)
+}
+
+@MainActor public extension AppSettingKey where Value == SortMode {
+  static let sortModeKey = AppSettingKey("SortMode", defaultValue: .state)
+}
+
+@MainActor public extension AppSettingKey where Value == DisplaySize {
+  static let displaySize = AppSettingKey("DisplaySize", defaultValue: .automatic)
 }
 
 /// String setting keys.
-@MainActor extension AppSettingKey where Value == String {
-  static let githubUserKey = AppSettingKey("GithubUser", defaultValue: "")
-  static let githubServerKey = AppSettingKey("GithubServer", defaultValue: "api.github.com")
-  static let sortMode = AppSettingKey("SortMode", defaultValue: SortMode.state)
+@MainActor public extension AppSettingKey where Value == String {
+  static let githubUser = AppSettingKey("GithubUser", defaultValue: "")
+  static let githubServer = AppSettingKey("GithubServer", defaultValue: "api.github.com")
 
 }
 
 /// Data setting keys.
-@MainActor extension AppSettingKey where Value == Data {
+@MainActor public extension AppSettingKey where Value == Data {
   /// UserDefaults key for the hotkey combo data.
   static let hotKeyCombo = AppSettingKey("hotKeyCombo", defaultValue: Data())
 }
 
 
-public extension String { // TODO: make these private
-  static let refreshIntervalKey = "RefreshInterval"
-  static let displaySizeKey = "TextSize"
-  static let showInMenuKey = "ShowInMenu"
-  static let showInDockKey = "ShowInDock"
-  static let githubUserKey = "GithubUser"
-  static let githubServerKey = "GithubServer"
-  static let sortModeKey = "SortMode"
-  static let testRefresh = "TestRefresh"
-}
-
-public struct Settings: Equatable {
-  public var isEditing: Bool = false
-  var displaySize: DisplaySize = .automatic
-  var refreshRate: RefreshRate = .automatic
-  var githubUser: String = ""
-  var githubServer: String = "api.github.com"
-  var sortMode: SortMode = .state
-  var showInMenu = false
-  var showInDock = false
-  var testRefresh = false
-
-  enum ReadResult {
-    case unchanged
-    case changed
-    case authenticationChanged
-  }
-
-  static func registerDefaults() {
-    UserDefaults.standard.register(defaults: [
-      .refreshIntervalKey: RefreshRate.automatic.rawValue,
-      .displaySizeKey: DisplaySize.automatic.rawValue,
-      .sortModeKey: SortMode.state.rawValue,
-      .showInMenuKey: true,
-      .showInDockKey: true,
-    ])
-  }
-  
-  func authenticationChanged(from other: Settings) -> Bool {
-    guard testRefresh == other.testRefresh else { return true }
-    guard githubUser == other.githubUser else { return true }
-    guard githubServer == other.githubServer else { return true }
-    return readToken() != other.readToken()
-  }
-
-  func readToken() -> String {
-    let token = try? Keychain.default.password(for: githubUser, on: githubServer)
-    return token ?? ""
-  }
-
-  func writeToken(_ token: String) {
-    do {
-      try Keychain.default.update(password: token, for: githubUser, on: githubServer)
-    } catch {
-      print("Failed to save token \(error)")
-    }
-  }
-
-  public mutating func toggleEditing() -> Bool {
-    isEditing = !isEditing
-    return isEditing
-  }
-
-  mutating func readSettings() -> ReadResult {
-    let oldSettings = self
-    let defaults = UserDefaults.standard
-    defaults.read(&displaySize, fromKey: .displaySizeKey)
-    defaults.read(&refreshRate, fromKey: .refreshIntervalKey)
-    defaults.read(&githubUser, fromKey: .githubUserKey, default: "")
-    defaults.read(&githubServer, fromKey: .githubServerKey, default: "api.github.com")
-    defaults.read(&sortMode, fromKey: .sortModeKey)
-    defaults.read(&showInMenu, fromKey: .showInMenuKey)
-    defaults.read(&showInDock, fromKey: .showInDockKey)
-    defaults.read(&testRefresh, fromKey: .testRefresh)
-
-    settingsChannel.debug("\(String.refreshIntervalKey) is \(refreshRate)")
-    settingsChannel.debug("\(String.displaySizeKey) is \(displaySize)")
-
-    guard self != oldSettings else { return .unchanged }
-    return authenticationChanged(from: oldSettings) ? .authenticationChanged : .changed
-  }
-
-  func writeSettings() {
-    let defaults = UserDefaults.standard
-    defaults.write(refreshRate.rawValue, forKey: .refreshIntervalKey)
-    defaults.write(displaySize.rawValue, forKey: .displaySizeKey)
-    defaults.write(githubUser, forKey: .githubUserKey)
-    defaults.write(githubServer, forKey: .githubServerKey)
-    defaults.write(sortMode.rawValue, forKey: .sortModeKey)
-    defaults.write(showInDock, forKey: .showInDockKey)
-    defaults.write(showInMenu, forKey: .showInMenuKey)
-    defaults.write(testRefresh, forKey: .testRefresh)
-
-    // NB: github token is stored in the keychain
-
-  }
-}
-
-public extension UserDefaults {
-  func read(_ value: inout Bool, fromKey key: String) {
-    value = bool(forKey: key)
-  }
-
-  func read(_ value: inout String, fromKey key: String, `default`: String = "") {
-    value = string(forKey: key) ?? `default`
-  }
-
-  func read<T>(_ value: inout T, fromKey key: String) where T: RawRepresentable, T.RawValue == Int {
-    if let resolved = T(rawValue: integer(forKey: key)) {
-      value = resolved
-    }
-  }
-
-  func read<T>(_ value: inout T, fromKey key: String) where T: RawRepresentable, T.RawValue == String {
-    if let raw = string(forKey: key), let resolved = T(rawValue: raw) {
-      value = resolved
-    }
-  }
-
-  /// Write a value to the defaults if it has changed.
-  /// We perform a comparison first to avoid triggering unnecessary
-  /// notifications if the value is unchanged.
-  func write(_ value: Int, forKey key: String) {
-    if integer(forKey: key) != value {
-      set(value, forKey: key)
-    }
-  }
-
-  func write(_ value: String, forKey key: String) {
-    if string(forKey: key) != value {
-      set(value, forKey: key)
-    }
-  }
-
-  func write(_ value: Bool, forKey key: String) {
-    if bool(forKey: key) != value {
-      set(value, forKey: key)
-    }
-  }
-}

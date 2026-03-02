@@ -19,15 +19,6 @@
       }
     }
 
-    override func loadSettings() {
-      super.loadSettings()
-      applyWindowSettings()
-    }
-
-    override func reveal(url: URL) {
-      NSWorkspace.shared.activateFileViewerSelecting([url])
-    }
-
     @objc func addLocalRepos() {
       let panel = NSOpenPanel()
       panel.canChooseFiles = false
@@ -55,16 +46,11 @@
     }
 
     private func applyWindowSettings() {
-      let showInDock = UserDefaults.standard.bool(forKey: .showInDockKey)
-
+      let showInDock = UserDefaults.standard.value(forKey: .showInDock)
       let activation: NSApplication.ActivationPolicy = showInDock ? .regular : .accessory
       if NSApp.activationPolicy() != activation {
         NSApp.setActivationPolicy(activation)
       }
-    }
-
-    func openWorkflow(for repo: Repo) {
-      open(url: repo.githubURL())
     }
 
     func statusSymbolName() -> String {

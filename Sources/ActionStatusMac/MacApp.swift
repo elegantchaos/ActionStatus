@@ -7,6 +7,7 @@
   import Core
   import CoreUI
   import SwiftUI
+  import Settings
 
   private extension Repo.State {
     var symbolName: String {
@@ -23,13 +24,15 @@
   }
 
   private struct StatusMenuContent: View {
+    @Environment(LaunchService.self) var launchService
+
     let application: MacEngine
     let status: RepoState
 
     var body: some View {
       ForEach(status.sortedRepos) { repo in
         Button {
-          application.openWorkflow(for: repo)
+          launchService.openWorkflow(for: repo)
         } label: {
           Label(repo.name, systemImage: repo.state.symbolName)
         }
@@ -65,15 +68,22 @@
   @main
   struct MacApp: App {
     @NSApplicationDelegateAdaptor(MacEngine.self) private var application
-    @Environment(SettingsService.self) private var settingsService
-    @AppStorage(.showInMenuKey) private var showInMenu = true
+    @AppStorage(.showInMenu) private var showInMenu
 
     var body: some Scene {
       WindowGroup {
-        application.applyEnvironment(to: ContentView())
+        application.applyEnvironment {
+          ContentView()
+        }
       }
+
       Settings {
-        application.applyEnvironment(to: AppSettingsView())
+        application.applyEnvironment {
+          PreferencesForm()
+            .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 16)
+        }
       }
       .defaultSize(width: 720, height: 620)
       .windowResizability(.automatic)
@@ -85,7 +95,9 @@
       }
 
       MenuBarExtra(isInserted: $showInMenu) {
-        StatusMenuContent(application: application, status: application.status)
+        application.applyEnvironment {
+          StatusMenuContent(application: application, status: application.status)
+        }
       } label: {
         StatusMenuLabel(application: application, status: application.status)
       }

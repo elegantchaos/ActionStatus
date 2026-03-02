@@ -20,10 +20,10 @@ public class RepoState {
   public var dormant: Int = 0
   public var unreachable: Int = 0
 
-  public func update(with model: Model, settings: Settings) {
+  public func update(with repos: [Repo]) {
     repoStateChannel.log("updated")
 
-    sortedRepos = model.repos(sortedBy: settings.sortMode)
+    sortedRepos = repos
 
     let set = NSCountedSet()
     sortedRepos.forEach({ set.add($0.state) })

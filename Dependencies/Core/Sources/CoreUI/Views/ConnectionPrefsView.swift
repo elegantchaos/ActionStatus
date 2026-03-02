@@ -11,7 +11,6 @@ struct ConnectionPrefsView: View {
 
   private let defaultGithubServer = "api.github.com"
 
-  @Binding var settings: Settings
   @Binding var token: String
   @State private var authState: GithubAuthUIState
   @State private var authTask: Task<Void, Never>? = nil
@@ -19,19 +18,22 @@ struct ConnectionPrefsView: View {
   @State private var authHealth: GithubAuthHealth = .unknown
   @State private var showCustomServerSettings = false
   
+  @AppStorage(.githubUser) var githubUser
+  @AppStorage(.githubServer) var githubServer
+  
   private let initialAuthState: GithubAuthUIState?
 
-  init(settings: Binding<Settings>, token: Binding<String>, initialAuthState: GithubAuthUIState? = nil) {
-    _settings = settings
+  init(token: Binding<String>, initialAuthState: GithubAuthUIState? = nil) {
     _token = token
     _authState = State(initialValue: initialAuthState ?? .idle)
     self.initialAuthState = initialAuthState
   }
 
   var body: some View {
-    Section {
+  
+    return Section {
       VStack(alignment: .leading, spacing: 12) {
-        AuthStatusBanner(state: authState, health: authHealth, currentUser: settings.githubUser, hasToken: !token.isEmpty)
+        AuthStatusBanner(state: authState, health: authHealth, currentUser: githubUser, hasToken: !token.isEmpty)
 
         HStack {
           if !isSignedIn {
@@ -42,7 +44,7 @@ struct ConnectionPrefsView: View {
               #endif
 
             if showCustomServerSettings {
-              TextField(defaultGithubServer, text: $settings.githubServer)
+              TextField(defaultGithubServer, text: $githubServer)
                 .labelsHidden()
                 #if !os(macOS)
                   .textInputAutocapitalization(.never)
@@ -69,15 +71,9 @@ struct ConnectionPrefsView: View {
         .foregroundStyle(.primary)
     }
     .onAppear {
-      showCustomServerSettings = settings.githubServer != defaultGithubServer
+      showCustomServerSettings = githubServer != defaultGithubServer
       if let initialAuthState {
         authState = initialAuthState
-      }
-      refreshAuthHealth()
-    }
-    .onChange(of: showCustomServerSettings) { _, useCustomServer in
-      if !useCustomServer {
-        settings.githubServer = defaultGithubServer
       }
       refreshAuthHealth()
     }
@@ -87,10 +83,10 @@ struct ConnectionPrefsView: View {
     .onChange(of: token) { _, _ in
       refreshAuthHealth()
     }
-    .onChange(of: settings.githubUser) { _, _ in
+    .onChange(of: githubUser) { _, _ in
       refreshAuthHealth()
     }
-    .onChange(of: settings.githubServer) { _, _ in
+    .onChange(of: githubServer) { _, _ in
       refreshAuthHealth()
     }
     .onDisappear {
@@ -100,7 +96,7 @@ struct ConnectionPrefsView: View {
   }
 
   private var isSignedIn: Bool {
-    !settings.githubUser.isEmpty && !token.isEmpty
+    !githubUser.isEmpty && !token.isEmpty
   }
 
   private var showsCancelAction: Bool {
@@ -125,9 +121,9 @@ struct ConnectionPrefsView: View {
   }
 
   func startSignIn() {
-    let serverInput = settings.githubServer.trimmingCharacters(in: .whitespacesAndNewlines)
+    let serverInput = githubServer.trimmingCharacters(in: .whitespacesAndNewlines)
     let server = serverInput.isEmpty ? defaultGithubServer : serverInput
-    settings.githubServer = server
+    githubServer = server
 
     guard let clientID = GithubDeviceAuthenticator.clientID() else {
       authState = .error("Missing Github OAuth client id. Set GithubOAuthClientID in Info.plist build settings.")
@@ -150,7 +146,7 @@ struct ConnectionPrefsView: View {
 
         let authenticatedUser = try await authenticator.pollForUser(authorization: authorization)
         await MainActor.run {
-          settings.githubUser = authenticatedUser.login
+          githubUser = authenticatedUser.login
           token = authenticatedUser.token
           authHealth = .healthy(authenticatedUser.login)
           authState = .signedIn(authenticatedUser.login)
@@ -181,7 +177,7 @@ struct ConnectionPrefsView: View {
     cancelSignIn()
     cancelHealthCheck()
     token = ""
-    settings.githubUser = ""
+    githubUser = ""
     authHealth = .unknown
     authState = .idle
   }
@@ -205,10 +201,10 @@ struct ConnectionPrefsView: View {
         break
     }
 
-    let serverInput = settings.githubServer.trimmingCharacters(in: .whitespacesAndNewlines)
+    let serverInput = githubServer.trimmingCharacters(in: .whitespacesAndNewlines)
     let server = serverInput.isEmpty ? defaultGithubServer : serverInput
     let currentToken = token
-    let currentUser = settings.githubUser
+    let currentUser = githubUser
 
     authHealth = .checking
     let authenticator = GithubDeviceAuthenticator(apiServer: server, clientID: "")
@@ -216,7 +212,7 @@ struct ConnectionPrefsView: View {
       do {
         let login = try await authenticator.validateToken(currentToken)
         await MainActor.run {
-          if token == currentToken, settings.githubUser == currentUser {
+          if token == currentToken, githubUser == currentUser {
             authHealth = .healthy(login)
           }
           healthTask = nil
@@ -228,7 +224,7 @@ struct ConnectionPrefsView: View {
       } catch {
         githubAuthChannel.log("Stored token check failed: \(error)")
         await MainActor.run {
-          if token == currentToken, settings.githubUser == currentUser {
+          if token == currentToken, githubUser == currentUser {
             authHealth = .unhealthy(error.githubAuthMessage)
           }
           healthTask = nil
@@ -407,61 +403,60 @@ private extension Error {
   }
 }
 
-private struct ConnectionPrefsPreviewHarness: View {
-  @State var settings: Settings
-  @State var token: String
-  let state: GithubAuthUIState
-
-  init(settings: Settings, token: String, state: GithubAuthUIState) {
-    _settings = State(initialValue: settings)
-    _token = State(initialValue: token)
-    self.state = state
-  }
-
-  var body: some View {
-    Form {
-      ConnectionPrefsView(settings: $settings, token: $token, initialAuthState: state)
-    }
-  }
-}
-
-struct ConnectionPrefsView_Previews: PreviewProvider {
-  static var previews: some View {
-    Group {
-      injectPreview(title: "Default Server - Signed Out", settings: signedOutSettings(), token: "", state: .idle)
-      injectPreview(title: "Authenticating", settings: signedOutSettings(), token: "", state: .authenticating)
-      injectPreview(title: "Awaiting Approval", settings: signedOutSettings(), token: "", state: .awaitingApproval("ABCD-EFGH", URL(string: "https://github.com/login/device")!))
-      injectPreview(title: "Signed In", settings: signedInSettings(), token: "token", state: .signedIn("octocat"))
-      injectPreview(title: "Error", settings: signedOutSettings(), token: "", state: .error("Github sign-in failed: bad_verification_code"))
-      injectPreview(title: "Custom Server", settings: customServerSettings(), token: "", state: .idle)
-    }
-    .padding()
-  }
-
-  static func injectPreview(title: String, settings: Settings, token: String, state: GithubAuthUIState) -> some View {
-    PreviewContext()
-      .inject(into: ConnectionPrefsPreviewHarness(settings: settings, token: token, state: state))
-      .previewDisplayName(title)
-  }
-
-  static func signedOutSettings() -> Settings {
-    var settings = Settings()
-    settings.githubServer = "api.github.com"
-    settings.githubUser = ""
-    return settings
-  }
-
-  static func signedInSettings() -> Settings {
-    var settings = Settings()
-    settings.githubServer = "api.github.com"
-    settings.githubUser = "octocat"
-    return settings
-  }
-
-  static func customServerSettings() -> Settings {
-    var settings = Settings()
-    settings.githubServer = "github.enterprise.example"
-    settings.githubUser = ""
-    return settings
-  }
-}
+//private struct ConnectionPrefsPreviewHarness: View {
+//  @State var token: String
+//  let state: GithubAuthUIState
+//
+//  init(token: String, state: GithubAuthUIState) {
+//    _settings = State(initialValue: settings)
+//    _token = State(initialValue: token)
+//    self.state = state
+//  }
+//
+//  var body: some View {
+//    Form {
+//      ConnectionPrefsView(token: $token, initialAuthState: state)
+//    }
+//  }
+//}
+//
+//struct ConnectionPrefsView_Previews: PreviewProvider {
+//  static var previews: some View {
+//    Group {
+//      injectPreview(title: "Default Server - Signed Out", settings: signedOutSettings(), token: "", state: .idle)
+//      injectPreview(title: "Authenticating", settings: signedOutSettings(), token: "", state: .authenticating)
+//      injectPreview(title: "Awaiting Approval", settings: signedOutSettings(), token: "", state: .awaitingApproval("ABCD-EFGH", URL(string: "https://github.com/login/device")!))
+//      injectPreview(title: "Signed In", settings: signedInSettings(), token: "token", state: .signedIn("octocat"))
+//      injectPreview(title: "Error", settings: signedOutSettings(), token: "", state: .error("Github sign-in failed: bad_verification_code"))
+//      injectPreview(title: "Custom Server", settings: customServerSettings(), token: "", state: .idle)
+//    }
+//    .padding()
+//  }
+//
+//  static func injectPreview(title: String, token: String, state: GithubAuthUIState) -> some View {
+//    PreviewContext()
+//      .inject(into: ConnectionPrefsPreviewHarness(token: token, state: state))
+//      .previewDisplayName(title)
+//  }
+//
+////  static func signedOutSettings() -> Settings {
+////    var settings = Settings()
+////    settings.githubServer = "api.github.com"
+////    settings.githubUser = ""
+////    return settings
+////  }
+////
+////  static func signedInSettings() -> Settings {
+////    var settings = Settings()
+////    settings.githubServer = "api.github.com"
+////    settings.githubUser = "octocat"
+////    return settings
+////  }
+////
+////  static func customServerSettings() -> Settings {
+////    var settings = Settings()
+////    settings.githubServer = "github.enterprise.example"
+////    settings.githubUser = ""
+////    return settings
+////  }
+//}
