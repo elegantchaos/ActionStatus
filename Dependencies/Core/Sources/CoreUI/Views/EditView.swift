@@ -10,9 +10,9 @@ import SwiftUI
 public struct EditView: View {
   let repo: Repo?
 
+  @Environment(LaunchService.self) private var launchService
   @Environment(\.dismiss) private var dismissAction
   @Environment(Model.self) var model
-  @Environment(ViewContext.self) var context
   @Environment(RefreshService.self) var refreshService
 
   var title: String { "\(shortTitle) Repository" }
@@ -80,8 +80,8 @@ public struct EditView: View {
                   .lineLimit(1)
                   .truncationMode(.middle)
                 Spacer()
-                Button(action: { context.host.open(url: updatedRepo.githubURL(for: .repo)) }) {
-                  Image(systemName: context.linkIcon)
+                Button(action: { launchService.open(url: updatedRepo.githubURL(for: .repo)) }) {
+                  Image(systemName: .linkIcon)
                     .foregroundColor(.gray)
                 }
               }
@@ -93,8 +93,8 @@ public struct EditView: View {
                   .lineLimit(1)
                   .truncationMode(.middle)
                 Spacer()
-                Button(action: { context.host.open(url: updatedRepo.githubURL(for: .workflow)) }) {
-                  Image(systemName: context.linkIcon)
+                Button(action: { launchService.open(url: updatedRepo.githubURL(for: .workflow)) }) {
+                  Image(systemName: .linkIcon)
                     .foregroundColor(.gray)
                 }
               }

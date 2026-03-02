@@ -7,29 +7,30 @@ import Observation
 import SwiftUI
 
 public struct ContentView: View {
-  @Environment(ViewContext.self) var context
+  @Environment(Engine.self) var engine
   @Environment(Model.self) var model
+  @Environment(SheetService.self) var sheets
 
   public init() {
   }
 
   public var body: some View {
-    @Bindable var context = context
-
+    @Bindable var presentedSheet = sheets
+    
     #if os(macOS)
-      RootView()
-        .sheet(item: $context.presentedSheet) { sheet in
+    RootView()
+      .sheet(item: $presentedSheet.presentedSheet) { sheet in
           sheetView(for: sheet)
         }
     #else
       NavigationStack {
         RootView()
-          .navigationTitle(Engine.shared.info.name)
+          .navigationTitle(engine.info.name)
           #if !os(tvOS)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
               ToolbarItem(placement: .navigationBarLeading) {
-                if context.settings.isEditing {
+                if settingsService.settings.isEditing {
                   Button(action: { context.presentedSheet = .editRepo(nil) }) {
                     Text("Add")
                   }
@@ -47,10 +48,10 @@ public struct ContentView: View {
               ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
                   withAnimation {
-                    context.settings.isEditing.toggle()
+                    settingsService.settings.isEditing.toggle()
                   }
                 }) {
-                  Text(context.settings.isEditing ? "Done" : "Edit")
+                  Text(settingsService.settings.isEditing ? "Done" : "Edit")
                 }
                 .accessibility(identifier: "toggleEditing")
               }

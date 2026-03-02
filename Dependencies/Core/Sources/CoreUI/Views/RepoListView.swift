@@ -7,9 +7,9 @@ import SwiftUI
 
 public struct RepoListView: View {
   @Environment(Model.self) var model
-  @Environment(ViewContext.self) var context
   @Environment(RepoState.self) var status
-
+  @Environment(SettingsService.self) private var settingsService
+  
   let namespace: Namespace.ID
 
   #if os(tvOS)
@@ -27,12 +27,12 @@ public struct RepoListView: View {
       }
       .onDelete(perform: delete)
     }
-    .environment(\.defaultMinListRowHeight, context.settings.displaySize.rowHeight)
+    .environment(\.defaultMinListRowHeight, settingsService.settings.displaySize.rowHeight)
 
     #if os(macOS)
       return list
     #else
-      return list.environment(\.editMode, .constant(context.settings.isEditing ? .active : .inactive))
+      return list.environment(\.editMode, .constant(settingsService.settings.isEditing ? .active : .inactive))
     #endif
   }
 

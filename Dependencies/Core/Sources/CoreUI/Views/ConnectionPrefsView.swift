@@ -7,9 +7,10 @@ import LoggerUI
 import SwiftUI
 
 struct ConnectionPrefsView: View {
+  @Environment(LaunchService.self) private var launchService
+
   private let defaultGithubServer = "api.github.com"
 
-  @Environment(ViewContext.self) var context
   @Binding var settings: Settings
   @Binding var token: String
   @State private var authState: GithubAuthUIState
@@ -17,7 +18,7 @@ struct ConnectionPrefsView: View {
   @State private var healthTask: Task<Void, Never>? = nil
   @State private var authHealth: GithubAuthHealth = .unknown
   @State private var showCustomServerSettings = false
-
+  
   private let initialAuthState: GithubAuthUIState?
 
   init(settings: Binding<Settings>, token: Binding<String>, initialAuthState: GithubAuthUIState? = nil) {
@@ -144,7 +145,7 @@ struct ConnectionPrefsView: View {
 
         await MainActor.run {
           authState = .awaitingApproval(authorization.userCode, authorization.verificationURL)
-          context.host.open(url: authorization.verificationURL)
+          launchService.open(url: authorization.verificationURL)
         }
 
         let authenticatedUser = try await authenticator.pollForUser(authorization: authorization)

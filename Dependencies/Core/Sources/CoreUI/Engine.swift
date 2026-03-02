@@ -21,6 +21,7 @@ public let settingsChannel = Channel("Settings")
 public let monitoringChannel = Channel("Monitoring")
 public let refreshControllerChannel = Channel("RefreshController")
 
+@Observable
 @MainActor open class Engine: NSObject {
   enum SetupState {
     case launching
@@ -34,34 +35,27 @@ public let refreshControllerChannel = Channel("RefreshController")
 #elseif canImport(AppKit)
   public typealias LaunchOptions = [String: Any]
 #endif
-  
-  static var sharedEngine: Engine?
+
+
   var setupState: SetupState = .launching
-  public let info = Bundle.main.runtimeInfo
-  
+  public let info = AppInfo()
+
   override init() {
     let model = Engine.makeModel()
-    modelService = ModelService(model: model)
-    context = ViewContext()
-    settingsService = SettingsService(settings: context.settings)
-    refreshService = RefreshService(settings: context.settings, model: model)
-    launchService = LaunchService()
+    self.sheetService = SheetService()
+    self.modelService = ModelService(model: model)
+    self.settingsService = SettingsService()
+    self.refreshService = RefreshService(settings: settingsService, model: model)
+    self.launchService = LaunchService()
     super.init()
-    context.host = self
-    Engine.sharedEngine = self
   }
   
   public required init(coder: NSCoder) {
     fatalError()
   }
   
-  open class var shared: Engine {
-    return Engine.sharedEngine!
-  }
-  
-  public lazy var updater: Updater = makeUpdater()
-  public var context: ViewContext
   public var status: RepoState = RepoState()
+  public var sheetService: SheetService
   
   var refreshService: RefreshService!
   
@@ -76,9 +70,6 @@ public let refreshControllerChannel = Channel("RefreshController")
   
   public let settingsService: SettingsService
   public let launchService: LaunchService
-  open func makeUpdater() -> Updater {
-    return Updater()
-  }
   
   @objc func changed() {
     modelService.model.load()
@@ -91,7 +82,7 @@ public let refreshControllerChannel = Channel("RefreshController")
   }
   
   public func editNewRepo() {
-    context.presentedSheet = .editRepo(nil)
+    sheetService.presentedSheet = .editRepo(nil)
   }
   
   
@@ -121,7 +112,7 @@ public let refreshControllerChannel = Channel("RefreshController")
   
   open func updateRepoState() {
     withAnimation {
-      status.update(with: modelService.model, context: context)
+      status.update(with: modelService.model, settings: settingsService.settings)
     }
   }
   
@@ -161,7 +152,7 @@ public let refreshControllerChannel = Channel("RefreshController")
 
   open func loadSettings() {
     settingsChannel.debug("Loading settings")
-    switch context.settings.readSettings() {
+    switch settingsService.settings.readSettings() {
       case .unchanged:
         settingsChannel.debug("Settings unchanged")
 
@@ -178,20 +169,20 @@ public let refreshControllerChannel = Channel("RefreshController")
 
   func saveSettings() {
     settingsChannel.debug("Saving settings")
-    context.settings.writeSettings()
+    settingsService.settings.writeSettings()
   }
 
   public func applyEnvironment<T>(to view: T) -> some View where T: View {
     return
       view
-      .environment(context)
       .environment(modelService)
       .environment(modelService.model)
       .environment(settingsService)
       .environment(launchService)
-      .environment(updater)
       .environment(status)
       .environment(refreshService)
+      .environment(sheetService)
+      .environment(self)
   }
 
 
@@ -288,15 +279,19 @@ public extension UserDefaults {
 
 @Observable
 @MainActor class RefreshService {
-  init(settings: Settings, model: Model) {
-    self.settings = settings
+  init(settings: SettingsService, model: Model) {
+    self.settingsService = settings
     self.model = model
   }
   
-  let settings: Settings
+  let settingsService: SettingsService
   let model: Model
 
   public var refreshController: RefreshController? = nil
+  
+  private var settings: Settings {
+    settingsService.settings
+  }
   
   func resetRefresh() {
     refreshControllerChannel.log("Reset")
@@ -359,11 +354,7 @@ public class ModelService {
 
 @Observable
 public class SettingsService {
-  init(settings: Settings) {
-    self.settings = settings
-  }
-  
-  var settings: Settings
+  var settings = Settings()
 }
 
 
@@ -377,4 +368,20 @@ public class LaunchService {
     
   }
 
+}
+
+@Observable
+public class SheetService {
+  public var presentedSheet: PresentedSheet?
+}
+
+extension String {
+  static let linkIcon = "arrow.right.circle.fill"
+  static let preferencesIcon = "gearshape"
+  static let editButtonIcon = "ellipsis.circle"
+  static let deleteRepoIcon = "minus.circle"
+}
+
+extension CGFloat {
+  static let padding: CGFloat = 10
 }

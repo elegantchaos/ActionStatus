@@ -13,8 +13,10 @@ public enum Focus: Hashable, Equatable {
 
 struct RootView: View {
   @Namespace() var defaultNamespace
-  @Environment(ViewContext.self) var context
   @Environment(Model.self) var model
+  @Environment(Engine.self) var engine
+  @Environment(SettingsService.self) var settingsService
+  
   @State var focusState = FadingFocusState()
 
   #if os(tvOS)
@@ -25,7 +27,7 @@ struct RootView: View {
     VStack(alignment: .center) {
       if model.count == 0 {
         NoReposView()
-      } else if context.settings.isEditing {
+      } else if settingsService.settings.isEditing {
         #if os(tvOS)
           RepoListView(namespace: defaultNamespace, focus: $focus)
         #else
@@ -48,10 +50,10 @@ struct RootView: View {
     }
     .onAppear(perform: handleAppear)
     .onChange(of: model.items, initial: false) { _,_ in
-      context.host?.modelDidChange()
+      engine.modelDidChange()
     }
-    .onChange(of: context.settings, initial: false) { _,_ in
-      context.host?.settingsDidChange()
+    .onChange(of: settingsService.settings, initial: false) { _,_ in
+      engine.settingsDidChange()
     }
     #if os(tvOS)
       .focusScope(defaultNamespace)

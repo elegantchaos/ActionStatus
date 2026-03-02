@@ -15,6 +15,7 @@
     }
 
     open func makeScene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+      
       let app = Engine.shared
       let content = app.applyEnvironment(to: ContentView())
 

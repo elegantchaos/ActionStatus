@@ -8,7 +8,9 @@ import Runtime
 import SwiftUI
 
 struct RepoCellView: View {
-  @Environment(ViewContext.self) var context
+  @Environment(LaunchService.self) private var launchService
+  @Environment(SettingsService.self) private var settingsService
+  @Environment(SheetService.self) private var sheetService
   @Environment(Model.self) var model
 
   let repo: Repo
@@ -29,30 +31,30 @@ struct RepoCellView: View {
     Text("\(repo.name)")
 
     Button(action: handleEdit) {
-      Label("Settings…", systemImage: context.editButtonIcon)
+      Label("Settings…", systemImage: .editButtonIcon)
         .accessibility(identifier: "editLabel")
     }
 
     Button(action: handleShowRepo) {
-      Label("Open In Github…", systemImage: context.linkIcon)
+      Label("Open In Github…", systemImage: .linkIcon)
     }
 
     Button(action: handleShowWorkflow) {
-      Label("Open Workflow In Github…", systemImage: context.linkIcon)
+      Label("Open Workflow In Github…", systemImage: .linkIcon)
     }
 
     if let url = repo.url(forDevice: Device().identifier) {
       Button(
         action: { handleReveal(url: url) },
         label: {
-          Label("Reveal In Finder…", systemImage: context.linkIcon)
+          Label("Reveal In Finder…", systemImage: .linkIcon)
         })
     }
 
     Divider()
 
     Button(action: handleDelete) {
-      Label("Delete", systemImage: context.deleteRepoIcon)
+      Label("Delete", systemImage: .deleteRepoIcon)
     }
     #if DEBUG
 
@@ -68,7 +70,7 @@ struct RepoCellView: View {
   func cell(for repo: Repo) -> some View {
     if selectable {
       return AnyView(
-        HStack(alignment: .center, spacing: context.padding) {
+        HStack(alignment: .center, spacing: .padding) {
           Text(repo.name)
             .allowsTightening(true)
             .truncationMode(.middle)
@@ -76,19 +78,19 @@ struct RepoCellView: View {
 
           Spacer()
           Button(action: handleEdit) {
-            Image(systemName: context.editButtonIcon)
+            Image(systemName: .editButtonIcon)
           }
           .accessibility(identifier: "editButton")
           .foregroundColor(.black)
         }
         .matchedGeometryEffect(id: repo.id, in: namespace)
         .padding(cellPadding)
-        .font(context.settings.displaySize.font)
+        .font(settingsService.settings.displaySize.font)
         .foregroundColor(.primary))
     } else {
       return AnyView(
         Button(action: handleShowWorkflow) {
-          HStack(alignment: .center, spacing: context.padding) {
+          HStack(alignment: .center, spacing: .padding) {
             Image(systemName: repo.badgeName)
               .foregroundColor(repo.statusColor)
 
@@ -102,7 +104,7 @@ struct RepoCellView: View {
           .matchedGeometryEffect(id: repo.id, in: namespace)
         }
         .padding(cellPadding)
-        .font(context.settings.displaySize.font)
+        .font(settingsService.settings.displaySize.font)
         .foregroundColor(.primary)
         #if os(tvOS)
           .buttonStyle(FadingFocusButtonStyle())
@@ -115,15 +117,15 @@ struct RepoCellView: View {
   }
 
   func handleShowRepo() {
-    context.host.open(url: repo.githubURL(for: .repo))
+    launchService.open(url: repo.githubURL(for: .repo))
   }
 
   func handleShowWorkflow() {
-    context.host.open(url: repo.githubURL(for: .workflow))
+    launchService.open(url: repo.githubURL(for: .workflow))
   }
 
   func handleEdit() {
-    context.presentedSheet = .editRepo(repo)
+    sheetService.presentedSheet = .editRepo(repo)
   }
 
   func handleDelete() {
@@ -138,7 +140,7 @@ struct RepoCellView: View {
 
   func handleReveal(url: URL) {
     url.accessSecurityScopedResource { unlockedURL in
-      context.host.reveal(url: unlockedURL)
+      launchService.reveal(url: unlockedURL)
     }
   }
 

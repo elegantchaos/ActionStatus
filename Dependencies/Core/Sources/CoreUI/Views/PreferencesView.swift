@@ -6,10 +6,10 @@
 import SwiftUI
 
 public struct AppSettingsView: View {
-  @Environment(ViewContext.self) var context
   @Environment(Model.self) var model
   @Environment(RefreshService.self) var refreshService
-
+  @Environment(SettingsService.self) var settingsService
+  
   @State var settings = Settings()
   @State var token: String = ""
 
@@ -31,14 +31,14 @@ public struct AppSettingsView: View {
   }
 
   func handleAppear() {
-    settings = context.settings
+    settings = settingsService.settings
     token = settings.readToken()
   }
 
   func handleSave() {
-    let authenticationChanged = settings.authenticationChanged(from: context.settings)
-    context.settings = settings
-    context.settings.writeToken(token)
+    let authenticationChanged = settings.authenticationChanged(from: settingsService.settings)
+    settingsService.settings = settings
+    settingsService.settings.writeToken(token)
 
     if authenticationChanged {
       refreshService.resetRefresh()
@@ -48,8 +48,8 @@ public struct AppSettingsView: View {
 
 public struct PreferencesView: View {
   @Environment(\.dismiss) private var dismissAction
-  @Environment(ViewContext.self) var context
   @Environment(RefreshService.self) var refreshService
+  @Environment(SettingsService.self) var settingsService
 
   @State var settings = Settings()
   @State var token: String = ""
@@ -73,14 +73,14 @@ public struct PreferencesView: View {
 
   func handleAppear() {
     refreshService.pauseRefresh()
-    settings = context.settings
+    settings = settingsService.settings
     token = settings.readToken()
   }
 
   func handleSave() {
-    let authenticationChanged = settings.authenticationChanged(from: context.settings)
-    context.settings = settings
-    context.settings.writeToken(token)
+    let authenticationChanged = settings.authenticationChanged(from: settingsService.settings)
+    settingsService.settings = settings
+    settingsService.settings.writeToken(token)
 
     if authenticationChanged {
       refreshService.resetRefresh()

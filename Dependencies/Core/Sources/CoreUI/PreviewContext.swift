@@ -9,12 +9,12 @@ import SwiftUI
 struct PreviewContext {
 
   let model: TestModel
-  let state: ViewContext
-
+  let settings: SettingsService
+  
   @MainActor init(isEditing: Bool = true) {
     model = TestModel()
-    state = ViewContext()
-    state.settings.isEditing = isEditing
+    settings = SettingsService()
+    settings.settings.isEditing = isEditing
   }
 
   var testRepo: Repo {
@@ -25,6 +25,6 @@ struct PreviewContext {
     return
       view
       .environment(model)
-      .environment(state)
+      .environment(settings)
   }
 }
