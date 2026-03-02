@@ -40,10 +40,10 @@ struct SettingsSnapshot {
 //  }
 }
 
-extension UserDefaults {
-  func snapshot<each V>(key: repeat AppSettingKey<each V>) -> [String: Any] {
+public extension UserDefaults {
+  func snapshot<each V>(for keys: repeat AppSettingKey<each V>) -> [String: Any] {
     var result: [String: Any] = [:]
-    for k in repeat each key {
+    for k in repeat each keys {
       if object(forKey: k.key) != nil {
         result[k.key] = value(forKey: k)
       }
@@ -51,8 +51,8 @@ extension UserDefaults {
     return result
   }
   
-  func restore<each V>(from snapshot: [String: Any], key: repeat AppSettingKey<each V>) {
-    for k in repeat each key {
+  func restore<each V>(from snapshot: [String: Any], for keys: repeat AppSettingKey<each V>) {
+    for k in repeat each keys {
       if let v = snapshot[k.key] {
         set(v, forKey: k.key)
       }

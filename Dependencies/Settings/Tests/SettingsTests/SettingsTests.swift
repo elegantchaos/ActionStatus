@@ -138,3 +138,19 @@ struct SettingsAppStorageTests {
 
 }
 #endif
+
+struct SnapshotTests {
+  @Test func testSnapshot() {
+    let settings = UserDefaults(suiteName: UUID().uuidString)!
+    settings.set("foo bar", forKey: .testString)
+    settings.set(123, forKey: .testInt)
+
+    let snapshot = settings.snapshot(for: .testString, .testInt)
+
+    let settings2 = UserDefaults(suiteName: UUID().uuidString)!
+    settings2.restore(from: snapshot, for: .testString, .testInt)
+
+    #expect(settings2.value(forKey: .testString) == "foo bar")
+    #expect(settings2.value(forKey: .testInt) == 123)
+  }
+}
