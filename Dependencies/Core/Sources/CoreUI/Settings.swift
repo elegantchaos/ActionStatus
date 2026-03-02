@@ -7,6 +7,37 @@ import Core
 import Foundation
 import Keychain
 
+import Settings
+
+/// Boolean setting keys.
+@MainActor extension AppSettingKey where Value == Bool {
+  /// UserDefaults key for the setting that controls whether we register a global hotkey.
+  static let showInMenuKey = AppSettingKey("ShowInMenu")
+  static let showInDockKey = AppSettingKey("ShowInDock")
+  static let testRefresh = AppSettingKey("TestRefresh")
+
+}
+
+/// Int setting keys.
+@MainActor extension AppSettingKey where Value == Int {
+  static let refreshIntervalKey = AppSettingKey("RefreshInterval", defaultValue: RefreshRate.automatic)
+}
+
+/// String setting keys.
+@MainActor extension AppSettingKey where Value == String {
+  static let githubUserKey = AppSettingKey("GithubUser", defaultValue: "")
+  static let githubServerKey = AppSettingKey("GithubServer", defaultValue: "api.github.com")
+  static let sortMode = AppSettingKey("SortMode", defaultValue: SortMode.state)
+
+}
+
+/// Data setting keys.
+@MainActor extension AppSettingKey where Value == Data {
+  /// UserDefaults key for the hotkey combo data.
+  static let hotKeyCombo = AppSettingKey("hotKeyCombo", defaultValue: Data())
+}
+
+
 public extension String { // TODO: make these private
   static let refreshIntervalKey = "RefreshInterval"
   static let displaySizeKey = "TextSize"

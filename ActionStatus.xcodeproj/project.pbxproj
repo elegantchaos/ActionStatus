@@ -67,6 +67,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2218311E2F55C0E1002324B6 /* Icons */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Icons; path = Dependencies/Icons; sourceTree = "<group>"; };
+		2218311F2F55C0E1002324B6 /* Settings */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Settings; path = Dependencies/Settings; sourceTree = "<group>"; };
 		2231B6762F52009700AB890D /* Runtime */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Runtime; path = Dependencies/Runtime; sourceTree = "<group>"; };
 		2231B69C2F5200D000AB890D /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Core; path = Dependencies/Core; sourceTree = "<group>"; };
 		2257D7F62F4DAEAF00DBD569 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
@@ -172,6 +174,8 @@
 				228D838C246AC10700943918 /* README.md */,
 				2231B69C2F5200D000AB890D /* Core */,
 				2231B6762F52009700AB890D /* Runtime */,
+				2218311E2F55C0E1002324B6 /* Icons */,
+				2218311F2F55C0E1002324B6 /* Settings */,
 				22AA000026B3A10000AA0001 /* Settings.xcconfig */,
 				8B3E64A523EAE62D00B28168 /* Sources */,
 				8B522FA223F6E7B40020AD36 /* Tests */,

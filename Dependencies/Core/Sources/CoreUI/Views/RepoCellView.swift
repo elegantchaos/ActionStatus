@@ -31,30 +31,30 @@ struct RepoCellView: View {
     Text("\(repo.name)")
 
     Button(action: handleEdit) {
-      Label("Settings…", systemImage: .editButtonIcon)
+      Label("Settings…", icon: .editButtonIcon)
         .accessibility(identifier: "editLabel")
     }
 
     Button(action: handleShowRepo) {
-      Label("Open In Github…", systemImage: .linkIcon)
+      Label("Open In Github…", icon: .linkIcon)
     }
 
     Button(action: handleShowWorkflow) {
-      Label("Open Workflow In Github…", systemImage: .linkIcon)
+      Label("Open Workflow In Github…", icon: .linkIcon)
     }
 
     if let url = repo.url(forDevice: Device().identifier) {
       Button(
         action: { handleReveal(url: url) },
         label: {
-          Label("Reveal In Finder…", systemImage: .linkIcon)
+          Label("Reveal In Finder…", icon: .linkIcon)
         })
     }
 
     Divider()
 
     Button(action: handleDelete) {
-      Label("Delete", systemImage: .deleteRepoIcon)
+      Label("Delete", icon: .deleteRepoIcon)
     }
     #if DEBUG
 
@@ -78,7 +78,7 @@ struct RepoCellView: View {
 
           Spacer()
           Button(action: handleEdit) {
-            Image(systemName: .editButtonIcon)
+            Image(icon: .editButtonIcon)
           }
           .accessibility(identifier: "editButton")
           .foregroundColor(.black)

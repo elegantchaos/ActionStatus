@@ -260,14 +260,6 @@ public let refreshControllerChannel = Channel("RefreshController")
   }
 #endif
 
-
-extension String {
-  static let linkIcon = "arrow.right.circle.fill"
-  static let preferencesIcon = "gearshape"
-  static let editButtonIcon = "ellipsis.circle"
-  static let deleteRepoIcon = "minus.circle"
-}
-
 extension CGFloat {
   static let padding: CGFloat = 10
 }

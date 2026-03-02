@@ -25,6 +25,8 @@ let package = Package(
     .package(url: "https://github.com/elegantchaos/Logger.git", from: "2.0.1"),
     .package(path: "../../../Octoid"),
     .package(path: "../Runtime"),
+    .package(path: "../Icons"),
+    .package(path: "../Settings"),
   ],
   targets: [
     .target(
@@ -49,6 +51,8 @@ let package = Package(
         "Keychain",
         "Octoid",
         "Runtime",
+        .product(name: "Icons", package: "Icons"),
+        .product(name: "Settings", package: "Settings")
       ]),
     .testTarget(
       name: "CoreTests",
