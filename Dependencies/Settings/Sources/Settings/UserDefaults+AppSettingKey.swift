@@ -28,7 +28,25 @@ public extension UserDefaults {
   }
 }
 
-struct SettingsSnapshot {
+public struct SettingsSnapshot<each V> {
+//  let values: (repeat (AppSettingKey<each V>, each V))
+//  init(values: (repeat (AppSettingKey<each V>, each V))) {
+//    self.values = values
+//  }
+
+  let values: (repeat (AppSettingKey<each V>, Any?))
+  init(values: (repeat (AppSettingKey<each V>, Any?))) {
+    self.values = values
+  }
+
+  public func print() {
+    for v in repeat each values {
+      Swift.print("\(v.0): \(v.1 ?? "<nil>")")
+    }
+    
+  }
+}
+
 //  func snapshot<each V>(key: repeat AppSettingKey<each V>) -> [String: Any] {
 //    var result: [String: Any] = [:]
 //    for k in repeat each key {
@@ -38,24 +56,27 @@ struct SettingsSnapshot {
 //    }
 //    return result
 //  }
-}
+
 
 public extension UserDefaults {
-  func snapshot<each V>(for keys: repeat AppSettingKey<each V>) -> [String: Any] {
-    var result: [String: Any] = [:]
-    for k in repeat each keys {
-      if object(forKey: k.key) != nil {
-        result[k.key] = value(forKey: k)
-      }
-    }
-    return result
+  func snapshot<each V>(for keys: repeat AppSettingKey<each V>) -> SettingsSnapshot<repeat each V> {
+//    var result: [String: Any] = [:]
+//    for k in repeat each keys {
+//      if object(forKey: k.key) != nil {
+//        result[k.key] = value(forKey: k)
+//      }
+//    }
+    return SettingsSnapshot(
+      values: (repeat (each keys, value(forKey: each keys)))
+    )
   }
   
-  func restore<each V>(from snapshot: [String: Any], for keys: repeat AppSettingKey<each V>) {
-    for k in repeat each keys {
-      if let v = snapshot[k.key] {
-        set(v, forKey: k.key)
-      }
+  func restore<each V>(
+    from snapshot: SettingsSnapshot<repeat each V>
+  ) {
+    for v in repeat each snapshot.values {
+      set(v.1, forKey: v.0.key)
     }
   }
+  
 }

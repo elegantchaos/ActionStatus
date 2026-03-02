@@ -146,9 +146,10 @@ struct SnapshotTests {
     settings.set(123, forKey: .testInt)
 
     let snapshot = settings.snapshot(for: .testString, .testInt)
-
+    snapshot.print()
+    
     let settings2 = UserDefaults(suiteName: UUID().uuidString)!
-    settings2.restore(from: snapshot, for: .testString, .testInt)
+    settings2.restore(from: snapshot)
 
     #expect(settings2.value(forKey: .testString) == "foo bar")
     #expect(settings2.value(forKey: .testInt) == 123)
