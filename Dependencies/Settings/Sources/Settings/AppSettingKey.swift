@@ -33,6 +33,14 @@ public extension AppSettingKey where Value == Bool {
   }
 }
 
+public extension AppSettingKey where Value == any RawRepresentable {
+  init(_ key: StringLiteralType, defaultValue: Value) {
+    self.key = key
+    self.defaultValue = defaultValue
+  }
+}
+
+
 public extension AppSettingKey {
   init<T>(_ key: StringLiteralType, defaultValue: T)  where T: RawRepresentable, T.RawValue == Value {
     self.key = key
