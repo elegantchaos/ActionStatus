@@ -6,17 +6,17 @@
 import Foundation
 import SwiftUI
 
-public protocol AppEngine: AnyObject {
+@MainActor public protocol AppEngine: AnyObject {
   /// Perform one-time, synchronous startup.
   /// This should be as quick as possible, to avoid a delay
   /// before the app shows any UI
   func initialise() throws
-  
+
   /// Perform asychronous startup.
   /// Whilst the app is doing this, it will be in the `.starting`
   /// state, and will be showing the startup UI.
   func startup() async throws
-  
+
   /// Perform any optional retry cleanup
   func retry() async throws
 
@@ -29,13 +29,13 @@ public protocol AppEngine: AnyObject {
 
   /// The state that the app is in.
   var state: AppState { get set }
-  
+
   /// A view modifier which injects environment into a view.
   /// It should assume that the engine isn't fully started yet,
   /// and so (for example) it may not inject services that
   /// could still be starting.
   associatedtype StartupInjector: ViewModifier
-  
+
   /// Returns a modifier which injects environment.
   var startupInjector: StartupInjector { get }
 
@@ -50,7 +50,7 @@ public protocol AppEngine: AnyObject {
 
 }
 
-public extension AppEngine {
+@MainActor public extension AppEngine {
   func standardLoop() {
     advance()
   }
@@ -87,22 +87,18 @@ public extension AppEngine {
 
   func recoverFromError() {
     switch state {
-      case .error(let error, let previousState):
+      case .error(_, let previousState):
         state = previousState
-        do {
-          try advance()
-        } catch {
-          caughtError(error)
-        }
+        advance()
       default:
         break
     }
   }
 
   func rootView<S: View, R: View, E: View>(
-    @ViewBuilder startup: () -> S,
     @ViewBuilder running: () -> R,
-    @ViewBuilder error: (Error) -> E
+    @ViewBuilder startup: () -> S = { DefaultStartupView() },
+    @ViewBuilder error: (Error, AppState) -> E = { e, s in DefaultErrorView(e, s) }
   ) -> some View {
     Group {
       switch state {
@@ -113,11 +109,30 @@ public extension AppEngine {
           running()
             .modifier(runningInjector)
         case .error(let e, let previousState):
-          error(e)
+          error(e, previousState)
       }
     }
   }
-
-
 }
 
+public struct DefaultStartupView: View {
+  public init() { }
+  public var body: some View {
+    ProgressView()
+  }
+}
+
+public struct DefaultErrorView: View {
+  let error: Error
+  let previousState: AppState
+  
+  public init(_ error: Error, _ previousState: AppState) {
+    self.error = error
+    self.previousState = previousState
+  }
+  
+  public var body: some View {
+    let errorDesc = String(describing: error)
+    Text("Error: \(errorDesc)")
+  }
+}
