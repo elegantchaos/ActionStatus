@@ -13,7 +13,7 @@ public enum Focus: Hashable, Equatable {
 
 struct RootView: View {
   @Namespace() var defaultNamespace
-  @Environment(Model.self) var model
+  @Environment(ModelService.self) var modelService
   @Environment(Engine.self) var engine
   @Environment(SettingsService.self) var settingsService
   
@@ -25,7 +25,7 @@ struct RootView: View {
 
   var body: some View {
     VStack(alignment: .center) {
-      if model.count == 0 {
+      if modelService.count == 0 {
         NoReposView()
       } else if settingsService.isEditing {
         #if os(tvOS)
@@ -49,7 +49,7 @@ struct RootView: View {
       #endif
     }
     .onAppear(perform: handleAppear)
-    .onChange(of: model.items, initial: false) { _,_ in
+    .onChange(of: modelService.items, initial: false) { _,_ in
       engine.modelDidChange()
     }
     #if os(tvOS)

@@ -10,7 +10,10 @@ import SwiftUI
 struct RepoCellView: View {
   @Environment(LaunchService.self) private var launchService
   @Environment(SheetService.self) private var sheetService
-  @Environment(Model.self) var model
+  @Environment(ModelService.self) var modelService
+  @Environment(Engine.self) var engine
+  @Environment(MetadataService.self) var metadataService
+
   @AppStorage(.displaySize) var displaySize
   
   let repo: Repo
@@ -58,7 +61,7 @@ struct RepoCellView: View {
     }
     #if DEBUG
 
-      if !ProcessInfo.processInfo.environment.isTestingUI {
+    if !metadataService.info.isUITestingBuild {
         Divider()
         Button(action: handleToggleState) {
           Text("DEBUG: Advance State")
@@ -129,12 +132,12 @@ struct RepoCellView: View {
   }
 
   func handleDelete() {
-    model.remove(reposWithIDs: [repo.id])
+    modelService.remove(reposWithIDs: [repo.id])
   }
 
   func handleToggleState() {
     if let newState = Repo.State(rawValue: (repo.state.rawValue + 1) % UInt(Repo.State.allCases.count)) {
-      model.update(repoWithID: repo.id, state: newState)
+      modelService.update(repoWithID: repo.id, state: newState)
     }
   }
 

@@ -12,7 +12,7 @@ public struct EditView: View {
 
   @Environment(LaunchService.self) private var launchService
   @Environment(\.dismiss) private var dismissAction
-  @Environment(Model.self) var model
+  @Environment(ModelService.self) var modelService
   @Environment(RefreshService.self) var refreshService
 
   var title: String { "\(shortTitle) Repository" }
@@ -152,7 +152,7 @@ public struct EditView: View {
   }
 
   func save() {
-    model.update(repo: updatedRepo)
+    modelService.update(repo: updatedRepo)
   }
 
   var updatedRepo: Repo {

@@ -3,13 +3,15 @@
 //  Copyright © 2026 Elegant Chaos Limited. All rights reserved.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import Foundation
+#if canImport(AppKit)
 
-@Observable
-public class ModelService {
-  init(model: Model) {
-    self.model = model
+import AppKit
+
+@MainActor
+class MacDelegate: NSObject, NSApplicationDelegate {
+  func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+    false
   }
-  
-  public let model: Model
 }
+
+#endif

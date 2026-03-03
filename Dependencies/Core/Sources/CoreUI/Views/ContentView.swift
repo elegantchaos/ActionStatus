@@ -8,8 +8,9 @@ import SwiftUI
 
 public struct ContentView: View {
   @Environment(Engine.self) var engine
-  @Environment(Model.self) var model
+  @Environment(ModelService.self) var modelService
   @Environment(SheetService.self) var sheets
+  @Environment(SettingsService.self) var settingsService
 
   public init() {
   }
@@ -30,15 +31,15 @@ public struct ContentView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
               ToolbarItem(placement: .navigationBarLeading) {
-                if settingsService.settings.isEditing {
-                  Button(action: { context.presentedSheet = .editRepo(nil) }) {
+                if settingsService.isEditing {
+                  Button(action: { presentedSheet.presentedSheet = .editRepo(nil) }) {
                     Text("Add")
                   }
                   .accessibility(identifier: "addButton")
                   .foregroundColor(.black)
                 } else {
-                  Button(action: { context.presentedSheet = .preferences }) {
-                    Image(systemName: context.preferencesIcon)
+                  Button(action: { presentedSheet.presentedSheet = .preferences }) {
+                    Image(icon: .preferencesIcon)
                   }
                   .accessibility(label: Text("Settings"))
                   .accessibility(identifier: "preferencesButton")
@@ -48,17 +49,17 @@ public struct ContentView: View {
               ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
                   withAnimation {
-                    settingsService.settings.isEditing.toggle()
+                    _ = settingsService.toggleEditing()
                   }
                 }) {
-                  Text(settingsService.settings.isEditing ? "Done" : "Edit")
+                  Text(settingsService.isEditing ? "Done" : "Edit")
                 }
                 .accessibility(identifier: "toggleEditing")
               }
             }
           #endif
       }
-      .sheet(item: $context.presentedSheet) { sheet in
+      .sheet(item: $presentedSheet.presentedSheet) { sheet in
         sheetView(for: sheet)
       }
     #endif

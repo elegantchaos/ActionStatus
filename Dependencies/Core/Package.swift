@@ -20,12 +20,16 @@ let package = Package(
     .package(url: "https://github.com/elegantchaos/CollectionExtensions.git", from: "1.1.9"),
     .package(url: "https://github.com/elegantchaos/DictionaryCoding.git", from: "1.0.9"),
     .package(url: "https://github.com/elegantchaos/Files.git", from: "1.2.2"),
-    .package(path: "../../../JSONSession"),
     .package(url: "https://github.com/elegantchaos/Keychain.git", from: "1.0.0"),
     .package(url: "https://github.com/elegantchaos/Logger.git", from: "2.0.1"),
+
+    // TODO: replace these with proper urls
+    .package(path: "../../../JSONSession"),
     .package(path: "../../../Octoid"),
-    .package(path: "../Runtime"),
+
+    .package(path: "../Application"),
     .package(path: "../Icons"),
+    .package(path: "../Runtime"),
     .package(path: "../Settings"),
   ],
   targets: [
@@ -46,13 +50,15 @@ let package = Package(
         "DictionaryCoding",
         "Files",
         "Logger",
-        .product(name: "LoggerUI", package: "Logger"),
         "JSONSession",
         "Keychain",
-        "Octoid",
         "Runtime",
+
+        .product(name: "Application", package: "Application"),
         .product(name: "Icons", package: "Icons"),
-        .product(name: "Settings", package: "Settings")
+        .product(name: "LoggerUI", package: "Logger"),
+        .product(name: "Octoid", package: "Octoid"),
+        .product(name: "Settings", package: "Settings"),
       ]),
     .testTarget(
       name: "CoreTests",

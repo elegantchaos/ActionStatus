@@ -5,10 +5,10 @@
 
 import Core
 import DictionaryCoding
+import Foundation
 import Logger
 import Observation
 import Runtime
-import SwiftUI
 
 public let modelChannel = Channel("com.elegantchaos.actionstatus.Model")
 
@@ -29,12 +29,12 @@ public class Model {
     self.store = store
     store.synchronize()
 
-#if DEBUG
-    key = stateKey ?? "StateDebug"
-#else
-    key = stateKey ?? "State"
-#endif
-    
+    #if DEBUG
+      key = stateKey ?? "StateDebug"
+    #else
+      key = stateKey ?? "State"
+    #endif
+
 
     var index: [UUID: Repo] = [:]
     for repo in repos {
@@ -43,7 +43,14 @@ public class Model {
     }
 
     self.items = index
-    NotificationCenter.default.addObserver(self, selector: #selector(modelChangedExternally), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: NSUbiquitousKeyValueStore.default)
+    NotificationCenter.default
+      .addObserver(
+        forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
+        object: NSUbiquitousKeyValueStore.default,
+        queue: .main
+      ) { _ in
+        self.load()
+      }
   }
 
   // MARK: Public
@@ -95,10 +102,6 @@ public class Model {
 
   public func repo(withIdentifier id: UUID) -> Repo? {
     return items[id]
-  }
-
-  public func repos(sortedBy mode: SortMode) -> [Repo] {
-    return mode.sort(items.values)
   }
 
   public func update(repoWithID id: UUID, state: Repo.State) {
@@ -177,11 +180,6 @@ public class Model {
 // MARK: Internal
 
 internal extension Model {
-
-  @objc func modelChangedExternally() {
-    load()
-  }
-
   func add(fromGitRepo localGitFolderURL: URL, detector: NSDataDetector) {
     let containerURL = localGitFolderURL.deletingLastPathComponent()
     let containerName = containerURL.lastPathComponent
@@ -207,8 +205,3 @@ internal extension Model {
   }
 
 }
-
-#Preview {
-    Text("activeDefaultsKey")
-}
-

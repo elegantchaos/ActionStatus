@@ -18,7 +18,7 @@ struct PreviewContext {
   }
 
   var testRepo: Repo {
-    model.repos(sortedBy: .name).first!
+    SortMode.name.sort(model.items.values).first!
   }
 
   func inject<Content>(into view: Content) -> some View where Content: View {

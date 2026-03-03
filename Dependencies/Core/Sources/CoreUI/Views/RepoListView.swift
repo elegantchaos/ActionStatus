@@ -6,7 +6,7 @@
 import SwiftUI
 
 public struct RepoListView: View {
-  @Environment(Model.self) var model
+  @Environment(ModelService.self) var modelService
   @Environment(RepoState.self) var status
   @Environment(SettingsService.self) private var settingsService
   @AppStorage(.displaySize) var displaySize
@@ -33,13 +33,13 @@ public struct RepoListView: View {
     #if os(macOS)
       return list
     #else
-      return list.environment(\.editMode, .constant(settingsService.settings.isEditing ? .active : .inactive))
+      return list.environment(\.editMode, .constant(settingsService.isEditing ? .active : .inactive))
     #endif
   }
 
   func delete(at offsets: IndexSet) {
     let ids = status.repoIDs(atOffets: offsets)
-    model.remove(reposWithIDs: ids)
+    modelService.remove(reposWithIDs: ids)
   }
 }
 
