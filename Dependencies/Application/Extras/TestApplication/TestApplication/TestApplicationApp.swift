@@ -48,11 +48,15 @@ struct TestApplication: App {
 
 @Observable
 class TestEngine: Engine {
-  var state: Application.State = .uninitialised
-
+  var state: Application.EngineState = .uninitialised
+  
+  var constantService: ConstantService
+  var slowService: SlowStartupService?
+  
   var startupContinuation: CheckedContinuation<Void, any Error>?
 
   init() {
+    constantService = ConstantService()
   }
   
   func initialise() throws {
@@ -68,12 +72,9 @@ class TestEngine: Engine {
   }
 
   func shouldIgnore(error: any Error) -> Bool { false }
-
-  func setState(_ state: Application.State) {
-    self.state = state
-  }
   
   func fakeFinishedStartup() {
+    slowService = SlowStartupService()
     startupContinuation?.resume()
   }
   
@@ -84,9 +85,46 @@ class TestEngine: Engine {
   func fakeErrorRunning() {
     caughtError(TestError.fakeRunningError)
   }
+  
+  var startupInjector: StartupInjector {
+    StartupInjector(engine: self)
+  }
+  
+  var runningInjector: RunningInjector {
+    RunningInjector(engine: self)
+  }
+  
+  struct StartupInjector: ViewModifier {
+    let engine: TestEngine
+    
+    func body(content: Content) -> some View {
+      content
+        .environment(engine.constantService)
+    }
+  }
+  
+  struct RunningInjector: ViewModifier {
+    let engine: TestEngine
+
+    func body(content: Content) -> some View {
+      content
+        .environment(engine.constantService)
+        .environment(engine.slowService!)
+    }
+  }
 }
 
 enum TestError: Error {
   case fakeStartupError
   case fakeRunningError
+}
+
+@Observable
+class ConstantService {
+  
+}
+
+@Observable
+class SlowStartupService {
+  
 }
