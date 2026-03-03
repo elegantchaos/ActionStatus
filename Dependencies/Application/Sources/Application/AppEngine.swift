@@ -6,7 +6,7 @@
 import Foundation
 import SwiftUI
 
-public protocol Engine: AnyObject {
+public protocol AppEngine: AnyObject {
   /// Perform one-time, synchronous startup.
   /// This should be as quick as possible, to avoid a delay
   /// before the app shows any UI
@@ -28,7 +28,7 @@ public protocol Engine: AnyObject {
   func shouldIgnore(error: Error) -> Bool
 
   /// The state that the app is in.
-  var state: EngineState { get set }
+  var state: AppState { get set }
   
   /// A view modifier which injects environment into a view.
   /// It should assume that the engine isn't fully started yet,
@@ -50,7 +50,7 @@ public protocol Engine: AnyObject {
 
 }
 
-public extension Engine {
+public extension AppEngine {
   func standardLoop() {
     advance()
   }

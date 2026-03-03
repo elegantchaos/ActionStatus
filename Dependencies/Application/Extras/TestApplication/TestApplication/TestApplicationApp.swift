@@ -47,8 +47,8 @@ struct TestApplication: App {
 
 
 @Observable
-class TestEngine: Engine {
-  var state: Application.EngineState = .uninitialised
+class TestEngine: AppEngine {
+  var state: AppState = .uninitialised
   
   var constantService: ConstantService
   var slowService: SlowStartupService?

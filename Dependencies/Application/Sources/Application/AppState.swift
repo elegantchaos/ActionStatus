@@ -8,7 +8,7 @@
 import Foundation
 
 /// The run state of the engine.
-public indirect enum EngineState {
+public indirect enum AppState {
   /// Nothing has happened yet.
   case uninitialised
   
@@ -23,7 +23,7 @@ public indirect enum EngineState {
   /// We caught an error during initialisation or startup, or
   /// were given one to display.
   /// The error UI will be showing.
-  case error(Error, EngineState)
+  case error(Error, AppState)
   
   /// We're shutting down.
   /// The running UI will still be showing.
