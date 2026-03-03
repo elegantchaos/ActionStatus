@@ -6,7 +6,7 @@
 import SwiftUI
 
 public struct RepoGridView: View {
-  @Environment(RepoState.self) var status
+  @Environment(StatusService.self) var status
   @Environment(SettingsService.self) var settings
   @AppStorage(.displaySize) var displaySize
   

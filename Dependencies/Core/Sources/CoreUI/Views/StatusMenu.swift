@@ -9,7 +9,7 @@ import SwiftUI
 import Core
 
 public struct StatusMenuLabel: View {
-  @Environment(RepoState.self) var status
+  @Environment(StatusService.self) var status
 
   public init() {
   }
@@ -37,7 +37,7 @@ public struct StatusMenuContent: View {
   @Environment(LaunchService.self) var launchService
   @Environment(MetadataService.self) var metadataService
   @Environment(Engine.self) var engine
-  @Environment(RepoState.self) var status
+  @Environment(StatusService.self) var status
 
   public init() {
   }

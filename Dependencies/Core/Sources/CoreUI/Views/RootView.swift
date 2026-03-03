@@ -49,9 +49,6 @@ struct RootView: View {
       #endif
     }
     .onAppear(perform: handleAppear)
-    .onChange(of: modelService.items, initial: false) { _,_ in
-      engine.modelDidChange()
-    }
     #if os(tvOS)
       .focusScope(defaultNamespace)
       .environment(focusState)

@@ -6,7 +6,7 @@
 import SwiftUI
 
 public struct FooterView: View {
-  @Environment(RepoState.self) var status
+  @Environment(StatusService.self) var status
 
   let namespace: Namespace.ID
 

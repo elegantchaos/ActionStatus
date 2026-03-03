@@ -5,9 +5,12 @@
 
 import Foundation
 import Keychain
+import Logger
 import Runtime
 import Settings
 import SwiftUI
+
+public let refreshServiceChannel = Channel("Refresh Service")
 
 @Observable
 @MainActor class RefreshService {
@@ -25,13 +28,13 @@ import SwiftUI
   public var refreshController: RefreshController? = nil
 
   func resetRefresh() {
-    refreshControllerChannel.log("Reset")
+    refreshServiceChannel.log("Reset")
     refreshController?.pause()
     refreshController = nil
   }
 
   func pauseRefresh() {
-    refreshControllerChannel.log("Paused")
+    refreshServiceChannel.log("Paused")
     refreshController?.pause()
   }
 
@@ -40,7 +43,7 @@ import SwiftUI
       refreshController = makeRefreshController()
     }
 
-    refreshControllerChannel.log("Resumed")
+    refreshServiceChannel.log("Resumed")
     refreshController?.resume(rate: refreshInterval.rate)
   }
 

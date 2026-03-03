@@ -7,7 +7,7 @@ import SwiftUI
 
 public struct RepoListView: View {
   @Environment(ModelService.self) var modelService
-  @Environment(RepoState.self) var status
+  @Environment(StatusService.self) var status
   @Environment(SettingsService.self) private var settingsService
   @AppStorage(.displaySize) var displaySize
   

@@ -17,11 +17,14 @@ let githubChannel = Channel("com.elegantchaos.Github")
   @ObservationIgnored @AppStorage(.githubUser) var githubUser
   @ObservationIgnored @AppStorage(.githubServer) var githubServer
   @ObservationIgnored @AppStorage(.refreshInterval) var refreshInterval
+  @ObservationIgnored @AppStorage(.sortModeKey) var sortMode
 
   private let model: Model
+  private let statusService: StatusService
 
-  init(metadata: MetadataService) {
-    model = metadata.device.platform.isSimulator || metadata.info.isUITestingBuild ? TestModel() : Model([])
+  init(statusService: StatusService, useTestModel: Bool) {
+    self.statusService = statusService
+    self.model = useTestModel ? TestModel() : Model([])
   }
 
   public var count: Int { model.count }
@@ -64,6 +67,7 @@ let githubChannel = Channel("com.elegantchaos.Github")
 
   public func addRepo() {
     model.addRepo()
+    modelChanged()
   }
   
   public func load() {
@@ -76,13 +80,22 @@ let githubChannel = Channel("com.elegantchaos.Github")
   
   public func update(repo: Repo) {
     model.update(repo: repo)
+    modelChanged()
   }
   
   public func update(repoWithID id: UUID, state: Repo.State) {
     model.update(repoWithID: id, state: state)
+    modelChanged()
   }
   
   public func add(fromFolders urls: [URL]) {
     model.add(fromFolders: urls)
+    modelChanged()
+  }
+  
+  func modelChanged() {
+    let sorted = sortMode.sort(model.items.values)
+    statusService.update(with: sorted)
+    save()
   }
 }

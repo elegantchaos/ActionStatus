@@ -6,12 +6,15 @@
 import Combine
 import Foundation
 import Keychain
+import Logger
+
+public let settingsChannel = Channel("Settings")
 
 @Observable
 @MainActor
 public class SettingsService {
   var isEditing = false
-  
+
   func readToken() -> String {
     let user = UserDefaults.standard.value(forKey: .githubUser)
     let server = UserDefaults.standard.value(forKey: .githubServer)
