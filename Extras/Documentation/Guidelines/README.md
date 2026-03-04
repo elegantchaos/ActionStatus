@@ -1,22 +1,24 @@
-# Coding Guidelines
+# Shared Instruction Modules
 
-This folder contains detailed coding guidance for both humans and coding agents.
+These files are shared guidance modules used when rebuilding project `AGENTS.md` files from the common guidance set (`instructions/COMMON.md`, `codex/skills/refresh-agents/SKILL.md`).
 
-## Start here
+They are written to serve both:
+- agents selecting and applying task-relevant rules
+- humans reading copied guideline files inside projects
 
-- `Principles.md`: engineering heuristics used for tradeoff decisions.
-- `Swift.md`: Swift language conventions, file/type layout, localization, and SwiftData rules.
-- `SwiftUI.md`: SwiftUI naming, composition, state, navigation, and interaction conventions.
-- `Testing.md`: testing expectations, tooling, and test design preferences.
-- `Trusted Sources.md`: approved web and MCP-backed research sources.
-- `GitHub.md`: PR/issue workflow and `gh` CLI safety guidance.
+## How to use this folder
 
-These files are managed copies from `~/.local/share/agents/instructions/` during agent-guidance refresh.
+- Keep each module focused on a clear domain (principles, testing, sources, language, technology, or service).
+- Start each module with relevance criteria so agents can decide if it applies.
+- Write guidance in clear, direct language that remains useful after copying into project docs.
 
-## Related project docs
+## Intended project copy workflow
 
-These are project references, not day-to-day coding style guides:
+When rebuilding project instructions, copy only relevant modules into the project's guideline directory (for example `Extras/Documentation/Guidelines/`).
 
-- `../../../README.md`
-- `../../../Settings.xcconfig`
-- `../../../ActionStatus.xcodeproj/project.pbxproj`
+Suggested copied set by default:
+- `Principles.md`
+- `Testing.md`
+- `Trusted Sources.md`
+
+Add language/technology/service modules only when the project uses them.
