@@ -12,99 +12,77 @@ import Runtime
 
 public let modelChannel = Channel("com.elegantchaos.actionstatus.Model")
 
+
 @Observable
 public class Model {
   public typealias RepoList = [Repo]
 
-  internal let store: NSUbiquitousKeyValueStore
-  internal var key: String
-  internal var items: [UUID: Repo]
+  internal var store: ModelStore
+  internal var items: [String: Repo]
 
   public var count: Int {
     items.count
   }
 
 
-  public init(_ repos: [Repo], store: NSUbiquitousKeyValueStore = NSUbiquitousKeyValueStore.default, stateKey: String? = nil) {
+  public init(
+    _ repos: [Repo],
+    store: ModelStore = UbiquitousStore()
+  ) {
     self.store = store
     store.synchronize()
 
-    #if DEBUG
-      key = stateKey ?? "StateDebug"
-    #else
-      key = stateKey ?? "State"
-    #endif
 
-
-    var index: [UUID: Repo] = [:]
+    var index: [String: Repo] = [:]
     for repo in repos {
       let id = repo.id
       index[id] = repo
     }
 
     self.items = index
-    NotificationCenter.default
-      .addObserver(
-        forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
-        object: NSUbiquitousKeyValueStore.default,
-        queue: .main
-      ) { _ in
-        self.load()
-      }
   }
 
   // MARK: Public
 
   public func load() {
-    modelChannel.log("Loading from key \(key)")
-    let decoder = Repo.dictionaryDecoder
-    if let repoIDs = store.array(forKey: key) as? [String] {
-      var loadedRepos: [UUID: Repo] = [:]
-      for repoID in repoIDs {
-        if let dict = store.dictionary(forKey: repoID), let id = UUID(uuidString: repoID) {
-          do {
-            let repo = try decoder.decode(Repo.self, from: dict)
-            loadedRepos[id] = repo
-          } catch {
-            modelChannel.log("Failed to restore repo data from \(dict).\n\nError:\(error)")
-          }
-        } else {
-          modelChannel.log("Missing repo data for \(repoID).")
-        }
+    modelChannel.log("Loading from \(store)")
+    var loadedRepos: [String: Repo] = [:]
+    for repoID in store.index {
+      if let repo = store.repo(forKey: repoID) {
+        loadedRepos[repoID] = repo
+      } else {
+        modelChannel.log("Missing repo data for \(repoID).")
       }
-      items = loadedRepos
     }
+    items = loadedRepos
+
 
   }
 
   public func save() {
-    modelChannel.log("Saving to key \(key)")
-    let encoder = DictionaryEncoder()
+    modelChannel.log("Saving to \(store)")
     var repoIDs: [String] = []
     for (id, repo) in items {
-      let repoID = id.uuidString
-      if let dict = try? encoder.encode(repo) as [String: Any] {
-        store.set(dict, forKey: repoID)
-        repoIDs.append(repoID)
+      if store.store(repo, forKey: id) {
+        repoIDs.append(id)
       }
     }
 
-    if let oldRepoIDs = store.array(forKey: key) as? [String] {
-      let removedIDs = Set(oldRepoIDs).subtracting(Set(repoIDs))
-      for removedID in removedIDs {
-        store.removeObject(forKey: removedID)
-        modelChannel.log("Removed repo data for \(removedID)")
-      }
+    let oldRepoIDs = store.index
+    let removedIDs = Set(oldRepoIDs).subtracting(Set(repoIDs))
+    for removedID in removedIDs {
+      store.removeObject(forKey: removedID)
+      modelChannel.log("Removed repo data for \(removedID)")
     }
 
-    store.set(repoIDs, forKey: key)
+    store.index = repoIDs
   }
 
-  public func repo(withIdentifier id: UUID) -> Repo? {
+  public func repo(withIdentifier id: String) -> Repo? {
     return items[id]
   }
 
-  public func update(repoWithID id: UUID, state: Repo.State) {
+  public func update(repoWithID id: String, state: Repo.State) {
     assert(Thread.isMainThread)
     if var repo = items[id] {
       modelChannel.log("Updated state of \(repo) to \(state)")
@@ -170,7 +148,7 @@ public class Model {
     }
   }
 
-  public func remove(reposWithIDs: [UUID]) {
+  public func remove(reposWithIDs: [String]) {
     for id in reposWithIDs {
       items.removeValue(forKey: id)
     }

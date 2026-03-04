@@ -19,7 +19,7 @@ public class OctoidRefreshController: RefreshController {
   internal let apiServer: String
   internal let fallbackRefreshInterval: TimeInterval
 
-  private var repoTasks: [UUID: Task<Void, Never>] = [:]
+  private var repoTasks: [String: Task<Void, Never>] = [:]
 
   public init(
     model: Model,

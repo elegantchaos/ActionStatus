@@ -16,7 +16,7 @@ public enum PresentedSheet: Identifiable {
     switch self {
       case .editRepo(let repo):
         if let repo {
-          return "edit-\(repo.id.uuidString)"
+          return "edit-\(repo.id)"
         }
         return "edit-new"
       case .preferences:

@@ -35,7 +35,7 @@ public class StatusService {
     unreachable = set.count(for: Repo.State.unknown)
   }
 
-  public func repoIDs(atOffets offsets: IndexSet) -> [UUID] {
+  public func repoIDs(atOffets offsets: IndexSet) -> [String] {
     offsets.map { sortedRepos[$0].id }
   }
 

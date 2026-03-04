@@ -83,7 +83,7 @@ public struct Repo: Identifiable, Equatable, Hashable, Sendable {
     }
   }
 
-  public let id: UUID
+  public let id: String
   public var name: String
   public var owner: String
   public var workflow: String
@@ -95,7 +95,7 @@ public struct Repo: Identifiable, Equatable, Hashable, Sendable {
   public var lastSucceeded: Date?
 
   public init() {
-    id = UUID()
+    id = UUID().uuidString
     name = "SomeRepo"
     owner = "someone"
     workflow = "Tests"
@@ -105,8 +105,8 @@ public struct Repo: Identifiable, Equatable, Hashable, Sendable {
     paths = [:]
   }
 
-  public init(_ name: String, owner: String, workflow: String, id: UUID? = nil, state: State = .unknown, branches: [String] = []) {
-    self.id = id ?? UUID()
+  public init(_ name: String, owner: String, workflow: String, id: String? = nil, state: State = .unknown, branches: [String] = []) {
+    self.id = id ?? UUID().uuidString
     self.name = name
     self.owner = owner
     self.workflow = workflow

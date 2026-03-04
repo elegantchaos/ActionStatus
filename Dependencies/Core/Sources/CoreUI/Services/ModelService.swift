@@ -36,9 +36,9 @@ public protocol ModelServiceProvider: CommandCentre {
 
   public var count: Int { model.count }
 
-  public var items: [UUID: Repo] { model.items }
+  public var items: [String: Repo] { model.items }
 
-  public func remove(reposWithIDs: [UUID]) {
+  public func remove(reposWithIDs: [String]) {
     model.remove(reposWithIDs: reposWithIDs)
   }
 
@@ -90,7 +90,7 @@ public protocol ModelServiceProvider: CommandCentre {
     modelChanged()
   }
 
-  public func update(repoWithID id: UUID, state: Repo.State) {
+  public func update(repoWithID id: String, state: Repo.State) {
     model.update(repoWithID: id, state: state)
     modelChanged()
   }
