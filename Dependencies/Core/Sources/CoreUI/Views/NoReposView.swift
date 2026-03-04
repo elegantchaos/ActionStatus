@@ -6,6 +6,7 @@
 import SwiftUI
 
 public struct NoReposView: View {
+  @Environment(Engine.self) var engine
   @Environment(ModelService.self) var modelService
 
   public init() {
@@ -33,16 +34,10 @@ public struct NoReposView: View {
         .fixedSize(horizontal: false, vertical: true)
         Spacer()
       #else
-        Button(action: makeInitialView) {
+      engine.button(AddRepoCommand()) {
           Text("Configure a repo to begin monitoring it.")
         }
       #endif
     }
   }
-
-  func makeInitialView() {
-    modelService.addRepo()
-    modelService.save()
-  }
-
 }

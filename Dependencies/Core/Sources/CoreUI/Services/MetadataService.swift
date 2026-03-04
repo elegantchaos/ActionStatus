@@ -10,7 +10,7 @@ import Runtime
 /// This is marked as @Observable so that it can be added to the environment,
 /// but actually it will not be mutated and should never cause a refresh.
 @Observable
-class MetadataService {
+public class MetadataService {
   @ObservationIgnored let info = AppInfo()
   @ObservationIgnored let device = Device()
 }

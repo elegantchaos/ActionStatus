@@ -28,6 +28,7 @@ let package = Package(
     .package(path: "../../../Octoid"),
 
     .package(path: "../Application"),
+    .package(path: "../Commands"),
     .package(path: "../Icons"),
     .package(path: "../Runtime"),
     .package(path: "../Settings"),
@@ -38,6 +39,8 @@ let package = Package(
       dependencies: [
         "DictionaryCoding",
         "Files",
+
+        .product(name: "Commands", package: "Commands"),
       ],
       swiftSettings: [
         .swiftLanguageMode(.v6)
@@ -55,6 +58,8 @@ let package = Package(
         "Runtime",
 
         .product(name: "Application", package: "Application"),
+        .product(name: "Commands", package: "Commands"),
+        .product(name: "CommandsUI", package: "Commands"),
         .product(name: "Icons", package: "Icons"),
         .product(name: "LoggerUI", package: "Logger"),
         .product(name: "Octoid", package: "Octoid"),

@@ -7,6 +7,7 @@ import Icons
 
 /// Standard icons for ActionStatus
 extension Icon {
+  static let addIcon = Icon("plus")
   static let linkIcon = Icon("arrow.right.circle.fill")
   static let preferencesIcon = Icon("gearshape")
   static let editButtonIcon = Icon("ellipsis.circle")

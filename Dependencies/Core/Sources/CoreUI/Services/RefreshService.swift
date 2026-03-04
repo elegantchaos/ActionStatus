@@ -13,7 +13,7 @@ import SwiftUI
 public let refreshServiceChannel = Channel("Refresh Service")
 
 @Observable
-@MainActor class RefreshService {
+@MainActor public class RefreshService {
   @ObservationIgnored @AppStorage(.testRefresh) var testRefresh
   @ObservationIgnored @AppStorage(.refreshInterval) var refreshInterval
 

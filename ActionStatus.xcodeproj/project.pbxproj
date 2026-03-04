@@ -80,6 +80,7 @@
 		22AA000A2F45F10000AA0001 /* MacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacApp.swift; sourceTree = "<group>"; };
 		22AA000B2F45F10000AA0001 /* TVApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVApp.swift; sourceTree = "<group>"; };
 		22C618B52F56345F00A9C6F0 /* MacDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDelegate.swift; sourceTree = "<group>"; };
+		22C8C7542F5846A000856024 /* Commands */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Commands; path = Dependencies/Commands; sourceTree = "<group>"; };
 		22E778362476A5A5009ED66A /* Screenshots-tvOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Screenshots-tvOS.xctestplan"; sourceTree = "<group>"; };
 		22E7783B2476A606009ED66A /* Action Status UI Tests TV.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Action Status UI Tests TV.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		22F177C12F45DFD300583266 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
@@ -170,6 +171,7 @@
 				22F177C12F45DFD300583266 /* AGENTS.md */,
 				228D838C246AC10700943918 /* README.md */,
 				22112FE42F57158E00CC642B /* Application */,
+				22C8C7542F5846A000856024 /* Commands */,
 				2231B69C2F5200D000AB890D /* Core */,
 				2231B6762F52009700AB890D /* Runtime */,
 				2218311E2F55C0E1002324B6 /* Icons */,

@@ -23,13 +23,13 @@ public let monitoringChannel = Channel("Monitoring")
   /// The state of the engine.
   public var state: AppState
 
-  let modelService: ModelService
-  let settingsService: SettingsService
-  let launchService: LaunchService
-  let metadataService: MetadataService
-  let sheetService: SheetService
-  let refreshService: RefreshService
-  let statusService: StatusService
+  public let modelService: ModelService
+  public let settingsService: SettingsService
+  public let launchService: LaunchService
+  public let metadataService: MetadataService
+  public let sheetService: SheetService
+  public let refreshService: RefreshService
+  public let statusService: StatusService
 
   #if canImport(UIKit)
     public var rootController: UIViewController?
