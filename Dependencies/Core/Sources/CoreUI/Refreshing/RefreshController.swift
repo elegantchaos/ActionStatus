@@ -17,7 +17,7 @@ public enum RefreshState {
   internal let model: ModelService
   internal var state: RefreshState = .paused(1)
 
-  public init(model: ModelService) {
+  @MainActor public init(model: ModelService) {
     self.model = model
   }
 

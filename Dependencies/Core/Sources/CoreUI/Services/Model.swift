@@ -33,7 +33,6 @@ public protocol ModelServiceProvider: CommandCentre {
   private let statusService: StatusService
 
   convenience init(statusService: StatusService, source: Source) {
-
     let store: ModelStore
     switch source {
       case .cloud: store = UbiquitousStore()
@@ -48,14 +47,15 @@ public protocol ModelServiceProvider: CommandCentre {
   }
 
 
-  public init(
+  @MainActor public init(
     _ repos: [Repo],
     statusService: StatusService,
-    store: ModelStore = UbiquitousStore()
+    store: ModelStore? = nil
   ) {
-    self.store = store
+    let s = store ?? UbiquitousStore()
+    self.store = s
     self.statusService = statusService
-    store.synchronize()
+    s.synchronize()
 
     var index: [String: Repo] = [:]
     for repo in repos {

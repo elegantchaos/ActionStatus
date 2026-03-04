@@ -9,7 +9,7 @@ import SwiftUI
 struct DisplayPrefsView: View {
   @AppStorage(.showInMenu) var showInMenu
   @AppStorage(.showInDock) var showInDock
-  @AppStorage(.sortModeKey) var sortMode
+  @AppStorage(.sortMode) var sortMode
   @AppStorage(.displaySize) var displaySize
   
   var body: some View {

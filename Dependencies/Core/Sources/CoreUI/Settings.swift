@@ -23,7 +23,7 @@ import Settings
 }
 
 @MainActor public extension AppSettingKey where Value == SortMode {
-  static let sortModeKey = AppSettingKey("SortMode", defaultValue: .state)
+  static let sortMode = AppSettingKey("SortMode", defaultValue: .state)
 }
 
 @MainActor public extension AppSettingKey where Value == DisplaySize {

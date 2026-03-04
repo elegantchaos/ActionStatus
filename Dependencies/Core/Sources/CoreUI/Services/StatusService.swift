@@ -11,7 +11,7 @@ import Observation
 let repoStateChannel = Channel("RepoState")
 
 @Observable
-public class StatusService {
+@MainActor public class StatusService {
   public var sortedRepos: [Repo] = []
   public var passing: Int = 0
   public var failing: Int = 0

@@ -3,14 +3,13 @@
 //  Copyright © 2026 Elegant Chaos Limited. All rights reserved.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import Core
 import Foundation
 
 public class BundleStore: ModelStore {
   public var index: [String]
   var repos: [String: Repo]
 
-  init(key: String, bundle: Bundle = Bundle.main) {
+  public init(key: String, bundle: Bundle = Bundle.main) {
     guard let url = bundle.url(forResource: key, withExtension: "json") else {
       fatalError("Missing RepoResource from \(key) in \(bundle)")
     }

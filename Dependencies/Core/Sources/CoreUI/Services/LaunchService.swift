@@ -7,7 +7,7 @@ import Foundation
 import Core
 
 @Observable
-public class LaunchService {
+@MainActor public class LaunchService {
   public func openWorkflow(for repo: Repo) {
     open(url: repo.githubURL(for: .workflow))
   }

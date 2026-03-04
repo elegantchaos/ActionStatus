@@ -7,11 +7,11 @@ import DictionaryCoding
 import Files
 import Foundation
 
-private extension URL {
+nonisolated private extension URL {
   var bookmarkKey: String { "bookmark:\(absoluteURL.path)" }
 }
 
-public struct Repo: Identifiable, Equatable, Hashable, Sendable {
+nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
   public enum State: UInt, Codable, Comparable, CaseIterable, Sendable {
     case unknown = 0
     case passing = 1

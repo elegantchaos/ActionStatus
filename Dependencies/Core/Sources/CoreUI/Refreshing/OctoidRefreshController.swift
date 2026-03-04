@@ -21,15 +21,15 @@ import Octoid
 
   private var repoTasks: [String: Task<Void, Never>] = [:]
 
-  public init(
+  @MainActor public init(
     model: ModelService,
     token: String,
     apiServer: String,
-    refreshInterval: TimeInterval = RefreshRate.minute.rate
+    refreshInterval: TimeInterval? = nil
   ) {
     self.token = token
     self.apiServer = apiServer
-    self.fallbackRefreshInterval = refreshInterval
+    self.fallbackRefreshInterval = refreshInterval ?? RefreshRate.minute.rate
     super.init(model: model)
   }
 

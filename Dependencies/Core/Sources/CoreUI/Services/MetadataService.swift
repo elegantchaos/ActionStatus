@@ -22,6 +22,8 @@ public class MetadataService {
   var modelSource: ModelService.Source {
     if let name = runtime.environment["TEST_MODEL"] {
       return .resource(name)
+    } else if isSimulator || isUITestingBuild {
+      return .resource("TestModel")
     } else {
       return .cloud
     }

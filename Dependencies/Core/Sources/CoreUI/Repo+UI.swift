@@ -6,7 +6,7 @@
 import Core
 import SwiftUI
 
-extension Repo {
+@MainActor extension Repo {
   var statusColor: Color {
     switch state {
       case .failing, .partiallyFailing: return .red

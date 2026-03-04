@@ -43,7 +43,11 @@ let package = Package(
         .product(name: "Commands", package: "Commands"),
       ],
       swiftSettings: [
-        .swiftLanguageMode(.v6)
+        .swiftLanguageMode(.v6),
+        .defaultIsolation(MainActor.self),
+        .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+        .enableUpcomingFeature("InferIsolatedConformances"),
+        .enableExperimentalFeature("SendableProhibitsMainActorInference"),
       ]),
     .target(
       name: "CoreUI",

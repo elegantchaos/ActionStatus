@@ -3,9 +3,11 @@
 //  Copyright © 2026 Elegant Chaos Limited. All rights reserved.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import Core
 import DictionaryCoding
 import Foundation
+import Logger
+
+let ubiquitousChannel = Channel("Ubiquitous Store")
 
 /// Model store backed by an NSUbiquitousKeyValueStore.
 public struct UbiquitousStore: ModelStore {
@@ -27,7 +29,7 @@ public struct UbiquitousStore: ModelStore {
         object: NSUbiquitousKeyValueStore.default,
         queue: .main
       ) { _ in
-        // TODO: call back 
+        // TODO: call back
       }
 
   }
@@ -50,7 +52,7 @@ public struct UbiquitousStore: ModelStore {
       let decoder = Repo.dictionaryDecoder
       return try decoder.decode(Repo.self, from: dict)
     } catch {
-      modelChannel.log("Failed to restore repo data from \(dict).\n\nError:\(error)")
+      ubiquitousChannel.log("Failed to restore repo data from \(dict).\n\nError:\(error)")
       return nil
     }
   }
