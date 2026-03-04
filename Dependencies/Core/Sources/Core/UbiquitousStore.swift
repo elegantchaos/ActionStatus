@@ -13,25 +13,12 @@ let ubiquitousChannel = Channel("Ubiquitous Store")
 public struct UbiquitousStore: ModelStore {
   let store: NSUbiquitousKeyValueStore
   let indexKey: String
+  var observer: NSObjectProtocol?
 
   public init(key: String? = nil) {
     store = NSUbiquitousKeyValueStore.default
-
-    #if DEBUG
-      indexKey = key ?? "StateDebug"
-    #else
-      indexKey = key ?? "State"
-    #endif
-
-    NotificationCenter.default
-      .addObserver(
-        forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
-        object: NSUbiquitousKeyValueStore.default,
-        queue: .main
-      ) { _ in
-        // TODO: call back
-      }
-
+    indexKey = key ?? Self.defaultKey
+    store.synchronize()
   }
 
   public func synchronize() -> Bool {
@@ -69,5 +56,26 @@ public struct UbiquitousStore: ModelStore {
 
   public func removeObject(forKey key: String) {
     store.removeObject(forKey: key)
+  }
+
+  public mutating func onChange(_ callback: @escaping ChangeCallback) {
+    let nc = NotificationCenter.default
+    if let observer {
+      nc.removeObserver(observer)
+    }
+    observer = NotificationCenter.default
+      .addObserver(
+        forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
+        object: NSUbiquitousKeyValueStore.default,
+        queue: .main
+      ) { _ in Task { await callback() } }
+  }
+
+  private static var defaultKey: String {
+    #if DEBUG
+      "StateDebug"
+    #else
+      "State"
+    #endif
   }
 }

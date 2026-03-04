@@ -25,10 +25,6 @@ public class BundleStore: ModelStore {
     }
   }
 
-  public func synchronize() -> Bool {
-    return true
-  }
-
   public func repo(forKey key: String) -> Core.Repo? {
     repos[key]
   }
@@ -43,5 +39,7 @@ public class BundleStore: ModelStore {
 
   }
 
+  public func onChange(_ perform: @escaping ChangeCallback) {
+  }
 
 }

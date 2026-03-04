@@ -3,7 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-@MainActor public enum DisplaySize: Int, CaseIterable {
+nonisolated public enum DisplaySize: Int, CaseIterable, Sendable {
   case automatic = 0
   case small = 1
   case medium = 2
@@ -15,7 +15,7 @@
   }
 }
 
-@MainActor extension DisplaySize {
+extension DisplaySize {
   public var labelName: String {
     switch self {
       case .automatic: return "Default (\(normalised.labelName))"

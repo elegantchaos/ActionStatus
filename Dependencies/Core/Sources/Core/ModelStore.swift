@@ -7,9 +7,11 @@ import Foundation
 
 /// Protocol for something that can save and load the model.
 public protocol ModelStore {
-  @discardableResult func synchronize() -> Bool
+  typealias ChangeCallback = @Sendable () async -> ()
+
   var index: [String] { get set }
   func repo(forKey: String) -> Repo?
   func store(_ repo: Repo, forKey: String) -> Bool
   func removeObject(forKey: String)
+  mutating func onChange(_ perform: @escaping ChangeCallback)
 }

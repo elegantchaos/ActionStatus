@@ -31,8 +31,6 @@ public let monitoringChannel = Channel("Monitoring")
   public let refreshService: RefreshService
   public let statusService: StatusService
 
-  @ObservationIgnored @AppStorage(.sortMode) var sortMode
-  
   #if canImport(UIKit)
     public var rootController: UIViewController?
     public var filePicker: FilePicker?
@@ -43,8 +41,7 @@ public let monitoringChannel = Channel("Monitoring")
 
   public func startup() async throws {
     modelService.load()
-    let sorted = sortMode.sort(modelService.items.values)
-    statusService.update(with: sorted)
+    statusService.update()
     refreshService.resumeRefresh()
   }
 
@@ -60,6 +57,7 @@ public let monitoringChannel = Channel("Monitoring")
       statusService: statusService,
       source: ms.modelSource
     )
+    self.statusService.modelService = self.modelService
     self.settingsService = SettingsService()
     self.refreshService = RefreshService(model: modelService, metadata: ms)
     self.launchService = LaunchService()

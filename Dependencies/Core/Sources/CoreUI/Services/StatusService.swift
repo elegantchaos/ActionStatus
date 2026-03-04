@@ -3,15 +3,19 @@
 //  All code (c) 2021 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Combine
 import Core
 import Foundation
 import Logger
 import Observation
+import SwiftUI
 
 let repoStateChannel = Channel("RepoState")
 
 @Observable
 @MainActor public class StatusService {
+  @ObservationIgnored @AppStorage(.sortMode) var sortMode
+  
   public var sortedRepos: [Repo] = []
   public var passing: Int = 0
   public var failing: Int = 0
@@ -20,19 +24,34 @@ let repoStateChannel = Channel("RepoState")
   public var dormant: Int = 0
   public var unreachable: Int = 0
 
-  public func update(with repos: [Repo]) {
+  public var modelService: ModelService?
+  public var observer: AnyCancellable?
+  
+  public init() {
+    observer = UserDefaults.standard.onChanged { [self] in
+      if let modelService {
+        update()
+      }
+    }
+  }
+
+  public func update() {
     repoStateChannel.log("updated")
 
-    sortedRepos = repos
-
-    let set = NSCountedSet()
-    sortedRepos.forEach({ set.add($0.state) })
-    passing = set.count(for: Repo.State.passing)
-    failing = set.count(for: Repo.State.failing) + set.count(for: Repo.State.partiallyFailing)
-    running = set.count(for: Repo.State.running)
-    queued = set.count(for: Repo.State.queued)
-    dormant = set.count(for: Repo.State.dormant)
-    unreachable = set.count(for: Repo.State.unknown)
+    if let modelService {
+      withAnimation {
+        sortedRepos = sortMode.sort(modelService.items.values)
+        
+        let set = NSCountedSet()
+        sortedRepos.forEach({ set.add($0.state) })
+        passing = set.count(for: Repo.State.passing)
+        failing = set.count(for: Repo.State.failing) + set.count(for: Repo.State.partiallyFailing)
+        running = set.count(for: Repo.State.running)
+        queued = set.count(for: Repo.State.queued)
+        dormant = set.count(for: Repo.State.dormant)
+        unreachable = set.count(for: Repo.State.unknown)
+      }
+    }
   }
 
   public func repoIDs(atOffets offsets: IndexSet) -> [String] {
