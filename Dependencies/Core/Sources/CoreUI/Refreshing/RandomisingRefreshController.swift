@@ -11,7 +11,7 @@ import Foundation
 public class RandomisingRefreshController: RefreshController {
   internal let timer: OneShotTimer
 
-  override public init(model: Model) {
+  override public init(model: ModelService) {
     self.timer = OneShotTimer()
     super.init(model: model)
   }

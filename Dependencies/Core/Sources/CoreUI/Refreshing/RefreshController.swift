@@ -13,11 +13,11 @@ public enum RefreshState {
   case paused(Int)
 }
 
-public class RefreshController {
-  internal let model: Model
+@MainActor public class RefreshController {
+  internal let model: ModelService
   internal var state: RefreshState = .paused(1)
 
-  public init(model: Model) {
+  public init(model: ModelService) {
     self.model = model
   }
 

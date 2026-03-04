@@ -11,6 +11,19 @@ import Runtime
 /// but actually it will not be mutated and should never cause a refresh.
 @Observable
 public class MetadataService {
-  @ObservationIgnored let info = AppInfo()
-  @ObservationIgnored let device = Device()
+  @ObservationIgnored let runtime = Runtime()
+  
+  var appName: String { runtime.app.name }
+  
+  var isUITestingBuild: Bool { runtime.app.isUITestingBuild}
+  
+  var isSimulator: Bool { runtime.device.platform.isSimulator }
+  
+  var modelSource: ModelService.Source {
+    if let name = runtime.environment["TEST_MODEL"] {
+      return .resource(name)
+    } else {
+      return .cloud
+    }
+  }
 }

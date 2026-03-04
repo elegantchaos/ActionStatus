@@ -16,6 +16,8 @@ public let refreshServiceChannel = Channel("Refresh Service")
 @MainActor public class RefreshService {
   @ObservationIgnored @AppStorage(.testRefresh) var testRefresh
   @ObservationIgnored @AppStorage(.refreshInterval) var refreshInterval
+  @ObservationIgnored @AppStorage(.githubUser) var githubUser
+  @ObservationIgnored @AppStorage(.githubServer) var githubServer
 
   init(model: ModelService, metadata: MetadataService) {
     self.modelService = model
@@ -49,12 +51,12 @@ public let refreshServiceChannel = Channel("Refresh Service")
 
   func makeRefreshController() -> RefreshController? {
     // disable refreshing for UI testing
-    guard !metadata.info.isUITestingBuild else { return nil }
+    guard !metadata.isUITestingBuild else { return nil }
 
     if testRefresh {
-      return modelService.makeRandomisingRefreshController()
+      return makeRandomisingRefreshController()
     } else {
-      if let refresh = modelService.makeRefreshController() {
+      if let refresh = makeGithubRefreshController() {
         return refresh
       } else {
         refreshChannel.log("Refresh is disabled until sign-in completes.")
@@ -62,4 +64,31 @@ public let refreshServiceChannel = Channel("Refresh Service")
       }
     }
   }
+
+  public func makeRandomisingRefreshController() -> RefreshController {
+    return RandomisingRefreshController(model: modelService)
+  }
+
+  public func makeGithubRefreshController() -> RefreshController? {
+    guard !githubUser.isEmpty else {
+      githubChannel.log("No GitHub account configured.")
+      return nil
+    }
+
+    do {
+      let token = try Keychain.default.password(for: githubUser, on: githubServer)
+      guard !token.isEmpty else {
+        githubChannel.log("No GitHub token configured.")
+        return nil
+      }
+
+      let controller = OctoidRefreshController(model: modelService, token: token, apiServer: githubServer, refreshInterval: refreshInterval.rate)
+      githubChannel.log("Using github refresh controller for \(githubUser)/\(githubServer)")
+      return controller
+    } catch {
+      githubChannel.log("Couldn't get token: \(error).")
+      return nil
+    }
+  }
+
 }

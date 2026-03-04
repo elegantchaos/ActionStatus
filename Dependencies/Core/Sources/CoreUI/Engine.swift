@@ -48,12 +48,15 @@ public let monitoringChannel = Channel("Monitoring")
     state = .uninitialised
 
     let ms = MetadataService()
-    let useTestModel = ms.device.platform.isSimulator || ms.info.isUITestingBuild
+    let useTestModel = ms.isSimulator || ms.isUITestingBuild
 
     self.statusService = StatusService()
     self.metadataService = ms
     self.sheetService = SheetService()
-    self.modelService = ModelService(statusService: statusService, useTestModel: useTestModel)
+    self.modelService = ModelService(
+      statusService: statusService,
+      source: ms.modelSource
+    )
     self.settingsService = SettingsService()
     self.refreshService = RefreshService(model: modelService, metadata: ms)
     self.launchService = LaunchService()

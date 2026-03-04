@@ -74,7 +74,7 @@ public struct StatusMenuContent: View {
   }
   
   var appName: String {
-    metadataService.info.name
+    metadataService.appName
   }
 }
 

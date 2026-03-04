@@ -3,6 +3,8 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Commands
+import CommandsUI
 import Core
 import DictionaryCoding
 import Foundation
@@ -11,14 +13,35 @@ import Observation
 import Runtime
 
 public let modelChannel = Channel("com.elegantchaos.actionstatus.Model")
+let githubChannel = Channel("com.elegantchaos.Github")
 
+public protocol ModelServiceProvider: CommandCentre {
+  var modelService: ModelService { get }
+}
 
 @Observable
-public class Model {
+@MainActor public class ModelService {
   public typealias RepoList = [Repo]
+
+  enum Source {
+    case cloud
+    case resource(String)
+  }
 
   internal var store: ModelStore
   internal var items: [String: Repo]
+  private let statusService: StatusService
+
+  convenience init(statusService: StatusService, source: Source) {
+
+    let store: ModelStore
+    switch source {
+      case .cloud: store = UbiquitousStore()
+      case .resource(let name): store = BundleStore(key: name)
+    }
+    
+    self.init([], statusService: statusService, store: store)
+  }
 
   public var count: Int {
     items.count
@@ -27,11 +50,12 @@ public class Model {
 
   public init(
     _ repos: [Repo],
+    statusService: StatusService,
     store: ModelStore = UbiquitousStore()
   ) {
     self.store = store
+    self.statusService = statusService
     store.synchronize()
-
 
     var index: [String: Repo] = [:]
     for repo in repos {
@@ -40,6 +64,7 @@ public class Model {
     }
 
     self.items = index
+    load()
   }
 
   // MARK: Public
@@ -155,7 +180,7 @@ public class Model {
 
 // MARK: Internal
 
-internal extension Model {
+internal extension ModelService {
   func add(fromGitRepo localGitFolderURL: URL, detector: NSDataDetector) {
     let containerURL = localGitFolderURL.deletingLastPathComponent()
     let containerName = containerURL.lastPathComponent

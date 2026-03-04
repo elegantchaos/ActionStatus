@@ -6,13 +6,14 @@
 import Core
 import SwiftUI
 
-struct PreviewContext {
+@MainActor struct PreviewContext {
 
-  let model: TestModel
+  let model: ModelService
   let settings: SettingsService
   
   @MainActor init(isEditing: Bool = true) {
-    model = TestModel()
+    let status = StatusService()
+    model = ModelService([], statusService: status, store: BundleStore(key: "TestModel"))
     settings = SettingsService()
     settings.isEditing = isEditing
   }

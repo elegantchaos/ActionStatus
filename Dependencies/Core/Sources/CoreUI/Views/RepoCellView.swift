@@ -61,7 +61,7 @@ struct RepoCellView: View {
     }
     #if DEBUG
 
-    if !metadataService.info.isUITestingBuild {
+    if !metadataService.isUITestingBuild {
         Divider()
         Button(action: handleToggleState) {
           Text("DEBUG: Advance State")

@@ -14,7 +14,7 @@ import Octoid
 /// isolated and cancellation-friendly while preserving the existing behavior:
 /// periodic workflow checks, optional events checks, and a persisted event
 /// cursor used to trigger extra workflow refreshes after pushes.
-public class OctoidRefreshController: RefreshController {
+@MainActor public class OctoidRefreshController: RefreshController {
   internal let token: String
   internal let apiServer: String
   internal let fallbackRefreshInterval: TimeInterval
@@ -22,7 +22,7 @@ public class OctoidRefreshController: RefreshController {
   private var repoTasks: [String: Task<Void, Never>] = [:]
 
   public init(
-    model: Model,
+    model: ModelService,
     token: String,
     apiServer: String,
     refreshInterval: TimeInterval = RefreshRate.minute.rate
@@ -268,7 +268,7 @@ private actor RepoPoller {
     }
     let updated = await refreshController.merge(repo: repo, discovered: discovered)
     if updated.enabledWorkflows.isEmpty {
-      refreshController.update(repo: updated, with: .unknown)
+      await refreshController.update(repo: updated, with: .unknown)
     }
   }
 
@@ -279,7 +279,7 @@ private actor RepoPoller {
 
     let enabled = latestRepo.enabledWorkflows
     guard !enabled.isEmpty else {
-      refreshController.update(repo: latestRepo, with: .unknown)
+      await refreshController.update(repo: latestRepo, with: .unknown)
       return
     }
 
@@ -299,7 +299,7 @@ private actor RepoPoller {
       workflowStates.removeValue(forKey: idKey)
       workflowStates.removeValue(forKey: nameKey)
     } else {
-      let state = refreshController.state(for: runs.latestRun, in: repo)
+      let state = await refreshController.state(for: runs.latestRun, in: repo)
       workflowStates[idKey] = state
       workflowStates[nameKey] = state
     }
@@ -312,12 +312,12 @@ private actor RepoPoller {
     }
 
     if relevantStates.isEmpty {
-      refreshController.update(repo: latestRepo, with: .dormant)
+      await refreshController.update(repo: latestRepo, with: .dormant)
       return
     }
 
-    let aggregate = refreshController.aggregateState(for: relevantStates)
-    refreshController.update(repo: latestRepo, with: aggregate)
+    let aggregate = await refreshController.aggregateState(for: relevantStates)
+    await refreshController.update(repo: latestRepo, with: aggregate)
   }
 
   private func handleMessage(source: RepositoryUpdateSource, message: Message) async {
@@ -328,11 +328,11 @@ private actor RepoPoller {
         shouldPollEvents = false
         shouldRestartStream = true
       } else {
-        refreshController.update(repo: repo, message: message)
+        await refreshController.update(repo: repo, message: message)
       }
 
     case .workflows:
-      refreshController.update(repo: repo, message: message)
+        await refreshController.update(repo: repo, message: message)
       if message.message == "Not Found" {
         shouldPollWorkflows = false
         workflowStates.removeAll()
