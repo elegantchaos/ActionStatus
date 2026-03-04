@@ -13,6 +13,10 @@
 		22AA00142F45F20000AA0001 /* MacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AA000A2F45F10000AA0001 /* MacApp.swift */; };
 		22AA00152F45F20000AA0001 /* TVApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AA000B2F45F10000AA0001 /* TVApp.swift */; };
 		22C618B62F56345F00A9C6F0 /* MacDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C618B52F56345F00A9C6F0 /* MacDelegate.swift */; };
+		22C8C7E22F585AB000856024 /* EmptyModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 22C8C7E12F585AB000856024 /* EmptyModel.json */; };
+		22C8C7E32F585AB000856024 /* EmptyModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 22C8C7E12F585AB000856024 /* EmptyModel.json */; };
+		22C8C7E52F585AC400856024 /* TestModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 22C8C7E42F585AC400856024 /* TestModel.json */; };
+		22C8C7E62F585AC400856024 /* TestModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 22C8C7E42F585AC400856024 /* TestModel.json */; };
 		22E778472476D230009ED66A /* ActionStatusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */; };
 		22E778482476D234009ED66A /* ScreenshotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */; };
 		8B2133F4264C4CFC00BE3D8D /* CoreUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8B2133F3264C4CFC00BE3D8D /* CoreUI */; };
@@ -81,6 +85,8 @@
 		22AA000B2F45F10000AA0001 /* TVApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVApp.swift; sourceTree = "<group>"; };
 		22C618B52F56345F00A9C6F0 /* MacDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDelegate.swift; sourceTree = "<group>"; };
 		22C8C7542F5846A000856024 /* Commands */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Commands; path = Dependencies/Commands; sourceTree = "<group>"; };
+		22C8C7E12F585AB000856024 /* EmptyModel.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = EmptyModel.json; sourceTree = "<group>"; };
+		22C8C7E42F585AC400856024 /* TestModel.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TestModel.json; sourceTree = "<group>"; };
 		22E778362476A5A5009ED66A /* Screenshots-tvOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Screenshots-tvOS.xctestplan"; sourceTree = "<group>"; };
 		22E7783B2476A606009ED66A /* Action Status UI Tests TV.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Action Status UI Tests TV.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		22F177C12F45DFD300583266 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
@@ -283,6 +289,8 @@
 				2257D7F62F4DAEAF00DBD569 /* AppIcon.icon */,
 				8B3E64AC23EAE62E00B28168 /* Assets.xcassets */,
 				8B430E9023F58E060050BF2A /* PreviewContent */,
+				22C8C7E12F585AB000856024 /* EmptyModel.json */,
+				22C8C7E42F585AC400856024 /* TestModel.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -480,8 +488,10 @@
 			files = (
 				8BBFAA99240401C30091157A /* dsa_pub.pem in Resources */,
 				2257D7F72F4DAEAF00DBD569 /* AppIcon.icon in Resources */,
+				22C8C7E52F585AC400856024 /* TestModel.json in Resources */,
 				8B430E9123F5947E0050BF2A /* Assets.xcassets in Resources */,
 				8B3E64B023EAE62E00B28168 /* Preview Assets.xcassets in Resources */,
+				22C8C7E22F585AB000856024 /* EmptyModel.json in Resources */,
 			);
 		};
 		8B3E64B723EAE62E00B28168 /* Resources */ = {
@@ -497,8 +507,10 @@
 		8B430E6823F586100050BF2A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
+				22C8C7E62F585AC400856024 /* TestModel.json in Resources */,
 				8B430E8E23F58AE10050BF2A /* Assets.xcassets in Resources */,
 				8B430E8F23F58CEE0050BF2A /* Preview Assets.xcassets in Resources */,
+				22C8C7E32F585AB000856024 /* EmptyModel.json in Resources */,
 			);
 		};
 /* End PBXResourcesBuildPhase section */

@@ -26,12 +26,27 @@ public protocol ModelServiceProvider: CommandCentre {
   @ObservationIgnored @AppStorage(.refreshInterval) var refreshInterval
   @ObservationIgnored @AppStorage(.sortModeKey) var sortMode
 
+  enum Source {
+    case cloud
+    case resource(String)
+  }
+  
   private let model: Model
   private let statusService: StatusService
 
-  init(statusService: StatusService, useTestModel: Bool) {
+  init(statusService: StatusService, source: Source) {
     self.statusService = statusService
-    self.model = useTestModel ? TestModel() : Model([])
+    
+    let store: ModelStore
+    switch source {
+      case .cloud: store = UbiquitousStore()
+      case .resource(let name): store = BundleStore(key: name)
+    }
+    self.model = Model(store: store)
+
+    let encoder = JSONEncoder()
+    let encoded = try! encoder.encode(TestModel().items)
+    print(String(data: encoded, encoding: .utf8)!)
   }
 
   public var count: Int { model.count }
@@ -108,7 +123,7 @@ public protocol ModelServiceProvider: CommandCentre {
 }
 
 extension Engine: ModelServiceProvider {
-  
+
 }
 
 struct AddRepoCommand<C: ModelServiceProvider>: CommandWithUI {

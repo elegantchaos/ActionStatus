@@ -55,8 +55,6 @@ public class Model {
       }
     }
     items = loadedRepos
-
-
   }
 
   public func save() {
