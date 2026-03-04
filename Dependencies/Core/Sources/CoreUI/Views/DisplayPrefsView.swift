@@ -13,29 +13,23 @@ struct DisplayPrefsView: View {
   @AppStorage(.displaySize) var displaySize
   
   var body: some View {
-    Section {
-      VStack(alignment: .leading, spacing: 12) {
-        Picker("Item Size", selection: $displaySize) {
-          ForEach(DisplaySize.allCases, id: \.rawValue) { size in
-            Text(size.labelName).tag(size)
-          }
+    PreferencesSection(title: "Display") {
+      Picker("Item Size", selection: $displaySize) {
+        ForEach(DisplaySize.allCases, id: \.rawValue) { size in
+          Text(size.labelName).tag(size)
         }
-
-        Picker("Sort By", selection: $sortMode) {
-          ForEach(SortMode.allCases, id: \.rawValue) { mode in
-            Text(mode.labelName).tag(mode)
-          }
-        }
-
-        #if os(macOS)
-          Toggle("Show In Menubar", isOn: $showInMenu)
-          Toggle("Show In Dock", isOn: $showInDock)
-        #endif
       }
-    } header: {
-      Text("Display")
-        .font(.headline)
-        .foregroundStyle(.primary)
+
+      Picker("Sort By", selection: $sortMode) {
+        ForEach(SortMode.allCases, id: \.rawValue) { mode in
+          Text(mode.labelName).tag(mode)
+        }
+      }
+
+      #if os(macOS)
+        Toggle("Show In Menubar", isOn: $showInMenu)
+        Toggle("Show In Dock", isOn: $showInDock)
+      #endif
     }
   }
 }

@@ -10,18 +10,12 @@ struct RefreshPrefsView: View {
   @AppStorage(.refreshInterval) var refreshInterval
 
   var body: some View {
-    Section {
-      VStack(alignment: .leading, spacing: 12) {
-        Picker("Refresh Rate", selection: $refreshInterval) {
-          ForEach(RefreshRate.allCases, id: \.rawValue) { rate in
-            Text(rate.labelName).tag(rate)
-          }
+    PreferencesSection(title: "Refresh") {
+      Picker("Refresh Rate", selection: $refreshInterval) {
+        ForEach(RefreshRate.allCases, id: \.rawValue) { rate in
+          Text(rate.labelName).tag(rate)
         }
       }
-    } header: {
-      Text("Refresh")
-        .font(.headline)
-        .foregroundStyle(.primary)
     }
   }
 }

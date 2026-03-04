@@ -30,45 +30,38 @@ struct ConnectionPrefsView: View {
   }
 
   var body: some View {
-  
-    return Section {
-      VStack(alignment: .leading, spacing: 12) {
-        AuthStatusBanner(state: authState, health: authHealth, currentUser: githubUser, hasToken: !token.isEmpty)
+    return PreferencesSection(title: "Account") {
+      AuthStatusBanner(state: authState, health: authHealth, currentUser: githubUser, hasToken: !token.isEmpty)
 
-        HStack {
-          if !isSignedIn {
-            Toggle("Custom Server", isOn: $showCustomServerSettings)
-              .controlSize(.small)
-              #if os(macOS)
-                .toggleStyle(.checkbox)
+      HStack {
+        if !isSignedIn {
+          Toggle("Custom Server", isOn: $showCustomServerSettings)
+            .controlSize(.small)
+            #if os(macOS)
+              .toggleStyle(.checkbox)
+            #endif
+
+          if showCustomServerSettings {
+            TextField(defaultGithubServer, text: $githubServer)
+              .labelsHidden()
+              #if !os(macOS)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
               #endif
-
-            if showCustomServerSettings {
-              TextField(defaultGithubServer, text: $githubServer)
-                .labelsHidden()
-                #if !os(macOS)
-                  .textInputAutocapitalization(.never)
-                  .autocorrectionDisabled()
-                #endif
-            }
-          }
-
-          Spacer()
-
-          if isSignedIn {
-            Button("Sign Out", role: .destructive, action: signOut)
-              .disabled(!isSignedIn)
-          } else {
-            Button(primaryAuthButtonTitle, action: primaryAuthButtonAction)
-              .buttonStyle(.borderedProminent)
-              .tint(primaryAuthButtonTint)
           }
         }
+
+        Spacer()
+
+        if isSignedIn {
+          Button("Sign Out", role: .destructive, action: signOut)
+            .disabled(!isSignedIn)
+        } else {
+          Button(primaryAuthButtonTitle, action: primaryAuthButtonAction)
+            .buttonStyle(.borderedProminent)
+            .tint(primaryAuthButtonTint)
+        }
       }
-    } header: {
-      Text("Account")
-        .font(.headline)
-        .foregroundStyle(.primary)
     }
     .onAppear {
       showCustomServerSettings = githubServer != defaultGithubServer
@@ -120,9 +113,13 @@ struct ConnectionPrefsView: View {
     showsCancelAction ? cancelSignIn : startSignIn
   }
 
-  func startSignIn() {
+  private var normalizedGithubServer: String {
     let serverInput = githubServer.trimmingCharacters(in: .whitespacesAndNewlines)
-    let server = serverInput.isEmpty ? defaultGithubServer : serverInput
+    return serverInput.isEmpty ? defaultGithubServer : serverInput
+  }
+
+  func startSignIn() {
+    let server = normalizedGithubServer
     githubServer = server
 
     guard let clientID = GithubDeviceAuthenticator.clientID() else {
@@ -201,8 +198,7 @@ struct ConnectionPrefsView: View {
         break
     }
 
-    let serverInput = githubServer.trimmingCharacters(in: .whitespacesAndNewlines)
-    let server = serverInput.isEmpty ? defaultGithubServer : serverInput
+    let server = normalizedGithubServer
     let currentToken = token
     let currentUser = githubUser
 
