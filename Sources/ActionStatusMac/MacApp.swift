@@ -40,12 +40,7 @@
       }
       .defaultSize(width: 720, height: 620)
       .windowResizability(.automatic)
-      .commands {
-        CommandGroup(after: .newItem) {
-          Button("Add Local Repos", action: engine.addLocalRepos)
-            .keyboardShortcut("o", modifiers: .command)
-        }
-      }
+      .addLocalReposCommand(using: engine)
 
       MenuBarExtra(isInserted: $showInMenu) {
           StatusMenuContent()

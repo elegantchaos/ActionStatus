@@ -32,12 +32,8 @@ import Application
           Button("Preferences…", action: engine.showPreferences)
             .keyboardShortcut(",", modifiers: .command)
         }
-
-        CommandGroup(after: .newItem) {
-          Button("Add Local Repos", action: engine.addLocalRepos)
-            .keyboardShortcut("o", modifiers: .command)
-        }
       }
+      .addLocalReposCommand(using: engine)
     }
   }
 #endif
