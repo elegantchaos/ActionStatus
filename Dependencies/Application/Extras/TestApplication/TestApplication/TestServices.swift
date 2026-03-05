@@ -19,7 +19,7 @@ import SwiftUI
 
   init(serviceA: ServiceA) {
     self.serviceA = serviceA
-    onChangeB(of: serviceA.value) { newValue in
+    onChange(of: serviceA.value) { newValue in
       assert(serviceA.value == newValue)
       print("service a changed to \(newValue)")
       self.value = newValue

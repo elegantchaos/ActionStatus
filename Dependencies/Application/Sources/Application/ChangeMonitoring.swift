@@ -1,6 +1,9 @@
 import SwiftUI
 
-@MainActor public func onChange<V>(of value: @escaping @autoclosure @Sendable () -> V, perform: @escaping @Sendable (V) -> Void) {
+@MainActor public func onChange<V>(
+  of value: @escaping @autoclosure @MainActor () -> V,
+  perform: @escaping @MainActor (V) -> Void
+) {
   withObservationTracking {
     _ = value()
   } onChange: {
@@ -11,16 +14,12 @@ import SwiftUI
   }
 }
 
-@MainActor public func onChangeB<V>(
-  of value: @escaping @autoclosure @MainActor () -> V,
-  perform: @escaping @MainActor (V) -> Void
-) {
+nonisolated public func onChangeSendable<V>(of value: @escaping @autoclosure @Sendable () -> V, perform: @escaping @Sendable (V) -> Void) {
   withObservationTracking {
     _ = value()
   } onChange: {
-    Task { @MainActor in
       perform(value())
-      onChangeB(of: value(), perform: perform)
-    }
+    onChangeSendable(of: value(), perform: perform)
   }
 }
+
