@@ -18,13 +18,28 @@ import SwiftUI
   
   init(serviceA: ServiceA) {
     self.serviceA = serviceA
+    onChange(of: serviceA.value) { newValue in
+      assert(serviceA.value == newValue)
+      print("service a changed to \(newValue)")
+      self.value = newValue
+    }
+
     withObservationTracking {
       _ = serviceA.value
     } onChange: {
       Task { @MainActor in
-        print("service a changed to \(serviceA.value)")
-        self.value = serviceA.value
       }
+    }
+  }
+}
+
+func onChange<V>(of value: @escaping @autoclosure () -> V, perform: @escaping (V) -> ()) {
+  withObservationTracking {
+    _ = value()
+  } onChange: {
+    Task { @MainActor in
+      perform(value())
+      onChange(of: value(), perform: perform)
     }
   }
 }
