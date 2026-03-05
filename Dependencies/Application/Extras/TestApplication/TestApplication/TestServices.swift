@@ -5,20 +5,21 @@
 //  Created by Sam Deane on 05/03/2026.
 //
 
+import Application
 import Foundation
 import SwiftUI
 
-@Observable class ServiceA {
+@MainActor @Observable class ServiceA {
   var value = 0
 }
 
 @Observable class ServiceB {
   var value = 0
   let serviceA: ServiceA
-  
+
   init(serviceA: ServiceA) {
     self.serviceA = serviceA
-    onChange(of: serviceA.value) { newValue in
+    onChangeB(of: serviceA.value) { newValue in
       assert(serviceA.value == newValue)
       print("service a changed to \(newValue)")
       self.value = newValue
@@ -33,25 +34,25 @@ import SwiftUI
   }
 }
 
-func onChange<V>(of value: @escaping @autoclosure () -> V, perform: @escaping (V) -> ()) {
-  withObservationTracking {
-    _ = value()
-  } onChange: {
-    Task { @MainActor in
-      perform(value())
-      onChange(of: value(), perform: perform)
-    }
-  }
-}
 
 struct ServiceAView: View {
   @Environment(ServiceA.self) var serviceA
-  
+
   var body: some View {
-    Text("A is \(serviceA.value)")
-    Button("Change A") {
-      serviceA.value += 1
+    VStack {
+      Text("A is \(serviceA.value)")
+      Button("Change A") {
+        serviceA.value += 1
+      }
+      Text("(body called \(bodyCount)")
     }
+  }
+
+  static var bodyCount = 0
+  var bodyCount: Int {
+    let v = Self.bodyCount + 1
+    Self.bodyCount = v
+    return v
   }
 }
 
@@ -59,6 +60,19 @@ struct ServiceBView: View {
   @Environment(ServiceB.self) var serviceB
 
   var body: some View {
-    Text("B is \(serviceB.value)")
+    VStack {
+      Text("B is \(serviceB.value)")
+      Button("Change B") {
+        serviceB.value += 1
+      }
+      Text("(body called \(bodyCount)")
+    }
+  }
+
+  static var bodyCount = 0
+  var bodyCount: Int {
+    let v = Self.bodyCount + 1
+    Self.bodyCount = v
+    return v
   }
 }
