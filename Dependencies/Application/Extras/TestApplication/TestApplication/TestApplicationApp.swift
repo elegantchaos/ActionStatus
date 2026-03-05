@@ -20,6 +20,15 @@ struct TestApplication: App {
   var body: some Scene {
     WindowGroup {
       engine.rootView {
+        Text("Running")
+        HStack {
+          ServiceAView()
+          ServiceBView()
+        }
+        Button("Throw Error Whilst Running") {
+          engine.fakeErrorRunning()
+        }
+      } startup: {
         VStack {
           ProgressView()
           Button("Finish Startup") {
@@ -29,12 +38,7 @@ struct TestApplication: App {
             engine.fakeErrorStartup()
           }
         }
-      } running: {
-        Text("Content Here")
-        Button("Throw Error Whilst Running") {
-          engine.fakeErrorRunning()
-        }
-      } error: { caughtError in
+      } error: { caughtError, caughtState in
         let e = String(describing: caughtError)
         Text("Error \(e)")
         Button("Resume") {
@@ -52,11 +56,16 @@ class TestEngine: AppEngine {
   
   var constantService: ConstantService
   var slowService: SlowStartupService?
+  var serviceA: ServiceA
+  var serviceB: ServiceB
   
   var startupContinuation: CheckedContinuation<Void, any Error>?
 
   init() {
     constantService = ConstantService()
+    let sa = ServiceA()
+    serviceA = sa
+    serviceB = ServiceB(serviceA: sa)
   }
   
   func initialise() throws {
@@ -110,6 +119,8 @@ class TestEngine: AppEngine {
       content
         .environment(engine.constantService)
         .environment(engine.slowService!)
+        .environment(engine.serviceA)
+        .environment(engine.serviceB)
     }
   }
 }

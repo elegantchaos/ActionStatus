@@ -10,23 +10,6 @@
 		22C618EC2F57054500A9C6F0 /* Application in Frameworks */ = {isa = PBXBuildFile; productRef = 22C618EB2F57054500A9C6F0 /* Application */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		22C618CE2F5704D300A9C6F0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 22C618B82F5704D100A9C6F0 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 22C618BF2F5704D100A9C6F0;
-			remoteInfo = TestApplication;
-		};
-		22C618D82F5704D300A9C6F0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 22C618B82F5704D100A9C6F0 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 22C618BF2F5704D100A9C6F0;
-			remoteInfo = TestApplication;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		22C618C02F5704D100A9C6F0 /* TestApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -45,20 +28,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				22C618EC2F57054500A9C6F0 /* Application in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		22C618CA2F5704D300A9C6F0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		22C618D42F5704D300A9C6F0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,14 +89,6 @@
 					22C618BF2F5704D100A9C6F0 = {
 						CreatedOnToolsVersion = 26.3;
 					};
-					22C618CC2F5704D300A9C6F0 = {
-						CreatedOnToolsVersion = 26.3;
-						TestTargetID = 22C618BF2F5704D100A9C6F0;
-					};
-					22C618D62F5704D300A9C6F0 = {
-						CreatedOnToolsVersion = 26.3;
-						TestTargetID = 22C618BF2F5704D100A9C6F0;
-					};
 				};
 			};
 			buildConfigurationList = 22C618BB2F5704D100A9C6F0 /* Build configuration list for PBXProject "TestApplication" */;
@@ -160,20 +121,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		22C618CB2F5704D300A9C6F0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		22C618D52F5704D300A9C6F0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -184,34 +131,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		22C618C92F5704D300A9C6F0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		22C618D32F5704D300A9C6F0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		22C618CF2F5704D300A9C6F0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 22C618BF2F5704D100A9C6F0 /* TestApplication */;
-			targetProxy = 22C618CE2F5704D300A9C6F0 /* PBXContainerItemProxy */;
-		};
-		22C618D92F5704D300A9C6F0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 22C618BF2F5704D100A9C6F0 /* TestApplication */;
-			targetProxy = 22C618D82F5704D300A9C6F0 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		22C618DF2F5704D300A9C6F0 /* Debug */ = {
