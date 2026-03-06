@@ -54,7 +54,7 @@ public let refreshServiceChannel = Channel("Refresh Service")
     guard !metadata.isUITestingBuild else { return nil }
 
     if testRefresh {
-      return makeRandomisingRefreshController()
+      return RandomisingRefreshController(model: modelService)
     } else {
       if let refresh = makeGithubRefreshController() {
         return refresh
@@ -63,10 +63,6 @@ public let refreshServiceChannel = Channel("Refresh Service")
         return nil
       }
     }
-  }
-
-  public func makeRandomisingRefreshController() -> RefreshController {
-    return RandomisingRefreshController(model: modelService)
   }
 
   public func makeGithubRefreshController() -> RefreshController? {

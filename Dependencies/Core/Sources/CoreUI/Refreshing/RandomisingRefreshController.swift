@@ -34,13 +34,13 @@ public class RandomisingRefreshController: RefreshController {
 internal extension RandomisingRefreshController {
   func doRefresh() {
     switch state {
-      case .running:
+      case .running(let rate):
         refreshChannel.log("Completed Refresh")
         if let id = self.model.items.randomElement()?.value.id, let newState = Repo.State.allCases.randomElement() {
           self.model.updateState(newState, forRepoWithID: id)
         }
 
-        timer.schedule(after: 5.0) { [self] _ in
+        timer.schedule(after: rate) { [self] _ in
           doRefresh()
         }
 

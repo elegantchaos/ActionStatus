@@ -5,6 +5,8 @@
 
 import Application
 import Combine
+import Commands
+import CommandsUI
 import Core
 import Keychain
 import Logger
@@ -92,4 +94,7 @@ extension Engine: AppEngine {
   public func shouldIgnore(error: any Error) -> Bool {
     false
   }
+}
+
+extension Engine: CommandCentre {
 }
