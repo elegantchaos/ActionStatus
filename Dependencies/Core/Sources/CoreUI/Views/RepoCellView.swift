@@ -9,7 +9,6 @@ import SwiftUI
 
 struct RepoCellView: View {
   @Environment(LaunchService.self) private var launchService
-  @Environment(SheetService.self) private var sheetService
   @Environment(Engine.self) var engine
   @Environment(MetadataService.self) var metadataService
 
@@ -32,10 +31,7 @@ struct RepoCellView: View {
   func contextMenuContent() -> some View {
     Text("\(repo.name)")
 
-    Button(action: handleEdit) {
-      Label("Settings…", icon: .editButtonIcon)
-        .accessibility(identifier: "editLabel")
-    }
+    engine.button(ShowEditSheetCommand(repo: repo))
 
     Button(action: handleShowRepo) {
       Label("Open In Github…", icon: .linkIcon)
@@ -74,11 +70,7 @@ struct RepoCellView: View {
             .lineLimit(1)
 
           Spacer()
-          Button(action: handleEdit) {
-            Image(icon: .editButtonIcon)
-          }
-          .accessibility(identifier: "editButton")
-          .foregroundColor(.black)
+          engine.button(ShowEditSheetCommand(repo: repo))
         }
         .matchedGeometryEffect(id: repo.id, in: namespace)
         .padding(cellPadding)
@@ -119,10 +111,6 @@ struct RepoCellView: View {
 
   func handleShowWorkflow() {
     launchService.open(url: repo.githubURL(for: .workflow))
-  }
-
-  func handleEdit() {
-    sheetService.presentedSheet = .editRepo(repo)
   }
 
   func handleReveal(url: URL) {

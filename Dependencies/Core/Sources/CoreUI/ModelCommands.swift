@@ -49,3 +49,15 @@ struct AdvanceStateCommand<C: ModelServiceProvider>: CommandWithUI {
     }
   }
 }
+
+public struct AddLocalReposCommand: CommandWithUI {
+  public let id = "model.local"
+  public let icon = Icon.addLocalIcon
+  public var shortcut: CommandShortcut? { .init("O", modifiers: [.command])}
+  
+  public init() { }
+
+  public func perform(centre: Engine) async throws {
+    centre.addLocalRepos()
+  }
+}

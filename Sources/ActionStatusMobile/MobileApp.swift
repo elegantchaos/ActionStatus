@@ -20,11 +20,7 @@ import Application
     var body: some Scene {
       WindowGroup {
         engine.rootView {
-          ProgressView()
-        } running: {
           ContentView()
-        } error: { error in
-          EmptyView()
         }
       }
       .commands {
@@ -32,8 +28,11 @@ import Application
           Button("Preferences…", action: engine.showPreferences)
             .keyboardShortcut(",", modifiers: .command)
         }
+
+        CommandGroup(after: .newItem) {
+          engine.button(AddLocalReposCommand())
+        }
       }
-      .addLocalReposCommand(using: engine)
     }
   }
 #endif

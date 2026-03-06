@@ -60,10 +60,6 @@ public let monitoringChannel = Channel("Monitoring")
     self.refreshService = RefreshService(model: modelService, metadata: ms)
     self.launchService = LaunchService()
   }
-
-  public func editNewRepo() {
-    sheetService.presentedSheet = .editRepo(nil)
-  }
 }
 
 extension CGFloat {

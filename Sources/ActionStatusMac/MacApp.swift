@@ -40,7 +40,11 @@
       }
       .defaultSize(width: 720, height: 620)
       .windowResizability(.automatic)
-      .addLocalReposCommand(using: engine)
+      .commands {
+        CommandGroup(after: .newItem) {
+          engine.button(AddLocalReposCommand())
+        }
+      }
 
       MenuBarExtra(isInserted: $showInMenu) {
           StatusMenuContent()

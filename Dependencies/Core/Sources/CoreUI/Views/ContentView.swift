@@ -8,40 +8,29 @@ import SwiftUI
 
 public struct ContentView: View {
   @Environment(Engine.self) var engine
-  @Environment(SheetService.self) var sheets
+  @Environment(SheetService.self) var sheetService
   @Environment(SettingsService.self) var settingsService
-
+  @Environment(MetadataService.self) var metadataService
+  
   public init() {
   }
 
   public var body: some View {
-    @Bindable var presentedSheet = sheets
-    
     #if os(macOS)
     RootView()
-      .sheet(item: $presentedSheet.presentedSheet) { sheet in
-          sheetView(for: sheet)
-        }
+      .sheetHost()
     #else
       NavigationStack {
         RootView()
-          .navigationTitle(engine.info.name)
+          .navigationTitle(metadataService.appName)
           #if !os(tvOS)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
               ToolbarItem(placement: .navigationBarLeading) {
                 if settingsService.isEditing {
-                  Button(action: { presentedSheet.presentedSheet = .editRepo(nil) }) {
-                    Text("Add")
-                  }
-                  .accessibility(identifier: "addButton")
-                  .foregroundColor(.black)
+                  engine.button(ShowAddSheetCommand())
                 } else {
-                  Button(action: { presentedSheet.presentedSheet = .preferences }) {
-                    Image(icon: .preferencesIcon)
-                  }
-                  .accessibility(label: Text("Settings"))
-                  .accessibility(identifier: "preferencesButton")
+                  engine.button(ShowPreferencesSheetCommand())
                 }
               }
 
@@ -58,23 +47,10 @@ public struct ContentView: View {
             }
           #endif
       }
-      .sheet(item: $presentedSheet.presentedSheet) { sheet in
-        sheetView(for: sheet)
-      }
+      .sheetHost()
     #endif
   }
 
-  @ViewBuilder
-  func sheetView(for sheet: PresentedSheet) -> some View {
-    switch sheet {
-      case .editRepo(let repo):
-        EditView(repo: repo)
-      case .preferences:
-        SheetView("ActionStatus Settings", shortTitle: "Settings", cancelAction: {}, doneAction: {}) {
-          PreferencesForm()
-        }
-    }
-  }
 }
 
 struct ContentView_Previews: PreviewProvider {
