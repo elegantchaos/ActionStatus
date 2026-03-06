@@ -241,3 +241,9 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
 
 extension Repo: Codable {
 }
+
+extension Repo: TypedDebugDescription {
+  public var debugLabel: String {
+    "\(owner)/\(name)".lowercased()
+  }
+}

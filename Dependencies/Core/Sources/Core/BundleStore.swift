@@ -7,8 +7,11 @@ import Foundation
 
 public class BundleStore: ModelStore {
   public var values: Values
+  private let key: String
 
   public init(key: String, bundle: Bundle = Bundle.main) {
+    self.key = key
+
     guard let url = bundle.url(forResource: key, withExtension: "json") else {
       fatalError("Missing RepoResource from \(key) in \(bundle)")
     }
@@ -40,4 +43,8 @@ public class BundleStore: ModelStore {
     await callback(values)
   }
 
+}
+
+nonisolated extension BundleStore: TypedDebugDescription {
+  public var debugLabel: String { key }
 }

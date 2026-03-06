@@ -43,7 +43,7 @@ public protocol ModelServiceProvider: CommandCentre {
     self.items = .init(uniqueKeysWithValues: repos.map { ($0.id, $0) })
                       
     statusService.connect(to: self)
-    modelChannel.log("Initialised with store: \(store)")
+    modelChannel.log("Initialised with \(store!)")
   }
 
   public func startup() async {

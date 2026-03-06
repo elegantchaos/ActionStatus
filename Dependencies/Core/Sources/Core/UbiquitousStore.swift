@@ -124,3 +124,7 @@ public struct UbiquitousStore: ModelStore {
     }
   }
 }
+
+nonisolated extension TypedDebugDescription {
+  public var debugLabel: String { "default" }
+}

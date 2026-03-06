@@ -6,7 +6,7 @@
 import Foundation
 
 /// Protocol for something that can save and load the model.
-public protocol ModelStore {
+public protocol ModelStore: TypedDebugDescription {
   typealias Values = [String:Repo]
   
   /// Callback to indicate that the store contents have been changed externally.
