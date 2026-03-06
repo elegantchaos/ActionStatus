@@ -6,7 +6,7 @@
 import SwiftUI
 
 public struct RepoListView: View {
-  @Environment(ModelService.self) var modelService
+  @Environment(Engine.self) var engine
   @Environment(StatusService.self) var status
   @Environment(SettingsService.self) private var settingsService
   @AppStorage(.displaySize) var displaySize
@@ -39,7 +39,7 @@ public struct RepoListView: View {
 
   func delete(at offsets: IndexSet) {
     let ids = status.repoIDs(atOffets: offsets)
-    modelService.remove(reposWithIDs: ids)
+    Task { try? await engine.perform(RemoveReposCommand(ids: ids)) }
   }
 }
 

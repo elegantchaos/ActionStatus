@@ -7,7 +7,6 @@ import SwiftUI
 
 public struct NoReposView: View {
   @Environment(Engine.self) var engine
-  @Environment(ModelService.self) var modelService
 
   public init() {
   }

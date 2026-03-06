@@ -8,7 +8,6 @@ import SwiftUI
 
 public struct ContentView: View {
   @Environment(Engine.self) var engine
-  @Environment(ModelService.self) var modelService
   @Environment(SheetService.self) var sheets
   @Environment(SettingsService.self) var settingsService
 

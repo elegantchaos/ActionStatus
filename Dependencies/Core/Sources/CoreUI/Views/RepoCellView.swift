@@ -10,7 +10,6 @@ import SwiftUI
 struct RepoCellView: View {
   @Environment(LaunchService.self) private var launchService
   @Environment(SheetService.self) private var sheetService
-  @Environment(ModelService.self) var modelService
   @Environment(Engine.self) var engine
   @Environment(MetadataService.self) var metadataService
 
@@ -56,17 +55,12 @@ struct RepoCellView: View {
 
     Divider()
 
-    Button(action: handleDelete) {
-      Label("Delete", icon: .deleteRepoIcon)
-    }
+    engine.button(RemoveReposCommand(ids: [repo.id]))
     #if DEBUG
-
     if !metadataService.isUITestingBuild {
-        Divider()
-        Button(action: handleToggleState) {
-          Text("DEBUG: Advance State")
-        }
-      }
+      Divider()
+      engine.button(AdvanceStateCommand(repo: repo))
+    }
     #endif
   }
 
@@ -129,16 +123,6 @@ struct RepoCellView: View {
 
   func handleEdit() {
     sheetService.presentedSheet = .editRepo(repo)
-  }
-
-  func handleDelete() {
-    modelService.remove(reposWithIDs: [repo.id])
-  }
-
-  func handleToggleState() {
-    if let newState = Repo.State(rawValue: (repo.state.rawValue + 1) % UInt(Repo.State.allCases.count)) {
-      modelService.update(repoWithID: repo.id, state: newState)
-    }
   }
 
   func handleReveal(url: URL) {

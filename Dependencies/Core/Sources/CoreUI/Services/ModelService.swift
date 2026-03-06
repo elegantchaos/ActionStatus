@@ -79,17 +79,19 @@ public protocol ModelServiceProvider: CommandCentre {
     return items[id]
   }
 
-  public func update(repoWithID id: String, state: Repo.State) {
+  public func updateState(_ state: Repo.State, forRepoWithID id: String, ) {
     assert(Thread.isMainThread)
     if var repo = items[id] {
-      modelChannel.log("Updated state of \(repo) to \(state)")
+      modelChannel.log("\(repo) changed to \(state)")
       repo.state = state
       switch state {
         case .passing: repo.lastSucceeded = Date()
         case .failing, .partiallyFailing: repo.lastFailed = Date()
         default: break
       }
-      items[id] = repo
+      update(repo: repo)
+    } else {
+      modelChannel.log("Unknown repo \(id) changed to \(state)")
     }
   }
 
