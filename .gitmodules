@@ -4,3 +4,15 @@
 [submodule "Dependencies/Runtime"]
 	path = Dependencies/Runtime
 	url = git@github.com:elegantchaos/Runtime.git
+[submodule "Dependencies/Application"]
+	path = Dependencies/Application
+	url = git@github.com:elegantchaos/Application.git
+[submodule "Dependencies/Commands"]
+	path = Dependencies/Commands
+	url = git@github.com:elegantchaos/Commands.git
+[submodule "Dependencies/Icons"]
+	path = Dependencies/Icons
+	url = git@github.com:elegantchaos/Icons.git
+[submodule "Dependencies/Settings"]
+	path = Dependencies/Settings
+	url = git@github.com:elegantchaos/Settings.git
