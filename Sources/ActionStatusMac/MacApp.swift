@@ -44,6 +44,9 @@
         CommandGroup(after: .newItem) {
           engine.button(AddLocalReposCommand())
         }
+        CommandGroup(before: .toolbar) {
+          engine.button(ToggleEditingCommand())
+        }
       }
 
       MenuBarExtra(isInserted: $showInMenu) {
