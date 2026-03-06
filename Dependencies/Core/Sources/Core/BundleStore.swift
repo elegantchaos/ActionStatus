@@ -6,8 +6,7 @@
 import Foundation
 
 public class BundleStore: ModelStore {
-  public var index: [String]
-  var repos: [String: Repo]
+  public var values: Values
 
   public init(key: String, bundle: Bundle = Bundle.main) {
     guard let url = bundle.url(forResource: key, withExtension: "json") else {
@@ -18,28 +17,27 @@ public class BundleStore: ModelStore {
       let data = try Data(contentsOf: url)
       let decoder = JSONDecoder()
       let decoded = try decoder.decode([String: Repo].self, from: data)
-      index = Array(decoded.keys)
-      repos = decoded
+      values = decoded
     } catch {
       fatalError("Failed to decode RepoResource data \(key) in \(bundle)")
     }
   }
 
-  public func repo(forKey key: String) -> Core.Repo? {
-    repos[key]
+  public func get(forKey key: String) -> Core.Repo? {
+    values[key]
   }
 
-  public func store(_ repo: Core.Repo, forKey key: String) -> Bool {
-    repos[key] = repo
-    return true
+  public func set(_ repo: Core.Repo, forKey key: String) {
+    values[key] = repo
   }
 
-  public func removeObject(forKey key: String) {
-    repos.removeValue(forKey: key)
+  public func remove(forKey key: String) {
+    values.removeValue(forKey: key)
 
   }
 
-  public func onChange(_ perform: @escaping ChangeCallback) {
+  public func onChange(_ callback: @escaping ChangeCallback) async {
+    await callback(values)
   }
 
 }

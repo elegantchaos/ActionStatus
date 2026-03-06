@@ -13,24 +13,47 @@ let ubiquitousChannel = Channel("Ubiquitous Store")
 public struct UbiquitousStore: ModelStore {
   let store: NSUbiquitousKeyValueStore
   let indexKey: String
-  var observer: NSObjectProtocol?
+  let observer: Observer
 
   public init(key: String? = nil) {
     store = NSUbiquitousKeyValueStore.default
+    observer = Observer()
     indexKey = key ?? Self.defaultKey
     store.synchronize()
   }
 
-  public func synchronize() -> Bool {
-    store.synchronize()
-  }
-
-  public var index: [String] {
+  private var index: [String] {
     get { (store.array(forKey: indexKey) as? [String]) ?? [] }
     set { store.set(newValue, forKey: indexKey) }
   }
 
-  public func repo(forKey key: String) -> Repo? {
+  public var values: [String: Repo] {
+    get { readValues() }
+    set { writeValues(newValue) }
+  }
+  
+  private func readValues() -> Values {
+    return .init(
+      uniqueKeysWithValues:
+        index.compactMap { id in
+          get(forKey: id).map { (id, $0) }
+        }
+    )
+  }
+  
+  private mutating func writeValues(_ newValues: Values) {
+    let oldIndex = index
+    index = Array(newValues.keys)
+    let removedIDs = Set(oldIndex).subtracting(Set(index))
+    for id in removedIDs {
+      remove(forKey: id)
+    }
+    for repo in newValues.values {
+      set(repo, forKey: repo.id)
+    }
+  }
+  
+  public func get(forKey key: String) -> Repo? {
     guard let dict = store.dictionary(forKey: key) else {
       return nil
     }
@@ -44,31 +67,33 @@ public struct UbiquitousStore: ModelStore {
     }
   }
 
-  public func store(_ repo: Repo, forKey key: String) -> Bool {
+  public func set(_ repo: Repo, forKey key: String) {
     let encoder = DictionaryEncoder()
-    guard let dict = try? encoder.encode(repo) as [String: Any] else {
-      return false
+    do {
+      let dict = try encoder.encode(repo) as [String: Any]
+      store.set(dict, forKey: key)
+    } catch {
+      ubiquitousChannel.log("Failed to encode repo \(repo).\n\nError:\(error)")
+      return
     }
-
-    store.set(dict, forKey: key)
-    return true
   }
 
-  public func removeObject(forKey key: String) {
+  public func remove(forKey key: String) {
     store.removeObject(forKey: key)
   }
 
-  public mutating func onChange(_ callback: @escaping ChangeCallback) {
+  public func onChange(_ callback: @escaping ChangeCallback) async {
     let nc = NotificationCenter.default
-    if let observer {
-      nc.removeObserver(observer)
+    // remove old observer if there is one
+    observer.clear()
+
+    // add an observer
+    observer.add {
+      await callback(readValues())
     }
-    observer = NotificationCenter.default
-      .addObserver(
-        forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
-        object: NSUbiquitousKeyValueStore.default,
-        queue: .main
-      ) { _ in Task { await callback() } }
+        
+    // make an initial call straight away and wait until it has completed
+    await callback(readValues())
   }
 
   private static var defaultKey: String {
@@ -77,5 +102,25 @@ public struct UbiquitousStore: ModelStore {
     #else
       "State"
     #endif
+  }
+  
+  class Observer {
+    let nc = NotificationCenter.default
+    var handle: NSObjectProtocol?
+    func clear() {
+      // remove old observer if there is one
+      if let handle {
+        nc.removeObserver(handle)
+      }
+    }
+    
+    func add(perform: @escaping @Sendable () async -> ()) {
+      handle = NotificationCenter.default
+        .addObserver(
+          forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
+          object: NSUbiquitousKeyValueStore.default,
+          queue: .main,
+        ) { _ in Task { await perform() } }
+    }
   }
 }
