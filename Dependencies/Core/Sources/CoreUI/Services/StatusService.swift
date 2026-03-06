@@ -3,6 +3,7 @@
 //  All code (c) 2021 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Application
 import Combine
 import Core
 import Foundation
@@ -14,8 +15,9 @@ let repoStateChannel = Channel("RepoState")
 
 @Observable
 @MainActor public class StatusService {
-  @ObservationIgnored @AppStorage(.sortMode) var sortMode
-  
+  @ObservationIgnored private var modelService: ModelService?
+  @ObservationIgnored private var observer: AnyCancellable?
+
   public var sortedRepos: [Repo] = []
   public var passing: Int = 0
   public var failing: Int = 0
@@ -24,18 +26,28 @@ let repoStateChannel = Channel("RepoState")
   public var dormant: Int = 0
   public var unreachable: Int = 0
 
-  public var modelService: ModelService?
-  public var observer: AnyCancellable?
   
   public init() {
-    observer = UserDefaults.standard.onChanged { [self] in
-      if let modelService {
-        update()
-      }
-    }
   }
 
-  public func update() {
+  public func connect(to modelService: ModelService) {
+    @AppStorage(.sortMode) var sortMode
+
+    self.modelService = modelService
+    onChange(of: modelService.items) { [weak self] _ in
+      self?.update(sortMode: sortMode)
+    }
+    
+    onChange(of: sortMode) { [weak self] _ in
+      self?.update(sortMode: sortMode)
+    }
+    
+//    observer = UserDefaults.standard.onChanged { [self] in
+//      update(sortMode: sortMode)
+//    }
+  }
+  
+  public func update(sortMode: SortMode) {
     repoStateChannel.log("updated")
 
     if let modelService {

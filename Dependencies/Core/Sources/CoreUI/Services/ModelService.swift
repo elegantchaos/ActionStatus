@@ -28,9 +28,10 @@ public protocol ModelServiceProvider: CommandCentre {
     case resource(String)
   }
 
-  internal var store: ModelStore
+  @ObservationIgnored private var store: ModelStore
+  @ObservationIgnored private let statusService: StatusService
+
   internal var items: [String: Repo]
-  private let statusService: StatusService
 
   public init(
     _ repos: [Repo],
@@ -39,20 +40,18 @@ public protocol ModelServiceProvider: CommandCentre {
   ) {
     self.store = store ?? UbiquitousStore()
     self.statusService = statusService
-
-    var index: [String: Repo] = [:]
-    for repo in repos {
-      let id = repo.id
-      index[id] = repo
-    }
-
-   self.items = index
-    load()
-    self.store.onChange {
-      await statusService.update()
-    }
+    self.items = .init(uniqueKeysWithValues: repos.map { ($0.id, $0) })
+                      
+    statusService.connect(to: self)
+    modelChannel.log("Initialised with store: \(store)")
   }
 
+  public func startup() async {
+    await store.onChange { newValues in
+      await self.load(newValues: newValues)
+    }
+    modelChannel.log("Started")
+  }
   
   convenience init(statusService: StatusService, source: Source) {
     let store: ModelStore
@@ -60,49 +59,22 @@ public protocol ModelServiceProvider: CommandCentre {
       case .cloud: store = UbiquitousStore()
       case .resource(let name): store = BundleStore(key: name)
     }
-    
+
     self.init([], statusService: statusService, store: store)
   }
-  
+
   // MARK: Public
 
   public var count: Int {
     items.count
   }
 
-
-  public func load() {
-    modelChannel.log("Loading from \(store)")
-    var loadedRepos: [String: Repo] = [:]
-    for repoID in store.index {
-      if let repo = store.repo(forKey: repoID) {
-        loadedRepos[repoID] = repo
-      } else {
-        modelChannel.log("Missing repo data for \(repoID).")
-      }
-    }
-    items = loadedRepos
+  /// Cache our own copy of the items from the store.
+  private func load(newValues: ModelStore.Values) {
+    items = newValues
   }
-
-  public func save() {
-    modelChannel.log("Saving to \(store)")
-    var repoIDs: [String] = []
-    for (id, repo) in items {
-      if store.store(repo, forKey: id) {
-        repoIDs.append(id)
-      }
-    }
-
-    let oldRepoIDs = store.index
-    let removedIDs = Set(oldRepoIDs).subtracting(Set(repoIDs))
-    for removedID in removedIDs {
-      store.removeObject(forKey: removedID)
-      modelChannel.log("Removed repo data for \(removedID)")
-    }
-
-    store.index = repoIDs
-  }
-
+  
+  /// Return a repo from our cache.
   public func repo(withIdentifier id: String) -> Repo? {
     return items[id]
   }
@@ -134,6 +106,7 @@ public protocol ModelServiceProvider: CommandCentre {
     if update {
       modelChannel.log(items[repo.id] == nil ? "Added \(repo)" : "Updated \(repo)")
       items[repo.id] = repo
+      store.set(repo, forKey: repo.id)
     }
   }
 
