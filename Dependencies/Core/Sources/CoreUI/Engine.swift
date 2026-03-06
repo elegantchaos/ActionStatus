@@ -56,6 +56,7 @@ public let monitoringChannel = Channel("Monitoring")
     self.sheetService = SheetService()
     self.modelService = ModelService(
       statusService: statusService,
+      deviceIdentifier: ms.deviceIdentifier,
       source: ms.modelSource
     )
     self.settingsService = SettingsService()

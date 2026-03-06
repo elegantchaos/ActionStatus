@@ -32,14 +32,17 @@ public protocol ModelServiceProvider: CommandCentre {
   @ObservationIgnored private let statusService: StatusService
 
   internal var items: [String: Repo]
+  internal let deviceIdentifier: String?
 
   public init(
     _ repos: [Repo],
     statusService: StatusService,
+    deviceIdentifier: String?,
     store: ModelStore? = nil
   ) {
     self.store = store ?? UbiquitousStore()
     self.statusService = statusService
+    self.deviceIdentifier = deviceIdentifier
     self.items = .init(uniqueKeysWithValues: repos.map { ($0.id, $0) })
                       
     statusService.connect(to: self)
@@ -53,14 +56,18 @@ public protocol ModelServiceProvider: CommandCentre {
     modelChannel.log("Started")
   }
   
-  convenience init(statusService: StatusService, source: Source) {
+  convenience init(statusService: StatusService, deviceIdentifier: String?, source: Source) {
     let store: ModelStore
     switch source {
       case .cloud: store = UbiquitousStore()
       case .resource(let name): store = BundleStore(key: name)
     }
 
-    self.init([], statusService: statusService, store: store)
+    self.init(
+  [],
+  statusService: statusService,
+  deviceIdentifier: deviceIdentifier, store: store
+    )
   }
 
   // MARK: Public
@@ -173,9 +180,9 @@ internal extension ModelService {
             repo = addRepo(name: name, owner: owner)
           }
 
-          if repo?.name == containerName, let identifier = Device().identifier, let repo = repo {
-            remember(url: containerURL, forDevice: identifier, inRepo: repo)
-            modelChannel.log("Local path for \(repo.name) on machine \(identifier) is \(localGitFolderURL).")
+          if repo?.name == containerName, let device = deviceIdentifier, let repo = repo {
+            remember(url: containerURL, forDevice: device, inRepo: repo)
+            modelChannel.log("Local path for \(repo.name) on machine \(device) is \(localGitFolderURL).")
           }
         }
       }

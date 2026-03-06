@@ -9,11 +9,19 @@ import SwiftUI
 @MainActor struct PreviewContext {
 
   let model: ModelService
+  let status: StatusService
+  let metadata: MetadataService
   let settings: SettingsService
   
   @MainActor init(isEditing: Bool = true) {
-    let status = StatusService()
-    model = ModelService([], statusService: status, store: BundleStore(key: "TestModel"))
+    status = StatusService()
+    metadata = MetadataService()
+    model = ModelService(
+  [],
+  statusService: status,
+  deviceIdentifier: metadata.deviceIdentifier,
+  store: BundleStore(key: "TestModel")
+    )
     settings = SettingsService()
     settings.isEditing = isEditing
   }
@@ -26,6 +34,8 @@ import SwiftUI
     return
       view
       .environment(model)
+      .environment(status)
       .environment(settings)
+      .environment(metadata)
   }
 }

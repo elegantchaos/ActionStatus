@@ -10,6 +10,7 @@ import SwiftUI
 public struct EditView: View {
   let repo: Repo?
 
+  @Environment(MetadataService.self) var metadataService
   @Environment(LaunchService.self) private var launchService
   @Environment(\.dismiss) private var dismissAction
   @Environment(ModelService.self) var modelService
@@ -24,7 +25,7 @@ public struct EditView: View {
   @State var branches: String = ""
 
   public var body: some View {
-    let localPath = repo?.url(forDevice: Device().identifier)?.path ?? ""
+    let localPath = repo?.url(forDevice: metadataService.deviceIdentifier)?.path ?? ""
 
     return
       SheetView(title, shortTitle: shortTitle, cancelAction: dismiss, doneAction: done) {

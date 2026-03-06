@@ -41,7 +41,7 @@ struct RepoCellView: View {
       Label("Open Workflow In Github…", icon: .linkIcon)
     }
 
-    if let url = repo.url(forDevice: Device().identifier) {
+    if let url = repo.url(forDevice: metadataService.runtime.bundle.identifier) {
       Button(
         action: { handleReveal(url: url) },
         label: {
