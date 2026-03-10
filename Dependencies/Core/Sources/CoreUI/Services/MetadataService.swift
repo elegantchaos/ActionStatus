@@ -13,15 +13,15 @@ import Runtime
 public class MetadataService {
   @ObservationIgnored let runtime = Runtime()
   
-  var appName: String { runtime.bundle.name }
+  public var appName: String { runtime.bundle.name }
   
-  var isUITestingBuild: Bool { runtime.isUITestingBuild}
+  public var isUITestingBuild: Bool { runtime.isUITestingBuild}
   
-  var isSimulator: Bool { runtime.isSimulatorBuild }
+  public var isSimulator: Bool { runtime.isSimulatorBuild }
   
-  var deviceIdentifier: String? { runtime.deviceIdentifier }
+  public var deviceIdentifier: String? { runtime.deviceIdentifier }
   
-  var modelSource: ModelService.Source {
+  public var modelSource: ModelService.Source {
     if let name = runtime.environment(.testModel) {
       return .resource(name)
     } else if isSimulator || isUITestingBuild {

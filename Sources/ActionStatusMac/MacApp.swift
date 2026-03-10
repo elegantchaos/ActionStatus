@@ -25,11 +25,16 @@
 
 
     var body: some Scene {
-      WindowGroup {
+      Window(engine.metadataService.appName, id: "repos") {
         engine.rootView {
           ContentView()
         }
+        .windowDismissBehavior(.disabled)
       }
+      .windowStyle(.hiddenTitleBar)
+      .windowManagerRole(.principal)
+      .windowResizability(.contentMinSize)
+//      .windowToolbarStyle(.unified)
 
       Settings {
         PreferencesForm()
@@ -44,8 +49,8 @@
         CommandGroup(after: .newItem) {
           engine.button(AddLocalReposCommand())
         }
-        CommandGroup(before: .toolbar) {
-          engine.button(ToggleEditingCommand())
+        CommandGroup(after: .textEditing) {
+          engine.button(ToggleEditingCommand(settingsService: engine.settingsService))
         }
       }
 

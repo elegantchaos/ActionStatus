@@ -23,7 +23,7 @@ public protocol ModelServiceProvider: CommandCentre {
 @MainActor public class ModelService {
   public typealias RepoList = [Repo]
 
-  enum Source {
+  public enum Source {
     case cloud
     case resource(String)
   }

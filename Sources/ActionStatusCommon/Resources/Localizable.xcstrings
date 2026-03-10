@@ -1,6 +1,28 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "editing.start" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit Repo List"
+          }
+        }
+      }
+    },
+    "editing.stop" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop Editing"
+          }
+        }
+      }
+    },
     "editing.toggle" : {
       "extractionState" : "manual",
       "localizations" : {

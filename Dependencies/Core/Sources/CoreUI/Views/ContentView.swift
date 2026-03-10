@@ -7,48 +7,45 @@ import Observation
 import SwiftUI
 
 public struct ContentView: View {
-  @Environment(Engine.self) var engine
-  @Environment(SheetService.self) var sheetService
-  @Environment(SettingsService.self) var settingsService
   @Environment(MetadataService.self) var metadataService
-  
+
+#if os(iOS)
+    @Environment(Engine.self) var engine
+    @Environment(SettingsService.self) var settingsService
+  #endif
+
   public init() {
   }
 
   public var body: some View {
-    #if os(macOS)
-    RootView()
-      .sheetHost()
-    #else
-      NavigationStack {
-        RootView()
-          .navigationTitle(metadataService.appName)
-          #if !os(tvOS)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-              ToolbarItem(placement: .navigationBarLeading) {
-                if settingsService.isEditing {
-                  engine.button(ShowAddSheetCommand())
-                } else {
-                  engine.button(ShowPreferencesSheetCommand())
-                }
-              }
-
-              ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                  withAnimation {
-                    _ = settingsService.toggleEditing()
-                  }
-                }) {
-                  Text(settingsService.isEditing ? "Done" : "Edit")
-                }
-                .accessibility(identifier: "toggleEditing")
+    NavigationStack {
+      RootView()
+        .navigationTitle(metadataService.appName)
+        #if os(iOS)
+          .navigationBarTitleDisplayMode(.inline)
+          .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+              if settingsService.isEditing {
+                engine.button(ShowEditSheetCommand())
+              } else {
+                engine.button(ShowPreferencesSheetCommand())
               }
             }
-          #endif
-      }
-      .sheetHost()
-    #endif
+
+            ToolbarItem(placement: .navigationBarTrailing) {
+              Button(action: {
+                withAnimation {
+                  _ = settingsService.toggleEditing()
+                }
+              }) {
+                Text(settingsService.isEditing ? "Done" : "Edit")
+              }
+              .accessibility(identifier: "toggleEditing")
+            }
+          }
+        #endif
+    }
+    .sheetHost()
   }
 
 }

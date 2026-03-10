@@ -12,11 +12,18 @@ import Icons
 public struct ToggleEditingCommand: CommandWithUI {
   public let id = "editing.toggle"
   public let icon = Icon.editButtonIcon
+  public let settingsService: SettingsService
   public var shortcut: CommandShortcut? {
     .init("E", modifiers: [.command])
   }
 
-  public init() {}
+  public var name: String {
+    String(localized: settingsService.isEditing ? "editing.stop" : "editing.start")
+  }
+
+  public init(settingsService: SettingsService) {
+    self.settingsService = settingsService
+  }
 
   public func perform(centre: Engine) async throws {
     _ = centre.settingsService.toggleEditing()
@@ -64,7 +71,7 @@ public struct RevealLocalCommand: CommandWithUI {
 
     return status
   }
-  
+
   public func perform(centre: Engine) async throws {
     let deviceID = centre.metadataService.runtime.bundle.identifier
     if let url = repo.url(forDevice: deviceID) {
