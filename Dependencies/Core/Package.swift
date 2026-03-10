@@ -27,11 +27,11 @@ let package = Package(
     .package(path: "../../../JSONSession"),
     .package(path: "../../../Octoid"),
 
-    .package(path: "../Application"),
-    .package(path: "../Commands"),
-    .package(path: "../Icons"),
-    .package(path: "../Runtime"),
-    .package(path: "../Settings"),
+    .package(url: "https://github.com/elegantchaos/Application.git", from: "1.0.0"),
+    .package(url: "https://github.com/elegantchaos/Commands.git", from: "1.0.0"),
+    .package(url: "https://github.com/elegantchaos/Icons.git", from: "1.0.0"),
+    .package(url: "https://github.com/elegantchaos/Runtime.git", from: "1.0.0"),
+    .package(url: "https://github.com/elegantchaos/Settings.git", from: "1.0.0"),
   ],
   targets: [
     .target(

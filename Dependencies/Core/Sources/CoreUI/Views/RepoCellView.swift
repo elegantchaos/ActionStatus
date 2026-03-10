@@ -32,22 +32,9 @@ struct RepoCellView: View {
     Text("\(repo.name)")
 
     engine.button(ShowEditSheetCommand(repo: repo))
-
-    Button(action: handleShowRepo) {
-      Label("Open In Github…", icon: .linkIcon)
-    }
-
-    Button(action: handleShowWorkflow) {
-      Label("Open Workflow In Github…", icon: .linkIcon)
-    }
-
-    if let url = repo.url(forDevice: metadataService.runtime.bundle.identifier) {
-      Button(
-        action: { handleReveal(url: url) },
-        label: {
-          Label("Reveal In Finder…", icon: .linkIcon)
-        })
-    }
+    engine.button(ShowRepoCommand(repo: repo))
+    engine.button(ShowWorkflowCommand(repo: repo))
+    engine.button(RevealLocalCommand(repo: repo))
 
     Divider()
 
@@ -78,7 +65,7 @@ struct RepoCellView: View {
         .foregroundColor(.primary))
     } else {
       return AnyView(
-        Button(action: handleShowWorkflow) {
+        engine.button(ShowRepoCommand(repo: repo)) {
           HStack(alignment: .center, spacing: .padding) {
             Image(systemName: repo.badgeName)
               .foregroundColor(repo.statusColor)
@@ -103,14 +90,6 @@ struct RepoCellView: View {
         #endif
       )
     }
-  }
-
-  func handleShowRepo() {
-    launchService.open(url: repo.githubURL(for: .repo))
-  }
-
-  func handleShowWorkflow() {
-    launchService.open(url: repo.githubURL(for: .workflow))
   }
 
   func handleReveal(url: URL) {

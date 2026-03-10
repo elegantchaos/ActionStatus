@@ -14,20 +14,32 @@ public let refreshServiceChannel = Channel("Refresh Service")
 
 @Observable
 @MainActor public class RefreshService {
-  @ObservationIgnored @AppStorage(.testRefresh) var testRefresh
   @ObservationIgnored @AppStorage(.refreshInterval) var refreshInterval
   @ObservationIgnored @AppStorage(.githubUser) var githubUser
   @ObservationIgnored @AppStorage(.githubServer) var githubServer
 
+  let type: RefreshType
+  let modelService: ModelService
+  var refreshController: RefreshController? = nil
+
   init(model: ModelService, metadata: MetadataService) {
     self.modelService = model
-    self.metadata = metadata
+
+    if metadata.runtime.normalized(.testRefresh) == "random" {
+      self.type = .random
+    } else if metadata.isUITestingBuild {
+      self.type = .none
+    } else {
+      self.type = .normal
+    }
   }
 
-  let modelService: ModelService
-  let metadata: MetadataService
+  enum RefreshType {
+    case normal
+    case random
+    case none
+  }
 
-  public var refreshController: RefreshController? = nil
 
   func resetRefresh() {
     refreshServiceChannel.log("Reset")
@@ -50,35 +62,35 @@ public let refreshServiceChannel = Channel("Refresh Service")
   }
 
   func makeRefreshController() -> RefreshController? {
-    // disable refreshing for UI testing
-    guard !metadata.isUITestingBuild else { return nil }
-
-    if testRefresh {
-      return RandomisingRefreshController(model: modelService)
-    } else {
-      if let refresh = makeGithubRefreshController() {
-        return refresh
-      } else {
-        refreshChannel.log("Refresh is disabled until sign-in completes.")
+    switch type {
+      case .normal: return makeGithubRefreshController()
+      case .random: return RandomisingRefreshController(model: modelService)
+      case .none:
+        refreshChannel.log("Refresh is disabled.")
         return nil
-      }
     }
   }
 
   public func makeGithubRefreshController() -> RefreshController? {
-    guard !githubUser.isEmpty else {
-      githubChannel.log("No GitHub account configured.")
-      return nil
-    }
-
     do {
+      guard !githubUser.isEmpty else {
+        githubChannel.log("No GitHub account configured.")
+        return nil
+      }
+
       let token = try Keychain.default.password(for: githubUser, on: githubServer)
       guard !token.isEmpty else {
         githubChannel.log("No GitHub token configured.")
         return nil
       }
 
-      let controller = OctoidRefreshController(model: modelService, token: token, apiServer: githubServer, refreshInterval: refreshInterval.rate)
+      let controller = OctoidRefreshController(
+        model: modelService,
+        token: token,
+        apiServer: githubServer,
+        refreshInterval: refreshInterval.rate
+      )
+
       githubChannel.log("Using github refresh controller for \(githubUser)/\(githubServer)")
       return controller
     } catch {

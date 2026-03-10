@@ -7,11 +7,8 @@ import LoggerUI
 import SwiftUI
 
 struct DebugPrefsView: View {
-  @AppStorage(.testRefresh) var testRefresh
-
   var body: some View {
     PreferencesSection(title: "Debug") {
-      Toggle("Use test refresh controller", isOn: $testRefresh)
       LoggerChannelsView()
         .frame(minHeight: 220)
     }

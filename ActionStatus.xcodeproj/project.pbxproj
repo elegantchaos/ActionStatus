@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2237DD942F6065D000F17DE7 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2237DD932F6065D000F17DE7 /* Localizable.xcstrings */; };
+		2237DD952F6065D000F17DE7 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2237DD932F6065D000F17DE7 /* Localizable.xcstrings */; };
 		2257D7F72F4DAEAF00DBD569 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 2257D7F62F4DAEAF00DBD569 /* AppIcon.icon */; };
 		226D6C89247590AE00B54967 /* ScreenshotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */; };
 		22AA00132F45F20000AA0001 /* MobileApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22AA00092F45F10000AA0001 /* MobileApp.swift */; };
@@ -74,6 +76,7 @@
 		2218311F2F55C0E1002324B6 /* Settings */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Settings; path = Dependencies/Settings; sourceTree = "<group>"; };
 		2231B6762F52009700AB890D /* Runtime */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Runtime; path = Dependencies/Runtime; sourceTree = "<group>"; };
 		2231B69C2F5200D000AB890D /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Core; path = Dependencies/Core; sourceTree = "<group>"; };
+		2237DD932F6065D000F17DE7 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		2257D7F62F4DAEAF00DBD569 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		226D6C8524758F1500B54967 /* Screenshots.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Screenshots.xctestplan; sourceTree = "<group>"; };
 		226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotUITests.swift; sourceTree = "<group>"; };
@@ -291,6 +294,7 @@
 				8B430E9023F58E060050BF2A /* PreviewContent */,
 				22C8C7E12F585AB000856024 /* EmptyModel.json */,
 				22C8C7E42F585AC400856024 /* TestModel.json */,
+				2237DD932F6065D000F17DE7 /* Localizable.xcstrings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -491,6 +495,7 @@
 				22C8C7E52F585AC400856024 /* TestModel.json in Resources */,
 				8B430E9123F5947E0050BF2A /* Assets.xcassets in Resources */,
 				8B3E64B023EAE62E00B28168 /* Preview Assets.xcassets in Resources */,
+				2237DD942F6065D000F17DE7 /* Localizable.xcstrings in Resources */,
 				22C8C7E22F585AB000856024 /* EmptyModel.json in Resources */,
 			);
 		};
@@ -508,6 +513,7 @@
 			isa = PBXResourcesBuildPhase;
 			files = (
 				22C8C7E62F585AC400856024 /* TestModel.json in Resources */,
+				2237DD952F6065D000F17DE7 /* Localizable.xcstrings in Resources */,
 				8B430E8E23F58AE10050BF2A /* Assets.xcassets in Resources */,
 				8B430E8F23F58CEE0050BF2A /* Preview Assets.xcassets in Resources */,
 				22C8C7E32F585AB000856024 /* EmptyModel.json in Resources */,
@@ -658,6 +664,7 @@
 				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -714,6 +721,7 @@
 				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};

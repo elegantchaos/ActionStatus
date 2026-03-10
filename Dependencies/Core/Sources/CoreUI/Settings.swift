@@ -14,7 +14,6 @@ import Settings
   /// UserDefaults key for the setting that controls whether we register a global hotkey.
   static let showInMenu = AppSettingKey("ShowInMenu", defaultValue: true)
   static let showInDock = AppSettingKey("ShowInDock", defaultValue: true)
-  static let testRefresh = AppSettingKey("TestRefresh")
 
 }
 
