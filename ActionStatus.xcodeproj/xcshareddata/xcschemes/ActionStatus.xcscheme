@@ -81,6 +81,8 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      enableASanStackUseAfterReturn = "YES"
+      enableThreadSanitizer = "YES"
       enableUBSanitizer = "YES"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
@@ -98,6 +100,18 @@
             ReferencedContainer = "container:ActionStatus.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "TEST_MODEL"
+            value = "TestModel"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "TEST_REFRESH"
+            value = "random"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

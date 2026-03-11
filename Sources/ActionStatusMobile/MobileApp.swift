@@ -4,26 +4,32 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 #if os(iOS)
+import Application
   import CoreUI
   import SwiftUI
 
   @main
   struct MobileApp: App {
-    @UIApplicationDelegateAdaptor(MobileEngine.self) private var application
+    let engine: Engine
 
+    init() {
+      engine = Engine()
+      engine.standardLoop()
+    }
+    
     var body: some Scene {
       WindowGroup {
-        application.applyEnvironment(to: ContentView())
+        engine.rootView {
+          ContentView()
+        }
       }
       .commands {
         CommandGroup(replacing: .appSettings) {
-          Button("Preferences…", action: application.showPreferences)
-            .keyboardShortcut(",", modifiers: .command)
+          engine.button(ShowPreferencesSheetCommand())
         }
 
         CommandGroup(after: .newItem) {
-          Button("Add Local Repos", action: application.addLocalRepos)
-            .keyboardShortcut("o", modifiers: .command)
+          engine.button(AddLocalReposCommand())
         }
       }
     }

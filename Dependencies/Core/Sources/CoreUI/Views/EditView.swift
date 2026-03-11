@@ -10,9 +10,11 @@ import SwiftUI
 public struct EditView: View {
   let repo: Repo?
 
+  @Environment(MetadataService.self) var metadataService
+  @Environment(LaunchService.self) private var launchService
   @Environment(\.dismiss) private var dismissAction
-  @Environment(Model.self) var model
-  @Environment(ViewContext.self) var context
+  @Environment(ModelService.self) var modelService
+  @Environment(RefreshService.self) var refreshService
 
   var title: String { "\(shortTitle) Repository" }
   var shortTitle: String { return repo == nil ? "Add" : "Edit" }
@@ -23,7 +25,7 @@ public struct EditView: View {
   @State var branches: String = ""
 
   public var body: some View {
-    let localPath = repo?.url(forDevice: Device().identifier)?.path ?? ""
+    let localPath = repo?.url(forDevice: metadataService.deviceIdentifier)?.path ?? ""
 
     return
       SheetView(title, shortTitle: shortTitle, cancelAction: dismiss, doneAction: done) {
@@ -79,8 +81,8 @@ public struct EditView: View {
                   .lineLimit(1)
                   .truncationMode(.middle)
                 Spacer()
-                Button(action: { context.host.open(url: updatedRepo.githubURL(for: .repo)) }) {
-                  Image(systemName: context.linkIcon)
+                Button(action: { launchService.open(url: updatedRepo.githubURL(for: .repo)) }) {
+                  Image(icon: .linkIcon)
                     .foregroundColor(.gray)
                 }
               }
@@ -92,8 +94,8 @@ public struct EditView: View {
                   .lineLimit(1)
                   .truncationMode(.middle)
                 Spacer()
-                Button(action: { context.host.open(url: updatedRepo.githubURL(for: .workflow)) }) {
-                  Image(systemName: context.linkIcon)
+                Button(action: { launchService.open(url: updatedRepo.githubURL(for: .workflow)) }) {
+                  Image(icon: .linkIcon)
                     .foregroundColor(.gray)
                 }
               }
@@ -114,7 +116,7 @@ public struct EditView: View {
         }
       }
       .onAppear {
-        context.host.pauseRefresh()
+        refreshService.pauseRefresh()
         self.load()
       }
   }
@@ -132,7 +134,7 @@ public struct EditView: View {
   }
 
   func dismiss() {
-    context.host.resumeRefresh()
+    refreshService.resumeRefresh()
     dismissAction()
   }
 
@@ -151,7 +153,7 @@ public struct EditView: View {
   }
 
   func save() {
-    model.update(repo: updatedRepo)
+    modelService.update(repo: updatedRepo)
   }
 
   var updatedRepo: Repo {

@@ -12,30 +12,28 @@ See <https://actionstatus.elegantchaos.com/> for product context.
 - The codebase currently:
   - is Swift 5.x; migration to 6+ is desirable.
   - contains old UIKit/AppKit patterns; migration to cross-platform/SwiftUI is desirable.
+- Avoid duplicated code. Avoid duplicated logic. Avoid duplicated layout.
 
 ### Code placement
 
 - Keep shared logic in `Dependencies/Core/Sources/Core` when possible.
-- Keep platform-specific behavior in `Sources/ActionStatusMobile`, `Sources/ActionStatusTV`, and `Sources/ActionStatusMac`.
-
-### Required validation
-
-- Run `Extras/Scripts/validate-changes` after code edits.
+- Consider creating new library packages in `Dependencies/` to improve modularisation. 
+- Minimize the size of `Sources/ActionStatusMobile`, `Sources/ActionStatusTV`, and `Sources/ActionStatusMac`.
 
 ### Project references
 
 - `README.md`
 - `Settings.xcconfig`
 - `ActionStatus.xcodeproj/project.pbxproj`
-- Local guideline docs: `Extras/Documentation/Guidelines/README.md`
+- Reference to guideline docs in `Extras/Documentation/Guidelines/` for detailed instructions (start with `README.md`).
 
 ## Standard Rules
 
 ### Baseline methodology
 
-- Prefer red/green TDD unless impractical; otherwise follow the testing workflow and report gaps.
+- Use red/green TDD for non-UI code; create UI Previews for UI code.
 - Always write good code and keep behavior, tests, and docs aligned.
-- Apply KISS, YAGNI, DRY thoughtfully, explicit dependencies, composition over inheritance, command-query separation, least knowledge, structured concurrency, design by contract, and idempotency.
+- Apply KISS, YAGNI, DRY, explicit dependencies, composition over inheritance, command-query separation, least knowledge, structured concurrency, design by contract, and idempotency.
 
 Reference:
 - `Extras/Documentation/Guidelines/Principles.md`

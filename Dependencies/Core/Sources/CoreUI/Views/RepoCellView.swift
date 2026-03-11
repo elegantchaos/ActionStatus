@@ -8,138 +8,72 @@ import Runtime
 import SwiftUI
 
 struct RepoCellView: View {
-  @Environment(ViewContext.self) var context
-  @Environment(Model.self) var model
+  @Environment(LaunchService.self) private var launchService
+  @Environment(Engine.self) var engine
+  @Environment(MetadataService.self) var metadataService
+
+  @AppStorage(.displaySize) var displaySize
 
   let repo: Repo
   let selectable: Bool
   let namespace: Namespace.ID
+  let isSource: Bool
 
-  #if os(tvOS)
-    let focus: FocusState<Focus?>.Binding
-  #endif
+  let focus: FocusState<Focus?>.Binding
 
   var body: some View {
-    let cell = cell(for: repo)
-    return cell.contextMenu(menuItems: contextMenuContent)
+    engine.button(NavigateRepoCommand(repo: repo)) {
+      repoLabel()
+    }
+    .padding(cellPadding)
+    #if os(tvOS)
+      .buttonStyle(FadingFocusButtonStyle())
+      .focused(focus, equals: .repo(repo.id))
+    #else
+      .buttonStyle(.plain)
+    #endif
+    .font(displaySize.font)
+    .foregroundColor(.primary)
+    .contextMenu(menuItems: contextMenuContent)
   }
 
   @ViewBuilder
   func contextMenuContent() -> some View {
-    Text("\(repo.name)")
+    Label(repo.name, icon: .repoIcon)
 
-    Button(action: handleEdit) {
-      Label("Settings…", systemImage: context.editButtonIcon)
-        .accessibility(identifier: "editLabel")
-    }
-
-    Button(action: handleShowRepo) {
-      Label("Open In Github…", systemImage: context.linkIcon)
-    }
-
-    Button(action: handleShowWorkflow) {
-      Label("Open Workflow In Github…", systemImage: context.linkIcon)
-    }
-
-    if let url = repo.url(forDevice: Device().identifier) {
-      Button(
-        action: { handleReveal(url: url) },
-        label: {
-          Label("Reveal In Finder…", systemImage: context.linkIcon)
-        })
-    }
+    engine.button(ShowEditSheetCommand(repo: repo))
+    engine.button(ShowRepoCommand(repo: repo))
+    engine.button(ShowWorkflowCommand(repo: repo))
+    engine.button(RevealLocalCommand(repo: repo))
 
     Divider()
 
-    Button(action: handleDelete) {
-      Label("Delete", systemImage: context.deleteRepoIcon)
-    }
-    #if DEBUG
-
-      if !ProcessInfo.processInfo.environment.isTestingUI {
-        Divider()
-        Button(action: handleToggleState) {
-          Text("DEBUG: Advance State")
-        }
-      }
-    #endif
-  }
-
-  func cell(for repo: Repo) -> some View {
-    if selectable {
-      return AnyView(
-        HStack(alignment: .center, spacing: context.padding) {
-          Text(repo.name)
-            .allowsTightening(true)
-            .truncationMode(.middle)
-            .lineLimit(1)
-
-          Spacer()
-          Button(action: handleEdit) {
-            Image(systemName: context.editButtonIcon)
-          }
-          .accessibility(identifier: "editButton")
-          .foregroundColor(.black)
-        }
-        .matchedGeometryEffect(id: repo.id, in: namespace)
-        .padding(cellPadding)
-        .font(context.settings.displaySize.font)
-        .foregroundColor(.primary))
-    } else {
-      return AnyView(
-        Button(action: handleShowWorkflow) {
-          HStack(alignment: .center, spacing: context.padding) {
-            Image(systemName: repo.badgeName)
-              .foregroundColor(repo.statusColor)
-
-            Text(repo.name)
-              .allowsTightening(true)
-              .truncationMode(.middle)
-              .lineLimit(1)
-
-            Spacer()
-          }
-          .matchedGeometryEffect(id: repo.id, in: namespace)
-        }
-        .padding(cellPadding)
-        .font(context.settings.displaySize.font)
-        .foregroundColor(.primary)
-        #if os(tvOS)
-          .buttonStyle(FadingFocusButtonStyle())
-          .focused(focus, equals: .repo(repo.id))
-        #else
-          .buttonStyle(.plain)
-        #endif
-      )
-    }
-  }
-
-  func handleShowRepo() {
-    context.host.open(url: repo.githubURL(for: .repo))
-  }
-
-  func handleShowWorkflow() {
-    context.host.open(url: repo.githubURL(for: .workflow))
-  }
-
-  func handleEdit() {
-    context.presentedSheet = .editRepo(repo)
-  }
-
-  func handleDelete() {
-    model.remove(reposWithIDs: [repo.id])
-  }
-
-  func handleToggleState() {
-    if let newState = Repo.State(rawValue: (repo.state.rawValue + 1) % UInt(Repo.State.allCases.count)) {
-      model.update(repoWithID: repo.id, state: newState)
+    engine.button(RemoveReposCommand(ids: [repo.id]))
+    if metadataService.showDebugUI {
+      Divider()
+      engine.button(AdvanceStateCommand(repo: repo))
     }
   }
 
   func handleReveal(url: URL) {
     url.accessSecurityScopedResource { unlockedURL in
-      context.host.reveal(url: unlockedURL)
+      launchService.reveal(url: unlockedURL)
     }
+  }
+
+  func repoLabel() -> some View {
+    HStack(alignment: .center, spacing: .padding) {
+      Image(systemName: repo.badgeName)
+        .foregroundColor(repo.statusColor)
+
+      Text(repo.name)
+        .allowsTightening(true)
+        .truncationMode(.middle)
+        .lineLimit(1)
+
+      Spacer()
+    }
+    .matchedGeometryEffect(id: repo.id, in: namespace, isSource: isSource)
   }
 
   var cellPadding: CGFloat {

@@ -3,6 +3,7 @@
 ## Regenerated files
 
 - `AGENTS.md`
+- `Extras/Documentation/Guidelines/README.md`
 - `Extras/Documentation/Guidelines/Principles.md`
 - `Extras/Documentation/Guidelines/Testing.md`
 - `Extras/Documentation/Guidelines/Trusted Sources.md`
@@ -14,6 +15,7 @@
 ## Included modules
 
 - `instructions/COMMON.md` (compacted into `AGENTS.md` Standard Rules)
+- `instructions/README.md`
 - `instructions/Principles.md`
 - `instructions/Testing.md`
 - `instructions/Trusted Sources.md`
@@ -24,17 +26,17 @@
 
 ## Excluded modules
 
-- `instructions/languages/JavaScript.md` (no JS stack evidence)
+- `instructions/languages/JavaScript.md` (no JavaScript stack evidence)
 - `instructions/languages/Python.md` (no Python stack evidence)
 
 ## Detected stack assumptions
 
-- Swift codebase (`.swift` sources)
-- Swift package usage (`Dependencies/Core/Package.swift`, `Dependencies/Runtime/Package.swift`)
-- Xcode app project/workspace (`ActionStatus.xcodeproj`, `ActionStatus.xcworkspace`)
-- SwiftUI usage (`CoreUI` views and app entry points)
-- GitHub-integrated workflows (repo domain behavior and GitHub-related configuration/docs)
+- Swift codebase (`.swift` files across `Sources/`, `Dependencies/`, and `Tests/`)
+- Swift Package Manager usage (`Dependencies/*/Package.swift`)
+- Xcode app/workspace (`ActionStatus.xcodeproj`, `ActionStatus.xcworkspace`)
+- SwiftUI usage (`Dependencies/Core/Sources/CoreUI/Views/*.swift`, app entry points under `Sources/ActionStatus*`)
+- GitHub-centric workflows and integrations (project naming, docs, and `gh` workflow requirements)
 
 ## Unresolved local-vs-shared instruction conflicts
 
-- None found. Local rules (platform targets, code placement, required validation script) were preserved.
+- None found. Local constraints (platform targets, code placement, required validation script) were preserved.

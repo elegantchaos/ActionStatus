@@ -3,108 +3,102 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Commands
+import CommandsUI
 import Core
 import DictionaryCoding
+import Foundation
 import Logger
 import Observation
 import Runtime
-import SwiftUI
 
 public let modelChannel = Channel("com.elegantchaos.actionstatus.Model")
+let githubChannel = Channel("com.elegantchaos.Github")
+
+public protocol ModelServiceProvider: CommandCentre {
+  var modelService: ModelService { get }
+}
 
 @Observable
-public class Model {
+@MainActor public class ModelService {
   public typealias RepoList = [Repo]
 
-  internal let store: NSUbiquitousKeyValueStore
-  internal let key: String = "State"
-  internal var items: [UUID: Repo]
+  public enum Source {
+    case cloud
+    case resource(String)
+  }
+
+  @ObservationIgnored private var store: ModelStore
+  @ObservationIgnored private let statusService: StatusService
+
+  internal var items: [String: Repo]
+  internal let deviceIdentifier: String?
+
+  public init(
+    _ repos: [Repo],
+    statusService: StatusService,
+    deviceIdentifier: String?,
+    store: ModelStore? = nil
+  ) {
+    self.store = store ?? UbiquitousStore()
+    self.statusService = statusService
+    self.deviceIdentifier = deviceIdentifier
+    self.items = .init(uniqueKeysWithValues: repos.map { ($0.id, $0) })
+                      
+    statusService.connect(to: self)
+    modelChannel.log("Initialised with \(store!)")
+  }
+
+  public func startup() async {
+    await store.onChange { newValues in
+      await self.load(newValues: newValues)
+    }
+    modelChannel.log("Started")
+  }
+  
+  convenience init(statusService: StatusService, deviceIdentifier: String?, source: Source) {
+    let store: ModelStore
+    switch source {
+      case .cloud: store = UbiquitousStore()
+      case .resource(let name): store = BundleStore(key: name)
+    }
+
+    self.init(
+  [],
+  statusService: statusService,
+  deviceIdentifier: deviceIdentifier, store: store
+    )
+  }
+
+  // MARK: Public
 
   public var count: Int {
     items.count
   }
 
-
-  public init(_ repos: [Repo], store: NSUbiquitousKeyValueStore = NSUbiquitousKeyValueStore.default) {
-    self.store = store
-    store.synchronize()
-
-    var index: [UUID: Repo] = [:]
-    for repo in repos {
-      let id = repo.id
-      index[id] = repo
-    }
-
-    self.items = index
-    NotificationCenter.default.addObserver(self, selector: #selector(modelChangedExternally), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: NSUbiquitousKeyValueStore.default)
+  /// Cache our own copy of the items from the store.
+  private func load(newValues: ModelStore.Values) {
+    items = newValues
   }
-
-  // MARK: Public
-
-  public func load(fromDefaultsKey key: String) {
-    modelChannel.log("Loading from key \(key)")
-    let decoder = Repo.dictionaryDecoder
-    if let repoIDs = store.array(forKey: key) as? [String] {
-      var loadedRepos: [UUID: Repo] = [:]
-      for repoID in repoIDs {
-        if let dict = store.dictionary(forKey: repoID), let id = UUID(uuidString: repoID) {
-          do {
-            let repo = try decoder.decode(Repo.self, from: dict)
-            loadedRepos[id] = repo
-          } catch {
-            modelChannel.log("Failed to restore repo data from \(dict).\n\nError:\(error)")
-          }
-        } else {
-          modelChannel.log("Missing repo data for \(repoID).")
-        }
-      }
-      items = loadedRepos
-    }
-
-  }
-
-  public func save(toDefaultsKey key: String) {
-    modelChannel.log("Saving to key \(key)")
-    let encoder = DictionaryEncoder()
-    var repoIDs: [String] = []
-    for (id, repo) in items {
-      let repoID = id.uuidString
-      if let dict = try? encoder.encode(repo) as [String: Any] {
-        store.set(dict, forKey: repoID)
-        repoIDs.append(repoID)
-      }
-    }
-
-    if let oldRepoIDs = store.array(forKey: key) as? [String] {
-      let removedIDs = Set(oldRepoIDs).subtracting(Set(repoIDs))
-      for removedID in removedIDs {
-        store.removeObject(forKey: removedID)
-        modelChannel.log("Removed repo data for \(removedID)")
-      }
-    }
-
-    store.set(repoIDs, forKey: key)
-  }
-
-  public func repo(withIdentifier id: UUID) -> Repo? {
+  
+  /// Return a repo from our cache.
+  public func repo(withIdentifier id: String) -> Repo? {
     return items[id]
   }
 
-  public func repos(sortedBy mode: SortMode) -> [Repo] {
-    return mode.sort(items.values)
-  }
-
-  public func update(repoWithID id: UUID, state: Repo.State) {
+  public func updateState(_ state: Repo.State, forRepoWithID id: String, ) {
     assert(Thread.isMainThread)
     if var repo = items[id] {
-      modelChannel.log("Updated state of \(repo) to \(state)")
+      modelChannel.log("\(repo) changed to \(state)")
       repo.state = state
       switch state {
         case .passing: repo.lastSucceeded = Date()
         case .failing, .partiallyFailing: repo.lastFailed = Date()
         default: break
       }
-      items[id] = repo
+      update(repo: repo)
+    } else {
+      modelChannel.log("Unknown repo \(id) changed to \(state)")
     }
   }
 
@@ -121,6 +115,7 @@ public class Model {
     if update {
       modelChannel.log(items[repo.id] == nil ? "Added \(repo)" : "Updated \(repo)")
       items[repo.id] = repo
+      store.set(repo, forKey: repo.id)
     }
   }
 
@@ -160,7 +155,7 @@ public class Model {
     }
   }
 
-  public func remove(reposWithIDs: [UUID]) {
+  public func remove(reposWithIDs: [String]) {
     for id in reposWithIDs {
       items.removeValue(forKey: id)
     }
@@ -169,16 +164,11 @@ public class Model {
 
 // MARK: Internal
 
-internal extension Model {
-
-  @objc func modelChangedExternally() {
-    load(fromDefaultsKey: key)
-  }
-
+internal extension ModelService {
   func add(fromGitRepo localGitFolderURL: URL, detector: NSDataDetector) {
     let containerURL = localGitFolderURL.deletingLastPathComponent()
     let containerName = containerURL.lastPathComponent
-    if let config = try? String(contentsOf: localGitFolderURL.appendingPathComponent("config")) {
+    if let config = try? String(contentsOf: localGitFolderURL.appendingPathComponent("config"), encoding: .utf8) {
       let tweaked = config.replacingOccurrences(of: "git@github.com:", with: "https://github.com/")
       let range = NSRange(location: 0, length: tweaked.count)
       for result in detector.matches(in: tweaked, options: [], range: range) {
@@ -190,9 +180,9 @@ internal extension Model {
             repo = addRepo(name: name, owner: owner)
           }
 
-          if repo?.name == containerName, let identifier = Device().identifier, let repo = repo {
-            remember(url: containerURL, forDevice: identifier, inRepo: repo)
-            modelChannel.log("Local path for \(repo.name) on machine \(identifier) is \(localGitFolderURL).")
+          if repo?.name == containerName, let device = deviceIdentifier, let repo = repo {
+            remember(url: containerURL, forDevice: device, inRepo: repo)
+            modelChannel.log("Local path for \(repo.name) on machine \(device) is \(localGitFolderURL).")
           }
         }
       }

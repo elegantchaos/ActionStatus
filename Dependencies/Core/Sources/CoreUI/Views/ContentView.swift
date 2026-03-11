@@ -7,70 +7,42 @@ import Observation
 import SwiftUI
 
 public struct ContentView: View {
-  @Environment(ViewContext.self) var context
+  @Environment(MetadataService.self) var metadataService
+
+#if os(iOS)
+    @Environment(Engine.self) var engine
+    @Environment(SettingsService.self) var settingsService
+  #endif
 
   public init() {
   }
 
   public var body: some View {
-    @Bindable var context = context
-
-    #if os(macOS)
-      RootView()
-        .sheet(item: $context.presentedSheet) { sheet in
-          sheetView(for: sheet)
-        }
-    #else
-      NavigationStack {
-        RootView()
-          .navigationTitle(Engine.shared.info.name)
-          #if !os(tvOS)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-              ToolbarItem(placement: .navigationBarLeading) {
-                if context.settings.isEditing {
-                  Button(action: { context.presentedSheet = .editRepo(nil) }) {
-                    Text("Add")
-                  }
-                  .accessibility(identifier: "addButton")
-                  .foregroundColor(.black)
-                } else {
-                  Button(action: { context.presentedSheet = .preferences }) {
-                    Image(systemName: context.preferencesIcon)
-                  }
-                  .accessibility(label: Text("Settings"))
-                  .accessibility(identifier: "preferencesButton")
-                }
-              }
-
-              ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                  withAnimation {
-                    context.settings.isEditing.toggle()
-                  }
-                }) {
-                  Text(context.settings.isEditing ? "Done" : "Edit")
-                }
-                .accessibility(identifier: "toggleEditing")
+    NavigationStack {
+      ReposView()
+        .navigationTitle(metadataService.appName)
+        #if os(iOS)
+          .navigationBarTitleDisplayMode(.inline)
+          .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+              if settingsService.isEditing {
+                engine.button(ShowEditSheetCommand())
+              } else {
+                engine.button(ShowPreferencesSheetCommand())
               }
             }
-          #endif
-      }
-      .sheet(item: $context.presentedSheet) { sheet in
-        sheetView(for: sheet)
-      }
-    #endif
+
+            engine
+              .toolbarItem(
+                ToggleEditingCommand(settingsService: engine.settingsService),
+                placement: .navigationBarTrailing
+              )
+          }
+        #endif
+    }
+    .sheetHost()
   }
 
-  @ViewBuilder
-  func sheetView(for sheet: PresentedSheet) -> some View {
-    switch sheet {
-      case .editRepo(let repo):
-        EditView(repo: repo)
-      case .preferences:
-        PreferencesView()
-    }
-  }
 }
 
 struct ContentView_Previews: PreviewProvider {

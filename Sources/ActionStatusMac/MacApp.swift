@@ -7,86 +7,59 @@
   import Core
   import CoreUI
   import SwiftUI
-
-  private extension Repo.State {
-    var symbolName: String {
-      switch self {
-        case .unknown: return "questionmark.circle"
-        case .dormant: return "moon.zzz"
-        case .passing: return "checkmark.circle"
-        case .failing: return "xmark.circle"
-        case .partiallyFailing: return "xmark.circle"
-        case .queued: return "clock.arrow.circlepath"
-        case .running: return "arrow.triangle.2.circlepath"
-      }
-    }
-  }
-
-  private struct StatusMenuContent: View {
-    let application: MacEngine
-    let status: RepoState
-
-    var body: some View {
-      ForEach(status.sortedRepos) { repo in
-        Button {
-          application.openWorkflow(for: repo)
-        } label: {
-          Label(repo.name, systemImage: repo.state.symbolName)
-        }
-      }
-
-      Divider()
-
-      Button("Show \(application.info.name)") {
-        application.showWindow(nil)
-      }
-      SettingsLink {
-        Text("Settings…")
-      }
-      Button("Add Local Repos", action: application.addLocalRepos)
-        .keyboardShortcut("o", modifiers: .command)
-      Button("Quit \(application.info.name)") {
-        application.handleQuit(nil)
-      }
-      .keyboardShortcut("q", modifiers: .command)
-    }
-  }
-
-  private struct StatusMenuLabel: View {
-    let application: MacEngine
-    let status: RepoState
-
-    var body: some View {
-      let _ = status.combinedState
-      Image(systemName: application.statusSymbolName())
-    }
-  }
+  import Settings
+  import Application
 
   @main
   struct MacApp: App {
-    @NSApplicationDelegateAdaptor(MacEngine.self) private var application
-    @AppStorage(.showInMenuKey) private var showInMenu = true
+    @NSApplicationDelegateAdaptor(MacDelegate.self) private var delegate
+
+    @AppStorage(.showInMenu) private var showInMenu
+
+    let engine: Engine
+
+    init() {
+      engine = Engine()
+      engine.standardLoop()
+    }
+
 
     var body: some Scene {
-      WindowGroup {
-        application.applyEnvironment(to: ContentView())
+      Window(engine.metadataService.appName, id: "repos") {
+        engine.rootView {
+          ContentView()
+        }
+        .windowDismissBehavior(.disabled)
       }
+      .windowStyle(.hiddenTitleBar)
+      .windowManagerRole(.principal)
+      .windowResizability(.contentMinSize)
+//      .windowToolbarStyle(.unified)
+
       Settings {
-        application.applyEnvironment(to: AppSettingsView())
+        PreferencesForm()
+          .modifier(engine.runningInjector)
+          .frame(maxWidth: .infinity, alignment: .center)
+          .padding(.horizontal, 12)
+          .padding(.vertical, 16)
       }
       .defaultSize(width: 720, height: 620)
       .windowResizability(.automatic)
       .commands {
         CommandGroup(after: .newItem) {
-          Button("Add Local Repos", action: application.addLocalRepos)
-            .keyboardShortcut("o", modifiers: .command)
+          engine.button(AddLocalReposCommand())
+        }
+        CommandGroup(after: .textEditing) {
+          engine.button(ToggleEditingCommand(settingsService: engine.settingsService))
         }
       }
 
       MenuBarExtra(isInserted: $showInMenu) {
-        StatusMenuContent(application: application, status: application.status)
+          StatusMenuContent()
+          .modifier(engine.startupInjector)
       } label: {
-        StatusMenuLabel(application: application, status: application.status)
+          StatusMenuLabel()
+          .modifier(engine.startupInjector)
       }
     }
   }

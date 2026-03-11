@@ -6,39 +6,41 @@
 import SwiftUI
 
 public struct RepoListView: View {
-  @Environment(Model.self) var model
-  @Environment(ViewContext.self) var context
-  @Environment(RepoState.self) var status
+  @Environment(Engine.self) var engine
+  @Environment(StatusService.self) var status
+  @Environment(SettingsService.self) private var settingsService
+  @AppStorage(.displaySize) var displaySize
 
   let namespace: Namespace.ID
 
-  #if os(tvOS)
-    let focus: FocusState<Focus?>.Binding
-  #endif
+  let focus: FocusState<Focus?>.Binding
 
   public var body: some View {
     let list = List {
       ForEach(status.sortedRepos) { repo in
-        #if os(tvOS)
-          RepoCellView(repo: repo, selectable: true, namespace: namespace, focus: focus)
-        #else
-          RepoCellView(repo: repo, selectable: true, namespace: namespace)
-        #endif
+        RepoCellView(
+          repo: repo,
+          selectable: true,
+          namespace: namespace,
+          isSource: settingsService.isEditing,
+          focus: focus
+        )
       }
       .onDelete(perform: delete)
     }
-    .environment(\.defaultMinListRowHeight, context.settings.displaySize.rowHeight)
+    .buttonStyle(.borderless)
+    .environment(\.defaultMinListRowHeight, displaySize.rowHeight)
 
     #if os(macOS)
       return list
     #else
-      return list.environment(\.editMode, .constant(context.settings.isEditing ? .active : .inactive))
+      return list.environment(\.editMode, .constant(settingsService.isEditing ? .active : .inactive))
     #endif
   }
 
   func delete(at offsets: IndexSet) {
     let ids = status.repoIDs(atOffets: offsets)
-    model.remove(reposWithIDs: ids)
+    Task { try? await engine.perform(RemoveReposCommand(ids: ids)) }
   }
 }
 

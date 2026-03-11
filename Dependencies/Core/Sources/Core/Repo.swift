@@ -7,12 +7,12 @@ import DictionaryCoding
 import Files
 import Foundation
 
-private extension URL {
+nonisolated private extension URL {
   var bookmarkKey: String { "bookmark:\(absoluteURL.path)" }
 }
 
-public struct Repo: Identifiable, Equatable, Hashable {
-  public enum State: UInt, Codable, Comparable, CaseIterable {
+nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
+  public enum State: UInt, Codable, Comparable, CaseIterable, Sendable {
     case unknown = 0
     case passing = 1
     case failing = 2
@@ -40,7 +40,7 @@ public struct Repo: Identifiable, Equatable, Hashable {
 
   public typealias LocalPathDictionary = [String: String]
 
-  public struct WorkflowSelection: Codable, Hashable, Identifiable {
+  public struct WorkflowSelection: Codable, Hashable, Identifiable, Sendable {
     public var workflowID: Int?
     public var name: String
     public var path: String
@@ -83,7 +83,7 @@ public struct Repo: Identifiable, Equatable, Hashable {
     }
   }
 
-  public let id: UUID
+  public let id: String
   public var name: String
   public var owner: String
   public var workflow: String
@@ -95,7 +95,7 @@ public struct Repo: Identifiable, Equatable, Hashable {
   public var lastSucceeded: Date?
 
   public init() {
-    id = UUID()
+    id = UUID().uuidString
     name = ""
     owner = ""
     workflow = "Tests"
@@ -105,8 +105,8 @@ public struct Repo: Identifiable, Equatable, Hashable {
     paths = [:]
   }
 
-  public init(_ name: String, owner: String, workflow: String, id: UUID? = nil, state: State = .unknown, branches: [String] = []) {
-    self.id = id ?? UUID()
+  public init(_ name: String, owner: String, workflow: String, id: String? = nil, state: State = .unknown, branches: [String] = []) {
+    self.id = id ?? UUID().uuidString
     self.name = name
     self.owner = owner
     self.workflow = workflow
@@ -240,4 +240,10 @@ public struct Repo: Identifiable, Equatable, Hashable {
 }
 
 extension Repo: Codable {
+}
+
+extension Repo: TypedDebugDescription {
+  public var debugLabel: String {
+    "\(owner)/\(name)".lowercased()
+  }
 }

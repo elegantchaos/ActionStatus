@@ -5,7 +5,7 @@
 
 import Foundation
 
-public enum RefreshRate: Int, CaseIterable, Equatable {
+public enum RefreshRate: Int, CaseIterable, Equatable, Sendable {
   case automatic = 0
   case quick = 30
   case minute = 60

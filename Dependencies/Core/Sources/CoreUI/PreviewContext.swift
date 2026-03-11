@@ -6,25 +6,36 @@
 import Core
 import SwiftUI
 
-struct PreviewContext {
+@MainActor struct PreviewContext {
 
-  let model: TestModel
-  let state: ViewContext
-
-  init(isEditing: Bool = true) {
-    model = TestModel()
-    state = ViewContext(host: PreviewHost())
-    state.settings.isEditing = isEditing
+  let model: ModelService
+  let status: StatusService
+  let metadata: MetadataService
+  let settings: SettingsService
+  
+  @MainActor init(isEditing: Bool = true) {
+    status = StatusService()
+    metadata = MetadataService()
+    model = ModelService(
+  [],
+  statusService: status,
+  deviceIdentifier: metadata.deviceIdentifier,
+  store: BundleStore(key: "TestModel")
+    )
+    settings = SettingsService()
+    settings.isEditing = isEditing
   }
 
   var testRepo: Repo {
-    model.repos(sortedBy: .name).first!
+    SortMode.name.sort(model.items.values).first!
   }
 
   func inject<Content>(into view: Content) -> some View where Content: View {
     return
       view
       .environment(model)
-      .environment(state)
+      .environment(status)
+      .environment(settings)
+      .environment(metadata)
   }
 }
