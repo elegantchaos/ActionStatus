@@ -53,6 +53,7 @@ public class SettingsService {
 
 public extension UserDefaults {
   /// Returns the configured repository navigation mode for the specified click trigger.
+  @MainActor
   func repoNavigationMode(for trigger: NavigationTrigger) -> NavigationMode {
     NavigationMode.resolve(
       for: trigger,

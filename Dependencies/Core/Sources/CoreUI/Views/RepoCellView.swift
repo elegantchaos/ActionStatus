@@ -49,7 +49,7 @@ public struct RepoCellView: View {
     #else
       .buttonStyle(.plain)
     #endif
-    .disabled(commander.shouldDisable(NavigateRepoCommand(repo: repo, trigger: navigationTrigger)))
+    .disabled(commander.shouldDisable(navigationCommand(for: .primaryClick)))
     .font(displaySize.font)
     .foregroundColor(.primary)
     .contextMenu(menuItems: contextMenuContent)
@@ -59,7 +59,12 @@ public struct RepoCellView: View {
   func performNavigation() {
     // TODO: Extract repo navigation rules into a NavigationService so trigger handling
     // and destination selection are explicit and easier to evolve.
-    commander.performWithoutWaiting(NavigateRepoCommand(repo: repo, trigger: navigationTrigger))
+    commander.performWithoutWaiting(navigationCommand(for: navigationTrigger))
+  }
+
+  /// Builds the navigation command for the specified click trigger.
+  func navigationCommand(for trigger: NavigationTrigger) -> NavigateRepoCommand {
+    NavigateRepoCommand(repo: repo, trigger: trigger)
   }
 
   @ViewBuilder
