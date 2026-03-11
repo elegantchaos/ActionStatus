@@ -21,8 +21,19 @@ struct RepoCellView: View {
   let focus: FocusState<Focus?>.Binding
 
   var body: some View {
-    let cell = cell(for: repo)
-    return cell.contextMenu(menuItems: contextMenuContent)
+    engine.button(NavigateRepoCommand(repo: repo)) {
+      repoLabel()
+    }
+    .padding(cellPadding)
+    #if os(tvOS)
+      .buttonStyle(FadingFocusButtonStyle())
+      .focused(focus, equals: .repo(repo.id))
+    #else
+      .buttonStyle(.plain)
+    #endif
+    .font(displaySize.font)
+    .foregroundColor(.primary)
+    .contextMenu(menuItems: contextMenuContent)
   }
 
   @ViewBuilder
@@ -41,32 +52,6 @@ struct RepoCellView: View {
       Divider()
       engine.button(AdvanceStateCommand(repo: repo))
     }
-  }
-
-  func cell(for repo: Repo) -> some View {
-    Group {
-      if selectable {
-        HStack(alignment: .center, spacing: .padding) {
-          repoLabel()
-          engine.button(ShowEditSheetCommand(repo: repo))
-            .labelStyle(.iconOnly)
-        }
-        .padding(cellPadding)
-      } else {
-        engine.button(ShowRepoCommand(repo: repo)) {
-          repoLabel()
-        }
-        .padding(cellPadding)
-        #if os(tvOS)
-          .buttonStyle(FadingFocusButtonStyle())
-          .focused(focus, equals: .repo(repo.id))
-        #else
-          .buttonStyle(.plain)
-        #endif
-      }
-    }
-    .font(displaySize.font)
-    .foregroundColor(.primary)
   }
 
   func handleReveal(url: URL) {
@@ -89,7 +74,7 @@ struct RepoCellView: View {
     }
     .matchedGeometryEffect(id: repo.id, in: namespace)
   }
-  
+
   var cellPadding: CGFloat {
     #if os(tvOS)
       return 0

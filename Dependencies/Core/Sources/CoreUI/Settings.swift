@@ -26,10 +26,7 @@ import Settings
 }
 
 @MainActor public extension AppSettingKey where Value == NavigationMode {
-  static let navigationMode = AppSettingKey(
-    "NavigationMode",
-    defaultValue: .edit
-  )
+  static let navigationMode = AppSettingKey("NavigationMode", defaultValue: .edit)
 }
 
 @MainActor public extension AppSettingKey where Value == DisplaySize {

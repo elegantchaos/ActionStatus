@@ -81,3 +81,22 @@ public struct RevealLocalCommand: CommandWithUI {
     }
   }
 }
+
+/// Command which opens the project on the web (eg in Github)
+public struct NavigateRepoCommand: CommandWithUI {
+  public let id = "navigate.repo"
+  public let icon = Icon.showRepoIcon
+  let repo: Repo
+  
+  public func perform(centre: Engine) async throws {
+    let mode = UserDefaults.standard.value(forKey: .navigationMode)
+    switch mode {
+      case .edit:
+        centre.sheetService.showing = .editRepo(repo)
+      case .viewRepo:
+        centre.launchService.open(url: repo.githubURL(for: .repo))
+      case .viewWorkflows:
+        centre.launchService.open(url: repo.githubURL(for: .workflow))
+    }
+  }
+}

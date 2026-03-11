@@ -12,36 +12,27 @@ public struct PreferencesForm: View {
 
   public init() {
   }
-  
+
   public var body: some View {
     List {
-#if os(macOS)
       ConnectionPrefsView(token: settingsService.readToken())
-        .listRowSeparator(.visible, edges: .bottom)
-        .listSectionSeparator(.hidden)
+        .navigationPrefsStyle()
+      NavigationPrefsView()
+        .navigationPrefsStyle()
       RefreshPrefsView()
-        .listRowSeparator(.visible, edges: .bottom)
-        .listSectionSeparator(.hidden)
+        .navigationPrefsStyle()
       DisplayPrefsView()
-        .listRowSeparator(.visible, edges: .bottom)
-        .listSectionSeparator(.hidden)
+        .navigationPrefsStyle()
       DebugPrefsView()
-        .listRowSeparator(.visible, edges: .bottom)
-        .listSectionSeparator(.hidden)
-#else
-      ConnectionPrefsView(token: settingsService.readToken())
-      RefreshPrefsView()
-      DisplayPrefsView()
-      DebugPrefsView()
-#if os(iOS)
-        .listStyle(.insetGrouped)
-#endif
-#endif
+        .navigationPrefsStyle()
     }
+    #if os(iOS)
+      .listStyle(.insetGrouped)
+    #endif
     .onAppear(perform: handleAppear)
     .onDisappear(perform: handleDisappear)
   }
-  
+
   func handleAppear() {
     refreshService.pauseRefresh()
   }
@@ -51,6 +42,22 @@ public struct PreferencesForm: View {
   }
 
 
+}
+
+struct NavigationPrefsStyleModifier: ViewModifier {
+  func body(content: Content) -> some View {
+    #if os(macOS)
+      content
+    #else
+      content.listStyle(.insetGrouped)
+    #endif
+  }
+}
+
+extension View {
+  func navigationPrefsStyle() -> some View {
+    modifier(NavigationPrefsStyleModifier())
+  }
 }
 
 // MARK: - Previews
