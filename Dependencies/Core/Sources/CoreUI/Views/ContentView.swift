@@ -6,11 +6,12 @@
 import Observation
 import SwiftUI
 
+/// Main content view for the ActionStatus application.
 public struct ContentView: View {
   @Environment(MetadataService.self) var metadataService
 
-#if os(iOS)
-    @Environment(Engine.self) var engine
+  #if os(iOS)
+    @Environment(ActionStatusCommander.self) var commander
     @Environment(SettingsService.self) var settingsService
   #endif
 
@@ -26,27 +27,19 @@ public struct ContentView: View {
           .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
               if settingsService.isEditing {
-                engine.button(ShowEditSheetCommand())
+                commander.button(ShowEditSheetCommand())
               } else {
-                engine.button(ShowPreferencesSheetCommand())
+                commander.button(ShowPreferencesSheetCommand())
               }
             }
 
-            engine
-              .toolbarItem(
-                ToggleEditingCommand(settingsService: engine.settingsService),
-                placement: .navigationBarTrailing
-              )
+            commander.toolbarItem(
+              ToggleEditingCommand(settingsService: commander.settingsService),
+              placement: .navigationBarTrailing
+            )
           }
         #endif
     }
     .sheetHost()
-  }
-
-}
-
-struct ContentView_Previews: PreviewProvider {
-  static var previews: some View {
-    ContentView()
   }
 }

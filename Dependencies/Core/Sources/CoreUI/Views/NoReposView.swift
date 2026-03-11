@@ -5,8 +5,9 @@
 
 import SwiftUI
 
+/// Empty-state view shown when no repositories are configured.
 public struct NoReposView: View {
-  @Environment(Engine.self) var engine
+  @Environment(ActionStatusCommander.self) var commander
 
   public init() {
   }
@@ -33,7 +34,7 @@ public struct NoReposView: View {
         .fixedSize(horizontal: false, vertical: true)
         Spacer()
       #else
-      engine.button(AddRepoCommand()) {
+        commander.button(AddRepoCommand()) {
           Text("Configure a repo to begin monitoring it.")
         }
       #endif

@@ -7,9 +7,9 @@ import Core
 import Runtime
 import SwiftUI
 
-struct RepoCellView: View {
-  @Environment(LaunchService.self) private var launchService
-  @Environment(Engine.self) var engine
+/// Cell view that renders a repository and its primary status affordances.
+public struct RepoCellView: View {
+  @Environment(ActionStatusCommander.self) var commander
   @Environment(MetadataService.self) var metadataService
 
   @AppStorage(.displaySize) var displaySize
@@ -18,11 +18,25 @@ struct RepoCellView: View {
   let selectable: Bool
   let namespace: Namespace.ID
   let isSource: Bool
-
   let focus: FocusState<Focus?>.Binding
 
-  var body: some View {
-    engine.button(NavigateRepoCommand(repo: repo)) {
+  /// Creates a repository cell view.
+  public init(
+    repo: Repo,
+    selectable: Bool,
+    namespace: Namespace.ID,
+    isSource: Bool = true,
+    focus: FocusState<Focus?>.Binding
+  ) {
+    self.repo = repo
+    self.selectable = selectable
+    self.namespace = namespace
+    self.isSource = isSource
+    self.focus = focus
+  }
+
+  public var body: some View {
+    commander.button(NavigateRepoCommand(repo: repo)) {
       repoLabel()
     }
     .padding(cellPadding)
@@ -41,23 +55,17 @@ struct RepoCellView: View {
   func contextMenuContent() -> some View {
     Label(repo.name, icon: .repoIcon)
 
-    engine.button(ShowEditSheetCommand(repo: repo))
-    engine.button(ShowRepoCommand(repo: repo))
-    engine.button(ShowWorkflowCommand(repo: repo))
-    engine.button(RevealLocalCommand(repo: repo))
+    commander.button(ShowEditSheetCommand(repo: repo))
+    commander.button(ShowRepoCommand(repo: repo))
+    commander.button(ShowWorkflowCommand(repo: repo))
+    commander.button(RevealLocalCommand(repo: repo))
 
     Divider()
 
-    engine.button(RemoveReposCommand(ids: [repo.id]))
+    commander.button(RemoveReposCommand(ids: [repo.id]))
     if metadataService.showDebugUI {
       Divider()
-      engine.button(AdvanceStateCommand(repo: repo))
-    }
-  }
-
-  func handleReveal(url: URL) {
-    url.accessSecurityScopedResource { unlockedURL in
-      launchService.reveal(url: unlockedURL)
+      commander.button(AdvanceStateCommand(repo: repo))
     }
   }
 

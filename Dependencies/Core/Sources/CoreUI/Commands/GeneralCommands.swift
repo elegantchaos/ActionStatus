@@ -9,10 +9,12 @@ import Core
 import Foundation
 import Icons
 
-public struct ToggleEditingCommand: CommandWithUI {
+/// Command that toggles repository editing mode.
+public struct ToggleEditingCommand<C: SettingsServiceProvider>: CommandWithUI {
   public let id = "editing.toggle"
   public let icon = Icon.editButtonIcon
   public let settingsService: SettingsService
+
   public var shortcut: CommandShortcut? {
     .init("E", modifiers: [.command])
   }
@@ -25,45 +27,45 @@ public struct ToggleEditingCommand: CommandWithUI {
     self.settingsService = settingsService
   }
 
-  public func perform(centre: Engine) async throws {
-    _ = centre.settingsService.toggleEditing()
+  public func perform(centre: C) async throws {
+    _ = settingsService.toggleEditing()
   }
 }
 
-/// Command which opens the project on the web (eg in Github)
-public struct ShowRepoCommand: CommandWithUI {
-  public let id = "show.repo"
-  public let icon = Icon.showRepoIcon
+/// Command which opens the project on the web.
+struct ShowRepoCommand<C: LaunchServiceProvider>: CommandWithUI {
+  let id = "show.repo"
+  let icon = Icon.showRepoIcon
   let repo: Repo
 
-  public func perform(centre: Engine) async throws {
+  func perform(centre: C) async throws {
     centre.launchService.open(url: repo.githubURL(for: .repo))
   }
 }
 
-/// Command which opens the workflow file on the web (eg in Github)
-public struct ShowWorkflowCommand: CommandWithUI {
-  public let id = "show.workflow"
-  public let icon = Icon.showWorkflowIcon
+/// Command which opens the workflow page on the web.
+struct ShowWorkflowCommand<C: LaunchServiceProvider>: CommandWithUI {
+  let id = "show.workflow"
+  let icon = Icon.showWorkflowIcon
   let repo: Repo
 
-  public func perform(centre: Engine) async throws {
+  func perform(centre: C) async throws {
     centre.launchService.open(url: repo.githubURL(for: .workflow))
   }
 }
 
 /// Command which reveals the project locally.
-public struct RevealLocalCommand: CommandWithUI {
-  public let id = "reveal.repo"
-  public let icon = Icon.revealLocalIcon
+struct RevealLocalCommand<C: LaunchServiceProvider & MetadataServiceProvider>: CommandWithUI {
+  let id = "reveal.repo"
+  let icon = Icon.revealLocalIcon
   let repo: Repo
 
-  public func availability(centre: Engine) -> CommandAvailability {
+  func availability(centre: C) -> CommandAvailability {
     var status = CommandAvailability.disabled
     let deviceID = centre.metadataService.deviceIdentifier
     if let url = repo.url(forDevice: deviceID) {
       url.accessSecurityScopedResource { unlockedURL in
-        if FileManager.default.fileExists(atURL: url) {
+        if FileManager.default.fileExists(atURL: unlockedURL) {
           status = .enabled
         }
       }
@@ -72,7 +74,7 @@ public struct RevealLocalCommand: CommandWithUI {
     return status
   }
 
-  public func perform(centre: Engine) async throws {
+  func perform(centre: C) async throws {
     let deviceID = centre.metadataService.deviceIdentifier
     if let url = repo.url(forDevice: deviceID) {
       url.accessSecurityScopedResource { unlockedURL in
@@ -82,13 +84,13 @@ public struct RevealLocalCommand: CommandWithUI {
   }
 }
 
-/// Command which opens the project on the web (eg in Github)
-public struct NavigateRepoCommand: CommandWithUI {
-  public let id = "navigate.repo"
-  public let icon = Icon.showRepoIcon
+/// Command which follows the configured navigation action for a repository.
+struct NavigateRepoCommand<C: LaunchServiceProvider & SheetServiceProvider>: CommandWithUI {
+  let id = "navigate.repo"
+  let icon = Icon.showRepoIcon
   let repo: Repo
-  
-  public func perform(centre: Engine) async throws {
+
+  func perform(centre: C) async throws {
     let mode = UserDefaults.standard.value(forKey: .navigationMode)
     switch mode {
       case .edit:

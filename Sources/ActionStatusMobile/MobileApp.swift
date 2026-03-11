@@ -4,7 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 #if os(iOS)
-import Application
+  import Application
   import CoreUI
   import SwiftUI
 
@@ -16,7 +16,7 @@ import Application
       engine = Engine()
       engine.standardLoop()
     }
-    
+
     var body: some Scene {
       WindowGroup {
         engine.rootView {
@@ -25,11 +25,11 @@ import Application
       }
       .commands {
         CommandGroup(replacing: .appSettings) {
-          engine.button(ShowPreferencesSheetCommand())
+          engine.commander.button(ShowPreferencesSheetCommand())
         }
 
         CommandGroup(after: .newItem) {
-          engine.button(AddLocalReposCommand())
+          engine.commander.button(AddLocalReposCommand())
         }
       }
     }

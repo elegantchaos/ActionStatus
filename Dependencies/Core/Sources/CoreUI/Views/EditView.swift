@@ -7,6 +7,7 @@ import Core
 import Runtime
 import SwiftUI
 
+/// Form used to add and edit monitored repositories.
 public struct EditView: View {
   let repo: Repo?
 
@@ -17,120 +18,124 @@ public struct EditView: View {
   @Environment(RefreshService.self) var refreshService
 
   var title: String { "\(shortTitle) Repository" }
-  var shortTitle: String { return repo == nil ? "Add" : "Edit" }
+  var shortTitle: String { repo == nil ? "Add" : "Edit" }
 
   @State var name = ""
   @State var owner = ""
   @State var workflows: [Repo.WorkflowSelection] = []
   @State var branches: String = ""
 
+  /// Creates an edit view for the supplied repository.
+  public init(repo: Repo? = nil) {
+    self.repo = repo
+  }
+
   public var body: some View {
     let localPath = repo?.url(forDevice: metadataService.deviceIdentifier)?.path ?? ""
 
-    return
-      SheetView(title, shortTitle: shortTitle, cancelAction: dismiss, doneAction: done) {
-        Form {
-          Section {
-            LabeledContent("name") {
-              TextField("github repo name", text: $name)
-                .modifier(NameOrgStyle())
-                .modifier(ClearButton(text: $name))
-            }
-            LabeledContent("owner") {
-              TextField("github user or organisation", text: $owner)
-                .modifier(NameOrgStyle())
-                .modifier(ClearButton(text: $owner))
-            }
-            LabeledContent("branches") {
-              TextField("branch1, branch2, …", text: $branches)
-                .modifier(BranchListStyle())
-                .modifier(ClearButton(text: $branches))
-            }
-          } header: {
-            Text("Details")
-          } footer: {
-            Text("Enter the name and owner of the repository. Select which workflows to monitor when they have been discovered, and optionally enter specific branches to test.")
+    return SheetView(title, shortTitle: shortTitle, cancelAction: dismiss, doneAction: done) {
+      Form {
+        Section {
+          LabeledContent("name") {
+            TextField("github repo name", text: $name)
+              .modifier(NameOrgStyle())
+              .modifier(ClearButton(text: $name))
           }
+          LabeledContent("owner") {
+            TextField("github user or organisation", text: $owner)
+              .modifier(NameOrgStyle())
+              .modifier(ClearButton(text: $owner))
+          }
+          LabeledContent("branches") {
+            TextField("branch1, branch2, …", text: $branches)
+              .modifier(BranchListStyle())
+              .modifier(ClearButton(text: $branches))
+          }
+        } header: {
+          Text("Details")
+        } footer: {
+          Text("Enter the name and owner of the repository. Select which workflows to monitor when they have been discovered, and optionally enter specific branches to test.")
+        }
 
-          Section {
-            if workflows.isEmpty {
-              Text("No workflows have been discovered yet for this repository.")
-                .foregroundStyle(.secondary)
-            } else {
-              ForEach($workflows) { $workflow in
-                Toggle(isOn: $workflow.enabled) {
-                  VStack(alignment: .leading, spacing: 2) {
-                    Text(workflow.name)
-                    Text(workflow.path)
-                      .font(.caption)
-                      .foregroundStyle(.secondary)
-                  }
+        Section {
+          if workflows.isEmpty {
+            Text("No workflows have been discovered yet for this repository.")
+              .foregroundStyle(.secondary)
+          } else {
+            ForEach($workflows) { $workflow in
+              Toggle(isOn: $workflow.enabled) {
+                VStack(alignment: .leading, spacing: 2) {
+                  Text(workflow.name)
+                  Text(workflow.path)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
                 }
               }
             }
-          } header: {
-            Text("Workflows")
-          } footer: {
-            Text("Newly discovered workflows are enabled by default.")
+          }
+        } header: {
+          Text("Workflows")
+        } footer: {
+          Text("Newly discovered workflows are enabled by default.")
+        }
+
+        Section {
+          LabeledContent("repo") {
+            HStack(alignment: .firstTextBaseline) {
+              Text("https://github.com/\(trimmedOwner)/\(trimmedName)")
+                .lineLimit(1)
+                .truncationMode(.middle)
+              Spacer()
+              Button(action: { launchService.open(url: updatedRepo.githubURL(for: .repo)) }) {
+                Image(icon: .linkIcon)
+                  .foregroundColor(.gray)
+              }
+            }
           }
 
-          Section {
-            LabeledContent("repo") {
-              HStack(alignment: .firstTextBaseline) {
-                Text("https://github.com/\(trimmedOwner)/\(trimmedName)")
-                  .lineLimit(1)
-                  .truncationMode(.middle)
-                Spacer()
-                Button(action: { launchService.open(url: updatedRepo.githubURL(for: .repo)) }) {
-                  Image(icon: .linkIcon)
-                    .foregroundColor(.gray)
-                }
+          LabeledContent("status") {
+            HStack(alignment: .firstTextBaseline) {
+              Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions")
+                .lineLimit(1)
+                .truncationMode(.middle)
+              Spacer()
+              Button(action: { launchService.open(url: updatedRepo.githubURL(for: .workflow)) }) {
+                Image(icon: .linkIcon)
+                  .foregroundColor(.gray)
               }
             }
-
-            LabeledContent("status") {
-              HStack(alignment: .firstTextBaseline) {
-                Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions")
-                  .lineLimit(1)
-                  .truncationMode(.middle)
-                Spacer()
-                Button(action: { launchService.open(url: updatedRepo.githubURL(for: .workflow)) }) {
-                  Image(icon: .linkIcon)
-                    .foregroundColor(.gray)
-                }
-              }
-            }
-
-            if !localPath.isEmpty {
-              LabeledContent("local") {
-                Text(localPath)
-                  .lineLimit(1)
-                  .truncationMode(.middle)
-              }
-            }
-          } header: {
-            Text("Locations")
-          } footer: {
-            Text("Corresponding locations on Github.")
           }
+
+          if !localPath.isEmpty {
+            LabeledContent("local") {
+              Text(localPath)
+                .lineLimit(1)
+                .truncationMode(.middle)
+            }
+          }
+        } header: {
+          Text("Locations")
+        } footer: {
+          Text("Corresponding locations on Github.")
         }
       }
-      .onAppear {
-        refreshService.pauseRefresh()
-        self.load()
-      }
+    }
+    .onAppear {
+      refreshService.pauseRefresh()
+      load()
+    }
   }
 
   var trimmedName: String {
-    return name.trimmingCharacters(in: .whitespaces)
+    name.trimmingCharacters(in: .whitespaces)
   }
 
   var trimmedOwner: String {
-    return owner.trimmingCharacters(in: .whitespaces)
+    owner.trimmingCharacters(in: .whitespaces)
   }
 
   var trimmedBranches: [String] {
-    return branches.split(separator: ",").map({ String($0.trimmingCharacters(in: .whitespaces)) })
+    branches.split(separator: ",").map { String($0.trimmingCharacters(in: .whitespaces)) }
   }
 
   func dismiss() {
@@ -144,7 +149,7 @@ public struct EditView: View {
   }
 
   func load() {
-    if let repo = repo {
+    if let repo {
       name = repo.name
       owner = repo.owner
       workflows = repo.workflows.sorted(by: { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending })
@@ -157,23 +162,13 @@ public struct EditView: View {
   }
 
   var updatedRepo: Repo {
-    var updated =
-      self.repo
-      ?? Repo()
+    var updated = repo ?? Repo()
     updated.name = trimmedName
     updated.owner = trimmedOwner
     updated.workflows = workflows
     updated.branches = trimmedBranches
     updated.state = Repo.State.unknown
     return updated
-  }
-}
-
-
-struct RepoEditView_Previews: PreviewProvider {
-  static var previews: some View {
-    let context = PreviewContext()
-    return context.inject(into: EditView(repo: context.testRepo))
   }
 }
 

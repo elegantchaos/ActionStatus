@@ -11,11 +11,18 @@ import SwiftUI
 
 public let settingsChannel = Channel("Settings")
 
+/// Service that manages user-configurable settings.
 @Observable
 @MainActor
 public class SettingsService {
+  /// Whether editing UI is currently enabled.
   public var isEditing = false
 
+  /// Creates a settings service.
+  public init() {
+  }
+
+  /// Reads the stored GitHub token.
   func readToken() -> String {
     let user = UserDefaults.standard.value(forKey: .githubUser)
     let server = UserDefaults.standard.value(forKey: .githubServer)
@@ -23,6 +30,7 @@ public class SettingsService {
     return token ?? ""
   }
 
+  /// Toggles editing mode and returns the new state.
   public func toggleEditing() -> Bool {
     withAnimation {
       isEditing = !isEditing
@@ -30,6 +38,7 @@ public class SettingsService {
     return isEditing
   }
 
+  /// Persists a new GitHub token.
   func writeToken(_ token: String) {
     do {
       let user = UserDefaults.standard.value(forKey: .githubUser)
@@ -39,11 +48,10 @@ public class SettingsService {
       print("Failed to save token \(error)")
     }
   }
-
 }
 
-
 public extension UserDefaults {
+  /// Calls the supplied action when defaults change, after a debounce delay.
   func onChanged(delay: TimeInterval = 1.0, _ action: @escaping () -> Void) -> AnyCancellable {
     NotificationCenter.default
       .publisher(for: UserDefaults.didChangeNotification, object: self)

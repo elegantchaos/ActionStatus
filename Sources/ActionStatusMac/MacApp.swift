@@ -4,11 +4,11 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 #if os(macOS)
+  import Application
   import Core
   import CoreUI
-  import SwiftUI
   import Settings
-  import Application
+  import SwiftUI
 
   @main
   struct MacApp: App {
@@ -23,7 +23,6 @@
       engine.standardLoop()
     }
 
-
     var body: some Scene {
       Window(engine.metadataService.appName, id: "repos") {
         engine.rootView {
@@ -34,7 +33,6 @@
       .windowStyle(.hiddenTitleBar)
       .windowManagerRole(.principal)
       .windowResizability(.contentMinSize)
-//      .windowToolbarStyle(.unified)
 
       Settings {
         PreferencesForm()
@@ -47,18 +45,18 @@
       .windowResizability(.automatic)
       .commands {
         CommandGroup(after: .newItem) {
-          engine.button(AddLocalReposCommand())
+          engine.commander.button(AddLocalReposCommand())
         }
         CommandGroup(after: .textEditing) {
-          engine.button(ToggleEditingCommand(settingsService: engine.settingsService))
+          engine.commander.button(ToggleEditingCommand(settingsService: engine.commander.settingsService))
         }
       }
 
       MenuBarExtra(isInserted: $showInMenu) {
-          StatusMenuContent()
+        StatusMenuContent()
           .modifier(engine.startupInjector)
       } label: {
-          StatusMenuLabel()
+        StatusMenuLabel()
           .modifier(engine.startupInjector)
       }
     }

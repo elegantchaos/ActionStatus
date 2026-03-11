@@ -5,8 +5,9 @@
 
 import SwiftUI
 
+/// Footer summary and controls shown beneath the repository content.
 public struct FooterView: View {
-  @Environment(Engine.self) var engine
+  @Environment(ActionStatusCommander.self) var commander
   @Environment(StatusService.self) var status
 
   let namespace: Namespace.ID
@@ -104,7 +105,7 @@ public struct FooterView: View {
 
           #if os(tvOS)
             Spacer()
-            engine.button(ShowPreferencesSheetCommand())
+            commander.button(ShowPreferencesSheetCommand())
             .accessibility(identifier: "preferencesButton")
             .prefersDefaultFocus(in: namespace)
             .focused(focus, equals: .prefs)

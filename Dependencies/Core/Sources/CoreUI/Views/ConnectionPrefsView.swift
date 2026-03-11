@@ -17,10 +17,10 @@ struct ConnectionPrefsView: View {
   @State private var healthTask: Task<Void, Never>? = nil
   @State private var authHealth: GithubAuthHealth = .unknown
   @State private var showCustomServerSettings = false
-  
+
   @AppStorage(.githubUser) var githubUser
   @AppStorage(.githubServer) var githubServer
-  
+
   private let initialAuthState: GithubAuthUIState?
 
   init(token: String, initialAuthState: GithubAuthUIState? = nil) {
@@ -398,61 +398,3 @@ private extension Error {
     }
   }
 }
-
-//private struct ConnectionPrefsPreviewHarness: View {
-//  @State var token: String
-//  let state: GithubAuthUIState
-//
-//  init(token: String, state: GithubAuthUIState) {
-//    _settings = State(initialValue: settings)
-//    _token = State(initialValue: token)
-//    self.state = state
-//  }
-//
-//  var body: some View {
-//    Form {
-//      ConnectionPrefsView(token: $token, initialAuthState: state)
-//    }
-//  }
-//}
-//
-//struct ConnectionPrefsView_Previews: PreviewProvider {
-//  static var previews: some View {
-//    Group {
-//      injectPreview(title: "Default Server - Signed Out", settings: signedOutSettings(), token: "", state: .idle)
-//      injectPreview(title: "Authenticating", settings: signedOutSettings(), token: "", state: .authenticating)
-//      injectPreview(title: "Awaiting Approval", settings: signedOutSettings(), token: "", state: .awaitingApproval("ABCD-EFGH", URL(string: "https://github.com/login/device")!))
-//      injectPreview(title: "Signed In", settings: signedInSettings(), token: "token", state: .signedIn("octocat"))
-//      injectPreview(title: "Error", settings: signedOutSettings(), token: "", state: .error("Github sign-in failed: bad_verification_code"))
-//      injectPreview(title: "Custom Server", settings: customServerSettings(), token: "", state: .idle)
-//    }
-//    .padding()
-//  }
-//
-//  static func injectPreview(title: String, token: String, state: GithubAuthUIState) -> some View {
-//    PreviewContext()
-//      .inject(into: ConnectionPrefsPreviewHarness(token: token, state: state))
-//      .previewDisplayName(title)
-//  }
-//
-////  static func signedOutSettings() -> Settings {
-////    var settings = Settings()
-////    settings.githubServer = "api.github.com"
-////    settings.githubUser = ""
-////    return settings
-////  }
-////
-////  static func signedInSettings() -> Settings {
-////    var settings = Settings()
-////    settings.githubServer = "api.github.com"
-////    settings.githubUser = "octocat"
-////    return settings
-////  }
-////
-////  static func customServerSettings() -> Settings {
-////    var settings = Settings()
-////    settings.githubServer = "github.enterprise.example"
-////    settings.githubUser = ""
-////    return settings
-////  }
-//}

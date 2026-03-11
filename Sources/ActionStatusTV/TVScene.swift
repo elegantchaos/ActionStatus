@@ -3,7 +3,6 @@
 //  All code (c) 2021 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import CoreUI
-
-class TVScene: SceneDelegate {
-}
+#if os(tvOS)
+  /// tvOS now uses the SwiftUI app lifecycle directly.
+#endif

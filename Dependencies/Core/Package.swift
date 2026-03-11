@@ -13,6 +13,9 @@ let package = Package(
       name: "CoreUI",
       targets: ["CoreUI"]),
     .library(
+      name: "CoreUIPreviews",
+      targets: ["CoreUIPreviews"]),
+    .library(
       name: "Core",
       targets: ["Core"]),
   ],
@@ -22,16 +25,15 @@ let package = Package(
     .package(url: "https://github.com/elegantchaos/Files.git", from: "1.2.2"),
     .package(url: "https://github.com/elegantchaos/Keychain.git", from: "1.0.0"),
     .package(url: "https://github.com/elegantchaos/Logger.git", from: "2.0.1"),
+    .package(url: "https://github.com/elegantchaos/JSONSession.git", from: "3.0.0"),
+    .package(url: "https://github.com/elegantchaos/Octoid.git", branch: "feature/async-stream"),
 
-    // TODO: replace these with proper urls
-    .package(path: "../../../JSONSession"),
-    .package(path: "../../../Octoid"),
-
-    .package(url: "https://github.com/elegantchaos/Application.git", from: "1.0.0"),
-    .package(url: "https://github.com/elegantchaos/Commands.git", from: "1.0.0"),
-    .package(url: "https://github.com/elegantchaos/Icons.git", from: "1.0.0"),
-    .package(url: "https://github.com/elegantchaos/Runtime.git", from: "1.0.0"),
-    .package(url: "https://github.com/elegantchaos/Settings.git", from: "1.0.0"),
+    .package(path: "../Previews"),
+    .package(path: "../Application"),
+    .package(path: "../Commands"),
+    .package(path: "../Icons"),
+    .package(path: "../Runtime"),
+    .package(path: "../Settings"),
   ],
   targets: [
     .target(
@@ -69,9 +71,15 @@ let package = Package(
         .product(name: "Octoid", package: "Octoid"),
         .product(name: "Settings", package: "Settings"),
       ]),
+    .target(
+      name: "CoreUIPreviews",
+      dependencies: [
+        "CoreUI",
+        .product(name: "Previews", package: "Previews"),
+      ]),
     .testTarget(
       name: "CoreTests",
-      dependencies: ["Core", "CoreUI"]),
+      dependencies: ["Core", "CoreUI", "CoreUIPreviews"]),
   ],
   swiftLanguageModes: [.v5]
 )

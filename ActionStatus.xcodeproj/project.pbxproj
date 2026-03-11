@@ -21,6 +21,7 @@
 		22C8C7E62F585AC400856024 /* TestModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 22C8C7E42F585AC400856024 /* TestModel.json */; };
 		22E778472476D230009ED66A /* ActionStatusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */; };
 		22E778482476D234009ED66A /* ScreenshotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */; };
+		22F911132F70010100AA0001 /* CoreUIPreviews in Frameworks */ = {isa = PBXBuildFile; productRef = 22F911122F70010100AA0001 /* CoreUIPreviews */; };
 		8B2133F4264C4CFC00BE3D8D /* CoreUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8B2133F3264C4CFC00BE3D8D /* CoreUI */; };
 		8B3E64B023EAE62E00B28168 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64AF23EAE62E00B28168 /* Preview Assets.xcassets */; };
 		8B3E64BE23EAE62E00B28168 /* ActionStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64BD23EAE62E00B28168 /* ActionStatusTests.swift */; };
@@ -74,6 +75,7 @@
 		22112FE42F57158E00CC642B /* Application */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Application; path = Dependencies/Application; sourceTree = "<group>"; };
 		2218311E2F55C0E1002324B6 /* Icons */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Icons; path = Dependencies/Icons; sourceTree = "<group>"; };
 		2218311F2F55C0E1002324B6 /* Settings */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Settings; path = Dependencies/Settings; sourceTree = "<group>"; };
+		22F911112F70000100AA0001 /* Previews */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Previews; path = Dependencies/Previews; sourceTree = "<group>"; };
 		2231B6762F52009700AB890D /* Runtime */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Runtime; path = Dependencies/Runtime; sourceTree = "<group>"; };
 		2231B69C2F5200D000AB890D /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Core; path = Dependencies/Core; sourceTree = "<group>"; };
 		2237DD932F6065D000F17DE7 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 		8B3E64A023EAE62D00B28168 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
+				22F911132F70010100AA0001 /* CoreUIPreviews in Frameworks */,
 				8B9A813725FA508F00F44800 /* CoreUI in Frameworks */,
 			);
 		};
@@ -185,6 +188,7 @@
 				2231B6762F52009700AB890D /* Runtime */,
 				2218311E2F55C0E1002324B6 /* Icons */,
 				2218311F2F55C0E1002324B6 /* Settings */,
+				22F911112F70000100AA0001 /* Previews */,
 				22AA000026B3A10000AA0001 /* Settings.xcconfig */,
 				8B3E64A523EAE62D00B28168 /* Sources */,
 				8B522FA223F6E7B40020AD36 /* Tests */,
@@ -362,6 +366,7 @@
 			);
 			name = ActionStatusMobile;
 			packageProductDependencies = (
+				22F911122F70010100AA0001 /* CoreUIPreviews */,
 				8B9A813625FA508F00F44800 /* CoreUI */,
 			);
 			productName = GithubStatus;
@@ -933,6 +938,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		22F911122F70010100AA0001 /* CoreUIPreviews */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CoreUIPreviews;
+		};
 		8B2133F3264C4CFC00BE3D8D /* CoreUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CoreUI;

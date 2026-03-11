@@ -7,7 +7,8 @@ import CommandsUI
 import Core
 import Icons
 
-public struct ShowEditSheetCommand: CommandWithUI {
+/// Command that presents the edit sheet.
+public struct ShowEditSheetCommand<C: SheetServiceProvider>: CommandWithUI {
   public let id = "sheet.add"
   public let icon = Icon.editButtonIcon
 
@@ -17,20 +18,20 @@ public struct ShowEditSheetCommand: CommandWithUI {
     self.repo = repo
   }
 
-  public func perform(centre: Engine) async throws {
+  public func perform(centre: C) async throws {
     centre.sheetService.showing = .editRepo(repo)
   }
 }
 
-public struct ShowPreferencesSheetCommand: CommandWithUI {
+/// Command that presents the preferences sheet.
+public struct ShowPreferencesSheetCommand<C: SheetServiceProvider>: CommandWithUI {
   public let id = "sheet.preferences"
   public let icon = Icon.preferencesIcon
 
-  public init() { }
-
-  public func perform(centre: Engine) async throws {
-    centre.sheetService.showing = .preferences
+  public init() {
   }
 
-
+  public func perform(centre: C) async throws {
+    centre.sheetService.showing = .preferences
+  }
 }

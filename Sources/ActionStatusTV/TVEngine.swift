@@ -3,11 +3,9 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import CoreUI
-import UIKit
+#if os(tvOS)
+  import CoreUI
 
-class TVEngine: Engine {
-  override class var shared: TVEngine {
-    UIApplication.shared.delegate as! TVEngine
-  }
-}
+  /// Legacy tvOS engine alias retained for compatibility with older references.
+  typealias TVEngine = Engine
+#endif
