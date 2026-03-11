@@ -17,6 +17,7 @@ struct RepoCellView: View {
   let repo: Repo
   let selectable: Bool
   let namespace: Namespace.ID
+  let isSource: Bool
 
   let focus: FocusState<Focus?>.Binding
 
@@ -72,7 +73,7 @@ struct RepoCellView: View {
 
       Spacer()
     }
-    .matchedGeometryEffect(id: repo.id, in: namespace)
+    .matchedGeometryEffect(id: repo.id, in: namespace, isSource: isSource)
   }
 
   var cellPadding: CGFloat {

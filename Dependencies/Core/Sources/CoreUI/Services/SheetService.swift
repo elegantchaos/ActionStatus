@@ -17,12 +17,21 @@ public class SheetService {
       case .editRepo(let repo):
         EditView(repo: repo)
       case .preferences:
-        SheetView("ActionStatus Settings", shortTitle: "Settings", cancelAction: {}, doneAction: {}) {
+        SheetView(
+          "ActionStatus Settings",
+          shortTitle: "Settings",
+          cancelAction: dismiss,
+          doneAction: dismiss
+        ) {
           PreferencesForm()
         }
       default:
         EmptyView()
     }
+  }
+
+  func dismiss() {
+    showing = nil
   }
 
 
@@ -64,4 +73,3 @@ extension View {
     modifier(SheetHostModifier())
   }
 }
-

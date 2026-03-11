@@ -60,7 +60,7 @@ public struct RevealLocalCommand: CommandWithUI {
 
   public func availability(centre: Engine) -> CommandAvailability {
     var status = CommandAvailability.disabled
-    let deviceID = centre.metadataService.runtime.bundle.identifier
+    let deviceID = centre.metadataService.deviceIdentifier
     if let url = repo.url(forDevice: deviceID) {
       url.accessSecurityScopedResource { unlockedURL in
         if FileManager.default.fileExists(atURL: url) {
@@ -73,7 +73,7 @@ public struct RevealLocalCommand: CommandWithUI {
   }
 
   public func perform(centre: Engine) async throws {
-    let deviceID = centre.metadataService.runtime.bundle.identifier
+    let deviceID = centre.metadataService.deviceIdentifier
     if let url = repo.url(forDevice: deviceID) {
       url.accessSecurityScopedResource { unlockedURL in
         centre.launchService.reveal(url: unlockedURL)

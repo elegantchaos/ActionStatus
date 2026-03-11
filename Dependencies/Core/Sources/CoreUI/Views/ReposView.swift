@@ -20,10 +20,18 @@ struct ReposView: View {
     VStack(alignment: .center) {
       if modelService.count == 0 {
         NoReposView()
-      } else if settingsService.isEditing {
-          RepoListView(namespace: namespace, focus: $focus)
       } else {
+        ZStack(alignment: .top) {
           RepoGridView(namespace: namespace, focus: $focus)
+            .opacity(settingsService.isEditing ? 0 : 1)
+            .allowsHitTesting(!settingsService.isEditing)
+            .accessibilityHidden(settingsService.isEditing)
+
+          RepoListView(namespace: namespace, focus: $focus)
+            .opacity(settingsService.isEditing ? 1 : 0)
+            .allowsHitTesting(settingsService.isEditing)
+            .accessibilityHidden(!settingsService.isEditing)
+        }
       }
 
       Spacer()

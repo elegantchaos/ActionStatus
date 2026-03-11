@@ -93,9 +93,7 @@ import Octoid
 
   func update(repo: Repo, message: Message) {
     refreshChannel.log("Error for \(repo.name) was: \(message.message)")
-    DispatchQueue.main.async {
-      self.model.updateState(.unknown, forRepoWithID: repo.id)
-    }
+    model.updateState(.unknown, forRepoWithID: repo.id)
   }
 
   func state(for run: WorkflowRun, in repo: Repo) -> Repo.State {
@@ -149,9 +147,7 @@ import Octoid
   }
 
   func update(repo: Repo, with state: Repo.State) {
-    DispatchQueue.main.async {
-      self.model.updateState(state, forRepoWithID: repo.id)
-    }
+    model.updateState(state, forRepoWithID: repo.id)
   }
 
   @discardableResult

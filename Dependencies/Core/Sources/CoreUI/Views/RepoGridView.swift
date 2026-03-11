@@ -17,7 +17,13 @@ public struct RepoGridView: View {
     ScrollView(.vertical) {
       LazyVGrid(columns: repoGridColumns, spacing: 0) {
         ForEach(status.sortedRepos) { repo in
-          RepoCellView(repo: repo, selectable: false, namespace: namespace, focus: focus)
+          RepoCellView(
+            repo: repo,
+            selectable: false,
+            namespace: namespace,
+            isSource: !settings.isEditing,
+            focus: focus
+          )
         }
       }
     }

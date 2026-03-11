@@ -67,6 +67,50 @@
         }
       }
     },
+    "mode.edit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open editor"
+          }
+        }
+      }
+    },
+    "mode.viewRepo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open repository"
+          }
+        }
+      }
+    },
+    "mode.viewWorkflows" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open workflows"
+          }
+        }
+      }
+    },
+    "repo.navigation.picker" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repository action"
+          }
+        }
+      }
+    },
     "reveal.repo" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -85,6 +129,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Configure Repo"
+          }
+        }
+      }
+    },
+    "sheet.preferences" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
           }
         }
       }

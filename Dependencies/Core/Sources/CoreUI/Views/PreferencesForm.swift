@@ -16,15 +16,10 @@ public struct PreferencesForm: View {
   public var body: some View {
     List {
       ConnectionPrefsView(token: settingsService.readToken())
-        .navigationPrefsStyle()
       NavigationPrefsView()
-        .navigationPrefsStyle()
       RefreshPrefsView()
-        .navigationPrefsStyle()
       DisplayPrefsView()
-        .navigationPrefsStyle()
       DebugPrefsView()
-        .navigationPrefsStyle()
     }
     #if os(iOS)
       .listStyle(.insetGrouped)
@@ -42,22 +37,6 @@ public struct PreferencesForm: View {
   }
 
 
-}
-
-struct NavigationPrefsStyleModifier: ViewModifier {
-  func body(content: Content) -> some View {
-    #if os(macOS)
-      content
-    #else
-      content.listStyle(.insetGrouped)
-    #endif
-  }
-}
-
-extension View {
-  func navigationPrefsStyle() -> some View {
-    modifier(NavigationPrefsStyleModifier())
-  }
 }
 
 // MARK: - Previews

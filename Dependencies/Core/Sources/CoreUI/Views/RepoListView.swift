@@ -18,7 +18,13 @@ public struct RepoListView: View {
   public var body: some View {
     let list = List {
       ForEach(status.sortedRepos) { repo in
-        RepoCellView(repo: repo, selectable: true, namespace: namespace, focus: focus)
+        RepoCellView(
+          repo: repo,
+          selectable: true,
+          namespace: namespace,
+          isSource: settingsService.isEditing,
+          focus: focus
+        )
       }
       .onDelete(perform: delete)
     }

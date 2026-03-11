@@ -6,6 +6,7 @@
 import SwiftUI
 
 public struct FooterView: View {
+  @Environment(Engine.self) var engine
   @Environment(StatusService.self) var status
 
   let namespace: Namespace.ID
@@ -103,9 +104,7 @@ public struct FooterView: View {
 
           #if os(tvOS)
             Spacer()
-            Button(action: { context.presentedSheet = .preferences }) {
-              Image(systemName: context.preferencesIcon)
-            }
+            engine.button(ShowPreferencesSheetCommand())
             .accessibility(identifier: "preferencesButton")
             .prefersDefaultFocus(in: namespace)
             .focused(focus, equals: .prefs)
