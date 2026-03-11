@@ -89,9 +89,15 @@ struct NavigateRepoCommand<C: LaunchServiceProvider & SheetServiceProvider>: Com
   let id = "navigate.repo"
   let icon = Icon.showRepoIcon
   let repo: Repo
+  let trigger: NavigationTrigger
+
+  public init(repo: Repo, trigger: NavigationTrigger = .primaryClick) {
+    self.repo = repo
+    self.trigger = trigger
+  }
 
   func perform(centre: C) async throws {
-    let mode = UserDefaults.standard.value(forKey: .navigationMode)
+    let mode = UserDefaults.standard.repoNavigationMode(for: trigger)
     switch mode {
       case .edit:
         centre.sheetService.showing = .editRepo(repo)

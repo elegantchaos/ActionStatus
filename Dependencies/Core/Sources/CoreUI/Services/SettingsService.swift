@@ -4,6 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Combine
+import Core
 import Foundation
 import Keychain
 import Logger
@@ -51,6 +52,16 @@ public class SettingsService {
 }
 
 public extension UserDefaults {
+  /// Returns the configured repository navigation mode for the specified click trigger.
+  func repoNavigationMode(for trigger: NavigationTrigger) -> NavigationMode {
+    NavigationMode.resolve(
+      for: trigger,
+      primaryClick: value(forKey: .navigationMode),
+      commandClick: value(forKey: .commandNavigationMode),
+      optionClick: value(forKey: .optionNavigationMode)
+    )
+  }
+  
   /// Calls the supplied action when defaults change, after a debounce delay.
   func onChanged(delay: TimeInterval = 1.0, _ action: @escaping () -> Void) -> AnyCancellable {
     NotificationCenter.default

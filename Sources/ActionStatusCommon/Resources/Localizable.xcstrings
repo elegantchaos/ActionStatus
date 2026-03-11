@@ -100,13 +100,35 @@
         }
       }
     },
-    "repo.navigation.picker" : {
+    "repo.navigation.click" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Repository action"
+            "value" : "Click action"
+          }
+        }
+      }
+    },
+    "repo.navigation.commandClick" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Command-click action"
+          }
+        }
+      }
+    },
+    "repo.navigation.optionClick" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Option-click action"
           }
         }
       }
