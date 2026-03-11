@@ -10,15 +10,13 @@ public struct PreferencesForm: View {
   @Environment(SettingsService.self) var settingsService
   @Environment(\.dismiss) private var dismissAction
 
-  @State var githubToken = ""
-
   public init() {
   }
   
   public var body: some View {
     List {
 #if os(macOS)
-      ConnectionPrefsView(token: $githubToken)
+      ConnectionPrefsView(token: settingsService.readToken())
         .listRowSeparator(.visible, edges: .bottom)
         .listSectionSeparator(.hidden)
       RefreshPrefsView()
@@ -31,7 +29,7 @@ public struct PreferencesForm: View {
         .listRowSeparator(.visible, edges: .bottom)
         .listSectionSeparator(.hidden)
 #else
-      ConnectionPrefsView(token: $githubToken)
+      ConnectionPrefsView(token: settingsService.readToken())
       RefreshPrefsView()
       DisplayPrefsView()
       DebugPrefsView()
@@ -41,28 +39,17 @@ public struct PreferencesForm: View {
 #endif
     }
     .onAppear(perform: handleAppear)
-    .onDisappear(perform: handleSave)
+    .onDisappear(perform: handleDisappear)
   }
   
   func handleAppear() {
     refreshService.pauseRefresh()
-    githubToken = settingsService.readToken()
   }
 
-  func handleSave() {
-    let authenticationChanged = false // settings.authenticationChanged(from: settingsService.settings)
-    settingsService.writeToken(githubToken)
-
-    if authenticationChanged {
-      refreshService.resetRefresh()
-    }
-    
+  func handleDisappear() {
     refreshService.resumeRefresh()
   }
 
-  func handleCancel() {
-    dismissAction()
-  }
 
 }
 

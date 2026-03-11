@@ -7,6 +7,7 @@ import Combine
 import Foundation
 import Keychain
 import Logger
+import SwiftUI
 
 public let settingsChannel = Channel("Settings")
 
@@ -23,7 +24,9 @@ public class SettingsService {
   }
 
   public func toggleEditing() -> Bool {
-    isEditing = !isEditing
+    withAnimation {
+      isEditing = !isEditing
+    }
     return isEditing
   }
 

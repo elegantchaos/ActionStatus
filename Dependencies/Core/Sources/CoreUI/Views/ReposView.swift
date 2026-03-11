@@ -6,47 +6,28 @@
 import Combine
 import SwiftUI
 
-public enum Focus: Hashable, Equatable {
-  case repo(UUID)
-  case prefs
-}
-
-struct RootView: View {
-  @Namespace() var defaultNamespace
+/// View containing all the repos, in a list or grid layout.
+struct ReposView: View {
+  @Namespace() var namespace
   @Environment(ModelService.self) var modelService
   @Environment(Engine.self) var engine
   @Environment(SettingsService.self) var settingsService
-  
-  @State var focusState = FadingFocusState()
 
-  #if os(tvOS)
-    @FocusState var focus: Focus?
-  #endif
+  @State var focusState = FadingFocusState()
+  @FocusState var focus: Focus?
 
   var body: some View {
     VStack(alignment: .center) {
       if modelService.count == 0 {
         NoReposView()
       } else if settingsService.isEditing {
-        #if os(tvOS)
-          RepoListView(namespace: defaultNamespace, focus: $focus)
-        #else
-          RepoListView(namespace: defaultNamespace)
-        #endif
+          RepoListView(namespace: namespace, focus: $focus)
       } else {
-        #if os(tvOS)
-          RepoGridView(namespace: defaultNamespace, focus: $focus)
-        #else
-          RepoGridView(namespace: defaultNamespace)
-        #endif
+          RepoGridView(namespace: namespace, focus: $focus)
       }
 
       Spacer()
-      #if os(tvOS)
-        FooterView(namespace: defaultNamespace, focus: $focus)
-      #else
-        FooterView(namespace: defaultNamespace)
-      #endif
+        FooterView(namespace: namespace, focus: $focus)
     }
     .onAppear(perform: handleAppear)
     #if os(tvOS)
@@ -64,4 +45,9 @@ struct RootView: View {
     #endif
   }
 
+}
+
+public enum Focus: Hashable, Equatable {
+  case repo(UUID)
+  case prefs
 }

@@ -25,8 +25,7 @@ import Application
       }
       .commands {
         CommandGroup(replacing: .appSettings) {
-          Button("Preferences…", action: engine.showPreferences)
-            .keyboardShortcut(",", modifiers: .command)
+          engine.button(ShowPreferencesSheetCommand())
         }
 
         CommandGroup(after: .newItem) {

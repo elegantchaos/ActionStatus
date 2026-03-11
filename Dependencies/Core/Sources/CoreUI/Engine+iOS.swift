@@ -23,10 +23,6 @@ public extension Engine {
     }
   }
 
-  func showPreferences() {
-    sheetService.presentedSheet = .preferences
-  }
-
   @IBAction func addLocalRepos() {
     let picker = filePickerClass.init(forOpeningFolderStartingIn: nil) { urls in
       self.modelService.add(fromFolders: urls)

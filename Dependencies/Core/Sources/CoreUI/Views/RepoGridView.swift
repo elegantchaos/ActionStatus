@@ -9,28 +9,21 @@ public struct RepoGridView: View {
   @Environment(StatusService.self) var status
   @Environment(SettingsService.self) var settings
   @AppStorage(.displaySize) var displaySize
-  
-   let namespace: Namespace.ID
 
-  #if os(tvOS)
-    let focus: FocusState<Focus?>.Binding
-  #endif
+  let namespace: Namespace.ID
+  let focus: FocusState<Focus?>.Binding
 
   public var body: some View {
     ScrollView(.vertical) {
       LazyVGrid(columns: repoGridColumns, spacing: 0) {
         ForEach(status.sortedRepos) { repo in
-          #if os(tvOS)
-            RepoCellView(repo: repo, selectable: false, namespace: namespace, focus: focus)
-          #else
-            RepoCellView(repo: repo, selectable: false, namespace: namespace)
-          #endif
+          RepoCellView(repo: repo, selectable: false, namespace: namespace, focus: focus)
         }
       }
     }
     .padding()
   }
-  
+
   var repoGridColumns: [GridItem] {
     let count: Int
     switch displaySize {
@@ -38,13 +31,13 @@ public struct RepoGridView: View {
       case .medium: count = 3
       default: count = 2
     }
-    
-#if os(tvOS)
-    return Array(repeating: .init(.flexible()), count: count)
-#else
-    let cols = CGFloat(count)
-    return [GridItem(.adaptive(minimum: 640 / cols, maximum: .infinity))]
-#endif
+
+    #if os(tvOS)
+      return Array(repeating: .init(.flexible()), count: count)
+    #else
+      let cols = CGFloat(count)
+      return [GridItem(.adaptive(minimum: 640 / cols, maximum: .infinity))]
+    #endif
   }
 
 }

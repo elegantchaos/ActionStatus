@@ -10,24 +10,19 @@ public struct RepoListView: View {
   @Environment(StatusService.self) var status
   @Environment(SettingsService.self) private var settingsService
   @AppStorage(.displaySize) var displaySize
-  
+
   let namespace: Namespace.ID
 
-  #if os(tvOS)
-    let focus: FocusState<Focus?>.Binding
-  #endif
+  let focus: FocusState<Focus?>.Binding
 
   public var body: some View {
     let list = List {
       ForEach(status.sortedRepos) { repo in
-        #if os(tvOS)
-          RepoCellView(repo: repo, selectable: true, namespace: namespace, focus: focus)
-        #else
-          RepoCellView(repo: repo, selectable: true, namespace: namespace)
-        #endif
+        RepoCellView(repo: repo, selectable: true, namespace: namespace, focus: focus)
       }
       .onDelete(perform: delete)
     }
+    .buttonStyle(.borderless)
     .environment(\.defaultMinListRowHeight, displaySize.rowHeight)
 
     #if os(macOS)

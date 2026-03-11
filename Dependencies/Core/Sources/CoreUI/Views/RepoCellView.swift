@@ -13,14 +13,12 @@ struct RepoCellView: View {
   @Environment(MetadataService.self) var metadataService
 
   @AppStorage(.displaySize) var displaySize
-  
+
   let repo: Repo
   let selectable: Bool
   let namespace: Namespace.ID
 
-  #if os(tvOS)
-    let focus: FocusState<Focus?>.Binding
-  #endif
+  let focus: FocusState<Focus?>.Binding
 
   var body: some View {
     let cell = cell(for: repo)
@@ -29,7 +27,7 @@ struct RepoCellView: View {
 
   @ViewBuilder
   func contextMenuContent() -> some View {
-    Text("\(repo.name)")
+    Label(repo.name, icon: .repoIcon)
 
     engine.button(ShowEditSheetCommand(repo: repo))
     engine.button(ShowRepoCommand(repo: repo))
@@ -39,57 +37,36 @@ struct RepoCellView: View {
     Divider()
 
     engine.button(RemoveReposCommand(ids: [repo.id]))
-    #if DEBUG
-    if !metadataService.isUITestingBuild {
+    if metadataService.showDebugUI {
       Divider()
       engine.button(AdvanceStateCommand(repo: repo))
     }
-    #endif
   }
 
   func cell(for repo: Repo) -> some View {
-    if selectable {
-      return AnyView(
+    Group {
+      if selectable {
         HStack(alignment: .center, spacing: .padding) {
-          Text(repo.name)
-            .allowsTightening(true)
-            .truncationMode(.middle)
-            .lineLimit(1)
-
-          Spacer()
+          repoLabel()
           engine.button(ShowEditSheetCommand(repo: repo))
+            .labelStyle(.iconOnly)
         }
-        .matchedGeometryEffect(id: repo.id, in: namespace)
         .padding(cellPadding)
-        .font(displaySize.font)
-        .foregroundColor(.primary))
-    } else {
-      return AnyView(
+      } else {
         engine.button(ShowRepoCommand(repo: repo)) {
-          HStack(alignment: .center, spacing: .padding) {
-            Image(systemName: repo.badgeName)
-              .foregroundColor(repo.statusColor)
-
-            Text(repo.name)
-              .allowsTightening(true)
-              .truncationMode(.middle)
-              .lineLimit(1)
-
-            Spacer()
-          }
-          .matchedGeometryEffect(id: repo.id, in: namespace)
+          repoLabel()
         }
         .padding(cellPadding)
-        .font(displaySize.font)
-        .foregroundColor(.primary)
         #if os(tvOS)
           .buttonStyle(FadingFocusButtonStyle())
           .focused(focus, equals: .repo(repo.id))
         #else
           .buttonStyle(.plain)
         #endif
-      )
+      }
     }
+    .font(displaySize.font)
+    .foregroundColor(.primary)
   }
 
   func handleReveal(url: URL) {
@@ -98,6 +75,21 @@ struct RepoCellView: View {
     }
   }
 
+  func repoLabel() -> some View {
+    HStack(alignment: .center, spacing: .padding) {
+      Image(systemName: repo.badgeName)
+        .foregroundColor(repo.statusColor)
+
+      Text(repo.name)
+        .allowsTightening(true)
+        .truncationMode(.middle)
+        .lineLimit(1)
+
+      Spacer()
+    }
+    .matchedGeometryEffect(id: repo.id, in: namespace)
+  }
+  
   var cellPadding: CGFloat {
     #if os(tvOS)
       return 0

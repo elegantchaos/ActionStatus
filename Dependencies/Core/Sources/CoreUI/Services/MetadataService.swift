@@ -21,6 +21,8 @@ public class MetadataService {
   
   public var deviceIdentifier: String? { runtime.deviceIdentifier }
   
+  public var showDebugUI: Bool { runtime.isDebugBuild && !runtime.isUITestingBuild }
+  
   public var modelSource: ModelService.Source {
     if let name = runtime.environment(.testModel) {
       return .resource(name)

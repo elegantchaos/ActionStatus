@@ -9,9 +9,9 @@ public struct FooterView: View {
   @Environment(StatusService.self) var status
 
   let namespace: Namespace.ID
+  let focus: FocusState<Focus?>.Binding
 
   #if os(tvOS)
-    let focus: FocusState<Focus?>.Binding
     public init(namespace: Namespace.ID, focus: FocusState<Focus?>.Binding) {
       self.namespace = namespace
       self.focus = focus

@@ -17,5 +17,6 @@ extension Icon {
   static let showRepoIcon = Icon("icloud")
   static let showWorkflowIcon = Icon("arrow.trianglehead.2.clockwise.rotate.90.icloud")
   static let revealLocalIcon = Icon("finder")
+  static let repoIcon = Icon("folder")
 }
 

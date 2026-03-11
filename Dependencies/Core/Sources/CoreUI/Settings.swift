@@ -25,6 +25,13 @@ import Settings
   static let sortMode = AppSettingKey("SortMode", defaultValue: .state)
 }
 
+@MainActor public extension AppSettingKey where Value == NavigationMode {
+  static let navigationMode = AppSettingKey(
+    "NavigationMode",
+    defaultValue: .edit
+  )
+}
+
 @MainActor public extension AppSettingKey where Value == DisplaySize {
   static let displaySize = AppSettingKey("DisplaySize", defaultValue: .automatic)
 }

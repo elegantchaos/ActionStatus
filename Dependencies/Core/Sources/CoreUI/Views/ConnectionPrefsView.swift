@@ -11,7 +11,7 @@ struct ConnectionPrefsView: View {
 
   private let defaultGithubServer = "api.github.com"
 
-  @Binding var token: String
+  @State var token: String
   @State private var authState: GithubAuthUIState
   @State private var authTask: Task<Void, Never>? = nil
   @State private var healthTask: Task<Void, Never>? = nil
@@ -23,8 +23,8 @@ struct ConnectionPrefsView: View {
   
   private let initialAuthState: GithubAuthUIState?
 
-  init(token: Binding<String>, initialAuthState: GithubAuthUIState? = nil) {
-    _token = token
+  init(token: String, initialAuthState: GithubAuthUIState? = nil) {
+    _token = .init(initialValue: token)
     _authState = State(initialValue: initialAuthState ?? .idle)
     self.initialAuthState = initialAuthState
   }

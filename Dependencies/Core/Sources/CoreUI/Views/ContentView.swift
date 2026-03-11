@@ -19,7 +19,7 @@ public struct ContentView: View {
 
   public var body: some View {
     NavigationStack {
-      RootView()
+      ReposView()
         .navigationTitle(metadataService.appName)
         #if os(iOS)
           .navigationBarTitleDisplayMode(.inline)
@@ -32,16 +32,11 @@ public struct ContentView: View {
               }
             }
 
-            ToolbarItem(placement: .navigationBarTrailing) {
-              Button(action: {
-                withAnimation {
-                  _ = settingsService.toggleEditing()
-                }
-              }) {
-                Text(settingsService.isEditing ? "Done" : "Edit")
-              }
-              .accessibility(identifier: "toggleEditing")
-            }
+            engine
+              .toolbarItem(
+                ToggleEditingCommand(settingsService: engine.settingsService),
+                placement: .navigationBarTrailing
+              )
           }
         #endif
     }
