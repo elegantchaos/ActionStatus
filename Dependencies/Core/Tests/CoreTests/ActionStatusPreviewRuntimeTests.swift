@@ -6,6 +6,10 @@ import XCTest
 
 @MainActor
 final class ActionStatusPreviewRuntimeTests: XCTestCase {
+  private struct TestSettingsCentre: SettingsServiceProvider {
+    let settingsService: SettingsService
+  }
+
   func testScenarioBuildSeedsFixtureAndRuntime() {
     let repo = ActionStatusPreviews.repo("ActionStatus", owner: "elegantchaos", state: .passing)
     let scenario = ActionStatusPreviewScenario(repos: [repo], isEditing: true)
@@ -25,5 +29,20 @@ final class ActionStatusPreviewRuntimeTests: XCTestCase {
     try await commander.perform(ShowPreferencesSheetCommand<ActionStatusCommander>())
 
     XCTAssertEqual(commander.sheetService.showing?.id, "preferences")
+  }
+
+  func testToggleEditingCommandUsesConfiguredSettingsService() async throws {
+    let commandSettings = SettingsService()
+    let centreSettings = SettingsService()
+    let command = ToggleEditingCommand<TestSettingsCentre>(settingsService: commandSettings)
+    let centre = TestSettingsCentre(settingsService: centreSettings)
+
+    XCTAssertFalse(commandSettings.isEditing)
+    XCTAssertFalse(centreSettings.isEditing)
+
+    try await command.perform(centre: centre)
+
+    XCTAssertTrue(commandSettings.isEditing)
+    XCTAssertFalse(centreSettings.isEditing)
   }
 }

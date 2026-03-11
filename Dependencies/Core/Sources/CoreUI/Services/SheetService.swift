@@ -18,8 +18,8 @@ public class SheetService {
   }
 
   @ViewBuilder
-  func sheetView() -> some View {
-    switch showing {
+  func sheetView(for sheet: Sheet) -> some View {
+    switch sheet {
       case .editRepo(let repo):
         EditView(repo: repo)
       case .preferences:
@@ -31,8 +31,6 @@ public class SheetService {
         ) {
           PreferencesForm()
         }
-      default:
-        EmptyView()
     }
   }
 
@@ -66,8 +64,8 @@ struct SheetHostModifier: ViewModifier {
   func body(content: Content) -> some View {
     @Bindable var service = sheetService
 
-    return content.sheet(item: $service.showing) { _ in
-      service.sheetView()
+    return content.sheet(item: $service.showing) { sheet in
+      service.sheetView(for: sheet)
     }
   }
 }

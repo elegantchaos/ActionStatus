@@ -28,7 +28,7 @@ public struct ToggleEditingCommand<C: SettingsServiceProvider>: CommandWithUI {
   }
 
   public func perform(centre: C) async throws {
-    _ = centre.settingsService.toggleEditing()
+    _ = settingsService.toggleEditing()
   }
 }
 
@@ -64,8 +64,8 @@ struct RevealLocalCommand<C: LaunchServiceProvider & MetadataServiceProvider>: C
     var status = CommandAvailability.disabled
     let deviceID = centre.metadataService.deviceIdentifier
     if let url = repo.url(forDevice: deviceID) {
-      url.accessSecurityScopedResource { _ in
-        if FileManager.default.fileExists(atURL: url) {
+      url.accessSecurityScopedResource { unlockedURL in
+        if FileManager.default.fileExists(atURL: unlockedURL) {
           status = .enabled
         }
       }
