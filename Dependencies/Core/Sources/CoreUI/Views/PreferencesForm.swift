@@ -5,6 +5,7 @@
 
 import SwiftUI
 
+/// Main preferences form for ActionStatus settings.
 public struct PreferencesForm: View {
   @Environment(RefreshService.self) var refreshService
   @Environment(SettingsService.self) var settingsService
@@ -35,67 +36,21 @@ public struct PreferencesForm: View {
   func handleDisappear() {
     refreshService.resumeRefresh()
   }
-
-
 }
 
-// MARK: - Previews
-//
-//#if DEBUG
-//  struct PreferencesView_Previews: PreviewProvider {
-//    static var previews: some View {
-//      Group {
-//        #if os(macOS)
-//          PreferencesMacWindowPreview()
-//            .previewDisplayName("macOS Settings Window")
-//        #endif
-//        #if os(iOS)
-//          PreferencesIOSSheetPreview()
-//            .previewDisplayName("iOS Full-Screen Sheet")
-//        #endif
-//      }
-//    }
-//  }
-//
-//  #if os(macOS)
-//    private struct PreferencesMacWindowPreview: View {
-//      var body: some View {
-//        PreviewContext()
-//          .inject(into: PreferencesForm())
-//          .frame(width: 760, height: 640)
-//          .background(Color(nsColor: .windowBackgroundColor))
-//          .overlay {
-//            RoundedRectangle(cornerRadius: 10)
-//              .stroke(Color.secondary.opacity(0.25), lineWidth: 1)
-//          }
-//          .clipShape(.rect(cornerRadius: 10))
-//          .padding()
-//      }
-//    }
-//  #endif
-//
-//  #if os(iOS)
-//    private struct PreferencesIOSSheetPreview: View {
-//      var body: some View {
-//        PreviewContext()
-//          .inject(into: PreferencesIOSPreviewHarness())
-//      }
-//    }
-//
-//    private struct PreferencesIOSPreviewHarness: View {
-//      @State private var settings = Settings()
-//      @State private var token: String = ""
-//
-//      var body: some View {
-//        NavigationStack {
-//          PreferencesForm(settings: $settings, githubToken: $token)
-//            .navigationTitle("Settings")
-//            .navigationBarTitleDisplayMode(.inline)
-//        }
-//        .onAppear {
-//          token = settings.readToken()
-//        }
-//      }
-//    }
-//  #endif
-//#endif
+struct NavigationPrefsStyleModifier: ViewModifier {
+  func body(content: Content) -> some View {
+    #if os(iOS)
+      content.listStyle(.insetGrouped)
+    #else
+      content
+    #endif
+  }
+}
+
+extension View {
+  /// Applies platform-appropriate styling for navigation-related preferences sections.
+  func navigationPrefsStyle() -> some View {
+    modifier(NavigationPrefsStyleModifier())
+  }
+}

@@ -5,91 +5,91 @@
 
 #if os(macOS)
 
-import SwiftUI
-import Core
+  import Core
+  import SwiftUI
 
-public struct StatusMenuLabel: View {
-  @Environment(StatusService.self) var status
+  /// Menu bar status icon for ActionStatus.
+  public struct StatusMenuLabel: View {
+    @Environment(StatusService.self) var status
 
-  public init() {
-  }
-
-  public var body: some View {
-    Image(systemName: statusSymbolName())
-  }
-  
-  func statusSymbolName() -> String {
-    if status.running > 0 || status.queued > 0 {
-      return "arrow.triangle.2.circlepath"
+    public init() {
     }
 
-    if status.failing > 0 {
-      return "xmark.circle"
+    public var body: some View {
+      Image(systemName: statusSymbolName())
     }
 
-    return "checkmark.circle"
+    func statusSymbolName() -> String {
+      if status.running > 0 || status.queued > 0 {
+        return "arrow.triangle.2.circlepath"
+      }
+
+      if status.failing > 0 {
+        return "xmark.circle"
+      }
+
+      return "checkmark.circle"
+    }
   }
 
-}
+  /// Menu bar status menu content for ActionStatus.
+  public struct StatusMenuContent: View {
+    @Environment(ActionStatusCommander.self) var commander
+    @Environment(LaunchService.self) var launchService
+    @Environment(MetadataService.self) var metadataService
+    @Environment(StatusService.self) var status
 
+    public init() {
+    }
 
-public struct StatusMenuContent: View {
-  @Environment(LaunchService.self) var launchService
-  @Environment(MetadataService.self) var metadataService
-  @Environment(Engine.self) var engine
-  @Environment(StatusService.self) var status
+    public var body: some View {
+      ForEach(status.sortedRepos) { repo in
+        Button {
+          launchService.openWorkflow(for: repo)
+        } label: {
+          Label(repo.name, systemImage: repo.state.symbolName)
+        }
+      }
 
-  public init() {
+      Divider()
+
+      Button("Show \(appName)") {
+        if let window = NSApp.windows.first {
+          window.makeKeyAndOrderFront(nil)
+        }
+        NSApp.activate(ignoringOtherApps: true)
+      }
+
+      SettingsLink {
+        Text("Settings…")
+      }
+
+      Button("Add Local Repos", action: commander.addLocalRepos)
+        .keyboardShortcut("o", modifiers: .command)
+
+      Button("Quit \(appName)") {
+        NSApp.terminate(nil)
+      }
+      .keyboardShortcut("q", modifiers: .command)
+    }
+
+    var appName: String {
+      metadataService.appName
+    }
   }
-  
-  public var body: some View {
-    ForEach(status.sortedRepos) { repo in
-      Button {
-        launchService.openWorkflow(for: repo)
-      } label: {
-        Label(repo.name, systemImage: repo.state.symbolName)
+
+  private extension Repo.State {
+    var symbolName: String {
+      switch self {
+        case .unknown: return "questionmark.circle"
+        case .dormant: return "moon.zzz"
+        case .passing: return "checkmark.circle"
+        case .failing: return "xmark.circle"
+        case .partiallyFailing: return "xmark.circle"
+        case .queued: return "clock.arrow.circlepath"
+        case .running: return "arrow.triangle.2.circlepath"
       }
     }
-
-    Divider()
-
-    Button("Show \(appName)") {
-      if let window = NSApp.windows.first {
-        window.makeKeyAndOrderFront(nil)
-      }
-      NSApp.activate(ignoringOtherApps: true)
-    }
-    
-    SettingsLink {
-      Text("Settings…")
-    }
-    
-    Button("Add Local Repos", action: engine.addLocalRepos)
-      .keyboardShortcut("o", modifiers: .command)
-    
-    Button("Quit \(appName)") {
-      NSApp.terminate(nil)
-    }
-    .keyboardShortcut("q", modifiers: .command)
   }
-  
-  var appName: String {
-    metadataService.appName
-  }
-}
-
-private extension Repo.State {
-  var symbolName: String {
-    switch self {
-      case .unknown: return "questionmark.circle"
-      case .dormant: return "moon.zzz"
-      case .passing: return "checkmark.circle"
-      case .failing: return "xmark.circle"
-      case .partiallyFailing: return "xmark.circle"
-      case .queued: return "clock.arrow.circlepath"
-      case .running: return "arrow.triangle.2.circlepath"
-    }
-  }
-}
 
 #endif

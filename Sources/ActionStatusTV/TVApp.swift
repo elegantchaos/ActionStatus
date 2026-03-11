@@ -4,16 +4,24 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 #if os(tvOS)
+  import Application
   import CoreUI
   import SwiftUI
 
   @main
   struct TVApp: App {
-    @UIApplicationDelegateAdaptor(TVEngine.self) private var application
+    let engine: Engine
+
+    init() {
+      engine = Engine()
+      engine.standardLoop()
+    }
 
     var body: some Scene {
       WindowGroup {
-        application.applyEnvironment(to: ContentView())
+        engine.rootView {
+          ContentView()
+        }
       }
     }
   }

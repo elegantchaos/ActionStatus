@@ -5,6 +5,7 @@
 
 import SwiftUI
 
+/// Grid presentation of monitored repositories.
 public struct RepoGridView: View {
   @Environment(StatusService.self) var status
   @Environment(SettingsService.self) var settings
@@ -12,6 +13,12 @@ public struct RepoGridView: View {
 
   let namespace: Namespace.ID
   let focus: FocusState<Focus?>.Binding
+
+  /// Creates a repository grid view.
+  public init(namespace: Namespace.ID, focus: FocusState<Focus?>.Binding) {
+    self.namespace = namespace
+    self.focus = focus
+  }
 
   public var body: some View {
     ScrollView(.vertical) {
@@ -45,11 +52,4 @@ public struct RepoGridView: View {
       return [GridItem(.adaptive(minimum: 640 / cols, maximum: .infinity))]
     #endif
   }
-
 }
-
-//struct RepoGridView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        return PreviewContext().inject(into: RepoGridView())
-//    }
-//}

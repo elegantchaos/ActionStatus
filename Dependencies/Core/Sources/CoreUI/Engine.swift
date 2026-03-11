@@ -5,8 +5,6 @@
 
 import Application
 import Combine
-import Commands
-import CommandsUI
 import Core
 import Keychain
 import Logger
@@ -20,48 +18,95 @@ import SwiftUI
 
 public let monitoringChannel = Channel("Monitoring")
 
+/// Main ActionStatus runtime engine.
+///
+/// The engine owns startup state and platform hooks, while `ActionStatusCommander`
+/// exposes the reusable command and environment surface used by SwiftUI views.
 @Observable
-@MainActor public class Engine {
+@MainActor
+public final class Engine {
   /// The state of the engine.
   public var state: AppState
 
+  /// Shared model service.
   public let modelService: ModelService
+
+  /// Shared settings service.
   public let settingsService: SettingsService
+
+  /// Shared launch service.
   public let launchService: LaunchService
+
+  /// Shared metadata service.
   public let metadataService: MetadataService
+
+  /// Shared sheet service.
   public let sheetService: SheetService
+
+  /// Shared refresh service.
   public let refreshService: RefreshService
+
+  /// Shared status service.
   public let statusService: StatusService
 
+  /// Shared commander used by SwiftUI views and menus.
+  public let commander: ActionStatusCommander
+
   #if canImport(UIKit)
+    /// Root view controller used for presenting UIKit UI.
     public var rootController: UIViewController?
+
+    /// Retained file picker while it is presented.
     public var filePicker: FilePicker?
   #endif
 
+  /// Performs one-time synchronous initialization.
   public func initialise() throws {
   }
 
+  /// Performs asynchronous startup after initialization.
   public func startup() async throws {
     await modelService.startup()
     refreshService.resumeRefresh()
   }
 
+  /// Creates the live engine and its shared services.
   public init() {
     state = .uninitialised
 
-    let ms = MetadataService()
-
-    self.statusService = StatusService()
-    self.metadataService = ms
-    self.sheetService = SheetService()
-    self.modelService = ModelService(
+    let metadataService = MetadataService()
+    let statusService = StatusService()
+    let sheetService = SheetService()
+    let modelService = ModelService(
       statusService: statusService,
-      deviceIdentifier: ms.deviceIdentifier,
-      source: ms.modelSource
+      deviceIdentifier: metadataService.deviceIdentifier,
+      source: metadataService.modelSource
     )
-    self.settingsService = SettingsService()
-    self.refreshService = RefreshService(model: modelService, metadata: ms)
-    self.launchService = LaunchService()
+    let settingsService = SettingsService()
+    let refreshService = RefreshService(model: modelService, metadata: metadataService)
+    let launchService = LaunchService()
+
+    self.statusService = statusService
+    self.metadataService = metadataService
+    self.sheetService = sheetService
+    self.modelService = modelService
+    self.settingsService = settingsService
+    self.refreshService = refreshService
+    self.launchService = launchService
+    self.commander = ActionStatusCommander(
+      modelService: modelService,
+      settingsService: settingsService,
+      metadataService: metadataService,
+      launchService: launchService,
+      refreshService: refreshService,
+      sheetService: sheetService
+    )
+
+    #if os(iOS) || os(macOS)
+      commander.setAddLocalReposAction { [weak self] in
+        self?.addLocalRepos()
+      }
+    #endif
   }
 }
 
@@ -70,23 +115,30 @@ extension CGFloat {
 }
 
 extension Engine: AppEngine {
-  public var startupInjector: some ViewModifier { EnvironmentInjector(engine: self) }
-  public var runningInjector: some ViewModifier { EnvironmentInjector(engine: self) }
+  public var startupInjector: some ViewModifier {
+    ActionStatusEnvironmentInjector(
+      commander: commander,
+      modelService: modelService,
+      metadataService: metadataService,
+      settingsService: settingsService,
+      launchService: launchService,
+      statusService: statusService,
+      refreshService: refreshService,
+      sheetService: sheetService
+    )
+  }
 
-  struct EnvironmentInjector: ViewModifier {
-    let engine: Engine
-
-    func body(content: Content) -> some View {
-      content
-        .environment(engine.modelService)
-        .environment(engine.metadataService)
-        .environment(engine.settingsService)
-        .environment(engine.launchService)
-        .environment(engine.statusService)
-        .environment(engine.refreshService)
-        .environment(engine.sheetService)
-        .environment(engine)
-    }
+  public var runningInjector: some ViewModifier {
+    ActionStatusEnvironmentInjector(
+      commander: commander,
+      modelService: modelService,
+      metadataService: metadataService,
+      settingsService: settingsService,
+      launchService: launchService,
+      statusService: statusService,
+      refreshService: refreshService,
+      sheetService: sheetService
+    )
   }
 
   public func retry() async throws {
@@ -95,7 +147,4 @@ extension Engine: AppEngine {
   public func shouldIgnore(error: any Error) -> Bool {
     false
   }
-}
-
-extension Engine: CommandCentre {
 }

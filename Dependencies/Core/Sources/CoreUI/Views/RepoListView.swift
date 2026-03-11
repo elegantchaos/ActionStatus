@@ -5,15 +5,21 @@
 
 import SwiftUI
 
+/// List presentation of monitored repositories.
 public struct RepoListView: View {
-  @Environment(Engine.self) var engine
+  @Environment(ActionStatusCommander.self) var commander
   @Environment(StatusService.self) var status
   @Environment(SettingsService.self) private var settingsService
   @AppStorage(.displaySize) var displaySize
 
   let namespace: Namespace.ID
-
   let focus: FocusState<Focus?>.Binding
+
+  /// Creates a repository list view.
+  public init(namespace: Namespace.ID, focus: FocusState<Focus?>.Binding) {
+    self.namespace = namespace
+    self.focus = focus
+  }
 
   public var body: some View {
     let list = List {
@@ -40,13 +46,6 @@ public struct RepoListView: View {
 
   func delete(at offsets: IndexSet) {
     let ids = status.repoIDs(atOffets: offsets)
-    Task { try? await engine.perform(RemoveReposCommand(ids: ids)) }
+    Task { try? await commander.perform(RemoveReposCommand(ids: ids)) }
   }
 }
-
-//
-//struct RepoListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        return PreviewContext().inject(into: RepoListView())
-//    }
-//}

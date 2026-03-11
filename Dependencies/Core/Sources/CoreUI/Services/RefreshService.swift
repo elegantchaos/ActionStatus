@@ -12,20 +12,32 @@ import SwiftUI
 
 public let refreshServiceChannel = Channel("Refresh Service")
 
+/// Service that manages status refresh scheduling and refresh controller creation.
 @Observable
-@MainActor public class RefreshService {
+@MainActor
+public class RefreshService {
   @ObservationIgnored @AppStorage(.refreshInterval) var refreshInterval
   @ObservationIgnored @AppStorage(.githubUser) var githubUser
   @ObservationIgnored @AppStorage(.githubServer) var githubServer
+
+  /// Supported refresh modes.
+  public enum RefreshType {
+    case normal
+    case random
+    case none
+  }
 
   let type: RefreshType
   let modelService: ModelService
   var refreshController: RefreshController? = nil
 
-  init(model: ModelService, metadata: MetadataService) {
+  /// Creates a refresh service for the supplied model and metadata.
+  public init(model: ModelService, metadata: MetadataService, forcedType: RefreshType? = nil) {
     self.modelService = model
 
-    if metadata.runtime.normalized(.testRefresh) == "random" {
+    if let forcedType {
+      self.type = forcedType
+    } else if metadata.runtime.normalized(.testRefresh) == "random" {
       self.type = .random
     } else if metadata.isUITestingBuild {
       self.type = .none
@@ -34,24 +46,20 @@ public let refreshServiceChannel = Channel("Refresh Service")
     }
   }
 
-  enum RefreshType {
-    case normal
-    case random
-    case none
-  }
-
-
+  /// Resets any active refresh controller.
   func resetRefresh() {
     refreshServiceChannel.log("Reset")
     refreshController?.pause()
     refreshController = nil
   }
 
+  /// Pauses refresh activity.
   func pauseRefresh() {
     refreshServiceChannel.log("Paused")
     refreshController?.pause()
   }
 
+  /// Resumes refresh activity.
   func resumeRefresh() {
     if refreshController == nil {
       refreshController = makeRefreshController()
@@ -61,6 +69,7 @@ public let refreshServiceChannel = Channel("Refresh Service")
     refreshController?.resume(rate: refreshInterval.rate)
   }
 
+  /// Creates the appropriate refresh controller for the configured mode.
   func makeRefreshController() -> RefreshController? {
     switch type {
       case .normal: return makeGithubRefreshController()
@@ -71,6 +80,7 @@ public let refreshServiceChannel = Channel("Refresh Service")
     }
   }
 
+  /// Creates a GitHub-backed refresh controller when credentials are available.
   public func makeGithubRefreshController() -> RefreshController? {
     do {
       guard !githubUser.isEmpty else {
@@ -98,5 +108,4 @@ public let refreshServiceChannel = Channel("Refresh Service")
       return nil
     }
   }
-
 }

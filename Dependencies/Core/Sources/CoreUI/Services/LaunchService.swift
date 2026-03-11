@@ -3,41 +3,44 @@
 //  Copyright © 2026 Elegant Chaos Limited. All rights reserved.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import Foundation
 import Core
+import Foundation
+import Observation
 
+/// Service responsible for opening remote URLs and revealing local files.
 @Observable
-@MainActor public class LaunchService {
+@MainActor
+open class LaunchService {
+  /// Creates a launch service.
+  public init() {
+  }
+
+  /// Opens the workflow page for the supplied repository.
   public func openWorkflow(for repo: Repo) {
     open(url: repo.githubURL(for: .workflow))
+  }
+
+  /// Opens the supplied URL.
+  open func open(url: URL) {
+    #if canImport(UIKit)
+      UIApplication.shared.open(url)
+    #elseif canImport(AppKit)
+      NSWorkspace.shared.open(url)
+    #endif
+  }
+
+  /// Reveals the supplied local URL.
+  open func reveal(url: URL) {
+    #if canImport(UIKit)
+      UIApplication.shared.open(url)
+    #elseif canImport(AppKit)
+      NSWorkspace.shared.activateFileViewerSelecting([url])
+    #endif
   }
 }
 
 #if canImport(UIKit)
   import UIKit
-  extension LaunchService {
-    func open(url: URL) {
-      UIApplication.shared.open(url)
-    }
-    open func reveal(url: URL) {
-      UIApplication.shared.open(url)
-    }
-  }
 #elseif canImport(AppKit)
   import AppKit
-  extension LaunchService {
-    func open(url: URL) {
-      NSWorkspace.shared.open(url)
-    }
-    func reveal(url: URL) {
-      NSWorkspace.shared.activateFileViewerSelecting([url])
-    }
-  }
-#else
-extension LaunchService {
-  func open(url: URL) {
-  }
-  open func reveal(url: URL) {
-  }
-}
 #endif

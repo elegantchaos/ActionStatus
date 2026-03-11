@@ -16,3 +16,6 @@
 [submodule "Dependencies/Settings"]
 	path = Dependencies/Settings
 	url = git@github.com:elegantchaos/Settings.git
+[submodule "Dependencies/Previews"]
+	path = Dependencies/Previews
+	url = git@github.com:elegantchaos/Previews.git

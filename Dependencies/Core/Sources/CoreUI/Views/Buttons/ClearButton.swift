@@ -5,6 +5,7 @@
 
 import SwiftUI
 
+/// Modifier that shows a trailing clear button for non-empty text input.
 struct ClearButton: ViewModifier {
   @Binding var text: String
 
@@ -14,7 +15,7 @@ struct ClearButton: ViewModifier {
 
       if !text.isEmpty {
         Button(action: {
-          self.text = ""
+          text = ""
         }) {
           Image(systemName: "multiply.circle.fill")
             .foregroundColor(.secondary)
@@ -22,11 +23,5 @@ struct ClearButton: ViewModifier {
         .padding(.trailing, 8)
       }
     }
-  }
-}
-
-struct ClearButton_Previews: PreviewProvider {
-  static var previews: some View {
-    /*@START_MENU_TOKEN@*/Text("Hello, World!") /*@END_MENU_TOKEN@*/
   }
 }

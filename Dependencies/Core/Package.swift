@@ -13,6 +13,9 @@ let package = Package(
       name: "CoreUI",
       targets: ["CoreUI"]),
     .library(
+      name: "CoreUIPreviews",
+      targets: ["CoreUIPreviews"]),
+    .library(
       name: "Core",
       targets: ["Core"]),
   ],
@@ -27,11 +30,12 @@ let package = Package(
     .package(path: "../../../JSONSession"),
     .package(path: "../../../Octoid"),
 
-    .package(url: "https://github.com/elegantchaos/Application.git", from: "1.0.0"),
-    .package(url: "https://github.com/elegantchaos/Commands.git", from: "1.0.0"),
-    .package(url: "https://github.com/elegantchaos/Icons.git", from: "1.0.0"),
-    .package(url: "https://github.com/elegantchaos/Runtime.git", from: "1.0.0"),
-    .package(url: "https://github.com/elegantchaos/Settings.git", from: "1.0.0"),
+    .package(path: "../Previews"),
+    .package(path: "../Application"),
+    .package(path: "../Commands"),
+    .package(path: "../Icons"),
+    .package(path: "../Runtime"),
+    .package(path: "../Settings"),
   ],
   targets: [
     .target(
@@ -69,9 +73,15 @@ let package = Package(
         .product(name: "Octoid", package: "Octoid"),
         .product(name: "Settings", package: "Settings"),
       ]),
+    .target(
+      name: "CoreUIPreviews",
+      dependencies: [
+        "CoreUI",
+        .product(name: "Previews", package: "Previews"),
+      ]),
     .testTarget(
       name: "CoreTests",
-      dependencies: ["Core", "CoreUI"]),
+      dependencies: ["Core", "CoreUI", "CoreUIPreviews"]),
   ],
   swiftLanguageModes: [.v5]
 )

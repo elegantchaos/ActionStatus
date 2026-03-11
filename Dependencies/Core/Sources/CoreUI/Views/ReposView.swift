@@ -6,17 +6,20 @@
 import Combine
 import SwiftUI
 
-/// View containing all the repos, in a list or grid layout.
-struct ReposView: View {
+/// View containing all monitored repositories in their chosen layout.
+public struct ReposView: View {
   @Namespace() var namespace
   @Environment(ModelService.self) var modelService
-  @Environment(Engine.self) var engine
   @Environment(SettingsService.self) var settingsService
 
   @State var focusState = FadingFocusState()
   @FocusState var focus: Focus?
 
-  var body: some View {
+  /// Creates a repositories container view.
+  public init() {
+  }
+
+  public var body: some View {
     VStack(alignment: .center) {
       if modelService.count == 0 {
         NoReposView()
@@ -35,13 +38,13 @@ struct ReposView: View {
       }
 
       Spacer()
-        FooterView(namespace: namespace, focus: $focus)
+      FooterView(namespace: namespace, focus: $focus)
     }
     .onAppear(perform: handleAppear)
     #if os(tvOS)
-      .focusScope(defaultNamespace)
+      .focusScope(namespace)
       .environment(focusState)
-      .onChange(of: focus) { value in
+      .onChange(of: focus) { _ in
         focusState.handleFocusChanged()
       }
     #endif
@@ -52,10 +55,9 @@ struct ReposView: View {
       focusState.handleFocusChanged()
     #endif
   }
-
 }
 
 public enum Focus: Hashable, Equatable {
-  case repo(UUID)
+  case repo(String)
   case prefs
 }

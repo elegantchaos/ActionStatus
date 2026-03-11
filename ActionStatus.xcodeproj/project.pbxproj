@@ -74,6 +74,7 @@
 		22112FE42F57158E00CC642B /* Application */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Application; path = Dependencies/Application; sourceTree = "<group>"; };
 		2218311E2F55C0E1002324B6 /* Icons */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Icons; path = Dependencies/Icons; sourceTree = "<group>"; };
 		2218311F2F55C0E1002324B6 /* Settings */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Settings; path = Dependencies/Settings; sourceTree = "<group>"; };
+		22F911112F70000100AA0001 /* Previews */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Previews; path = Dependencies/Previews; sourceTree = "<group>"; };
 		2231B6762F52009700AB890D /* Runtime */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Runtime; path = Dependencies/Runtime; sourceTree = "<group>"; };
 		2231B69C2F5200D000AB890D /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Core; path = Dependencies/Core; sourceTree = "<group>"; };
 		2237DD932F6065D000F17DE7 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -185,6 +186,7 @@
 				2231B6762F52009700AB890D /* Runtime */,
 				2218311E2F55C0E1002324B6 /* Icons */,
 				2218311F2F55C0E1002324B6 /* Settings */,
+				22F911112F70000100AA0001 /* Previews */,
 				22AA000026B3A10000AA0001 /* Settings.xcconfig */,
 				8B3E64A523EAE62D00B28168 /* Sources */,
 				8B522FA223F6E7B40020AD36 /* Tests */,
