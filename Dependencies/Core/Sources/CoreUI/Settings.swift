@@ -28,10 +28,10 @@ import Settings
 @MainActor public extension AppSettingKey where Value == NavigationMode {
   /// UserDefaults key for the default repository navigation action.
   static let navigationMode = AppSettingKey("NavigationMode", defaultValue: .edit)
-  /// UserDefaults key for the repository navigation action used for Command-click on macOS.
-  static let commandNavigationMode = AppSettingKey("CommandNavigationMode", defaultValue: .viewRepo)
-  /// UserDefaults key for the repository navigation action used for Option-click on macOS.
-  static let optionNavigationMode = AppSettingKey("OptionNavigationMode", defaultValue: .viewWorkflows)
+  /// UserDefaults key for the secondary repository navigation action.
+  static let secondaryNavigationMode = AppSettingKey("SecondaryNavigationMode", defaultValue: .viewRepo)
+  /// UserDefaults key for the tertiary repository navigation action.
+  static let tertiaryNavigationMode = AppSettingKey("TertiaryNavigationMode", defaultValue: .viewWorkflows)
 }
 
 @MainActor public extension AppSettingKey where Value == DisplaySize {
@@ -50,4 +50,3 @@ import Settings
   /// UserDefaults key for the hotkey combo data.
   static let hotKeyCombo = AppSettingKey("hotKeyCombo", defaultValue: Data())
 }
-

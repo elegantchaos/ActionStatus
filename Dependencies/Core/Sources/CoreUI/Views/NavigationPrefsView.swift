@@ -10,17 +10,17 @@ import SwiftUI
 struct NavigationPrefsView: View {
   /// The navigation action used for an unmodified click.
   @AppStorage(.navigationMode) var navigationMode
-  /// The navigation action used for a Command-click on macOS.
-  @AppStorage(.commandNavigationMode) var commandNavigationMode
-  /// The navigation action used for an Option-click on macOS.
-  @AppStorage(.optionNavigationMode) var optionNavigationMode
+  /// The navigation action used for the secondary trigger.
+  @AppStorage(.secondaryNavigationMode) var secondaryNavigationMode
+  /// The navigation action used for the tertiary trigger.
+  @AppStorage(.tertiaryNavigationMode) var tertiaryNavigationMode
   
   var body: some View {
     PreferencesSection(title: "Navigation") {
       navigationPicker("repo.navigation.click", selection: $navigationMode)
       #if os(macOS)
-        navigationPicker("repo.navigation.commandClick", selection: $commandNavigationMode)
-        navigationPicker("repo.navigation.optionClick", selection: $optionNavigationMode)
+        navigationPicker("repo.navigation.commandClick", selection: $secondaryNavigationMode)
+        navigationPicker("repo.navigation.optionClick", selection: $tertiaryNavigationMode)
       #endif
     }
   }

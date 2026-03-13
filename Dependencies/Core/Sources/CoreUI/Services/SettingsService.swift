@@ -4,6 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Combine
+import Commands
 import Core
 import Foundation
 import Keychain
@@ -54,13 +55,15 @@ public class SettingsService {
 public extension UserDefaults {
   /// Returns the configured repository navigation mode for the specified click trigger.
   @MainActor
-  func repoNavigationMode(for trigger: NavigationTrigger) -> NavigationMode {
-    NavigationMode.resolve(
-      for: trigger,
-      primaryClick: value(forKey: .navigationMode),
-      commandClick: value(forKey: .commandNavigationMode),
-      optionClick: value(forKey: .optionNavigationMode)
-    )
+  func repoNavigationMode(for trigger: CommandTrigger) -> NavigationMode {
+    switch trigger {
+      case .primary:
+        value(forKey: .navigationMode)
+      case .secondary:
+        value(forKey: .secondaryNavigationMode)
+      case .tertiary:
+        value(forKey: .tertiaryNavigationMode)
+    }
   }
   
   /// Calls the supplied action when defaults change, after a debounce delay.

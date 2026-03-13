@@ -3,12 +3,11 @@
 //  All code (c) 2021 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Commands
+import CommandsUI
 import Core
 import Runtime
 import SwiftUI
-#if os(macOS)
-  import AppKit
-#endif
 
 /// Cell view that renders a repository and its primary status affordances.
 public struct RepoCellView: View {
@@ -39,7 +38,9 @@ public struct RepoCellView: View {
   }
 
   public var body: some View {
-    Button(action: performNavigation) {
+    commander.dynamicButton { (trigger: CommandTrigger) in
+      NavigateRepoCommand<ActionStatusCommander>(repo: repo, trigger: trigger)
+    } content: {
       repoLabel()
     }
     .padding(cellPadding)
@@ -49,22 +50,9 @@ public struct RepoCellView: View {
     #else
       .buttonStyle(.plain)
     #endif
-    .disabled(commander.shouldDisable(navigationCommand(for: .primaryClick)))
     .font(displaySize.font)
     .foregroundColor(.primary)
     .contextMenu(menuItems: contextMenuContent)
-  }
-
-  /// Performs the configured navigation action for the current click trigger.
-  func performNavigation() {
-    // TODO: Extract repo navigation rules into a NavigationService so trigger handling
-    // and destination selection are explicit and easier to evolve.
-    commander.performWithoutWaiting(navigationCommand(for: navigationTrigger))
-  }
-
-  /// Builds the navigation command for the specified click trigger.
-  func navigationCommand(for trigger: NavigationTrigger) -> NavigateRepoCommand {
-    NavigateRepoCommand(repo: repo, trigger: trigger)
   }
 
   @ViewBuilder
@@ -106,20 +94,5 @@ public struct RepoCellView: View {
     #else
       return 4
     #endif
-  }
-
-  /// Returns the click trigger for the current platform event.
-  var navigationTrigger: NavigationTrigger {
-    #if os(macOS)
-      let modifiers = NSApp.currentEvent?.modifierFlags ?? []
-      if modifiers.contains(.command) {
-        return .commandClick
-      }
-      if modifiers.contains(.option) {
-        return .optionClick
-      }
-    #endif
-
-    return .primaryClick
   }
 }

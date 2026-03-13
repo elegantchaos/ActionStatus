@@ -89,14 +89,16 @@ struct NavigateRepoCommand<C: LaunchServiceProvider & SheetServiceProvider>: Com
   let id = "navigate.repo"
   let icon = Icon.showRepoIcon
   let repo: Repo
-  let trigger: NavigationTrigger
+  let trigger: CommandTrigger
 
-  public init(repo: Repo, trigger: NavigationTrigger = .primaryClick) {
+  public init(repo: Repo, trigger: CommandTrigger = .primary) {
     self.repo = repo
     self.trigger = trigger
   }
 
   func perform(centre: C) async throws {
+    // TODO: Extract repo navigation resolution into a NavigationService so trigger
+    // mapping and destination selection are explicit and easier to evolve.
     let mode = UserDefaults.standard.repoNavigationMode(for: trigger)
     switch mode {
       case .edit:
