@@ -25,6 +25,9 @@ public final class Engine {
   /// The state of the engine.
   public var state: AppState
 
+  /// Startup task tracked by the shared application loop.
+  @ObservationIgnored public var startupTask: Task<Void, Never>?
+
   /// Shared model service.
   public let modelService: ModelService
 
@@ -70,6 +73,7 @@ public final class Engine {
   /// Creates the live engine and its shared services.
   public init() {
     state = .uninitialised
+    startupTask = nil
 
     let settingsService = SettingsService()
     let metadataService = MetadataService()
