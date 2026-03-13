@@ -4,12 +4,9 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Application
-import Combine
 import Core
-import Keychain
 import Logger
 import Observation
-import Runtime
 import SwiftUI
 
 #if canImport(UIKit)
@@ -27,6 +24,9 @@ public let monitoringChannel = Channel("Monitoring")
 public final class Engine {
   /// The state of the engine.
   public var state: AppState
+
+  /// Startup task tracked by the shared application loop.
+  @ObservationIgnored public var startupTask: Task<Void, Never>?
 
   /// Shared model service.
   public let modelService: ModelService
@@ -73,17 +73,22 @@ public final class Engine {
   /// Creates the live engine and its shared services.
   public init() {
     state = .uninitialised
+    startupTask = nil
 
+    let settingsService = SettingsService()
     let metadataService = MetadataService()
-    let statusService = StatusService()
+    let statusService = StatusService(settingsService: settingsService)
     let sheetService = SheetService()
     let modelService = ModelService(
       statusService: statusService,
       deviceIdentifier: metadataService.deviceIdentifier,
       source: metadataService.modelSource
     )
-    let settingsService = SettingsService()
-    let refreshService = RefreshService(model: modelService, metadata: metadataService)
+    let refreshService = RefreshService(
+      model: modelService,
+      settingsService: settingsService,
+      metadata: metadataService
+    )
     let launchService = LaunchService()
 
     self.statusService = statusService

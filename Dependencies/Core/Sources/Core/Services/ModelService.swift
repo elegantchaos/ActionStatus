@@ -4,23 +4,22 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Commands
-import CommandsUI
-import Core
-import DictionaryCoding
 import Foundation
 import Logger
 import Observation
-import Runtime
 
 public let modelChannel = Channel("com.elegantchaos.actionstatus.Model")
-let githubChannel = Channel("com.elegantchaos.Github")
+public let githubChannel = Channel("com.elegantchaos.Github")
 
+/// Provider of the shared model service used by commands.
+@MainActor
 public protocol ModelServiceProvider: CommandCentre {
   var modelService: ModelService { get }
 }
 
 @Observable
-@MainActor public class ModelService {
+@MainActor
+public final class ModelService {
   public typealias RepoList = [Repo]
 
   public enum Source {
@@ -40,37 +39,34 @@ public protocol ModelServiceProvider: CommandCentre {
     deviceIdentifier: String?,
     store: ModelStore? = nil
   ) {
-    self.store = store ?? UbiquitousStore()
+    let resolvedStore = store ?? UbiquitousStore()
+    self.store = resolvedStore
     self.statusService = statusService
     self.deviceIdentifier = deviceIdentifier
     self.items = .init(uniqueKeysWithValues: repos.map { ($0.id, $0) })
-                      
+
     statusService.connect(to: self)
-    modelChannel.log("Initialised with \(store!)")
+    modelChannel.log("Initialised with \(resolvedStore)")
+  }
+
+  public convenience init(statusService: StatusService, deviceIdentifier: String?, source: Source) {
+    let store: ModelStore
+    switch source {
+      case .cloud:
+        store = UbiquitousStore()
+      case .resource(let name):
+        store = BundleStore(key: name)
+    }
+
+    self.init([], statusService: statusService, deviceIdentifier: deviceIdentifier, store: store)
   }
 
   public func startup() async {
-    await store.onChange { newValues in
-      await self.load(newValues: newValues)
+    await store.onChange { [weak self] newValues in
+      self?.load(newValues: newValues)
     }
     modelChannel.log("Started")
   }
-  
-  convenience init(statusService: StatusService, deviceIdentifier: String?, source: Source) {
-    let store: ModelStore
-    switch source {
-      case .cloud: store = UbiquitousStore()
-      case .resource(let name): store = BundleStore(key: name)
-    }
-
-    self.init(
-  [],
-  statusService: statusService,
-  deviceIdentifier: deviceIdentifier, store: store
-    )
-  }
-
-  // MARK: Public
 
   public var count: Int {
     items.count
@@ -80,21 +76,23 @@ public protocol ModelServiceProvider: CommandCentre {
   private func load(newValues: ModelStore.Values) {
     items = newValues
   }
-  
+
   /// Return a repo from our cache.
   public func repo(withIdentifier id: String) -> Repo? {
-    return items[id]
+    items[id]
   }
 
-  public func updateState(_ state: Repo.State, forRepoWithID id: String, ) {
-    assert(Thread.isMainThread)
+  public func updateState(_ state: Repo.State, forRepoWithID id: String) {
     if var repo = items[id] {
       modelChannel.log("\(repo) changed to \(state)")
       repo.state = state
       switch state {
-        case .passing: repo.lastSucceeded = Date()
-        case .failing, .partiallyFailing: repo.lastFailed = Date()
-        default: break
+        case .passing:
+          repo.lastSucceeded = Date()
+        case .failing, .partiallyFailing:
+          repo.lastFailed = Date()
+        default:
+          break
       }
       update(repo: repo)
     } else {
@@ -103,16 +101,15 @@ public protocol ModelServiceProvider: CommandCentre {
   }
 
   public func update(repo: Repo) {
-    assert(Thread.isMainThread)
     let item = items[repo.id]
-    let update: Bool
+    let shouldUpdate: Bool
     if let existing = item, repo != existing {
-      update = true
+      shouldUpdate = true
     } else {
-      update = item == nil
+      shouldUpdate = item == nil
     }
 
-    if update {
+    if shouldUpdate {
       modelChannel.log(items[repo.id] == nil ? "Added \(repo)" : "Updated \(repo)")
       items[repo.id] = repo
       store.set(repo, forKey: repo.id)
@@ -126,28 +123,28 @@ public protocol ModelServiceProvider: CommandCentre {
     }
   }
 
-  @discardableResult public func addRepo() -> Repo {
+  @discardableResult
+  public func addRepo() -> Repo {
     let repo = Repo()
     items[repo.id] = repo
-
     return repo
   }
 
-  @discardableResult public func addRepo(name: String, owner: String) -> Repo {
+  @discardableResult
+  public func addRepo(name: String, owner: String) -> Repo {
     let repo = Repo(name, owner: owner, workflow: "Tests")
     items[repo.id] = repo
-
     return repo
   }
 
   public func add(fromFolders urls: [URL]) {
     if let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) {
-      let fm = FileManager.default
+      let fileManager = FileManager.default
       for url in urls {
-        if let enumerator = fm.enumerator(at: url, includingPropertiesForKeys: []) {
-          while let url = enumerator.nextObject() as? URL {
-            if url.lastPathComponent == ".git" {
-              add(fromGitRepo: url, detector: detector)
+        if let enumerator = fileManager.enumerator(at: url, includingPropertiesForKeys: []) {
+          while let repositoryURL = enumerator.nextObject() as? URL {
+            if repositoryURL.lastPathComponent == ".git" {
+              add(fromGitRepo: repositoryURL, detector: detector)
             }
           }
         }
@@ -155,14 +152,13 @@ public protocol ModelServiceProvider: CommandCentre {
     }
   }
 
-  public func remove(reposWithIDs: [String]) {
-    for id in reposWithIDs {
+  public func remove(reposWithIDs ids: [String]) {
+    for id in ids {
       items.removeValue(forKey: id)
+      store.remove(forKey: id)
     }
   }
 }
-
-// MARK: Internal
 
 internal extension ModelService {
   func add(fromGitRepo localGitFolderURL: URL, detector: NSDataDetector) {
@@ -180,7 +176,7 @@ internal extension ModelService {
             repo = addRepo(name: name, owner: owner)
           }
 
-          if repo?.name == containerName, let device = deviceIdentifier, let repo = repo {
+          if repo?.name == containerName, let device = deviceIdentifier, let repo {
             remember(url: containerURL, forDevice: device, inRepo: repo)
             modelChannel.log("Local path for \(repo.name) on machine \(device) is \(localGitFolderURL).")
           }
@@ -188,5 +184,4 @@ internal extension ModelService {
       }
     }
   }
-
 }

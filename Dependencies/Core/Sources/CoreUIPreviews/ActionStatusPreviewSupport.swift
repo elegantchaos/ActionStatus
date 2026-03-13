@@ -72,7 +72,8 @@ public final class ActionStatusPreviewRuntime: EnvironmentInjectingRuntime {
     initialSheet: SheetService.Sheet? = nil,
     sortMode: SortMode = .name
   ) {
-    let statusService = StatusService()
+    let settingsService = SettingsService()
+    let statusService = StatusService(settingsService: settingsService)
     let metadataService = MetadataService()
     let modelService = ModelService(
       repos,
@@ -80,11 +81,15 @@ public final class ActionStatusPreviewRuntime: EnvironmentInjectingRuntime {
       deviceIdentifier: metadataService.deviceIdentifier,
       store: PreviewModelStore(repos: repos)
     )
-    let settingsService = SettingsService()
     settingsService.isEditing = isEditing
 
     let launchService = PreviewLaunchService()
-    let refreshService = RefreshService(model: modelService, metadata: metadataService, forcedType: RefreshService.RefreshType.none)
+    let refreshService = RefreshService(
+      model: modelService,
+      settingsService: settingsService,
+      metadata: metadataService,
+      forcedType: RefreshService.RefreshType.none
+    )
     let sheetService = SheetService()
     sheetService.showing = initialSheet
 

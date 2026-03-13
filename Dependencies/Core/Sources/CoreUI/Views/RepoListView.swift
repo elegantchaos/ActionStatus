@@ -3,6 +3,7 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Core
 import SwiftUI
 
 /// List presentation of monitored repositories.
@@ -45,7 +46,7 @@ public struct RepoListView: View {
   }
 
   func delete(at offsets: IndexSet) {
-    let ids = status.repoIDs(atOffets: offsets)
+    let ids = status.repoIDs(atOffsets: offsets)
     Task { try? await commander.perform(RemoveReposCommand(ids: ids)) }
   }
 }

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		220D3E642F647B8F00F44E6F /* Application in Frameworks */ = {isa = PBXBuildFile; productRef = 22F92A352F71000200AA0001 /* Application */; };
+		220D3E812F647BF700F44E6F /* Application in Frameworks */ = {isa = PBXBuildFile; productRef = 220D3E802F647BF700F44E6F /* Application */; };
+		220D3E832F647BFC00F44E6F /* CoreUI in Frameworks */ = {isa = PBXBuildFile; productRef = 220D3E822F647BFC00F44E6F /* CoreUI */; };
 		2237DD942F6065D000F17DE7 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2237DD932F6065D000F17DE7 /* Localizable.xcstrings */; };
 		2237DD952F6065D000F17DE7 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2237DD932F6065D000F17DE7 /* Localizable.xcstrings */; };
 		2257D7F72F4DAEAF00DBD569 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 2257D7F62F4DAEAF00DBD569 /* AppIcon.icon */; };
@@ -21,7 +24,6 @@
 		22C8C7E62F585AC400856024 /* TestModel.json in Resources */ = {isa = PBXBuildFile; fileRef = 22C8C7E42F585AC400856024 /* TestModel.json */; };
 		22E778472476D230009ED66A /* ActionStatusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64C823EAE62F00B28168 /* ActionStatusUITests.swift */; };
 		22E778482476D234009ED66A /* ScreenshotUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */; };
-		22F911132F70010100AA0001 /* CoreUIPreviews in Frameworks */ = {isa = PBXBuildFile; productRef = 22F911122F70010100AA0001 /* CoreUIPreviews */; };
 		8B2133F4264C4CFC00BE3D8D /* CoreUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8B2133F3264C4CFC00BE3D8D /* CoreUI */; };
 		8B3E64B023EAE62E00B28168 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64AF23EAE62E00B28168 /* Preview Assets.xcassets */; };
 		8B3E64BE23EAE62E00B28168 /* ActionStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3E64BD23EAE62E00B28168 /* ActionStatusTests.swift */; };
@@ -30,7 +32,6 @@
 		8B430E8E23F58AE10050BF2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64AC23EAE62E00B28168 /* Assets.xcassets */; };
 		8B430E8F23F58CEE0050BF2A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64AF23EAE62E00B28168 /* Preview Assets.xcassets */; };
 		8B430E9123F5947E0050BF2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3E64AC23EAE62E00B28168 /* Assets.xcassets */; };
-		8B9A813725FA508F00F44800 /* CoreUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8B9A813625FA508F00F44800 /* CoreUI */; };
 		8BA073A3260103E800F962B5 /* CoreUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8BA073A2260103E800F962B5 /* CoreUI */; };
 		8BA13D28260A6185007CB9CD /* TVScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA13D26260A6148007CB9CD /* TVScene.swift */; };
 		8BBFAA99240401C30091157A /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 8BBFAA8B2403F09F0091157A /* dsa_pub.pem */; };
@@ -135,8 +136,8 @@
 		8B3E64A023EAE62D00B28168 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
-				22F911132F70010100AA0001 /* CoreUIPreviews in Frameworks */,
-				8B9A813725FA508F00F44800 /* CoreUI in Frameworks */,
+				220D3E812F647BF700F44E6F /* Application in Frameworks */,
+				220D3E832F647BFC00F44E6F /* CoreUI in Frameworks */,
 			);
 		};
 		8B3E64B623EAE62E00B28168 /* Frameworks */ = {
@@ -153,6 +154,7 @@
 		8B430E6723F586100050BF2A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
+				220D3E642F647B8F00F44E6F /* Application in Frameworks */,
 				8BA073A3260103E800F962B5 /* CoreUI in Frameworks */,
 			);
 		};
@@ -374,8 +376,8 @@
 			);
 			name = ActionStatusMobile;
 			packageProductDependencies = (
-				22F911122F70010100AA0001 /* CoreUIPreviews */,
-				8B9A813625FA508F00F44800 /* CoreUI */,
+				220D3E802F647BF700F44E6F /* Application */,
+				220D3E822F647BFC00F44E6F /* CoreUI */,
 			);
 			productName = GithubStatus;
 			productReference = 8B3E64A323EAE62D00B28168 /* Action Status.app */;
@@ -432,6 +434,7 @@
 			);
 			name = ActionStatusTV;
 			packageProductDependencies = (
+				22F92A352F71000200AA0001 /* Application */,
 				8BA073A2260103E800F962B5 /* CoreUI */,
 			);
 			productName = ActionStatusTV;
@@ -479,6 +482,8 @@
 			mainGroup = 8B3E649A23EAE62D00B28168;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				22F92A332F71000000AA0001 /* XCLocalSwiftPackageReference "Dependencies/Application" */,
+				22F911152F70010300AA0001 /* XCLocalSwiftPackageReference "Dependencies/Core" */,
 			);
 			preferredProjectObjectVersion = 90;
 			productRefGroup = 8B3E64A423EAE62D00B28168 /* Products */;
@@ -945,16 +950,31 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCSwiftPackageProductDependency section */
-		22F911122F70010100AA0001 /* CoreUIPreviews */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = CoreUIPreviews;
+/* Begin XCLocalSwiftPackageReference section */
+		22F911152F70010300AA0001 /* XCLocalSwiftPackageReference "Dependencies/Core" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Dependencies/Core;
 		};
-		8B2133F3264C4CFC00BE3D8D /* CoreUI */ = {
+		22F92A332F71000000AA0001 /* XCLocalSwiftPackageReference "Dependencies/Application" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Dependencies/Application;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		220D3E802F647BF700F44E6F /* Application */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Application;
+		};
+		220D3E822F647BFC00F44E6F /* CoreUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CoreUI;
 		};
-		8B9A813625FA508F00F44800 /* CoreUI */ = {
+		22F92A352F71000200AA0001 /* Application */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Application;
+		};
+		8B2133F3264C4CFC00BE3D8D /* CoreUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CoreUI;
 		};

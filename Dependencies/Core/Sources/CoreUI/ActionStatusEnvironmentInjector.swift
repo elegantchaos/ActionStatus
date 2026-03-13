@@ -1,3 +1,4 @@
+import Core
 import SwiftUI
 
 /// Shared environment injector used by the live app and preview runtime.

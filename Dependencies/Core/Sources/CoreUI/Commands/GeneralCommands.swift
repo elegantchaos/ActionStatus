@@ -85,7 +85,7 @@ struct RevealLocalCommand<C: LaunchServiceProvider & MetadataServiceProvider>: C
 }
 
 /// Command which follows the configured navigation action for a repository.
-struct NavigateRepoCommand<C: LaunchServiceProvider & SheetServiceProvider>: CommandWithUI {
+struct NavigateRepoCommand<C: LaunchServiceProvider & SheetServiceProvider & SettingsServiceProvider>: CommandWithUI {
   let id = "navigate.repo"
   let icon = Icon.showRepoIcon
   let repo: Repo
@@ -97,9 +97,7 @@ struct NavigateRepoCommand<C: LaunchServiceProvider & SheetServiceProvider>: Com
   }
 
   func perform(centre: C) async throws {
-    // TODO: Extract repo navigation resolution into a NavigationService so trigger
-    // mapping and destination selection are explicit and easier to evolve.
-    let mode = UserDefaults.standard.repoNavigationMode(for: trigger)
+    let mode = centre.settingsService.repoNavigationMode(for: trigger)
     switch mode {
       case .edit:
         centre.sheetService.showing = .editRepo(repo)

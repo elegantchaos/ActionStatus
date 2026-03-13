@@ -3,15 +3,13 @@
 //  Copyright © 2026 Elegant Chaos Limited. All rights reserved.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Observation
 import Runtime
-import SwiftUI
 
-/// Service that views can use to obtain metadata.
-/// This is marked as @Observable so that it can be added to the environment,
-/// but actually it will not be mutated and should never cause a refresh.
+/// Service that exposes runtime metadata to the app's shared services.
 @Observable
-public class MetadataService {
-  @ObservationIgnored let runtime = Runtime()
+public final class MetadataService {
+  @ObservationIgnored public let runtime = Runtime()
 
   /// Creates a metadata service.
   public init() {

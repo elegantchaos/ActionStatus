@@ -6,11 +6,9 @@
 import Runtime
 
 public extension EnvironmentKey {
-  
   /// Variable for injecting a test model.
   static let testModel = EnvironmentKey("TEST_MODEL")
 
   /// Variable for configuring a test refresh controller.
   static let testRefresh = EnvironmentKey("TEST_REFRESH")
-
 }

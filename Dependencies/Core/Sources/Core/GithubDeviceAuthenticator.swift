@@ -118,40 +118,7 @@ public struct GithubDeviceAuthenticator {
     return try await fetchUserLogin(token: token)
   }
 
-  private func fetchUserLogin(token: String) async throws -> String {
-    let endpoint = try Self.normalizedAPIBaseURL(for: apiServer).appending(path: "user")
-    var request = URLRequest(url: endpoint)
-    request.httpMethod = "GET"
-    request.setValue("application/json", forHTTPHeaderField: "Accept")
-    request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-
-    let (data, response) = try await session.data(for: request)
-    guard let http = response as? HTTPURLResponse else { throw GithubDeviceAuthError.invalidResponse }
-    guard (200...299).contains(http.statusCode) else {
-      throw GithubDeviceAuthError.failed("Failed to fetch user: \(http.statusCode)")
-    }
-
-    let user = try JSONDecoder().decode(UserResponse.self, from: data)
-    return user.login
-  }
-
-  private func postForm<T: Decodable>(endpoint: URL, body: [URLQueryItem]) async throws -> T {
-    var request = URLRequest(url: endpoint)
-    request.httpMethod = "POST"
-    request.setValue("application/json", forHTTPHeaderField: "Accept")
-    request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-    request.httpBody = body.formEncodedData
-
-    let (data, response) = try await session.data(for: request)
-    guard let http = response as? HTTPURLResponse else { throw GithubDeviceAuthError.invalidResponse }
-    guard (200...299).contains(http.statusCode) else {
-      throw GithubDeviceAuthError.failed("Auth request failed: \(http.statusCode)")
-    }
-
-    return try JSONDecoder().decode(T.self, from: data)
-  }
-
-  static func normalizedAPIBaseURL(for server: String) throws -> URL {
+  public static func normalizedAPIBaseURL(for server: String) throws -> URL {
     let trimmed = server.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !trimmed.isEmpty else { throw GithubDeviceAuthError.invalidServer }
 
@@ -189,6 +156,39 @@ public struct GithubDeviceAuthenticator {
     components.host = oauthHost
     guard let resolved = components.url else { throw GithubDeviceAuthError.invalidServer }
     return resolved
+  }
+
+  private func fetchUserLogin(token: String) async throws -> String {
+    let endpoint = try Self.normalizedAPIBaseURL(for: apiServer).appending(path: "user")
+    var request = URLRequest(url: endpoint)
+    request.httpMethod = "GET"
+    request.setValue("application/json", forHTTPHeaderField: "Accept")
+    request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+    let (data, response) = try await session.data(for: request)
+    guard let http = response as? HTTPURLResponse else { throw GithubDeviceAuthError.invalidResponse }
+    guard (200...299).contains(http.statusCode) else {
+      throw GithubDeviceAuthError.failed("Failed to fetch user: \(http.statusCode)")
+    }
+
+    let user = try JSONDecoder().decode(UserResponse.self, from: data)
+    return user.login
+  }
+
+  private func postForm<T: Decodable>(endpoint: URL, body: [URLQueryItem]) async throws -> T {
+    var request = URLRequest(url: endpoint)
+    request.httpMethod = "POST"
+    request.setValue("application/json", forHTTPHeaderField: "Accept")
+    request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+    request.httpBody = body.formEncodedData
+
+    let (data, response) = try await session.data(for: request)
+    guard let http = response as? HTTPURLResponse else { throw GithubDeviceAuthError.invalidResponse }
+    guard (200...299).contains(http.statusCode) else {
+      throw GithubDeviceAuthError.failed("Auth request failed: \(http.statusCode)")
+    }
+
+    return try JSONDecoder().decode(T.self, from: data)
   }
 
   private struct DeviceCodeResponse: Decodable {
