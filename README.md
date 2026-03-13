@@ -11,16 +11,16 @@ For more information, see https://actionstatus.elegantchaos.com.
 
 ## Coding Guidelines
 
-This project keeps coding guidance in `Extras/Documentation/Guidelines/`.
+This project keeps agent-facing coding guidance in `AGENTS.md`.
 
 If you are contributing code, start with:
 
-- `Extras/Documentation/Guidelines/README.md`
-- `Extras/Documentation/Guidelines/Principles.md`
-- `Extras/Documentation/Guidelines/Swift.md`
-- `Extras/Documentation/Guidelines/SwiftUI.md`
-- `Extras/Documentation/Guidelines/Testing.md`
-- `Extras/Documentation/Guidelines/Trusted Sources.md`
+- `AGENTS.md`
+- `~/.local/share/agents/references/Principles.md`
+- `~/.local/share/agents/references/languages/Swift.md`
+- `~/.local/share/agents/references/Validation.md`
+- `~/.local/share/agents/references/Trusted Sources.md`
+- `~/.local/share/skills/SwiftUI-Agent-Skill/swiftui-pro/SKILL.md`
 
 Quick summary:
 
@@ -30,4 +30,4 @@ Quick summary:
 - Localize all user-facing strings.
 - Run `Extras/Scripts/validate-changes` before finalizing changes.
 
-For coding and design context, see the guideline documents under `Extras/Documentation/Guidelines/`.
+For coding and design context, see `AGENTS.md` and the shared references it points to.
