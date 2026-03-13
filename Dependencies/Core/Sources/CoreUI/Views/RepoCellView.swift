@@ -3,6 +3,8 @@
 //  All code (c) 2021 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Commands
+import CommandsUI
 import Core
 import Runtime
 import SwiftUI
@@ -36,7 +38,9 @@ public struct RepoCellView: View {
   }
 
   public var body: some View {
-    commander.button(NavigateRepoCommand(repo: repo)) {
+    commander.dynamicButton { (trigger: CommandTrigger) in
+      NavigateRepoCommand<ActionStatusCommander>(repo: repo, trigger: trigger)
+    } content: {
       repoLabel()
     }
     .padding(cellPadding)

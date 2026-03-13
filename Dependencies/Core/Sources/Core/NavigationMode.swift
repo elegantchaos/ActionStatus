@@ -5,6 +5,7 @@
 
 import Foundation
 
+/// The available navigation actions for a repository cell.
 public enum NavigationMode: String, CaseIterable {
   case edit
   case viewRepo
