@@ -46,7 +46,7 @@ public struct RepoListView: View {
   }
 
   func delete(at offsets: IndexSet) {
-    let ids = status.repoIDs(atOffets: offsets)
+    let ids = status.repoIDs(atOffsets: offsets)
     Task { try? await commander.perform(RemoveReposCommand(ids: ids)) }
   }
 }

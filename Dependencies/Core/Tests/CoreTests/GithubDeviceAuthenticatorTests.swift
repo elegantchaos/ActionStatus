@@ -1,7 +1,8 @@
 import XCTest
 
-@testable import CoreUI
+@testable import Core
 
+@MainActor
 final class GithubDeviceAuthenticatorTests: XCTestCase {
   func testNormalizesGithubAPIHost() throws {
     let api = try GithubDeviceAuthenticator.normalizedAPIBaseURL(for: "api.github.com")

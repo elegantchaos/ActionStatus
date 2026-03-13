@@ -48,6 +48,8 @@ public final class StatusService {
     defaultsObserver = UserDefaults.standard.onActionStatusSettingsChanged { [weak self] in
       self?.update(sortMode: self?.settingsService.sortMode ?? .state)
     }
+
+    update(sortMode: settingsService.sortMode)
   }
 
   public func update(sortMode: SortMode) {
@@ -67,7 +69,7 @@ public final class StatusService {
     unreachable = set.count(for: Repo.State.unknown)
   }
 
-  public func repoIDs(atOffets offsets: IndexSet) -> [String] {
+  public func repoIDs(atOffsets offsets: IndexSet) -> [String] {
     offsets.map { sortedRepos[$0].id }
   }
 
