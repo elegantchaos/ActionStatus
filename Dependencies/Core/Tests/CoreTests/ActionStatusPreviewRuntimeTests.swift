@@ -10,7 +10,7 @@ final class ActionStatusPreviewRuntimeTests: XCTestCase {
     let settingsService: SettingsService
   }
 
-  func testScenarioBuildSeedsFixtureAndRuntime() {
+  func testScenarioBuildSeedsFixtureAndRuntime() async {
     let repo = ActionStatusPreviews.repo("ActionStatus", owner: "elegantchaos", state: .passing)
     let scenario = ActionStatusPreviewScenario(repos: [repo], isEditing: true)
 
