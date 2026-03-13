@@ -26,7 +26,7 @@ let package = Package(
     .package(url: "https://github.com/elegantchaos/Keychain.git", from: "1.0.0"),
     .package(url: "https://github.com/elegantchaos/Logger.git", from: "2.0.1"),
     .package(url: "https://github.com/elegantchaos/JSONSession.git", from: "3.0.0"),
-    .package(url: "https://github.com/elegantchaos/Octoid.git", branch: "feature/async-stream"),
+    .package(url: "https://github.com/elegantchaos/Octoid.git", from: "3.0.0"),
 
     .package(path: "../Previews"),
     .package(path: "../Application"),

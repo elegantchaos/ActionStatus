@@ -72,12 +72,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		22112FE42F57158E00CC642B /* Application */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Application; path = Dependencies/Application; sourceTree = "<group>"; };
-		2218311E2F55C0E1002324B6 /* Icons */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Icons; path = Dependencies/Icons; sourceTree = "<group>"; };
-		2218311F2F55C0E1002324B6 /* Settings */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Settings; path = Dependencies/Settings; sourceTree = "<group>"; };
-		22F911112F70000100AA0001 /* Previews */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Previews; path = Dependencies/Previews; sourceTree = "<group>"; };
-		2231B6762F52009700AB890D /* Runtime */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Runtime; path = Dependencies/Runtime; sourceTree = "<group>"; };
-		2231B69C2F5200D000AB890D /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Core; path = Dependencies/Core; sourceTree = "<group>"; };
+		22112FE42F57158E00CC642B /* Application */ = {isa = PBXFileReference; lastKnownFileType = text; name = Application; path = Dependencies/Application; sourceTree = "<group>"; };
+		2218311E2F55C0E1002324B6 /* Icons */ = {isa = PBXFileReference; lastKnownFileType = text; name = Icons; path = Dependencies/Icons; sourceTree = "<group>"; };
+		2218311F2F55C0E1002324B6 /* Settings */ = {isa = PBXFileReference; lastKnownFileType = text; name = Settings; path = Dependencies/Settings; sourceTree = "<group>"; };
+		2231B6762F52009700AB890D /* Runtime */ = {isa = PBXFileReference; lastKnownFileType = text; name = Runtime; path = Dependencies/Runtime; sourceTree = "<group>"; };
+		2231B69C2F5200D000AB890D /* Core */ = {isa = PBXFileReference; lastKnownFileType = text; name = Core; path = Dependencies/Core; sourceTree = "<group>"; };
 		2237DD932F6065D000F17DE7 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		2257D7F62F4DAEAF00DBD569 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		226D6C8524758F1500B54967 /* Screenshots.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Screenshots.xctestplan; sourceTree = "<group>"; };
@@ -89,11 +88,12 @@
 		22AA000A2F45F10000AA0001 /* MacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacApp.swift; sourceTree = "<group>"; };
 		22AA000B2F45F10000AA0001 /* TVApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVApp.swift; sourceTree = "<group>"; };
 		22C618B52F56345F00A9C6F0 /* MacDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacDelegate.swift; sourceTree = "<group>"; };
-		22C8C7542F5846A000856024 /* Commands */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Commands; path = Dependencies/Commands; sourceTree = "<group>"; };
+		22C8C7542F5846A000856024 /* Commands */ = {isa = PBXFileReference; lastKnownFileType = text; name = Commands; path = Dependencies/Commands; sourceTree = "<group>"; };
 		22C8C7E12F585AB000856024 /* EmptyModel.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = EmptyModel.json; sourceTree = "<group>"; };
 		22C8C7E42F585AC400856024 /* TestModel.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TestModel.json; sourceTree = "<group>"; };
 		22E778362476A5A5009ED66A /* Screenshots-tvOS.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Screenshots-tvOS.xctestplan"; sourceTree = "<group>"; };
 		22E7783B2476A606009ED66A /* Action Status UI Tests TV.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Action Status UI Tests TV.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		22E897422F61D28900DF258B /* Previews */ = {isa = PBXFileReference; lastKnownFileType = text; name = Previews; path = Dependencies/Previews; sourceTree = "<group>"; };
 		22F177C12F45DFD300583266 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		8B3C0576240FDAAD00FB533B /* ActionStatus.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ActionStatus.xctestplan; sourceTree = "<group>"; };
 		8B3E64A323EAE62D00B28168 /* Action Status.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Action Status.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -177,21 +177,29 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		8B3E649A23EAE62D00B28168 = {
+		22F911142F70010200AA0001 /* Local Packages */ = {
 			isa = PBXGroup;
 			children = (
-				22F177C12F45DFD300583266 /* AGENTS.md */,
-				228D838C246AC10700943918 /* README.md */,
 				22112FE42F57158E00CC642B /* Application */,
 				22C8C7542F5846A000856024 /* Commands */,
 				2231B69C2F5200D000AB890D /* Core */,
 				2231B6762F52009700AB890D /* Runtime */,
 				2218311E2F55C0E1002324B6 /* Icons */,
 				2218311F2F55C0E1002324B6 /* Settings */,
-				22F911112F70000100AA0001 /* Previews */,
+				22E897422F61D28900DF258B /* Previews */,
+			);
+			name = "Local Packages";
+			sourceTree = "<group>";
+		};
+		8B3E649A23EAE62D00B28168 = {
+			isa = PBXGroup;
+			children = (
+				22F177C12F45DFD300583266 /* AGENTS.md */,
+				228D838C246AC10700943918 /* README.md */,
 				22AA000026B3A10000AA0001 /* Settings.xcconfig */,
 				8B3E64A523EAE62D00B28168 /* Sources */,
 				8B522FA223F6E7B40020AD36 /* Tests */,
+				22F911142F70010200AA0001 /* Local Packages */,
 				8B3E64A423EAE62D00B28168 /* Products */,
 				8B5E7E7823F6BA8400087E15 /* Frameworks */,
 				2231B6742F52006500AB890D /* Extras */,
