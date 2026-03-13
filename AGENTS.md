@@ -7,14 +7,12 @@ See <https://actionstatus.elegantchaos.com/> for product context.
 ## Project Specific Rules
 
 - Target iOS 26.0+ and/or macOS 26.0+.
-- The codebase currently uses Swift 5.x; keep changes migration-friendly toward Swift 6+.
-- The codebase still contains UIKit/AppKit patterns; prefer migration-friendly moves toward cross-platform SwiftUI.
-- Avoid duplicated code. Avoid duplicated logic. Avoid duplicated layout.
-- Keep shared logic in `Dependencies/Core/Sources/Core` when possible.
+- The codebase uses Swift 6 and modern concurrency.
+- The codebase still contains UIKit/AppKit patterns; prefer deliberate moves toward cross-platform SwiftUI.
+- Keep code in `Dependencies/Core` when possible.
 - Consider creating new library packages in `Dependencies/` to improve modularisation.
 - Minimize the size of `Sources/ActionStatusMobile`, `Sources/ActionStatusTV`, and `Sources/ActionStatusMac`.
 - Relevant repo files: `README.md`, `Settings.xcconfig`, `ActionStatus.xcodeproj/project.pbxproj`.
-- Shared references and skills for this repo: `~/.local/share/agents/references/Principles.md`, `~/.local/share/agents/references/Good Code.md`, `~/.local/share/agents/references/Trusted Sources.md`, `~/.local/share/agents/references/Validation.md`, `~/.local/share/agents/references/languages/Swift.md`, `~/.local/share/skills/SwiftUI-Agent-Skill/swiftui-pro/SKILL.md`, `~/.local/share/skills/Swift-Concurrency-Agent-Skill/swift-concurrency-pro/SKILL.md`, `~/.local/share/skills/Swift-Testing-Agent-Skill/swift-testing-pro/SKILL.md`, `~/.local/share/skills/validation-flow-skill/SKILL.md`, `~/.local/share/skills/codex-git-skill/SKILL.md`, `~/.local/share/skills/codex-github-skill/SKILL.md`.
 
 ## Standard Rules
 
