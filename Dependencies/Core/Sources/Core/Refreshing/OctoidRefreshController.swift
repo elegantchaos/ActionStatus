@@ -41,17 +41,20 @@ public final class OctoidRefreshController: RefreshController {
         let initialDelay = UInt64(index) * 1_000_000_000
         if initialDelay > 0 {
           let delaySeconds = Double(initialDelay) / 1_000_000_000
-          await MainActor.run {
-            refreshChannel.log("Scheduling first poll for \(repo.owner)/\(repo.name) in \(delaySeconds)s.")
-          }
+          refreshChannel.log("Scheduling first poll for \(repo.owner)/\(repo.name) in \(delaySeconds)s.")
         } else {
-          await MainActor.run {
-            refreshChannel.log("Scheduling first poll for \(repo.owner)/\(repo.name) immediately.")
-          }
+          refreshChannel.log("Scheduling first poll for \(repo.owner)/\(repo.name) immediately.")
         }
         if initialDelay > 0 {
-          try? await Task.sleep(nanoseconds: initialDelay)
+          do {
+            try await Task.sleep(nanoseconds: initialDelay)
+          } catch is CancellationError {
+            return
+          } catch {
+            return
+          }
         }
+        guard !Task.isCancelled else { return }
 
         let baseURL =
           (try? GithubDeviceAuthenticator.normalizedAPIBaseURL(for: apiServer))

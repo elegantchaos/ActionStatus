@@ -15,7 +15,6 @@ struct ConnectionPrefsView: View {
   @State var token: String
   @State private var authState: GithubAuthUIState
   @State private var authTask: Task<Void, Never>? = nil
-  @State private var healthTask: Task<Void, Never>? = nil
   @State private var authHealth: GithubAuthHealth = .unknown
   @State private var showCustomServerSettings = false
 
@@ -69,23 +68,12 @@ struct ConnectionPrefsView: View {
       if let initialAuthState {
         authState = initialAuthState
       }
-      refreshAuthHealth()
     }
-    .onChange(of: authState) { _, _ in
-      refreshAuthHealth()
-    }
-    .onChange(of: token) { _, _ in
-      refreshAuthHealth()
-    }
-    .onChange(of: githubUser) { _, _ in
-      refreshAuthHealth()
-    }
-    .onChange(of: githubServer) { _, _ in
-      refreshAuthHealth()
+    .task(id: authHealthTaskKey) {
+      await refreshAuthHealth()
     }
     .onDisappear {
       cancelSignIn()
-      cancelHealthCheck()
     }
   }
 
@@ -119,6 +107,15 @@ struct ConnectionPrefsView: View {
     return serverInput.isEmpty ? defaultGithubServer : serverInput
   }
 
+  private var authHealthTaskKey: AuthHealthTaskKey {
+    AuthHealthTaskKey(
+      token: token,
+      githubUser: githubUser,
+      githubServer: githubServer,
+      authState: authState
+    )
+  }
+
   func startSignIn() {
     let server = normalizedGithubServer
     githubServer = server
@@ -137,30 +134,22 @@ struct ConnectionPrefsView: View {
           "repo"
         ])
 
-        await MainActor.run {
-          authState = .awaitingApproval(authorization.userCode, authorization.verificationURL)
-          launchService.open(url: authorization.verificationURL)
-        }
+        authState = .awaitingApproval(authorization.userCode, authorization.verificationURL)
+        launchService.open(url: authorization.verificationURL)
 
         let authenticatedUser = try await authenticator.pollForUser(authorization: authorization)
-        await MainActor.run {
-          githubUser = authenticatedUser.login
-          token = authenticatedUser.token
-          authHealth = .healthy(authenticatedUser.login)
-          authState = .signedIn(authenticatedUser.login)
-          authTask = nil
-        }
+        githubUser = authenticatedUser.login
+        token = authenticatedUser.token
+        authHealth = .healthy(authenticatedUser.login)
+        authState = .signedIn(authenticatedUser.login)
+        authTask = nil
       } catch is CancellationError {
-        await MainActor.run {
-          authState = .idle
-          authTask = nil
-        }
+        authState = .idle
+        authTask = nil
       } catch {
         githubAuthChannel.log("Sign-in failed: \(error)")
-        await MainActor.run {
-          authState = .error(error.githubAuthMessage)
-          authTask = nil
-        }
+        authState = .error(error.githubAuthMessage)
+        authTask = nil
       }
     }
   }
@@ -173,20 +162,13 @@ struct ConnectionPrefsView: View {
 
   func signOut() {
     cancelSignIn()
-    cancelHealthCheck()
     token = ""
     githubUser = ""
     authHealth = .unknown
     authState = .idle
   }
 
-  func cancelHealthCheck() {
-    healthTask?.cancel()
-    healthTask = nil
-  }
-
-  func refreshAuthHealth() {
-    cancelHealthCheck()
+  func refreshAuthHealth() async {
     guard isSignedIn else {
       authHealth = .unknown
       return
@@ -205,30 +187,27 @@ struct ConnectionPrefsView: View {
 
     authHealth = .checking
     let authenticator = GithubDeviceAuthenticator(apiServer: server, clientID: "")
-    healthTask = Task {
-      do {
-        let login = try await authenticator.validateToken(currentToken)
-        await MainActor.run {
-          if token == currentToken, githubUser == currentUser {
-            authHealth = .healthy(login)
-          }
-          healthTask = nil
-        }
-      } catch is CancellationError {
-        await MainActor.run {
-          healthTask = nil
-        }
-      } catch {
-        githubAuthChannel.log("Stored token check failed: \(error)")
-        await MainActor.run {
-          if token == currentToken, githubUser == currentUser {
-            authHealth = .unhealthy(error.githubAuthMessage)
-          }
-          healthTask = nil
-        }
+
+    do {
+      let login = try await authenticator.validateToken(currentToken)
+      if token == currentToken, githubUser == currentUser {
+        authHealth = .healthy(login)
+      }
+    } catch is CancellationError {
+    } catch {
+      githubAuthChannel.log("Stored token check failed: \(error)")
+      if token == currentToken, githubUser == currentUser {
+        authHealth = .unhealthy(error.githubAuthMessage)
       }
     }
   }
+}
+
+private struct AuthHealthTaskKey: Equatable {
+  let token: String
+  let githubUser: String
+  let githubServer: String
+  let authState: GithubAuthUIState
 }
 
 private struct AuthStatusBanner: View {

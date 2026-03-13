@@ -20,9 +20,9 @@ final class OneShotTimer {
   func schedule(after interval: TimeInterval, action: @escaping Action) {
     _ = cancel()
     modelChannel.log("Scheduled refresh for \(interval) seconds.")
-    timer = .scheduledTimer(withTimeInterval: interval, repeats: false) { timer in
-      _ = timer
-      Task { @MainActor in
+    timer = .scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
+      MainActor.assumeIsolated {
+        self?.timer = nil
         action()
       }
     }

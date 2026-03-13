@@ -16,6 +16,8 @@ public final class StatusService {
   @ObservationIgnored private let settingsService: SettingsService
   @ObservationIgnored private var defaultsObserver: AnyCancellable?
   @ObservationIgnored private var modelService: ModelService?
+  @ObservationIgnored private var modelObservation: ObservationToken?
+  @ObservationIgnored private var sortModeObservation: ObservationToken?
 
   public var sortedRepos: [Repo] = []
   public var passing = 0
@@ -32,11 +34,14 @@ public final class StatusService {
   public func connect(to modelService: ModelService) {
     self.modelService = modelService
 
-    observeChange(of: modelService.items) { [weak self] _ in
+    modelObservation?.cancel()
+    sortModeObservation?.cancel()
+
+    modelObservation = observeChange(of: modelService.items) { [weak self] _ in
       self?.update(sortMode: self?.settingsService.sortMode ?? .state)
     }
 
-    observeChange(of: self.settingsService.sortMode) { [weak self] sortMode in
+    sortModeObservation = observeChange(of: self.settingsService.sortMode) { [weak self] sortMode in
       self?.update(sortMode: sortMode)
     }
 
