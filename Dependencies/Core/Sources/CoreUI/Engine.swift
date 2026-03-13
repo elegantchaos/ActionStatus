@@ -4,12 +4,9 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Application
-import Combine
 import Core
-import Keychain
 import Logger
 import Observation
-import Runtime
 import SwiftUI
 
 #if canImport(UIKit)
@@ -74,16 +71,20 @@ public final class Engine {
   public init() {
     state = .uninitialised
 
+    let settingsService = SettingsService()
     let metadataService = MetadataService()
-    let statusService = StatusService()
+    let statusService = StatusService(settingsService: settingsService)
     let sheetService = SheetService()
     let modelService = ModelService(
       statusService: statusService,
       deviceIdentifier: metadataService.deviceIdentifier,
       source: metadataService.modelSource
     )
-    let settingsService = SettingsService()
-    let refreshService = RefreshService(model: modelService, metadata: metadataService)
+    let refreshService = RefreshService(
+      model: modelService,
+      settingsService: settingsService,
+      metadata: metadataService
+    )
     let launchService = LaunchService()
 
     self.statusService = statusService

@@ -4,6 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Combine
+import Core
 import SwiftUI
 
 /// View containing all monitored repositories in their chosen layout.

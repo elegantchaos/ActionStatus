@@ -1,4 +1,5 @@
 import Commands
+import Core
 
 /// Provider for the shared settings service used by commands.
 @MainActor

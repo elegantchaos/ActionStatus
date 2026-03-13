@@ -83,7 +83,6 @@ public struct UbiquitousStore: ModelStore {
   }
 
   public func onChange(_ callback: @escaping ChangeCallback) async {
-    let nc = NotificationCenter.default
     // remove old observer if there is one
     observer.clear()
 
@@ -114,13 +113,17 @@ public struct UbiquitousStore: ModelStore {
       }
     }
     
-    func add(perform: @escaping @Sendable () async -> ()) {
+    func add(perform: @escaping @MainActor @Sendable () async -> ()) {
       handle = NotificationCenter.default
         .addObserver(
           forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
           object: NSUbiquitousKeyValueStore.default,
           queue: .main,
-        ) { _ in Task { await perform() } }
+        ) { _ in
+          Task { @MainActor in
+            await perform()
+          }
+        }
     }
   }
 }

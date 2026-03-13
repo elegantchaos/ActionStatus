@@ -28,8 +28,8 @@ let package = Package(
     .package(url: "https://github.com/elegantchaos/JSONSession.git", from: "3.0.0"),
     .package(url: "https://github.com/elegantchaos/Octoid.git", from: "3.0.0"),
 
-    .package(path: "../Previews"),
     .package(path: "../Application"),
+    .package(path: "../Previews"),
     .package(path: "../Commands"),
     .package(path: "../Icons"),
     .package(path: "../Runtime"),
@@ -41,6 +41,11 @@ let package = Package(
       dependencies: [
         "DictionaryCoding",
         "Files",
+        "Keychain",
+        "Logger",
+        "JSONSession",
+        "Runtime",
+        "Octoid",
 
         .product(name: "Commands", package: "Commands"),
       ],
@@ -59,27 +64,36 @@ let package = Package(
         "DictionaryCoding",
         "Files",
         "Logger",
-        "JSONSession",
-        "Keychain",
-        "Runtime",
 
         .product(name: "Application", package: "Application"),
         .product(name: "Commands", package: "Commands"),
         .product(name: "CommandsUI", package: "Commands"),
         .product(name: "Icons", package: "Icons"),
         .product(name: "LoggerUI", package: "Logger"),
-        .product(name: "Octoid", package: "Octoid"),
         .product(name: "Settings", package: "Settings"),
+      ],
+      swiftSettings: [
+        .swiftLanguageMode(.v6),
+        .defaultIsolation(MainActor.self),
+        .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+        .enableUpcomingFeature("InferIsolatedConformances"),
+        .enableExperimentalFeature("SendableProhibitsMainActorInference"),
       ]),
     .target(
       name: "CoreUIPreviews",
       dependencies: [
         "CoreUI",
         .product(name: "Previews", package: "Previews"),
+      ],
+      swiftSettings: [
+        .swiftLanguageMode(.v6),
+        .defaultIsolation(MainActor.self),
+        .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+        .enableUpcomingFeature("InferIsolatedConformances"),
+        .enableExperimentalFeature("SendableProhibitsMainActorInference"),
       ]),
     .testTarget(
       name: "CoreTests",
       dependencies: ["Core", "CoreUI", "CoreUIPreviews"]),
   ],
-  swiftLanguageModes: [.v5]
 )

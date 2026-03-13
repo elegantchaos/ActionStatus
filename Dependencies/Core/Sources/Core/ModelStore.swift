@@ -10,7 +10,7 @@ public protocol ModelStore: TypedDebugDescription {
   typealias Values = [String:Repo]
   
   /// Callback to indicate that the store contents have been changed externally.
-  typealias ChangeCallback = @Sendable (Values) async -> ()
+  typealias ChangeCallback = @MainActor @Sendable (Values) async -> ()
 
   /// Our values.
   var values: Values { get set }

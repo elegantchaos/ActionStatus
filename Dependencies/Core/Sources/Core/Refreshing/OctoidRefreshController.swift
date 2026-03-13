@@ -3,25 +3,20 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import Core
 import Foundation
 import JSONSession
 import Octoid
 
 /// Refresh controller that polls GitHub APIs through Octoid resources.
-///
-/// The implementation uses one task per repository to keep polling work
-/// isolated and cancellation-friendly while preserving the existing behavior:
-/// periodic workflow checks, optional events checks, and a persisted event
-/// cursor used to trigger extra workflow refreshes after pushes.
-@MainActor public class OctoidRefreshController: RefreshController {
+@MainActor
+public final class OctoidRefreshController: RefreshController {
   internal let token: String
   internal let apiServer: String
   internal let fallbackRefreshInterval: TimeInterval
 
   private var repoTasks: [String: Task<Void, Never>] = [:]
 
-  @MainActor public init(
+  public init(
     model: ModelService,
     token: String,
     apiServer: String,
@@ -40,20 +35,35 @@ import Octoid
     let repos = Array(model.items.values)
     refreshChannel.log("Starting refresh for \(repos.count) repos at \(interval)s interval.")
     for (index, repo) in repos.enumerated() {
-      repoTasks[repo.id] = Task { [weak self] in
-        guard let self else { return }
+      let token = token
+      let apiServer = apiServer
+      repoTasks[repo.id] = Task {
         let initialDelay = UInt64(index) * 1_000_000_000
         if initialDelay > 0 {
           let delaySeconds = Double(initialDelay) / 1_000_000_000
-          refreshChannel.log("Scheduling first poll for \(repo.owner)/\(repo.name) in \(delaySeconds)s.")
+          await MainActor.run {
+            refreshChannel.log("Scheduling first poll for \(repo.owner)/\(repo.name) in \(delaySeconds)s.")
+          }
         } else {
-          refreshChannel.log("Scheduling first poll for \(repo.owner)/\(repo.name) immediately.")
+          await MainActor.run {
+            refreshChannel.log("Scheduling first poll for \(repo.owner)/\(repo.name) immediately.")
+          }
         }
         if initialDelay > 0 {
           try? await Task.sleep(nanoseconds: initialDelay)
         }
 
-        await self.runPollingLoop(for: repo, refreshInterval: interval)
+        let baseURL =
+          (try? GithubDeviceAuthenticator.normalizedAPIBaseURL(for: apiServer))
+          ?? URL(string: "https://api.github.com")!
+        let session = JSONSession.Session(base: baseURL, token: token)
+        let poller = RepoPoller(
+          repo: repo,
+          session: session,
+          refreshController: self,
+          refreshInterval: interval
+        )
+        await poller.run()
       }
     }
   }
@@ -77,20 +87,6 @@ import Octoid
     return fallbackRefreshInterval
   }
 
-  private func runPollingLoop(for repo: Repo, refreshInterval: TimeInterval) async {
-    let baseURL =
-      (try? GithubDeviceAuthenticator.normalizedAPIBaseURL(for: apiServer))
-      ?? URL(string: "https://api.github.com")!
-    let session = JSONSession.Session(base: baseURL, token: token)
-    let poller = RepoPoller(
-      repo: repo,
-      session: session,
-      refreshController: self,
-      refreshInterval: refreshInterval
-    )
-    await poller.run()
-  }
-
   func update(repo: Repo, message: Message) {
     refreshChannel.log("Error for \(repo.name) was: \(message.message)")
     model.updateState(.unknown, forRepoWithID: repo.id)
@@ -100,17 +96,13 @@ import Octoid
     refreshChannel.log("\(repo.name) status: \(run.status), conclusion: \(run.conclusion ?? "")")
 
     switch run.status {
-      case "queued":
-        return .queued
-      case "pending", "requested", "waiting":
+      case "queued", "pending", "requested", "waiting":
         return .queued
       case "in_progress":
         return .running
       case "completed":
         switch run.conclusion {
-          case "success":
-            return .passing
-          case "neutral", "skipped", "cancelled":
+          case "success", "neutral", "skipped", "cancelled":
             return .passing
           case "failure", "timed_out", "action_required", "startup_failure", "stale":
             return .failing
@@ -151,14 +143,12 @@ import Octoid
   }
 
   @discardableResult
-  func merge(repo: Repo, discovered workflows: [Repo.WorkflowSelection]) async -> Repo {
-    await MainActor.run {
-      guard var current = self.model.repo(withIdentifier: repo.id) else { return repo }
-      if current.mergeDiscoveredWorkflows(workflows) {
-        self.model.update(repo: current)
-      }
-      return current
+  func merge(repo: Repo, discovered workflows: [Repo.WorkflowSelection]) -> Repo {
+    guard var current = model.repo(withIdentifier: repo.id) else { return repo }
+    if current.mergeDiscoveredWorkflows(workflows) {
+      model.update(repo: current)
     }
+    return current
   }
 }
 
@@ -227,20 +217,19 @@ private actor RepoPoller {
 
   private func handle(_ update: RepositoryUpdate) async {
     switch update {
-    case .events(let events):
-      await handleEvents(events)
-
-    case .workflows(let workflows):
-      await handleWorkflows(workflows)
-
-    case .workflowRuns(let target, let runs):
-      await handleWorkflowRuns(target: target, runs: runs)
-
-    case .message(let source, let message):
-      await handleMessage(source: source, message: message)
-
-    case .transportError(let source, let description):
-      refreshChannel.log("Transport error for \(fullName) (\(source)): \(description)")
+      case .events(let events):
+        await handleEvents(events)
+      case .workflows(let workflows):
+        await handleWorkflows(workflows)
+      case .workflowRuns(let target, let runs):
+        await handleWorkflowRuns(target: target, runs: runs)
+      case .message(let source, let message):
+        await handleMessage(source: source, message: message)
+      case .transportError(let source, let description):
+        let fullName = self.fullName
+        await MainActor.run {
+          refreshChannel.log("Transport error for \(fullName) (\(source)): \(description)")
+        }
     }
   }
 
@@ -269,7 +258,7 @@ private actor RepoPoller {
   }
 
   private func handleWorkflowRuns(target: RepositoryWorkflowTarget, runs: WorkflowRuns) async {
-    guard let latestRepo = await MainActor.run(resultType: Repo?.self, body: { refreshController.model.repo(withIdentifier: repo.id) }) else {
+    guard let latestRepo = await MainActor.run(body: { refreshController.model.repo(withIdentifier: repo.id) }) else {
       return
     }
 
@@ -318,25 +307,31 @@ private actor RepoPoller {
 
   private func handleMessage(source: RepositoryUpdateSource, message: Message) async {
     switch source {
-    case .events:
-      if message.message == "Not Found" {
-        refreshChannel.log("Events endpoint unavailable for \(fullName); stopping events polling.")
-        shouldPollEvents = false
-        shouldRestartStream = true
-      } else {
-        await refreshController.update(repo: repo, message: message)
-      }
+      case .events:
+        if message.message == "Not Found" {
+          let fullName = self.fullName
+          await MainActor.run {
+            refreshChannel.log("Events endpoint unavailable for \(fullName); stopping events polling.")
+          }
+          shouldPollEvents = false
+          shouldRestartStream = true
+        } else {
+          await refreshController.update(repo: repo, message: message)
+        }
 
-    case .workflows:
+      case .workflows:
         await refreshController.update(repo: repo, message: message)
-      if message.message == "Not Found" {
-        shouldPollWorkflows = false
-        workflowStates.removeAll()
-        shouldRestartStream = true
-      }
+        if message.message == "Not Found" {
+          shouldPollWorkflows = false
+          workflowStates.removeAll()
+          shouldRestartStream = true
+        }
 
-    case .workflowRuns(let target):
-      refreshChannel.log("Workflow runs unavailable for \(fullName) (\(target.name)): \(message.message)")
+      case .workflowRuns(let target):
+        let fullName = self.fullName
+        await MainActor.run {
+          refreshChannel.log("Workflow runs unavailable for \(fullName) (\(target.name)): \(message.message)")
+        }
     }
   }
 

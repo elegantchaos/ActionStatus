@@ -5,11 +5,12 @@
 
 import Foundation
 
-class OneShotTimer {
-  typealias Action = (Timer) -> Void
+@MainActor
+final class OneShotTimer {
+  typealias Action = @MainActor @Sendable () -> Void
   var timer: Timer?
 
-  public func cancel() -> Bool {
+  func cancel() -> Bool {
     let cancelled = timer != nil
     timer?.invalidate()
     timer = nil
@@ -19,7 +20,11 @@ class OneShotTimer {
   func schedule(after interval: TimeInterval, action: @escaping Action) {
     _ = cancel()
     modelChannel.log("Scheduled refresh for \(interval) seconds.")
-    timer = .scheduledTimer(withTimeInterval: interval, repeats: false, block: action)
+    timer = .scheduledTimer(withTimeInterval: interval, repeats: false) { timer in
+      _ = timer
+      Task { @MainActor in
+        action()
+      }
+    }
   }
-
 }

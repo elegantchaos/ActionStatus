@@ -13,11 +13,12 @@ public enum RefreshState {
   case paused(Int)
 }
 
-@MainActor public class RefreshController {
+@MainActor
+public class RefreshController {
   internal let model: ModelService
   internal var state: RefreshState = .paused(1)
 
-  @MainActor public init(model: ModelService) {
+  public init(model: ModelService) {
     self.model = model
   }
 
@@ -28,33 +29,28 @@ public enum RefreshState {
 
 public extension RefreshController {
   func pause() {
-    DispatchQueue.main.async { [self] in
-      switch state {
-        case .paused(let level):
-          state = .paused(level + 1)
-
-        case .running:
-          state = .paused(1)
-          cancelRefresh()
-      }
+    switch state {
+      case .paused(let level):
+        state = .paused(level + 1)
+      case .running:
+        state = .paused(1)
+        cancelRefresh()
     }
   }
 
   func resume(rate: Double) {
-    DispatchQueue.main.async { [self] in
-      switch state {
-        case .paused(let level):
-          if level == 1 {
-            state = .running(rate)
-            startRefresh()
-          } else {
-            state = .paused(level - 1)
-          }
-        case .running(let currentRate):
-          guard currentRate != rate else { break }
+    switch state {
+      case .paused(let level):
+        if level == 1 {
           state = .running(rate)
-          refreshRateDidChange(to: rate)
-      }
+          startRefresh()
+        } else {
+          state = .paused(level - 1)
+        }
+      case .running(let currentRate):
+        guard currentRate != rate else { break }
+        state = .running(rate)
+        refreshRateDidChange(to: rate)
     }
   }
 }
