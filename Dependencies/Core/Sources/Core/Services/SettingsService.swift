@@ -4,7 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Commands
-import Combine
+import Application
 import Foundation
 import Keychain
 import Logger
@@ -17,7 +17,7 @@ public let settingsChannel = Channel("Settings")
 @MainActor
 public final class SettingsService {
   @ObservationIgnored private let defaults: UserDefaults
-  @ObservationIgnored private var defaultsObserver: AnyCancellable?
+  @ObservationIgnored private var defaultsObserver: NotificationToken?
 
   /// Whether editing UI is currently enabled.
   public var isEditing = false

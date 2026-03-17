@@ -3,7 +3,7 @@
 //  All code (c) 2021 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import Combine
+import Application
 import Foundation
 import Logger
 import Observation
@@ -14,7 +14,7 @@ let repoStateChannel = Channel("RepoState")
 @MainActor
 public final class StatusService {
   @ObservationIgnored private let settingsService: SettingsService
-  @ObservationIgnored private var defaultsObserver: AnyCancellable?
+  @ObservationIgnored private var defaultsObserver: NotificationToken?
   @ObservationIgnored private var modelService: ModelService?
   @ObservationIgnored private var modelObservation: ObservationToken?
   @ObservationIgnored private var sortModeObservation: ObservationToken?

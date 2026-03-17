@@ -39,6 +39,7 @@ let package = Package(
     .target(
       name: "Core",
       dependencies: [
+        .product(name: "Application", package: "Application"),
         "DictionaryCoding",
         "Files",
         "Keychain",
