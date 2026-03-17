@@ -86,7 +86,6 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
   public let id: String
   public var name: String
   public var owner: String
-  public var workflow: String
   public var workflows: [WorkflowSelection]
   public var branches: [String]
   public var state: State
@@ -96,9 +95,8 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
 
   public init() {
     id = UUID().uuidString
-    name = ""
-    owner = ""
-    workflow = "Tests"
+    name = "name"
+    owner = "owner"
     workflows = []
     branches = []
     state = .unknown
@@ -109,7 +107,6 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
     self.id = id ?? UUID().uuidString
     self.name = name
     self.owner = owner
-    self.workflow = workflow
     self.workflows = []
     self.branches = branches
     self.state = state
@@ -136,11 +133,6 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
     let selected = workflows.filter(\.enabled)
     if !selected.isEmpty {
       return selected
-    }
-
-    let trimmedLegacy = workflow.trimmingCharacters(in: .whitespacesAndNewlines)
-    if workflows.isEmpty, !trimmedLegacy.isEmpty {
-      return [WorkflowSelection(name: trimmedLegacy, path: ".github/workflows/\(trimmedLegacy).yml")]
     }
 
     return []
@@ -220,17 +212,16 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
   public enum GithubLocation {
     case repo
     case workflow
-    case badge(String)
   }
 
   public func githubURL(for location: GithubLocation = .workflow) -> URL {
     let suffix: String
     switch location {
       case .workflow: suffix = "/actions"
-      case .badge(let branch):
-        let query = branch.isEmpty ? "" : "?branch=\(branch)"
-        let workflowName = enabledWorkflows.first?.normalizedWorkflowName ?? workflow
-        suffix = "/workflows/\(workflowName)/badge.svg\(query)"
+//      case .badge(let branch):
+//        let query = branch.isEmpty ? "" : "?branch=\(branch)"
+//        let workflowName = enabledWorkflows.first?.normalizedWorkflowName ?? workflow
+//        suffix = "/workflows/\(workflowName)/badge.svg\(query)"
 
       default: suffix = ""
     }
