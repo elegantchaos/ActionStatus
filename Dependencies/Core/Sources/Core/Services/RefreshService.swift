@@ -6,8 +6,16 @@
 import Foundation
 import Logger
 import Observation
+import Settings
 
 public let refreshServiceChannel = Channel("Refresh Service")
+
+/// Defines the configuration parameters required for refresh controller creation.
+public protocol RefreshConfiguration {
+  var githubServer: String { get }
+  var refreshInterval: RefreshRate { get }
+  var githubToken: String { get }
+}
 
 /// Service that manages status refresh scheduling and refresh controller creation.
 @Observable
@@ -22,18 +30,19 @@ public final class RefreshService {
 
   let type: RefreshType
   let modelService: ModelService
-  let settingsService: SettingsService
+  let configuration: RefreshConfiguration
   var refreshController: RefreshController?
+
 
   /// Creates a refresh service for the supplied model and metadata.
   public init(
     model: ModelService,
-    settingsService: SettingsService,
     metadata: MetadataService,
+    configuration: RefreshConfiguration,
     forcedType: RefreshType? = nil
   ) {
     self.modelService = model
-    self.settingsService = settingsService
+    self.configuration = configuration
 
     if let forcedType {
       self.type = forcedType
@@ -45,7 +54,7 @@ public final class RefreshService {
       self.type = .normal
     }
   }
-  
+
   /// Resets any active refresh controller.
   public func resetRefresh() {
     refreshServiceChannel.log("Reset")
@@ -66,7 +75,7 @@ public final class RefreshService {
     }
 
     refreshServiceChannel.log("Resumed")
-    refreshController?.resume(rate: settingsService.refreshInterval.rate)
+    refreshController?.resume(rate: configuration.refreshInterval.rate)
   }
 
   /// Creates the appropriate refresh controller for the configured mode.
@@ -84,14 +93,7 @@ public final class RefreshService {
 
   /// Creates a GitHub-backed refresh controller when credentials are available.
   public func makeGithubRefreshController() -> RefreshController? {
-    let user = settingsService.githubUser
-    let server = settingsService.githubServer
-    guard !user.isEmpty else {
-      githubChannel.log("No GitHub account configured.")
-      return nil
-    }
-
-    let token = settingsService.readToken()
+    let token = configuration.githubToken
     guard !token.isEmpty else {
       githubChannel.log("No GitHub token configured.")
       return nil
@@ -100,24 +102,27 @@ public final class RefreshService {
     let controller = OctoidRefreshController(
       model: modelService,
       token: token,
-      apiServer: server,
-      refreshInterval: settingsService.refreshInterval.rate
+      apiServer: configuration.githubServer,
+      refreshInterval: configuration.refreshInterval.rate
     )
 
-    githubChannel.log("Using github refresh controller for \(user)/\(server)")
     return controller
   }
 }
 
 extension RefreshService: TypedDebugDescription {
   public var debugLabel: String {
-      switch type {
-        case .normal:
-          return "GitHub"
-        case .random:
-          return "Random"
-        case .none:
-          return "None"
-      }
+    switch type {
+      case .normal:
+        return "GitHub"
+      case .random:
+        return "Random"
+      case .none:
+        return "None"
+    }
   }
+}
+
+extension RefreshService {
+
 }

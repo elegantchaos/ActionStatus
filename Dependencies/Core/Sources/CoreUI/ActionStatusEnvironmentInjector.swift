@@ -25,6 +25,9 @@ public struct ActionStatusEnvironmentInjector: ViewModifier {
   /// Refresh service injected into SwiftUI views.
   public let refreshService: RefreshService
 
+  /// Refresh configuration injected into SwiftUI views.
+  public let refreshConfig: StoredRefreshConfiguration
+  
   /// Sheet service injected into SwiftUI views.
   public let sheetService: SheetService
 
@@ -37,6 +40,7 @@ public struct ActionStatusEnvironmentInjector: ViewModifier {
     launchService: LaunchService,
     statusService: StatusService,
     refreshService: RefreshService,
+    refreshConfig: StoredRefreshConfiguration,
     sheetService: SheetService
   ) {
     self.commander = commander
@@ -46,6 +50,7 @@ public struct ActionStatusEnvironmentInjector: ViewModifier {
     self.launchService = launchService
     self.statusService = statusService
     self.refreshService = refreshService
+    self.refreshConfig = refreshConfig
     self.sheetService = sheetService
   }
 
@@ -58,6 +63,7 @@ public struct ActionStatusEnvironmentInjector: ViewModifier {
       .environment(launchService)
       .environment(statusService)
       .environment(refreshService)
+      .environment(refreshConfig)
       .environment(sheetService)
       .environment(commander)
   }

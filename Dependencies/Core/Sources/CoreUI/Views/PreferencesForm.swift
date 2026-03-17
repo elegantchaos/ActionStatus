@@ -17,7 +17,7 @@ public struct PreferencesForm: View {
 
   public var body: some View {
     List {
-      ConnectionPrefsView(token: settingsService.readToken())
+      ConnectionPrefsView()
       NavigationPrefsView()
       RefreshPrefsView()
       DisplayPrefsView()

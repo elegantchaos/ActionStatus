@@ -46,6 +46,9 @@ public final class Engine {
   /// Shared refresh service.
   public let refreshService: RefreshService
 
+  /// Shared refresh configuration.
+  public let refreshConfig: StoredRefreshConfiguration
+
   /// Shared status service.
   public let statusService: StatusService
 
@@ -74,17 +77,18 @@ public final class Engine {
 
     let settingsService = SettingsService()
     let metadataService = MetadataService()
-    let statusService = StatusService(settingsService: settingsService)
+    let statusService = StatusService()
     let sheetService = SheetService()
     let modelService = ModelService(
       statusService: statusService,
       deviceIdentifier: metadataService.deviceIdentifier,
       source: metadataService.modelSource
     )
+    let refreshConfig = StoredRefreshConfiguration()
     let refreshService = RefreshService(
       model: modelService,
-      settingsService: settingsService,
-      metadata: metadataService
+      metadata: metadataService,
+      configuration: refreshConfig
     )
     let launchService = LaunchService()
 
@@ -94,6 +98,7 @@ public final class Engine {
     self.modelService = modelService
     self.settingsService = settingsService
     self.refreshService = refreshService
+    self.refreshConfig = refreshConfig
     self.launchService = launchService
     self.commander = ActionStatusCommander(
       modelService: modelService,
@@ -120,6 +125,7 @@ extension Engine: AppEngine {
       launchService: launchService,
       statusService: statusService,
       refreshService: refreshService,
+      refreshConfig: refreshConfig,
       sheetService: sheetService
     )
   }
@@ -133,6 +139,7 @@ extension Engine: AppEngine {
       launchService: launchService,
       statusService: statusService,
       refreshService: refreshService,
+      refreshConfig: refreshConfig,
       sheetService: sheetService
     )
   }

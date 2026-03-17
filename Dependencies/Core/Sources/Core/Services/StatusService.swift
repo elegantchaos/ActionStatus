@@ -7,17 +7,16 @@ import Application
 import Foundation
 import Logger
 import Observation
+import Settings
 
 let repoStateChannel = Channel("RepoState")
 
 @Observable
 @MainActor
 public final class StatusService {
-  @ObservationIgnored private let settingsService: SettingsService
   @ObservationIgnored private var defaultsObserver: NotificationToken?
   @ObservationIgnored private var modelService: ModelService?
   @ObservationIgnored private var modelObservation: ObservationToken?
-  @ObservationIgnored private var sortModeObservation: ObservationToken?
 
   public var sortedRepos: [Repo] = []
   public var passing = 0
@@ -27,32 +26,25 @@ public final class StatusService {
   public var dormant = 0
   public var unreachable = 0
 
-  public init(settingsService: SettingsService) {
-    self.settingsService = settingsService
+  public init() {
   }
 
   public func connect(to modelService: ModelService) {
     self.modelService = modelService
 
     modelObservation?.cancel()
-    sortModeObservation?.cancel()
-
     modelObservation = observeChange(of: modelService.items) { [weak self] _ in
-      self?.update(sortMode: self?.settingsService.sortMode ?? .state)
-    }
-
-    sortModeObservation = observeChange(of: self.settingsService.sortMode) { [weak self] sortMode in
-      self?.update(sortMode: sortMode)
+      self?.update()
     }
 
     defaultsObserver = UserDefaults.standard.onActionStatusSettingsChanged { [weak self] in
-      self?.update(sortMode: self?.settingsService.sortMode ?? .state)
+      self?.update()
     }
 
-    update(sortMode: settingsService.sortMode)
+    update()
   }
 
-  public func update(sortMode: SortMode) {
+  public func update() {
     repoStateChannel.log("updated")
 
     guard let modelService else { return }
@@ -102,4 +94,12 @@ public final class StatusService {
     }
     return state
   }
+
+  var sortMode: SortMode {
+    UserDefaults.standard.value(forKey: .sortMode)
+  }
+}
+
+@MainActor public extension AppSettingKey where Value == SortMode {
+  static let sortMode = AppSettingKey("SortMode", defaultValue: .state)
 }

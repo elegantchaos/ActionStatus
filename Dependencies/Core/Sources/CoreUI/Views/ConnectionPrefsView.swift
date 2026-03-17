@@ -9,10 +9,9 @@ import SwiftUI
 
 struct ConnectionPrefsView: View {
   @Environment(LaunchService.self) private var launchService
-
+  @Environment(StoredRefreshConfiguration.self) var refreshConfig
   private let defaultGithubServer = "api.github.com"
 
-  @State var token: String
   @State private var authState: GithubAuthUIState
   @State private var authTask: Task<Void, Never>? = nil
   @State private var authHealth: GithubAuthHealth = .unknown
@@ -23,18 +22,17 @@ struct ConnectionPrefsView: View {
 
   private let initialAuthState: GithubAuthUIState?
 
-  init(token: String, initialAuthState: GithubAuthUIState? = nil) {
-    _token = .init(initialValue: token)
+  init(initialAuthState: GithubAuthUIState? = nil) {
     _authState = State(initialValue: initialAuthState ?? .idle)
     self.initialAuthState = initialAuthState
   }
 
   var body: some View {
     return PreferencesSection(title: "Account") {
-      AuthStatusBanner(state: authState, health: authHealth, currentUser: githubUser, hasToken: !token.isEmpty)
+      AuthStatusBanner(state: authState, health: authHealth)
 
       HStack {
-        if !isSignedIn {
+        if !refreshConfig.isSignedIn {
           Toggle("Custom Server", isOn: $showCustomServerSettings)
             .controlSize(.small)
             #if os(macOS)
@@ -53,9 +51,9 @@ struct ConnectionPrefsView: View {
 
         Spacer()
 
-        if isSignedIn {
+        if refreshConfig.isSignedIn {
           Button("Sign Out", role: .destructive, action: signOut)
-            .disabled(!isSignedIn)
+            .disabled(!refreshConfig.isSignedIn)
         } else {
           Button(primaryAuthButtonTitle, action: primaryAuthButtonAction)
             .buttonStyle(.borderedProminent)
@@ -75,10 +73,6 @@ struct ConnectionPrefsView: View {
     .onDisappear {
       cancelSignIn()
     }
-  }
-
-  private var isSignedIn: Bool {
-    !githubUser.isEmpty && !token.isEmpty
   }
 
   private var showsCancelAction: Bool {
@@ -109,9 +103,9 @@ struct ConnectionPrefsView: View {
 
   private var authHealthTaskKey: AuthHealthTaskKey {
     AuthHealthTaskKey(
-      token: token,
-      githubUser: githubUser,
-      githubServer: githubServer,
+      token: refreshConfig.githubToken,
+      githubUser: refreshConfig.githubUser,
+      githubServer: refreshConfig.githubServer,
       authState: authState
     )
   }
@@ -138,8 +132,11 @@ struct ConnectionPrefsView: View {
         launchService.open(url: authorization.verificationURL)
 
         let authenticatedUser = try await authenticator.pollForUser(authorization: authorization)
-        githubUser = authenticatedUser.login
-        token = authenticatedUser.token
+        try refreshConfig.updateGithubCredentials(
+          user: authenticatedUser.login,
+          server: server,
+          token: authenticatedUser.token
+        )
         authHealth = .healthy(authenticatedUser.login)
         authState = .signedIn(authenticatedUser.login)
         authTask = nil
@@ -162,14 +159,20 @@ struct ConnectionPrefsView: View {
 
   func signOut() {
     cancelSignIn()
-    token = ""
-    githubUser = ""
-    authHealth = .unknown
-    authState = .idle
+    refreshConfig.githubToken = ""
+
+    do {
+      try refreshConfig.clearGithubCredentials()
+      authHealth = .unknown
+      authState = .idle
+    } catch {
+      githubAuthChannel.log("Sign-out failed: \(error)")
+      authState = .error("Failed to remove stored Github credentials.")
+    }
   }
 
   func refreshAuthHealth() async {
-    guard isSignedIn else {
+    guard refreshConfig.isSignedIn else {
       authHealth = .unknown
       return
     }
@@ -182,7 +185,7 @@ struct ConnectionPrefsView: View {
     }
 
     let server = normalizedGithubServer
-    let currentToken = token
+    let currentToken = refreshConfig.githubToken
     let currentUser = githubUser
 
     authHealth = .checking
@@ -190,13 +193,13 @@ struct ConnectionPrefsView: View {
 
     do {
       let login = try await authenticator.validateToken(currentToken)
-      if token == currentToken, githubUser == currentUser {
+      if refreshConfig.githubToken == currentToken, githubUser == currentUser {
         authHealth = .healthy(login)
       }
     } catch is CancellationError {
     } catch {
       githubAuthChannel.log("Stored token check failed: \(error)")
-      if token == currentToken, githubUser == currentUser {
+      if refreshConfig.githubToken == currentToken, githubUser == currentUser {
         authHealth = .unhealthy(error.githubAuthMessage)
       }
     }
@@ -211,10 +214,10 @@ private struct AuthHealthTaskKey: Equatable {
 }
 
 private struct AuthStatusBanner: View {
+  @Environment(StoredRefreshConfiguration.self) var refreshConfig
+
   let state: GithubAuthUIState
   let health: GithubAuthHealth
-  let currentUser: String
-  let hasToken: Bool
 
   var body: some View {
     HStack(alignment: .top, spacing: 10) {
@@ -244,7 +247,7 @@ private struct AuthStatusBanner: View {
   private var statusTitle: String {
     switch state {
       case .idle:
-        if isSignedIn {
+        if refreshConfig.isSignedIn {
           switch health {
             case .unknown, .checking:
               return "Signed In"
@@ -269,13 +272,13 @@ private struct AuthStatusBanner: View {
   private var statusDetail: Text? {
     switch state {
       case .idle:
-        guard isSignedIn else {
+        guard refreshConfig.isSignedIn else {
           return Text("Sign in to enable private repositories and notifications.")
         }
 
         switch health {
           case .unknown:
-            return Text(currentUser)
+            return Text(refreshConfig.githubUser)
           case .checking:
             return Text("Checking API access for stored credentials.")
           case .healthy(let login):
@@ -297,7 +300,7 @@ private struct AuthStatusBanner: View {
   private var statusSymbol: String {
     switch state {
       case .idle:
-        guard isSignedIn else { return "person.crop.circle.badge.exclamationmark" }
+        guard refreshConfig.isSignedIn else { return "person.crop.circle.badge.exclamationmark" }
         switch health {
           case .unknown, .checking, .healthy:
             return "checkmark.circle.fill"
@@ -318,7 +321,7 @@ private struct AuthStatusBanner: View {
   private var statusColor: Color {
     switch state {
       case .idle:
-        guard isSignedIn else { return .secondary }
+        guard refreshConfig.isSignedIn else { return .secondary }
         switch health {
           case .unknown, .healthy:
             return .green
@@ -334,10 +337,6 @@ private struct AuthStatusBanner: View {
       case .error:
         return .red
     }
-  }
-
-  private var isSignedIn: Bool {
-    !currentUser.isEmpty && hasToken
   }
 }
 
