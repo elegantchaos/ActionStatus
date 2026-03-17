@@ -17,7 +17,7 @@
       panel.canCreateDirectories = false
 
       guard panel.runModal() == .OK else { return }
-      modelService.add(fromFolders: panel.urls)
+      modelService.addLocalReposIn(panel.urls)
     }
 
     func applyWindowSettings() {

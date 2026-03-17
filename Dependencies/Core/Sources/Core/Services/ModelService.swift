@@ -29,7 +29,6 @@ public final class ModelService {
 
   @ObservationIgnored private var store: ModelStore
   @ObservationIgnored private let statusService: StatusService
-
   internal var items: [String: Repo]
   internal let deviceIdentifier: String?
 
@@ -60,7 +59,7 @@ public final class ModelService {
 
     self.init([], statusService: statusService, deviceIdentifier: deviceIdentifier, store: store)
   }
-
+  
   public func startup() async {
     await store.onChange { [weak self] newValues in
       self?.load(newValues: newValues)
@@ -123,28 +122,30 @@ public final class ModelService {
     }
   }
 
-  @discardableResult
-  public func addRepo() -> Repo {
+  /// Add a new repo with default values, and return it.
+  @discardableResult public func addNewRepo() -> Repo {
     let repo = Repo()
     items[repo.id] = repo
+    store.set(repo, forKey: repo.id)
     return repo
   }
 
   @discardableResult
-  public func addRepo(name: String, owner: String) -> Repo {
+  public func addRemoteRepo(name: String, owner: String) -> Repo {
     let repo = Repo(name, owner: owner, workflow: "Tests")
     items[repo.id] = repo
+    store.set(repo, forKey: repo.id)
     return repo
   }
 
-  public func add(fromFolders urls: [URL]) {
+  public func addLocalReposIn(_ urls: [URL]) {
     if let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) {
       let fileManager = FileManager.default
       for url in urls {
         if let enumerator = fileManager.enumerator(at: url, includingPropertiesForKeys: []) {
           while let repositoryURL = enumerator.nextObject() as? URL {
             if repositoryURL.lastPathComponent == ".git" {
-              add(fromGitRepo: repositoryURL, detector: detector)
+              addLocalRepoIn(repositoryURL, detector: detector)
             }
           }
         }
@@ -161,7 +162,7 @@ public final class ModelService {
 }
 
 internal extension ModelService {
-  func add(fromGitRepo localGitFolderURL: URL, detector: NSDataDetector) {
+  func addLocalRepoIn(_ localGitFolderURL: URL, detector: NSDataDetector) {
     let containerURL = localGitFolderURL.deletingLastPathComponent()
     let containerName = containerURL.lastPathComponent
     if let config = try? String(contentsOf: localGitFolderURL.appendingPathComponent("config"), encoding: .utf8) {
@@ -173,7 +174,7 @@ internal extension ModelService {
           let owner = url.deletingLastPathComponent().lastPathComponent
           var repo = items.first(where: { $0.value.name == name && $0.value.owner == owner })?.value
           if repo == nil {
-            repo = addRepo(name: name, owner: owner)
+            repo = addRemoteRepo(name: name, owner: owner)
           }
 
           if repo?.name == containerName, let device = deviceIdentifier, let repo {

@@ -14,7 +14,7 @@ struct AddRepoCommand<C: ModelServiceProvider>: CommandWithUI {
   let icon = Icon.addIcon
 
   func perform(centre: C) async throws {
-    centre.modelService.addRepo()
+    centre.modelService.addNewRepo()
   }
 }
 

@@ -25,7 +25,7 @@ public extension Engine {
 
   @IBAction func addLocalRepos() {
     let picker = filePickerClass.init(forOpeningFolderStartingIn: nil) { urls in
-      self.modelService.add(fromFolders: urls)
+      self.modelService.add(localReposIn: urls)
     }
     presentPicker(picker)
   }
