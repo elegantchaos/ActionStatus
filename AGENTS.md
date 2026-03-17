@@ -7,12 +7,12 @@ See <https://actionstatus.elegantchaos.com/> for product context.
 ## Project Specific Rules
 
 - Target iOS 26.0+ and/or macOS 26.0+.
-- The codebase uses Swift 6 and modern concurrency.
-- The codebase still contains UIKit/AppKit patterns; prefer deliberate moves toward cross-platform SwiftUI.
+- Use Swift 6 and modern concurrency.
+- Use Swift Testing and not XCTest for unit tests.
+- Avoid UIKit/AppKit patterns; prefer cross-platform SwiftUI.
 - Keep code in `Dependencies/Core` when possible.
 - Consider creating new library packages in `Dependencies/` to improve modularisation.
 - Minimize the size of `Sources/ActionStatusMobile`, `Sources/ActionStatusTV`, and `Sources/ActionStatusMac`.
-- Relevant repo files: `README.md`, `Settings.xcconfig`, `ActionStatus.xcodeproj/project.pbxproj`.
 
 ## Standard Rules
 

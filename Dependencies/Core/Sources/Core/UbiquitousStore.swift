@@ -73,7 +73,9 @@ public struct UbiquitousStore: ModelStore {
     let encoder = DictionaryEncoder()
     do {
       let dict = try encoder.encode(repo) as [String: Any]
+      insertIntoIndex(key)
       store.set(dict, forKey: key)
+      store.synchronize()
       ubiquitousChannel.log("Saved \(repo) to store.")
     } catch {
       ubiquitousChannel.log("Failed to encode repo \(repo).\n\nError:\(error)")
@@ -82,8 +84,21 @@ public struct UbiquitousStore: ModelStore {
   }
 
   public func remove(forKey key: String) {
+    removeFromIndex(key)
     store.removeObject(forKey: key)
+    store.synchronize()
     ubiquitousChannel.log("Removed repo with id \(key) from store.")
+  }
+
+  private func insertIntoIndex(_ key: String) {
+    var keys = index
+    guard !keys.contains(key) else { return }
+    keys.append(key)
+    store.set(keys, forKey: indexKey)
+  }
+
+  private func removeFromIndex(_ key: String) {
+    store.set(index.filter { $0 != key }, forKey: indexKey)
   }
 
   public func onChange(_ callback: @escaping ChangeCallback) async {
