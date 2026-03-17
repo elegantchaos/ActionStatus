@@ -20,6 +20,8 @@ public struct UbiquitousStore: ModelStore {
     observer = Observer()
     indexKey = key ?? Self.defaultKey
     store.synchronize()
+
+    ubiquitousChannel.log("Initialized store with index \(index)")
   }
 
   private var index: [String] {
@@ -72,6 +74,7 @@ public struct UbiquitousStore: ModelStore {
     do {
       let dict = try encoder.encode(repo) as [String: Any]
       store.set(dict, forKey: key)
+      ubiquitousChannel.log("Saved \(repo) to store.")
     } catch {
       ubiquitousChannel.log("Failed to encode repo \(repo).\n\nError:\(error)")
       return
@@ -80,6 +83,7 @@ public struct UbiquitousStore: ModelStore {
 
   public func remove(forKey key: String) {
     store.removeObject(forKey: key)
+    ubiquitousChannel.log("Removed repo with id \(key) from store.")
   }
 
   public func onChange(_ callback: @escaping ChangeCallback) async {
@@ -121,6 +125,7 @@ public struct UbiquitousStore: ModelStore {
           queue: .main,
         ) { _ in
           Task { @MainActor in
+            ubiquitousChannel.log("store changed.")
             await perform()
           }
         }
@@ -128,6 +133,6 @@ public struct UbiquitousStore: ModelStore {
   }
 }
 
-nonisolated extension TypedDebugDescription {
-  public var debugLabel: String { "default" }
+nonisolated extension UbiquitousStore: TypedDebugDescription {
+  public var debugLabel: String { indexKey }
 }

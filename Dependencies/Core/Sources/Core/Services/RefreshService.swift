@@ -45,7 +45,7 @@ public final class RefreshService {
       self.type = .normal
     }
   }
-
+  
   /// Resets any active refresh controller.
   public func resetRefresh() {
     refreshServiceChannel.log("Reset")
@@ -106,5 +106,18 @@ public final class RefreshService {
 
     githubChannel.log("Using github refresh controller for \(user)/\(server)")
     return controller
+  }
+}
+
+extension RefreshService: TypedDebugDescription {
+  public var debugLabel: String {
+      switch type {
+        case .normal:
+          return "GitHub"
+        case .random:
+          return "Random"
+        case .none:
+          return "None"
+      }
   }
 }

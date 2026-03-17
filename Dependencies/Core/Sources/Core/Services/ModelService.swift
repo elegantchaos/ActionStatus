@@ -185,3 +185,7 @@ internal extension ModelService {
     }
   }
 }
+
+extension ModelService: TypedDebugDescription {
+  public var debugLabel: String { "store: \(store)" }
+}
