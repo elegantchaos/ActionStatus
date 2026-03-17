@@ -6,6 +6,10 @@ Redesign GitHub authentication persistence so the username, server, and token ar
 
 The recommended structure is to keep polling in `OctoidRefreshController`, but move credential storage, validation, and sign-in state into a dedicated auth service. `RefreshService` and the UI should consume that state rather than each performing their own credential checks.
 
+The design should also support:
+- startup injection of alternate auth services, matching the existing `TEST_REFRESH` override pattern used for refresh controllers
+- a future with multiple providers such as GitHub, GitLab, and Codeberg, where valid auth and refresh pairings are explicit rather than accidental
+
 ## Key Changes
 
 - Add a `GithubCredentials` value type with `login`, `server`, and `token`.
@@ -29,6 +33,12 @@ The recommended structure is to keep polling in `OctoidRefreshController`, but m
 - Keep `OctoidRefreshController` focused on repository refresh using already-validated credentials, rather than giving it ownership of Keychain I/O and auth lifecycle.
 - Update the sign-in/sign-out UI so it owns only transient device-flow UI state, then hands completed `GithubCredentials` to the auth service.
 - Keep invalid stored credentials in Keychain but mark them invalid in published state so the UI can show the problem and allow retry or sign-out.
+- Mirror refresh-controller injection with an auth override environment variable, for example `TEST_AUTH`, so app startup can substitute fake auth services for UI and integration testing.
+- Introduce provider-level abstractions so auth and refresh are selected as a matched pair:
+  - a provider identifier such as `github`, `gitlab`, or `codeberg`
+  - provider-specific credentials and auth service implementations
+  - provider-specific refresh controller factories
+- Make provider pairing explicit in startup wiring so unsupported combinations cannot be created accidentally.
 - Add a one-time migration path from legacy storage:
   - if the combined Keychain entry is absent
   - but legacy `githubUser`, `githubServer`, and token storage exist
@@ -36,20 +46,50 @@ The recommended structure is to keep polling in `OctoidRefreshController`, but m
   - save the new single entry
   - clear legacy defaults/keychain data
 
+## Provider and Injection Architecture
+
+- Add a small provider abstraction at the service boundary rather than hard-coding GitHub into app startup.
+- Define a provider selection type, for example `ForgeProvider`, with cases such as `github`, `gitlab`, and `codeberg`.
+- Define a protocol for auth services, for example `AuthService`, that exposes:
+  - published auth state
+  - validated credentials if available
+  - startup validation
+  - sign-in completion
+  - sign-out
+- Define a protocol or factory for refresh creation that takes validated provider credentials and returns a provider-compatible refresh controller.
+- Create a provider composition object or registry that owns the valid auth/refresh pairing for each provider.
+  - GitHub maps to `GithubAuthService` plus `OctoidRefreshController`
+  - future providers map to their own auth service plus their own refresh controller
+  - unsupported pairings are unrepresentable in the registry
+- Keep the first implementation GitHub-only, but shape the interfaces so adding a second provider is additive rather than a refactor.
+- Add an auth override path in runtime metadata similar to `TEST_REFRESH`.
+  - `TEST_AUTH` should allow values such as `signed-out`, `valid`, `invalid`, or `in-progress`
+  - the injected auth double should publish stable canned states without touching Keychain or network
+  - startup should compose the chosen auth service and refresh factory from runtime overrides before building the engine environment
+
 ## Public API and Type Changes
 
 - Add `GithubCredentials`
   - `login: String`
   - `server: String`
   - `token: String`
+- Add a provider identifier, for example `ForgeProvider`
+  - initial default is `github`
 - Add `GithubAuthState`
   - explicit enum for signed-out, validating, signing-in, signed-in, invalid-stored-credentials, and error states
+- Add `AuthService`
+  - provider-agnostic protocol for observable sign-in state and auth operations
 - Add `GithubAuthService`
   - exposes current auth state
   - exposes current validated credentials if available
   - owns startup validation, sign-in completion, and sign-out
+- Add a test auth implementation
+  - driven from runtime environment for UI and integration testing
+- Add a provider registry or factory layer
+  - selects matched auth and refresh implementations for the active provider
 - Update `RefreshService`
   - depend on auth state / validated credentials instead of directly reading token and server from configuration
+  - create refresh only through the selected provider pairing
 - Remove legacy auth-related settings API
   - `githubUser`
   - `githubServer`
@@ -66,10 +106,15 @@ The recommended structure is to keep polling in `OctoidRefreshController`, but m
 - Failed sign-in validation does not persist new credentials.
 - Sign-out removes the Keychain entry, publishes signed-out state, and stops refresh.
 - Preferences/auth UI reflects each auth state correctly, including validation-in-progress and invalid-credentials states.
+- `TEST_AUTH` startup injection can force signed-out, valid, invalid, and in-progress auth states without real network or Keychain access.
+- Auth doubles integrate cleanly with alternate refresh-controller injection so UI tests can exercise supported and unsupported startup configurations.
+- Provider registry only constructs supported auth/refresh pairings and rejects unsupported combinations deterministically.
 
 ## Assumptions and Defaults
 
 - Only one GitHub account/server is supported at a time, so a fixed Keychain key is correct for now.
+- The first shipped provider remains GitHub, even though the architecture will introduce provider abstraction points now.
 - Invalid stored credentials should remain stored until the user explicitly signs out or successfully signs in again.
 - GitHub-dependent features should remain disabled until credentials are validated during the current startup/session.
 - `OctoidRefreshController` should remain a refresh/polling component, not the owner of credential persistence and auth state.
+- Test injection should follow the same runtime-environment pattern already used for refresh overrides, rather than a separate bespoke mechanism.
