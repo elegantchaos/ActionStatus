@@ -19,3 +19,6 @@
 [submodule "Dependencies/Previews"]
 	path = Dependencies/Previews
 	url = git@github.com:elegantchaos/Previews.git
+[submodule "Dependencies/Logger"]
+	path = Dependencies/Logger
+	url = git@github.com:elegantchaos/Logger

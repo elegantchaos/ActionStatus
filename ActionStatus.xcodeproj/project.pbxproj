@@ -82,6 +82,7 @@
 		2257D7F62F4DAEAF00DBD569 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		226D6C8524758F1500B54967 /* Screenshots.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Screenshots.xctestplan; sourceTree = "<group>"; };
 		226D6C8624758F3A00B54967 /* ScreenshotUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotUITests.swift; sourceTree = "<group>"; };
+		226F05C72F69592600ABAF3B /* Logger */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Logger; path = Dependencies/Logger; sourceTree = "<group>"; };
 		228D838C246AC10700943918 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		22AA000026B3A10000AA0001 /* Settings.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Settings.xcconfig; sourceTree = "<group>"; };
 		22AA00062F45F10000AA0001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -185,10 +186,11 @@
 				22112FE42F57158E00CC642B /* Application */,
 				22C8C7542F5846A000856024 /* Commands */,
 				2231B69C2F5200D000AB890D /* Core */,
-				2231B6762F52009700AB890D /* Runtime */,
 				2218311E2F55C0E1002324B6 /* Icons */,
-				2218311F2F55C0E1002324B6 /* Settings */,
+				226F05C72F69592600ABAF3B /* Logger */,
 				22E897422F61D28900DF258B /* Previews */,
+				2231B6762F52009700AB890D /* Runtime */,
+				2218311F2F55C0E1002324B6 /* Settings */,
 			);
 			name = "Local Packages";
 			sourceTree = "<group>";
@@ -759,6 +761,7 @@
 				ENABLE_USER_SELECTED_FILES = readwrite;
 				INFOPLIST_FILE = Sources/ActionStatusMobile/Resources/Info.plist;
 				"INFOPLIST_FILE[sdk=macosx*]" = Sources/ActionStatusMac/Resources/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -787,6 +790,7 @@
 				ENABLE_USER_SELECTED_FILES = readwrite;
 				INFOPLIST_FILE = Sources/ActionStatusMobile/Resources/Info.plist;
 				"INFOPLIST_FILE[sdk=macosx*]" = Sources/ActionStatusMac/Resources/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
