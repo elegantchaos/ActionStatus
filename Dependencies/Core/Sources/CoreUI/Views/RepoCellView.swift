@@ -57,7 +57,7 @@ public struct RepoCellView: View {
 
   @ViewBuilder
   func contextMenuContent() -> some View {
-    Label(repo.name, icon: .repoIcon)
+    Label(repo.name, icon: .repo)
 
     commander.button(ShowEditSheetCommand(repo: repo))
     commander.button(ShowRepoCommand(repo: repo))

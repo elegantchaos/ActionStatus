@@ -12,6 +12,12 @@ echo "**********"
 rt tag
 
 echo " "
+echo "****************"
+echo "Submitting macOS"
+echo "****************"
+rt submit --platform=macOS --scheme=ActionStatus
+
+echo " "
 echo "**************"
 echo "Submitting iOS"
 echo "**************"
@@ -23,11 +29,6 @@ echo "Submitting tvOS"
 echo "***************"
 rt submit --platform=tvOS --scheme=ActionStatus-tvOS
 
-echo " "
-echo "****************"
-echo "Submitting macOS"
-echo "****************"
-rt submit --platform=macOS --scheme=ActionStatus
 
 echo "------------"
 echo "Pushing Tags"

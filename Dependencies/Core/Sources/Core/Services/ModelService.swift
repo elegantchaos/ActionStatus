@@ -142,12 +142,16 @@ public final class ModelService {
     if let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) {
       let fileManager = FileManager.default
       for url in urls {
-        if let enumerator = fileManager.enumerator(at: url, includingPropertiesForKeys: []) {
-          while let repositoryURL = enumerator.nextObject() as? URL {
-            if repositoryURL.lastPathComponent == ".git" {
-              addLocalRepoIn(repositoryURL, detector: detector)
+        modelChannel.log("Looking for local repos in \(url)")
+        if url.startAccessingSecurityScopedResource() {
+          if let enumerator = fileManager.enumerator(at: url, includingPropertiesForKeys: []) {
+            while let repositoryURL = enumerator.nextObject() as? URL {
+              if repositoryURL.lastPathComponent == ".git" {
+                addLocalRepoIn(repositoryURL, detector: detector)
+              }
             }
           }
+          url.stopAccessingSecurityScopedResource()
         }
       }
     }

@@ -9,27 +9,11 @@ import Foundation
 import UIKit
 
 public extension Engine {
-  func presentPicker(_ picker: FilePicker) {
-    rootController?.present(picker, animated: true) {
-    }
-    filePicker = picker
-  }
-  
-  var filePickerClass: FilePicker.Type { return MobileFilePicker.self }
-
   func showHelp(_ sender: Any) {
     if let url = URL(string: "https://actionstatus.elegantchaos.com/help") {
       UIApplication.shared.open(url)
     }
   }
-
-  @IBAction func addLocalRepos() {
-    let picker = filePickerClass.init(forOpeningFolderStartingIn: nil) { urls in
-      self.modelService.add(localReposIn: urls)
-    }
-    presentPicker(picker)
-  }
-
 }
 
 #endif

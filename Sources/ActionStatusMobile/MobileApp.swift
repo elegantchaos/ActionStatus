@@ -29,7 +29,7 @@
         }
 
         CommandGroup(after: .newItem) {
-          engine.commander.button(AddLocalReposCommand())
+          engine.commander.importer(AddLocalReposCommand())
         }
       }
     }

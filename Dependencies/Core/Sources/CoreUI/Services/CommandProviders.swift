@@ -35,10 +35,3 @@ public protocol RefreshServiceProvider: CommandCentre {
   /// Service that controls status refresh behavior.
   var refreshService: RefreshService { get }
 }
-
-/// Provider for importing local repositories into the model.
-@MainActor
-public protocol LocalRepoImportingProvider: CommandCentre {
-  /// Prompts for local repositories and adds them to the model.
-  func addLocalRepos()
-}

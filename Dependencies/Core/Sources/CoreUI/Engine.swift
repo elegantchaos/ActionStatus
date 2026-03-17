@@ -55,9 +55,6 @@ public final class Engine {
   #if canImport(UIKit)
     /// Root view controller used for presenting UIKit UI.
     public var rootController: UIViewController?
-
-    /// Retained file picker while it is presented.
-    public var filePicker: FilePicker?
   #endif
 
   /// Performs one-time synchronous initialization.
@@ -106,12 +103,6 @@ public final class Engine {
       refreshService: refreshService,
       sheetService: sheetService
     )
-
-    #if os(iOS) || os(macOS)
-      commander.setAddLocalReposAction { [weak self] in
-        self?.addLocalRepos()
-      }
-    #endif
   }
 }
 

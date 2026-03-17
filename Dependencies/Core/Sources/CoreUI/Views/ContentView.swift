@@ -4,6 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Core
+import Icons
 import Observation
 import SwiftUI
 
@@ -26,13 +27,7 @@ public struct ContentView: View {
         #if os(iOS)
           .navigationBarTitleDisplayMode(.inline)
           .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-              if settingsService.isEditing {
-                commander.button(ShowEditSheetCommand())
-              } else {
-                commander.button(ShowPreferencesSheetCommand())
-              }
-            }
+            MobileActionsMenu()
 
             commander.toolbarItem(
               ToggleEditingCommand(settingsService: commander.settingsService),
@@ -42,5 +37,22 @@ public struct ContentView: View {
         #endif
     }
     .sheetHost()
+  }
+}
+
+struct MobileActionsMenu: ToolbarContent {
+  @Environment(ActionStatusCommander.self) var commander
+
+  var body: some ToolbarContent {
+    ToolbarItemGroup {
+      
+      Menu {
+        commander.button(ShowPreferencesSheetCommand())
+        commander.button(AddRepoCommand())
+        commander.importer(AddLocalReposCommand())
+      } label: {
+        Label("Settings", icon: .actions)
+      }
+    }
   }
 }

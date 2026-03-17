@@ -95,8 +95,8 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
 
   public init() {
     id = UUID().uuidString
-    name = "name"
-    owner = "owner"
+    name = "SomeRepo"
+    owner = "SomeOwner"
     workflows = []
     branches = []
     state = .unknown

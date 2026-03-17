@@ -13,7 +13,6 @@
   @main
   struct MacApp: App {
     @NSApplicationDelegateAdaptor(MacDelegate.self) private var delegate
-
     @AppStorage(.showInMenu) private var showInMenu
 
     let engine: Engine
@@ -45,7 +44,7 @@
       .windowResizability(.automatic)
       .commands {
         CommandGroup(after: .newItem) {
-          engine.commander.button(AddLocalReposCommand())
+          engine.commander.importer(AddLocalReposCommand())
         }
         CommandGroup(after: .textEditing) {
           engine.commander.button(ToggleEditingCommand(settingsService: engine.commander.settingsService))

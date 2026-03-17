@@ -27,8 +27,6 @@ public final class ActionStatusCommander {
   /// Sheet service used by presentation commands.
   public let sheetService: SheetService
 
-  @ObservationIgnored private var addLocalReposAction: @MainActor () -> Void
-
   /// Creates a commander backed by the supplied services.
   public init(
     modelService: ModelService,
@@ -36,8 +34,7 @@ public final class ActionStatusCommander {
     metadataService: MetadataService,
     launchService: LaunchService,
     refreshService: RefreshService,
-    sheetService: SheetService,
-    addLocalReposAction: @escaping @MainActor () -> Void = {}
+    sheetService: SheetService
   ) {
     self.modelService = modelService
     self.settingsService = settingsService
@@ -45,17 +42,6 @@ public final class ActionStatusCommander {
     self.launchService = launchService
     self.refreshService = refreshService
     self.sheetService = sheetService
-    self.addLocalReposAction = addLocalReposAction
-  }
-
-  /// Updates the local-repo import action used by menu and button commands.
-  public func setAddLocalReposAction(_ action: @escaping @MainActor () -> Void) {
-    addLocalReposAction = action
-  }
-
-  /// Performs the configured local-repo import action.
-  public func addLocalRepos() {
-    addLocalReposAction()
   }
 }
 
@@ -63,9 +49,6 @@ extension ActionStatusCommander: CommandCentre {
 }
 
 extension ActionStatusCommander: LaunchServiceProvider {
-}
-
-extension ActionStatusCommander: LocalRepoImportingProvider {
 }
 
 extension ActionStatusCommander: MetadataServiceProvider {

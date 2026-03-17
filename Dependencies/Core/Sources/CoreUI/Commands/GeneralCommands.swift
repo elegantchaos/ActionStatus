@@ -12,11 +12,14 @@ import Icons
 /// Command that toggles repository editing mode.
 public struct ToggleEditingCommand<C: SettingsServiceProvider>: CommandWithUI {
   public let id = "editing.toggle"
-  public let icon = Icon.editButtonIcon
   public let settingsService: SettingsService
 
   public var shortcut: CommandShortcut? {
     .init("E", modifiers: [.command])
+  }
+
+  public var icon: Icon {
+    settingsService.isEditing ? .startEditing : .stopEditing
   }
 
   public var name: String {
@@ -35,7 +38,7 @@ public struct ToggleEditingCommand<C: SettingsServiceProvider>: CommandWithUI {
 /// Command which opens the project on the web.
 struct ShowRepoCommand<C: LaunchServiceProvider>: CommandWithUI {
   let id = "show.repo"
-  let icon = Icon.showRepoIcon
+  let icon = Icon.showRepo
   let repo: Repo
 
   func perform(centre: C) async throws {
@@ -46,7 +49,7 @@ struct ShowRepoCommand<C: LaunchServiceProvider>: CommandWithUI {
 /// Command which opens the workflow page on the web.
 struct ShowWorkflowCommand<C: LaunchServiceProvider>: CommandWithUI {
   let id = "show.workflow"
-  let icon = Icon.showWorkflowIcon
+  let icon = Icon.showWorkflow
   let repo: Repo
 
   func perform(centre: C) async throws {
@@ -57,7 +60,7 @@ struct ShowWorkflowCommand<C: LaunchServiceProvider>: CommandWithUI {
 /// Command which reveals the project locally.
 struct RevealLocalCommand<C: LaunchServiceProvider & MetadataServiceProvider>: CommandWithUI {
   let id = "reveal.repo"
-  let icon = Icon.revealLocalIcon
+  let icon = Icon.revealLocalRepo
   let repo: Repo
 
   func availability(centre: C) -> CommandAvailability {
@@ -87,7 +90,7 @@ struct RevealLocalCommand<C: LaunchServiceProvider & MetadataServiceProvider>: C
 /// Command which follows the configured navigation action for a repository.
 struct NavigateRepoCommand<C: LaunchServiceProvider & SheetServiceProvider & SettingsServiceProvider>: CommandWithUI {
   let id = "navigate.repo"
-  let icon = Icon.showRepoIcon
+  let icon = Icon.showRepo
   let repo: Repo
   let trigger: CommandTrigger
 

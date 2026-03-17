@@ -87,7 +87,7 @@ public struct EditView: View {
                 .truncationMode(.middle)
               Spacer()
               Button(action: { launchService.open(url: updatedRepo.githubURL(for: .repo)) }) {
-                Image(icon: .linkIcon)
+                Image(icon: .link)
                   .foregroundColor(.gray)
               }
             }
@@ -100,7 +100,7 @@ public struct EditView: View {
                 .truncationMode(.middle)
               Spacer()
               Button(action: { launchService.open(url: updatedRepo.githubURL(for: .workflow)) }) {
-                Image(icon: .linkIcon)
+                Image(icon: .link)
                   .foregroundColor(.gray)
               }
             }

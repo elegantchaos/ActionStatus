@@ -64,8 +64,7 @@
         Text("Settings…")
       }
 
-      Button("Add Local Repos", action: commander.addLocalRepos)
-        .keyboardShortcut("o", modifiers: .command)
+      commander.importer(AddLocalReposCommand())
 
       Button("Quit \(appName)") {
         NSApp.terminate(nil)
