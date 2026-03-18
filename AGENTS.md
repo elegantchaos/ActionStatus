@@ -10,9 +10,12 @@ See <https://actionstatus.elegantchaos.com/> for product context.
 - Use Swift 6 and modern concurrency.
 - Use Swift Testing and not XCTest for unit tests.
 - Avoid UIKit/AppKit patterns; prefer cross-platform SwiftUI.
-- Keep code in `Dependencies/Core` when possible.
+- `Dependencies/Core` contains the core functionality for the application.
+- The Xcode target is a thin layer wrapping Core. Keep it as small as possible.
+- Other packages in `Dependencies/` are local copies of external libraries.
 - Consider creating new library packages in `Dependencies/` to improve modularisation.
-- Minimize the size of `Sources/ActionStatusMobile`, `Sources/ActionStatusTV`, and `Sources/ActionStatusMac`.
+- Keep application code in `Dependencies/Core` when possible.
+- Avoid duplication: use existing library code unless there is a clear reason to duplicate or reimplement.  
 
 ## Standard Rules
 
