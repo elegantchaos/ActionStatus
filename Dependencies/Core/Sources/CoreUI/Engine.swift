@@ -63,6 +63,9 @@ public final class Engine {
     public var rootController: UIViewController?
   #endif
 
+  /// Observer token for UserDefaults settings changes.
+  @ObservationIgnored private var settingsObserver: NotificationToken?
+
   /// Performs one-time synchronous initialization.
   public func initialise() throws {
   }
@@ -72,6 +75,19 @@ public final class Engine {
     await authService.startup()
     await modelService.startup()
     refreshService.startup()
+
+    // Push initial values
+    let currentSortMode: SortMode = UserDefaults.standard.value(forKey: .sortMode)
+    statusService.apply(sortMode: currentSortMode)
+    refreshService.apply(interval: refreshConfig.refreshInterval)
+
+    // Observe future UserDefaults changes and push updated values to services
+    settingsObserver = UserDefaults.standard.onActionStatusSettingsChanged { [weak self] in
+      guard let self else { return }
+      let newSortMode: SortMode = UserDefaults.standard.value(forKey: .sortMode)
+      statusService.apply(sortMode: newSortMode)
+      refreshService.apply(interval: refreshConfig.refreshInterval)
+    }
   }
 
   /// Creates the live engine and its shared services.
