@@ -3,6 +3,8 @@
 //  All code (c) 2020 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Commands
+import CommandsUI
 import Core
 import Runtime
 import SwiftUI
@@ -17,6 +19,7 @@ public struct EditView: View {
   @Environment(\.dismiss) private var dismissAction
   @Environment(ModelService.self) var modelService
   @Environment(RefreshService.self) var refreshService
+  @Environment(ActionStatusCommander.self) var commander
 
   var title: String { "\(shortTitle) Repository" }
   var shortTitle: String { repo == nil ? "Add" : "Edit" }
@@ -81,37 +84,23 @@ public struct EditView: View {
         }
 
         Section {
-          LabeledContent("repo") {
-            HStack(alignment: .firstTextBaseline) {
-              Text("https://github.com/\(trimmedOwner)/\(trimmedName)")
-                .lineLimit(1)
-                .truncationMode(.middle)
-              Spacer()
-              Button(action: { launchService.open(url: updatedRepo.githubURL(for: .repo)) }) {
-                Image(icon: .link)
-                  .foregroundColor(.gray)
-              }
+          LabeledContent("repo", icon: .showRepo) {
+            commander.button(ShowRepoCommand(repo: updatedRepo)) {
+              Text(updatedRepo.githubURL(for: .repo).absoluteString)
             }
           }
 
-          LabeledContent("status") {
-            HStack(alignment: .firstTextBaseline) {
-              Text("https://github.com/\(trimmedOwner)/\(trimmedName)/actions")
-                .lineLimit(1)
-                .truncationMode(.middle)
-              Spacer()
-              Button(action: { launchService.open(url: updatedRepo.githubURL(for: .workflow)) }) {
-                Image(icon: .link)
-                  .foregroundColor(.gray)
-              }
+          LabeledContent("status", icon: .showWorkflow) {
+            commander.button(ShowWorkflowCommand(repo: updatedRepo)) {
+              Text(updatedRepo.githubURL(for: .workflow).absoluteString)
             }
           }
 
           if !localPath.isEmpty {
-            LabeledContent("local") {
-              Text(localPath)
-                .lineLimit(1)
-                .truncationMode(.middle)
+            LabeledContent("local", icon: .revealLocalRepo) {
+              commander.button(RevealLocalCommand(repo: updatedRepo)) {
+                Text(localPath)
+              }
             }
           }
         } header: {
