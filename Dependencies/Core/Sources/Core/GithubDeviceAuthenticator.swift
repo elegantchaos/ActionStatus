@@ -47,6 +47,13 @@ public struct GithubCredentials: Equatable, Sendable {
   public let server: String
   /// The OAuth access token for API requests.
   public let token: String
+
+  /// Creates credentials with the given login, server, and token.
+  public init(login: String, server: String, token: String) {
+    self.login = login
+    self.server = server
+    self.token = token
+  }
 }
 
 /// Implements the GitHub Device Authorization Grant (RFC 8628) OAuth flow.

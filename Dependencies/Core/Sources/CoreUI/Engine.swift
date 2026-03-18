@@ -46,6 +46,9 @@ public final class Engine {
   /// Shared refresh service.
   public let refreshService: RefreshService
 
+  /// Shared authentication service.
+  public let authService: any AuthService
+
   /// Shared refresh configuration.
   public let refreshConfig: StoredRefreshConfiguration
 
@@ -66,6 +69,7 @@ public final class Engine {
 
   /// Performs asynchronous startup after initialization.
   public func startup() async throws {
+    await authService.startup()
     await modelService.startup()
     refreshService.resumeRefresh()
   }
@@ -92,6 +96,15 @@ public final class Engine {
     )
     let launchService = LaunchService()
 
+    let authService: any AuthService
+    if ProcessInfo.processInfo.environment["TEST_AUTH"] != nil {
+      authService = StubAuthService(initialState: .signedIn(GithubCredentials(login: "test", server: "api.github.com", token: "test-token")))
+    } else {
+      let clientID = GithubDeviceAuthenticator.clientID(from: .main) ?? ""
+      authService = GithubAuthService(clientID: clientID)
+    }
+
+    self.authService = authService
     self.statusService = statusService
     self.metadataService = metadataService
     self.sheetService = sheetService
@@ -126,6 +139,7 @@ extension Engine: AppEngine {
       statusService: statusService,
       refreshService: refreshService,
       refreshConfig: refreshConfig,
+      authService: authService,
       sheetService: sheetService
     )
   }
@@ -140,6 +154,7 @@ extension Engine: AppEngine {
       statusService: statusService,
       refreshService: refreshService,
       refreshConfig: refreshConfig,
+      authService: authService,
       sheetService: sheetService
     )
   }
