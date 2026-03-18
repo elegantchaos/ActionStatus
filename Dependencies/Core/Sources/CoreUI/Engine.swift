@@ -13,6 +13,7 @@ import SwiftUI
   import UIKit
 #endif
 
+/// Logger channel for app monitoring lifecycle events.
 public let monitoringChannel = Channel("Monitoring")
 
 /// Main ActionStatus runtime engine.
@@ -141,10 +142,12 @@ public final class Engine {
 }
 
 extension CGFloat {
+  /// Standard inset/padding value used throughout ActionStatus UI.
   static let padding: CGFloat = 10
 }
 
 extension Engine: AppEngine {
+  /// Returns the environment modifier used while the app is starting up.
   public var startupInjector: some ViewModifier {
     ActionStatusEnvironmentInjector(
       commander: commander,
@@ -159,6 +162,7 @@ extension Engine: AppEngine {
     )
   }
 
+  /// Returns the environment modifier used while the app is running.
   public var runningInjector: some ViewModifier {
     ActionStatusEnvironmentInjector(
       commander: commander,
@@ -173,9 +177,11 @@ extension Engine: AppEngine {
     )
   }
 
+  /// No-op retry hook; ActionStatus has no recoverable startup error path.
   public func retry() async throws {
   }
 
+  /// Returns `false` — all errors are surfaced to the Application framework.
   public func shouldIgnore(error: any Error) -> Bool {
     false
   }

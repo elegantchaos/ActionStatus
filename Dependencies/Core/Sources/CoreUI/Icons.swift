@@ -5,11 +5,11 @@
 
 import Icons
 
-/// Standard icons for ActionStatus
+/// Standard icons for ActionStatus.
 extension Icon {
   static let addRepo = Icon("plus")
-  static let addLocalRepo = Icon("folder.badge.plus") // TODO: replace this
-  static let advanceState = Icon("forward.circle") // TODO: replace this
+  static let addLocalRepo = Icon("folder.badge.plus")
+  static let advanceState = Icon("forward.circle")
   static let actions = Icon("ellipsis.circle")
   static let deleteRepo = Icon("minus.circle")
   static let link = Icon("arrow.right.circle.fill")
@@ -21,4 +21,3 @@ extension Icon {
   static let startEditing = Icon("lock.open")
   static let stopEditing = Icon("lock")
 }
-

@@ -7,6 +7,7 @@ import Core
 import SwiftUI
 
 @MainActor extension Repo {
+  /// The SwiftUI color used to tint the status badge for this repo's current state.
   var statusColor: Color {
     switch state {
       case .failing, .partiallyFailing: return .red

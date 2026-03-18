@@ -11,11 +11,12 @@ import Settings
 @MainActor public extension AppSettingKey where Value == Bool {
   /// UserDefaults key for the setting that controls whether we register a global hotkey.
   static let showInMenu = AppSettingKey("ShowInMenu", defaultValue: true)
+  /// UserDefaults key for whether the app icon appears in the Dock.
   static let showInDock = AppSettingKey("ShowInDock", defaultValue: true)
-
 }
 
 @MainActor public extension AppSettingKey where Value == RefreshRate {
+  /// UserDefaults key for the configured polling interval.
   static let refreshInterval = AppSettingKey("RefreshInterval", defaultValue: RefreshRate.automatic)
 }
 
@@ -24,9 +25,8 @@ import Settings
   static let sortMode = AppSettingKey("SortMode", defaultValue: SortMode.state)
 }
 
-
-
 @MainActor public extension AppSettingKey where Value == DisplaySize {
+  /// UserDefaults key for the display density setting.
   static let displaySize = AppSettingKey("DisplaySize", defaultValue: .automatic)
 }
 

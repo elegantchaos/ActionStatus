@@ -40,6 +40,7 @@ public final class RefreshService {
   /// The credential snapshot currently driving the GitHub refresh controller, or `nil` when signed out.
   var currentSettings: RefreshSettings?
 
+  /// The currently active refresh controller, if any.
   var refreshController: RefreshController?
 
   /// Token that owns the auth-state observation loop; cancelled when the service is deallocated.

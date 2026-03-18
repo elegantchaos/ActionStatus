@@ -9,6 +9,7 @@ import SwiftUI
 
 /// Form used to add and edit monitored repositories.
 public struct EditView: View {
+  /// The repository being edited; `nil` when adding a new repository.
   let repo: Repo?
 
   @Environment(MetadataService.self) var metadataService
@@ -126,28 +127,34 @@ public struct EditView: View {
     }
   }
 
+  /// Name with leading/trailing whitespace removed.
   var trimmedName: String {
     name.trimmingCharacters(in: .whitespaces)
   }
 
+  /// Owner with leading/trailing whitespace removed.
   var trimmedOwner: String {
     owner.trimmingCharacters(in: .whitespaces)
   }
 
+  /// Branch list parsed from the comma-separated text field.
   var trimmedBranches: [String] {
     branches.split(separator: ",").map { String($0.trimmingCharacters(in: .whitespaces)) }
   }
 
+  /// Resumes refresh and dismisses the sheet.
   func dismiss() {
     refreshService.resumeRefresh()
     dismissAction()
   }
 
+  /// Saves the edited repo then dismisses the sheet.
   func done() {
     save()
     dismiss()
   }
 
+  /// Populates local state from the stored repo, or leaves defaults for a new repo.
   func load() {
     if let repo {
       name = repo.name
@@ -157,10 +164,12 @@ public struct EditView: View {
     }
   }
 
+  /// Writes the current form values back to the model.
   func save() {
     modelService.update(repo: updatedRepo)
   }
 
+  /// Constructs a `Repo` value from the current form fields.
   var updatedRepo: Repo {
     var updated = repo ?? Repo()
     updated.name = trimmedName
@@ -172,6 +181,7 @@ public struct EditView: View {
   }
 }
 
+/// Platform-appropriate text-field style for repository name and owner fields.
 struct NameOrgStyle: ViewModifier {
   func body(content: Content) -> some View {
     #if os(macOS)
@@ -191,6 +201,7 @@ struct NameOrgStyle: ViewModifier {
   }
 }
 
+/// Platform-appropriate text-field style for the branch list field.
 struct BranchListStyle: ViewModifier {
   func body(content: Content) -> some View {
     #if os(macOS)

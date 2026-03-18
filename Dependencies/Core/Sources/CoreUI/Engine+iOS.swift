@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 public extension Engine {
+  /// Opens the ActionStatus help page in the system browser.
   func showHelp(_ sender: Any) {
     if let url = URL(string: "https://actionstatus.elegantchaos.com/help") {
       UIApplication.shared.open(url)

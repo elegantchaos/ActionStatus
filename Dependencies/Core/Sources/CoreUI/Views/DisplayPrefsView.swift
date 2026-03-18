@@ -6,6 +6,7 @@
 import Core
 import SwiftUI
 
+/// Preferences section for display density, sort order, and platform-specific visibility settings.
 struct DisplayPrefsView: View {
   @AppStorage(.showInMenu) var showInMenu
   @AppStorage(.showInDock) var showInDock

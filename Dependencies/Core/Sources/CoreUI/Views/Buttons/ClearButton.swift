@@ -7,6 +7,7 @@ import SwiftUI
 
 /// Modifier that shows a trailing clear button for non-empty text input.
 struct ClearButton: ViewModifier {
+  /// The text binding cleared when the button is tapped.
   @Binding var text: String
 
   public func body(content: Content) -> some View {

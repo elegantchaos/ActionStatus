@@ -3,10 +3,12 @@
 //  All code (c) 2021 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+/// Determines the order in which repositories appear in the list.
 public enum SortMode: String, CaseIterable {
   case name
   case state
 
+  /// Returns `repos` sorted according to this mode.
   public func sort<T>(_ repos: T) -> [Repo] where T: Collection, T.Element == Repo {
     switch self {
       case .name: return repos.sorted { $0.name < $1.name }
@@ -27,6 +29,7 @@ public enum SortMode: String, CaseIterable {
     }
   }
 
+  /// Maps a `Repo.State` to a numeric priority for the state-based sort.
   private func statePriority(for state: Repo.State) -> Int {
     switch state {
       case .running:
@@ -44,6 +47,7 @@ public enum SortMode: String, CaseIterable {
 }
 
 extension SortMode {
+  /// Human-readable label shown in picker UI.
   public var labelName: String {
     switch self {
       case .name: return "Name"

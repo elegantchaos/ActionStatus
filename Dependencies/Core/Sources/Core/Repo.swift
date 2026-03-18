@@ -11,7 +11,16 @@ nonisolated private extension URL {
   var bookmarkKey: String { "bookmark:\(absoluteURL.path)" }
 }
 
+/// A monitored GitHub repository and its runtime state.
+///
+/// `Repo` is the central model value: it carries the identity (`id`, `owner`, `name`),
+/// the set of selected workflows, and the aggregated CI state produced by the refresh layer.
+/// All mutation goes through `ModelService` so `NSUbiquitousKeyValueStore` stays in sync.
+///
+/// `id` is a stable UUID string assigned at creation time and never changes. Equality and
+/// hashing are based solely on `id` so that different snapshots of the same repo compare equal.
 nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
+  /// Aggregated CI state for the repository.
   public enum State: UInt, Codable, Comparable, CaseIterable, Sendable {
     case unknown = 0
     case passing = 1
@@ -19,12 +28,14 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
     case queued = 3
     case running = 4
     case partiallyFailing = 5
+    /// No workflow runs exist or all workflows are disabled.
     case dormant = 6
 
     public static func < (lhs: State, rhs: State) -> Bool {
       lhs.sortOrder < rhs.sortOrder
     }
 
+    /// Numeric priority used by the state-based sort; higher values appear first.
     var sortOrder: Int {
       switch self {
         case .unknown: 0
@@ -38,12 +49,18 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
     }
   }
 
+  /// Maps device identifiers to local filesystem paths for this repository.
   public typealias LocalPathDictionary = [String: String]
 
+  /// A workflow and whether it should be included in the aggregate CI status.
   public struct WorkflowSelection: Codable, Hashable, Identifiable, Sendable {
+    /// Stable GitHub workflow ID, if known. `nil` for workflows discovered by name only.
     public var workflowID: Int?
+    /// Display name of the workflow.
     public var name: String
+    /// Repository-relative path to the workflow YAML file.
     public var path: String
+    /// Whether this workflow contributes to the aggregate state.
     public var enabled: Bool
 
     public init(workflowID: Int? = nil, name: String, path: String, enabled: Bool = true) {
@@ -53,6 +70,7 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
       self.enabled = enabled
     }
 
+    /// Stable identifier: prefers the numeric workflow ID, falls back to the lowercased path.
     public var id: String {
       if let workflowID {
         return "id:\(workflowID)"
@@ -60,13 +78,10 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
       return "path:\(path.lowercased())"
     }
 
-    public var lookupKey: String {
-      if let workflowID {
-        return "id:\(workflowID)"
-      }
-      return "path:\(path.lowercased())"
-    }
+    /// Lookup key used when merging discovered workflows into the stored list; mirrors `id`.
+    public var lookupKey: String { id }
 
+    /// Workflow name derived from the YAML filename, stripping the extension.
     public var normalizedWorkflowName: String {
       let fileName = URL(fileURLWithPath: path).deletingPathExtension().lastPathComponent
       if !fileName.isEmpty {
@@ -83,16 +98,21 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
     }
   }
 
+  /// Stable UUID string assigned at creation; used as the key in all stores.
   public let id: String
   public var name: String
   public var owner: String
+  /// All known workflows for this repository; may include disabled entries.
   public var workflows: [WorkflowSelection]
   public var branches: [String]
+  /// Current aggregated CI state, updated by the refresh layer.
   public var state: State
+  /// Per-device local filesystem paths, keyed by device identifier.
   public var paths: LocalPathDictionary
   public var lastFailed: Date?
   public var lastSucceeded: Date?
 
+  /// Creates a placeholder repo with default name and owner values.
   public init() {
     id = UUID().uuidString
     name = "SomeRepo"
@@ -103,6 +123,8 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
     paths = [:]
   }
 
+  /// Creates a repo with the supplied attributes.
+  /// - Parameter workflow: Accepted for call-site compatibility; not persisted on this struct.
   public init(_ name: String, owner: String, workflow: String, id: String? = nil, state: State = .unknown, branches: [String] = []) {
     self.id = id ?? UUID().uuidString
     self.name = name
@@ -117,6 +139,7 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
     id.hash(into: &hasher)
   }
 
+  /// A `DictionaryDecoder` configured with sensible defaults for missing optional keys.
   public static var dictionaryDecoder: DictionaryDecoder {
     let decoder = DictionaryDecoder()
     let defaults: [String: Any] = [
@@ -125,19 +148,15 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
     ]
     decoder.missingValueDecodingStrategy = .useDefault(defaults: defaults)
     return decoder
-
-
   }
 
+  /// The subset of `workflows` that are currently enabled; empty when none are selected.
   public var enabledWorkflows: [WorkflowSelection] {
-    let selected = workflows.filter(\.enabled)
-    if !selected.isEmpty {
-      return selected
-    }
-
-    return []
+    workflows.filter(\.enabled)
   }
 
+  /// Merges a freshly discovered workflow list into the stored list, preserving existing `enabled` flags.
+  /// - Returns: `true` if the stored list changed and a model update is needed.
   @discardableResult mutating public func mergeDiscoveredWorkflows(_ discovered: [WorkflowSelection]) -> Bool {
     let existingByKey = Dictionary(uniqueKeysWithValues: workflows.map { ($0.lookupKey, $0) })
     let merged = discovered.map { workflow in
@@ -155,11 +174,13 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
     return true
   }
 
+  /// Records the local path for `url` on `device` and stores a security-scoped bookmark.
   mutating public func remember(url: URL, forDevice device: String) {
     paths[device] = url.absoluteURL.path
     storeBookmark(for: url)
   }
 
+  /// Returns the local URL for `device`, restoring a security-scoped bookmark if available.
   public func url(forDevice device: String?) -> URL? {
     guard let device = device, let path = paths[device] else { return nil }
 
@@ -185,6 +206,7 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
     return resolved
   }
 
+  /// Infers a `State` from the text content of a GitHub SVG badge.
   public func state(fromSVG svg: String) -> State {
     if svg.contains("failing") {
       return .failing
@@ -195,6 +217,7 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
     }
   }
 
+  /// SF Symbol name appropriate for the current state, used in list and menu cells.
   public var badgeName: String {
     let name: String
     switch state {
@@ -209,20 +232,19 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
     return name
   }
 
+  /// Destination page for a GitHub URL open action.
   public enum GithubLocation {
+    /// The repository's main page.
     case repo
+    /// The repository's Actions (workflow runs) page.
     case workflow
   }
 
+  /// Constructs a `github.com` URL for the given location.
   public func githubURL(for location: GithubLocation = .workflow) -> URL {
     let suffix: String
     switch location {
       case .workflow: suffix = "/actions"
-//      case .badge(let branch):
-//        let query = branch.isEmpty ? "" : "?branch=\(branch)"
-//        let workflowName = enabledWorkflows.first?.normalizedWorkflowName ?? workflow
-//        suffix = "/workflows/\(workflowName)/badge.svg\(query)"
-
       default: suffix = ""
     }
 

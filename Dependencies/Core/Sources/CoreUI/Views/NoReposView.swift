@@ -6,8 +6,7 @@
 import SwiftUI
 
 /// Empty-state view shown when no repositories are configured.
-public struct NoReposView: View {
-  @Environment(ActionStatusCommander.self) var commander
+public struct NoReposView: View {  @Environment(ActionStatusCommander.self) var commander
 
   public init() {
   }

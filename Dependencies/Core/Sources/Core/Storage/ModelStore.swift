@@ -7,23 +7,24 @@ import Foundation
 
 /// Protocol for something that can save and load the model.
 public protocol ModelStore: TypedDebugDescription {
-  typealias Values = [String:Repo]
-  
-  /// Callback to indicate that the store contents have been changed externally.
+  typealias Values = [String: Repo]
+
+  /// Callback invoked when the store contents change externally.
   typealias ChangeCallback = @MainActor @Sendable (Values) async -> ()
 
-  /// Our values.
+  /// All repos currently held by the store.
   var values: Values { get set }
-  
-  /// Get a repo for an id.
+
+  /// Returns the repo stored under the given key, or `nil` if absent.
   func get(forKey: String) -> Repo?
-  
-  /// Store a repo for an id.
+
+  /// Persists a repo under the given key.
   func set(_ repo: Repo, forKey: String)
-  
-  /// Remove a repo for an id.
+
+  /// Removes the repo stored under the given key.
   func remove(forKey: String)
 
-  /// Register a callback which is invoked if the store changes externally.
+  /// Registers a callback invoked whenever the store changes externally.
+  /// The callback is also invoked once immediately with the current contents.
   mutating func onChange(_ perform: @escaping ChangeCallback) async
 }

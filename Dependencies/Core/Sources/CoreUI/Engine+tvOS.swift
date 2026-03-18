@@ -8,8 +8,6 @@ import Foundation
 #if os(tvOS)
 
 extension Engine {
-  
-  // TV-specific code here
 }
 
 #endif

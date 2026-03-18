@@ -10,19 +10,21 @@ import Logger
 import Observation
 import Settings
 
+/// Logger channel for settings-related events.
 public let settingsChannel = Channel("Settings")
 
 /// Service that manages user-configurable settings.
 @Observable
 @MainActor
 public final class SettingsService {
-  
+
   /// Whether editing UI is currently enabled.
   public var isEditing = false
 
+  /// Creates an idle settings service with default values.
   public init() {
   }
-  
+
   /// Toggles editing mode and returns the new state.
   public func toggleEditing() -> Bool {
     isEditing.toggle()
@@ -43,8 +45,6 @@ public final class SettingsService {
   }
 
 }
-
-
 @MainActor public extension AppSettingKey where Value == NavigationMode {
   /// UserDefaults key for the default repository navigation action.
   static let navigationMode = AppSettingKey("NavigationMode", defaultValue: .edit)

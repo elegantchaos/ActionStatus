@@ -21,17 +21,25 @@ public final class StatusService {
   @ObservationIgnored private var modelService: ModelService?
   @ObservationIgnored private var modelObservation: ObservationToken?
 
+  /// Repositories in the currently configured sort order.
   public var sortedRepos: [Repo] = []
+  /// Count of repos in the `.passing` state.
   public var passing = 0
+  /// Count of repos in the `.failing` or `.partiallyFailing` states.
   public var failing = 0
+  /// Count of repos in the `.running` state.
   public var running = 0
+  /// Count of repos in the `.queued` state.
   public var queued = 0
+  /// Count of repos in the `.dormant` state.
   public var dormant = 0
+  /// Count of repos in the `.unknown` state.
   public var unreachable = 0
 
   /// The current sort mode applied when building `sortedRepos`.
   public var sortMode: SortMode = .state
 
+  /// Creates an idle status service; call `connect(to:)` before use.
   public init() {
   }
 
