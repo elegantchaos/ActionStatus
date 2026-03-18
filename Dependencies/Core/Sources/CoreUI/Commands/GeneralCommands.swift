@@ -97,15 +97,14 @@ struct NavigateRepoCommand<C: LaunchServiceProvider & SheetServiceProvider & Set
   let id = "navigate.repo"
   let icon = Icon.showRepo
   let repo: Repo
-  let trigger: CommandTrigger
+  let mode: NavigationMode
 
-  public init(repo: Repo, trigger: CommandTrigger = .primary) {
+  public init(repo: Repo, mode: NavigationMode) {
     self.repo = repo
-    self.trigger = trigger
+    self.mode = mode
   }
 
   func perform(centre: C) async throws {
-    let mode = centre.settingsService.repoNavigationMode(for: trigger)
     switch mode {
       case .edit:
         centre.sheetService.showing = .editRepo(repo)

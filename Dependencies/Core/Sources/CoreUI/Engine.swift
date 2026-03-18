@@ -31,29 +31,34 @@ public final class Engine {
   @ObservationIgnored public var startupTask: Task<Void, Never>?
 
   /// Shared model service.
-  public let modelService: ModelService
+  @ObservationIgnored public let modelService: ModelService
 
   /// Shared settings service.
-  public let settingsService: SettingsService
+  @ObservationIgnored public let settingsService: SettingsService
 
   /// Shared launch service.
-  public let launchService: LaunchService
+  @ObservationIgnored public let launchService: LaunchService
 
   /// Shared sheet service.
-  public let sheetService: SheetService
+  @ObservationIgnored public let sheetService: SheetService
 
   /// Shared refresh service.
-  public let refreshService: RefreshService
+  @ObservationIgnored public let refreshService: RefreshService
 
   /// Shared authentication service.
-  public let authService: any AuthService
+  @ObservationIgnored public let authService: any AuthService
 
   /// Shared status service.
-  public let statusService: StatusService
+  @ObservationIgnored public let statusService: StatusService
 
   /// Shared commander used by SwiftUI views and menus.
-  public let commander: ActionStatusCommander
+  @ObservationIgnored public let commander: ActionStatusCommander
 
+  /// Environment injector used while the app is starting up and running.
+  /// All services are safe to use before startup completes,
+  /// and so we can use the same injector for startup and running states.
+  @ObservationIgnored private let injector: ActionStatusEnvironmentInjector
+  
   #if canImport(UIKit)
     /// Root view controller used for presenting UIKit UI.
     public var rootController: UIViewController?
@@ -75,17 +80,9 @@ public final class Engine {
     // ensuring the initial auth state and model data are both available.
     refreshService.connect(to: authService)
 
-    // Read initial settings values
-    let defaults = UserDefaults.standard
-    let currentSortMode = defaults.value(forKey: .sortMode)
-    let currentInterval = defaults.value(forKey: .refreshInterval)
-
-    // Push initial values
-    statusService.apply(sortMode: currentSortMode)
-    refreshService.apply(interval: currentInterval)
-
-    // Observe future UserDefaults changes and push updated values to services
-    settingsObserver = defaults.onChanged { [weak self] in
+    // Observe settings changes and push updated values to services.
+    // This will trigger immediately with the initial values, so services are updated before the UI appears.
+    settingsObserver = UserDefaults.standard.onChange(initial: true) { [weak self] defaults in
       guard let self else { return }
       let newSortMode = defaults.value(forKey: .sortMode)
       let newInterval = defaults.value(forKey: .refreshInterval)
@@ -141,8 +138,28 @@ public final class Engine {
       interval: UserDefaults.standard.value(forKey: .refreshInterval),
       lastEventStore: UserDefaultsLastEventStore()
     )
+    
     let launchService = LaunchService()
-
+    
+    let commander = ActionStatusCommander(
+      modelService: modelService,
+      settingsService: settingsService,
+      launchService: launchService,
+      refreshService: refreshService,
+      sheetService: sheetService
+    )
+    
+    let injector = ActionStatusEnvironmentInjector(
+      commander: commander,
+      modelService: modelService,
+      settingsService: settingsService,
+      launchService: launchService,
+      statusService: statusService,
+      refreshService: refreshService,
+      authService: authService,
+      sheetService: sheetService
+    )
+    
     self.authService = authService
     self.statusService = statusService
     self.sheetService = sheetService
@@ -150,13 +167,9 @@ public final class Engine {
     self.settingsService = settingsService
     self.refreshService = refreshService
     self.launchService = launchService
-    self.commander = ActionStatusCommander(
-      modelService: modelService,
-      settingsService: settingsService,
-      launchService: launchService,
-      refreshService: refreshService,
-      sheetService: sheetService
-    )
+    self.commander = commander
+    self.injector = injector
+      
   }
 }
 
@@ -167,32 +180,10 @@ extension CGFloat {
 
 extension Engine: AppEngine {
   /// Returns the environment modifier used while the app is starting up.
-  public var startupInjector: some ViewModifier {
-    ActionStatusEnvironmentInjector(
-      commander: commander,
-      modelService: modelService,
-      settingsService: settingsService,
-      launchService: launchService,
-      statusService: statusService,
-      refreshService: refreshService,
-      authService: authService,
-      sheetService: sheetService
-    )
-  }
+  public var startupInjector: some ViewModifier { injector }
 
   /// Returns the environment modifier used while the app is running.
-  public var runningInjector: some ViewModifier {
-    ActionStatusEnvironmentInjector(
-      commander: commander,
-      modelService: modelService,
-      settingsService: settingsService,
-      launchService: launchService,
-      statusService: statusService,
-      refreshService: refreshService,
-      authService: authService,
-      sheetService: sheetService
-    )
-  }
+  public var runningInjector: some ViewModifier { injector }
 
   /// No-op retry hook; ActionStatus has no recoverable startup error path.
   public func retry() async throws {

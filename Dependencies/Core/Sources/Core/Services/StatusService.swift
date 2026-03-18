@@ -7,7 +7,6 @@ import Application
 import Foundation
 import Logger
 import Observation
-import Settings
 
 let repoStateChannel = Channel("RepoState")
 

@@ -34,39 +34,6 @@
         }
       }
     },
-    "model.advance" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Next State 🛠️"
-          }
-        }
-      }
-    },
-    "model.local" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add Local Repo"
-          }
-        }
-      }
-    },
-    "model.remove" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Remove Repo"
-          }
-        }
-      }
-    },
     "mode.edit" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -96,6 +63,50 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Open workflows"
+          }
+        }
+      }
+    },
+    "model.add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Remote Repo"
+          }
+        }
+      }
+    },
+    "model.advance" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next State 🛠️"
+          }
+        }
+      }
+    },
+    "model.local" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Local Repo"
+          }
+        }
+      }
+    },
+    "model.remove" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove Repo"
           }
         }
       }

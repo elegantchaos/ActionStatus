@@ -8,7 +8,6 @@ import Application
 import Foundation
 import Logger
 import Observation
-import Settings
 
 /// Logger channel for settings-related events.
 public let settingsChannel = Channel("Settings")
@@ -31,26 +30,4 @@ public final class SettingsService {
     return isEditing
   }
 
-  /// Returns the configured navigation mode for the supplied trigger.
-  public func repoNavigationMode(for trigger: CommandTrigger) -> NavigationMode {
-    let defaults = UserDefaults.standard
-    return switch trigger {
-      case .primary:
-        defaults.value(forKey: .navigationMode)
-      case .secondary:
-        defaults.value(forKey: .secondaryNavigationMode)
-      case .tertiary:
-        defaults.value(forKey: .tertiaryNavigationMode)
-    }
-  }
-
-}
-
-@MainActor public extension AppSettingKey where Value == NavigationMode {
-  /// UserDefaults key for the default repository navigation action.
-  static let navigationMode = AppSettingKey("NavigationMode", defaultValue: .edit)
-  /// UserDefaults key for the secondary repository navigation action.
-  static let secondaryNavigationMode = AppSettingKey("SecondaryNavigationMode", defaultValue: .viewRepo)
-  /// UserDefaults key for the tertiary repository navigation action.
-  static let tertiaryNavigationMode = AppSettingKey("TertiaryNavigationMode", defaultValue: .viewWorkflows)
 }
