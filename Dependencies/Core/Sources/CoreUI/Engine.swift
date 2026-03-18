@@ -100,10 +100,10 @@ public final class Engine {
     let statusService = StatusService()
     let sheetService = SheetService()
     let modelService = ModelService(
-      statusService: statusService,
       deviceIdentifier: metadataService.deviceIdentifier,
       source: metadataService.modelSource
     )
+    statusService.connect(to: modelService)
 
     let authService: any AuthService
     if ProcessInfo.processInfo.environment["TEST_AUTH"] != nil {
