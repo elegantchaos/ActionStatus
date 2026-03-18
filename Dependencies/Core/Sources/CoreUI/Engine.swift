@@ -81,7 +81,7 @@ public final class Engine {
     refreshService.apply(interval: currentInterval)
 
     // Observe future UserDefaults changes and push updated values to services
-    settingsObserver = UserDefaults.standard.onActionStatusSettingsChanged { [weak self] in
+    settingsObserver = UserDefaults.standard.onChanged { [weak self] in
       guard let self else { return }
       let newSortMode: SortMode = UserDefaults.standard.value(forKey: .sortMode)
       let newInterval: RefreshRate = UserDefaults.standard.value(forKey: .refreshInterval)

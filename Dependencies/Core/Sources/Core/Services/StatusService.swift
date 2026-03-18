@@ -48,7 +48,7 @@ public final class StatusService {
     self.modelService = modelService
 
     modelObservation?.cancel()
-    modelObservation = observeChange(of: modelService.items) { [weak self] _ in
+    modelObservation = onChange(of: modelService.items) { [weak self] _ in
       self?.update()
     }
 
