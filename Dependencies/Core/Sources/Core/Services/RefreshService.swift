@@ -3,9 +3,9 @@
 //  Copyright © 2026 Elegant Chaos Limited. All rights reserved.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+import Application
 import Foundation
 import Logger
-import Observation
 import Settings
 
 public let refreshServiceChannel = Channel("Refresh Service")
@@ -13,7 +13,7 @@ public let refreshServiceChannel = Channel("Refresh Service")
 /// Service that manages status refresh scheduling and refresh controller creation.
 ///
 /// For the `.normal` type the service observes `AuthService.authState` via
-/// `withObservationTracking` and creates or tears down the GitHub refresh controller
+/// `onChange(of:)` and creates or tears down the GitHub refresh controller
 /// whenever the user signs in or out. For `.random` and `.none` types (used in tests
 /// and UI testing respectively) the controller is created directly on `startup()`.
 @Observable
@@ -42,6 +42,9 @@ public final class RefreshService {
 
   var refreshController: RefreshController?
 
+  /// Token that owns the auth-state observation loop; cancelled when the service is deallocated.
+  @ObservationIgnored private var authObservationToken: ObservationToken?
+
   /// Creates a refresh service for the supplied model, auth service, and metadata.
   public init(
     model: ModelService,
@@ -69,13 +72,17 @@ public final class RefreshService {
 
   /// Starts the refresh service.
   ///
-  /// For `.normal` type, begins observing auth state so the GitHub refresh controller
-  /// is created when signed in and destroyed when signed out.
+  /// For `.normal` type, applies the current auth state immediately then observes
+  /// future changes so the GitHub refresh controller is created or destroyed
+  /// as credentials arrive or are removed.
   /// For `.random` and `.none` types, creates and starts the controller immediately.
   public func startup() {
     switch type {
     case .normal:
-      observeAuthState()
+      applyAuthState(authService.authState)
+      authObservationToken = onChange(of: self.authService.authState) { [weak self] newState in
+        self?.applyAuthState(newState)
+      }
     case .random, .none:
       refreshController = makeRefreshController()
       refreshController?.resume(rate: interval.rate)
@@ -147,15 +154,6 @@ public final class RefreshService {
   }
 
   // MARK: - Private
-
-  /// Begins a recursive observation loop that reacts to `authService.authState` changes.
-  private func observeAuthState() {
-    withObservationTracking {
-      applyAuthState(authService.authState)
-    } onChange: {
-      Task { @MainActor [weak self] in self?.observeAuthState() }
-    }
-  }
 
   /// Reacts to a new auth state by starting or stopping the GitHub refresh controller.
   private func applyAuthState(_ state: GithubAuthState) {
