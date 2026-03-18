@@ -1,6 +1,10 @@
 {
   "defaultScheme": "ActionStatus",
   "settings": {
-    "*": {}
+    "*": {
+      "apiIssuer": "69a6de8a-ccc2-47e3-e053-5b8c7c11a4d1",
+      "apiKey": "T58M3AG6LV",
+      "incrementTag": true
+    }
   }
 }

@@ -83,11 +83,13 @@ public final class ActionStatusPreviewRuntime: EnvironmentInjectingRuntime {
     settingsService.isEditing = isEditing
 
     let launchService = PreviewLaunchService()
+    let authService = StubAuthService()
     let refreshConfig = StoredRefreshConfiguration()
     let refreshService = RefreshService(
       model: modelService,
       metadata: metadataService,
-      configuration: refreshConfig,
+      authService: authService,
+      interval: refreshConfig.refreshInterval,
       lastEventStore: UserDefaultsLastEventStore(),
       forcedType: RefreshService.RefreshType.none
     )
