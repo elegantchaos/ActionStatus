@@ -20,7 +20,7 @@ struct AddRepoCommand<C: ModelServiceProvider & SheetServiceProvider>: CommandWi
   init(openSheet: Bool = true) {
     self.openSheet = openSheet
   }
-  
+
   func perform(centre: C) async throws {
     let repo = centre.modelService.addNewRepo()
     if openSheet {
@@ -54,7 +54,6 @@ struct AdvanceStateCommand<C: ModelServiceProvider>: CommandWithUI {
     }
   }
 }
-
 
 /// Command that imports repositories from local folders.
 public struct AddLocalReposCommand<C: ModelServiceProvider>: ImporterCommand {

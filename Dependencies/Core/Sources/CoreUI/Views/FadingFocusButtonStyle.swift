@@ -3,27 +3,19 @@
 //  All code (c) 2021 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import Observation
 import SwiftUI
 
+/// Button style that fades the focus highlight out over time on tvOS.
+///
+/// Reads `FadingFocusState` from the environment and dims the grey focus
+/// background according to its current alpha, so the highlight disappears
+/// naturally after the user stops navigating.
 struct FadingFocusButtonStyle: ButtonStyle {
   @Environment(FadingFocusState.self) var focus
   @Environment(\.isFocused) var isFocused: Bool
 
   func makeBody(configuration: Configuration) -> some View {
-    return configuration.label
+    configuration.label
       .background(isFocused ? Color.gray.opacity(focus.alpha) : Color.clear)
-  }
-}
-
-@Observable
-class FadingFocusState {
-  var alpha: Double = 1.0
-
-  func handleFocusChanged() {
-    alpha = 1.0
-    withAnimation(.easeIn(duration: 20.0)) {
-      alpha = 0.0
-    }
   }
 }

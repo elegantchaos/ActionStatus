@@ -45,6 +45,7 @@ public final class SettingsService {
   }
 
 }
+
 @MainActor public extension AppSettingKey where Value == NavigationMode {
   /// UserDefaults key for the default repository navigation action.
   static let navigationMode = AppSettingKey("NavigationMode", defaultValue: .edit)
