@@ -13,8 +13,21 @@ import SwiftUI
 public struct RepoCellView: View {
   @Environment(ActionStatusCommander.self) var commander
 
+  /// Size of text and icons in the cell, configured by the user.
   @AppStorage(.displaySize) var displaySize
-
+  
+  /// Navigation mode to use when the cell is triggered with the primary command trigger.
+  /// This is a plain click or tap.
+  @AppStorage(.navigationMode) var navigationMode
+  
+  /// Navigation mode to use when the cell is triggered with the secondary command trigger.
+  /// This is a command-click on macOS.
+  @AppStorage(.secondaryNavigationMode) var secondaryNavigationMode
+  
+  /// Navigation mode to use when the cell is triggered with the tertiary command trigger.
+  /// This is an option-click on macOS.
+  @AppStorage(.tertiaryNavigationMode) var tertiaryNavigationMode
+  
   let repo: Repo
   let selectable: Bool
   let isSource: Bool
@@ -35,7 +48,7 @@ public struct RepoCellView: View {
 
   public var body: some View {
     commander.dynamicButton { (trigger: CommandTrigger) in
-      NavigateRepoCommand<ActionStatusCommander>(repo: repo, trigger: trigger)
+      NavigateRepoCommand<ActionStatusCommander>(repo: repo, mode: repoNavigationMode(for: trigger))
     } content: {
       repoLabel()
     }
@@ -90,5 +103,17 @@ public struct RepoCellView: View {
     #else
       return 4
     #endif
+  }
+  
+  /// Returns the configured navigation mode for the supplied trigger.
+  private func repoNavigationMode(for trigger: CommandTrigger) -> NavigationMode {
+    return switch trigger {
+      case .primary:
+        navigationMode
+      case .secondary:
+        secondaryNavigationMode
+      case .tertiary:
+        tertiaryNavigationMode
+    }
   }
 }

@@ -6,7 +6,6 @@
 import Application
 import Foundation
 import Logger
-import Settings
 
 public let refreshServiceChannel = Channel("Refresh Service")
 

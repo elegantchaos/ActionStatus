@@ -30,14 +30,8 @@ struct NavigationPrefsView: View {
   func navigationPicker(_ title: LocalizedStringResource, selection: Binding<NavigationMode>) -> some View {
     Picker(title, selection: selection) {
       ForEach(NavigationMode.allCases, id: \.self) { mode in
-        Text(mode.label).tag(mode)
+        Text(String(localized: "mode.\(String(describing: mode))")).tag(mode)
       }
     }
-  }
-}
-
-extension NavigationMode {
-  var label: LocalizedStringResource {
-    "mode.\(String(describing: self))"
   }
 }
