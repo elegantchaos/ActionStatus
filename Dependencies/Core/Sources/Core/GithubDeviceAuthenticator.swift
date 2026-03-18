@@ -39,10 +39,12 @@ public enum GithubDeviceAuthError: Error {
   case failed(String)
 }
 
-/// A successfully authenticated GitHub user.
-public struct GithubAuthenticatedUser {
+/// A set of validated GitHub credentials identifying a user on a specific server.
+public struct GithubCredentials: Equatable, Sendable {
   /// The user's GitHub login (username).
   public let login: String
+  /// The GitHub API server this credential is valid for.
+  public let server: String
   /// The OAuth access token for API requests.
   public let token: String
 }
@@ -104,7 +106,7 @@ public struct GithubDeviceAuthenticator {
 
   /// Polls the GitHub token endpoint until the user authorizes, denies, or the device code expires.
   /// Respects the polling interval from the authorization response and handles slow-down requests.
-  public func pollForUser(authorization: GithubDeviceAuthorization) async throws -> GithubAuthenticatedUser {
+  public func pollForUser(authorization: GithubDeviceAuthorization) async throws -> GithubCredentials {
     guard !clientID.isEmpty else { throw GithubDeviceAuthError.missingClientID }
     let oauthBase = try Self.oauthBaseURL(for: apiServer)
     let endpoint = oauthBase.appending(path: "login/oauth/access_token")
@@ -122,7 +124,7 @@ public struct GithubDeviceAuthenticator {
       let response: AccessTokenResponse = try await postForm(endpoint: endpoint, body: body)
       if let token = response.accessToken, !token.isEmpty {
         let login = try await fetchUserLogin(token: token)
-        return GithubAuthenticatedUser(login: login, token: token)
+        return GithubCredentials(login: login, server: apiServer, token: token)
       }
 
       switch response.error {

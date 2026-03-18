@@ -131,14 +131,14 @@ struct ConnectionPrefsView: View {
         authState = .awaitingApproval(authorization.userCode, authorization.verificationURL)
         launchService.open(url: authorization.verificationURL)
 
-        let authenticatedUser = try await authenticator.pollForUser(authorization: authorization)
+        let credentials = try await authenticator.pollForUser(authorization: authorization)
         try refreshConfig.updateGithubCredentials(
-          user: authenticatedUser.login,
-          server: server,
-          token: authenticatedUser.token
+          user: credentials.login,
+          server: credentials.server,
+          token: credentials.token
         )
-        authHealth = .healthy(authenticatedUser.login)
-        authState = .signedIn(authenticatedUser.login)
+        authHealth = .healthy(credentials.login)
+        authState = .signedIn(credentials.login)
         authTask = nil
       } catch is CancellationError {
         authState = .idle
