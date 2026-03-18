@@ -1,6 +1,7 @@
 import Core
 import CoreUI
 import Previews
+import Runtime
 import SwiftUI
 
 private struct RepoCellPreviewHost: View {
@@ -10,7 +11,8 @@ private struct RepoCellPreviewHost: View {
   let repo: Repo
 
   var body: some View {
-    RepoCellView(repo: repo, selectable: false, namespace: namespace, focus: $focus)
+    let context = RepoContainerContext(namespace: namespace, runtime: .shared, focus: $focus)
+    RepoCellView(repo: repo, context: context, selectable: false)
       .frame(width: 320)
       .padding()
   }
@@ -21,7 +23,7 @@ private struct RepoListPreviewHost: View {
   @FocusState private var focus: Focus?
 
   var body: some View {
-    RepoListView(namespace: namespace, focus: $focus)
+    RepoListView(context: RepoContainerContext(namespace: namespace, runtime: .shared, focus: $focus))
   }
 }
 
@@ -30,7 +32,7 @@ private struct RepoGridPreviewHost: View {
   @FocusState private var focus: Focus?
 
   var body: some View {
-    RepoGridView(namespace: namespace, focus: $focus)
+    RepoGridView(context: RepoContainerContext(namespace: namespace, runtime: .shared, focus: $focus))
       .frame(minWidth: 700, minHeight: 420)
   }
 }

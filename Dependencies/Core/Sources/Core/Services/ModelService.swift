@@ -46,7 +46,7 @@ public final class ModelService {
   }
 
   @ObservationIgnored private var store: ModelStore
-  
+
   internal var items: [String: Repo]
   internal let deviceIdentifier: String?
 
@@ -77,22 +77,17 @@ public final class ModelService {
     self.init([], deviceIdentifier: runtime.deviceIdentifier, store: store)
   }
 
+  /// The number of repositories currently in the model.
+  public var count: Int {
+    items.count
+  }
+
   /// Begins observing the backing store for external changes and loads the initial snapshot.
   public func startup() async {
     await store.onChange { [weak self] newValues in
       self?.load(newValues: newValues)
     }
     modelChannel.log("Started")
-  }
-
-  /// The number of repositories currently in the model.
-  public var count: Int {
-    items.count
-  }
-
-  /// Replaces the in-memory items with a fresh snapshot from the store.
-  private func load(newValues: ModelStore.Values) {
-    items = newValues
   }
 
   /// Returns the repo stored under `id`, or `nil` if not present.
@@ -187,6 +182,11 @@ public final class ModelService {
       items.removeValue(forKey: id)
       store.remove(forKey: id)
     }
+  }
+
+  /// Replaces the in-memory items with a fresh snapshot from the store.
+  private func load(newValues: ModelStore.Values) {
+    items = newValues
   }
 }
 

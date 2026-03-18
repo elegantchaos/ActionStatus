@@ -4,16 +4,23 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Core
-import SwiftUI
 import Runtime
+import SwiftUI
 
 public struct RepoContainerContext {
   let namespace: Namespace.ID
-  
+
   /// Runtime metadata. Injectable for testing purposes.
   let runtime: Runtime
-  
+
   let focus: FocusState<Focus?>.Binding
+
+  /// Creates a context for a repository container view.
+  public init(namespace: Namespace.ID, runtime: Runtime = .shared, focus: FocusState<Focus?>.Binding) {
+    self.namespace = namespace
+    self.runtime = runtime
+    self.focus = focus
+  }
 }
 
 /// Grid presentation of monitored repositories.

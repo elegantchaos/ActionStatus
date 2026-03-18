@@ -4,8 +4,8 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Core
-import SwiftUI
 import Runtime
+import SwiftUI
 
 /// List presentation of monitored repositories.
 public struct RepoListView: View {

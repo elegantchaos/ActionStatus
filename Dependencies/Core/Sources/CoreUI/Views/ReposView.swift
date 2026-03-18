@@ -4,8 +4,8 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Core
-import SwiftUI
 import Runtime
+import SwiftUI
 
 /// View containing all monitored repositories in their chosen layout.
 public struct ReposView: View {
@@ -18,7 +18,7 @@ public struct ReposView: View {
 
   /// Runtime metadata. Injectable for testing purposes.
   let runtime: Runtime
-  
+
   /// Creates a repositories container view.
   public init(runtime: Runtime = .shared) {
     self.runtime = runtime
@@ -63,4 +63,3 @@ public struct ReposView: View {
     #endif
   }
 }
-

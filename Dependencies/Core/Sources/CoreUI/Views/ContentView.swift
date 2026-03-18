@@ -6,8 +6,8 @@
 import Core
 import Icons
 import Observation
-import SwiftUI
 import Runtime
+import SwiftUI
 
 /// Main content view for the ActionStatus application.
 public struct ContentView: View {
@@ -49,7 +49,7 @@ struct MobileActionsMenu: ToolbarContent {
 
   var body: some ToolbarContent {
     ToolbarItemGroup {
-      
+
       Menu {
         commander.button(ShowPreferencesSheetCommand())
         commander.button(AddRepoCommand())
