@@ -17,6 +17,10 @@ public final class GithubRefreshController: RefreshController {
 
   private var repoTasks: [String: Task<Void, Never>] = [:]
 
+  /// Creates a controller that polls the given GitHub API server.
+  /// - Parameters:
+  ///   - refreshInterval: Overrides the default (`.minute`) polling interval when provided.
+  ///   - lastEventStore: Storage for per-repository last-event timestamps.
   public init(
     model: ModelService,
     token: String,
@@ -31,6 +35,7 @@ public final class GithubRefreshController: RefreshController {
     super.init(model: model)
   }
 
+  /// Spawns a polling task per repository, staggered by one second per repo to avoid thundering herd.
   override func startRefresh() {
     cancelRefresh()
     let interval = activeRefreshInterval
@@ -75,6 +80,7 @@ public final class GithubRefreshController: RefreshController {
     }
   }
 
+  /// Cancels all in-flight repository polling tasks.
   override func cancelRefresh() {
     for task in repoTasks.values {
       task.cancel()
@@ -82,11 +88,13 @@ public final class GithubRefreshController: RefreshController {
     repoTasks.removeAll()
   }
 
+  /// Restarts all polling tasks at the new rate when the interval changes while running.
   override func refreshRateDidChange(to _: Double) {
     cancelRefresh()
     startRefresh()
   }
 
+  /// Returns the effective polling interval from the current running state, or falls back to the configured default.
   private var activeRefreshInterval: TimeInterval {
     if case .running(let rate) = state {
       return rate
@@ -94,11 +102,13 @@ public final class GithubRefreshController: RefreshController {
     return fallbackRefreshInterval
   }
 
+  /// Logs a message error from the polling layer and resets the repo's state to `.unknown`.
   func update(repo: Repo, message: Message) {
     refreshChannel.log("Error for \(repo.name) was: \(message.message)")
     model.updateState(.unknown, forRepoWithID: repo.id)
   }
 
+  /// Maps a GitHub `WorkflowRun` to a `Repo.State`.
   func state(for run: WorkflowRun, in repo: Repo) -> Repo.State {
     refreshChannel.log("\(repo.name) status: \(run.status), conclusion: \(run.conclusion ?? "")")
 
@@ -123,6 +133,7 @@ public final class GithubRefreshController: RefreshController {
     }
   }
 
+  /// Reduces an array of per-workflow states to a single aggregate for the repository row.
   func aggregateState(for states: [Repo.State]) -> Repo.State {
     guard !states.isEmpty else { return .unknown }
 
@@ -145,10 +156,12 @@ public final class GithubRefreshController: RefreshController {
     return .unknown
   }
 
+  /// Pushes a new aggregate state to the model for the given repo.
   func update(repo: Repo, with state: Repo.State) {
     model.updateState(state, forRepoWithID: repo.id)
   }
 
+  /// Merges a freshly discovered workflow list into the model, preserving existing enabled/disabled choices.
   @discardableResult
   func merge(repo: Repo, discovered workflows: [Repo.WorkflowSelection]) -> Repo {
     guard var current = model.repo(withIdentifier: repo.id) else { return repo }
@@ -161,6 +174,7 @@ public final class GithubRefreshController: RefreshController {
 
 /// Per-repository task runner for events and workflow polling.
 private actor RepoPoller {
+  /// Differentiates workflow state entries by numeric ID vs. filename.
   private enum WorkflowKey: Hashable {
     case id(Int)
     case name(String)
@@ -193,9 +207,11 @@ private actor RepoPoller {
     self.refreshController = refreshController
     self.refreshInterval = refreshInterval
     self.lastEventStore = lastEventStore
+    // Initialise to the epoch so that all events are considered new on the first poll.
     self.lastEvent = Date(timeIntervalSinceReferenceDate: 0)
   }
 
+  /// Runs the polling loop until the enclosing task is cancelled.
   func run() async {
     lastEvent = await lastEventStore.lastEvent(forKey: lastEventKey)
     while !Task.isCancelled {
@@ -226,6 +242,7 @@ private actor RepoPoller {
     }
   }
 
+  /// Dispatches a single `RepositoryUpdate` value to the appropriate handler.
   private func handle(_ update: RepositoryUpdate) async {
     switch update {
       case .events(let events):
@@ -244,6 +261,7 @@ private actor RepoPoller {
     }
   }
 
+  /// Advances `lastEvent` to the most recent timestamp in the event batch and persists it.
   private func handleEvents(_ events: Events) async {
     var latestEvent = lastEvent
     for event in events where event.created_at > lastEvent {
@@ -258,6 +276,7 @@ private actor RepoPoller {
     await lastEventStore.setLastEvent(latestEvent, forKey: lastEventKey)
   }
 
+  /// Merges the discovered workflow list into the model, then resets state to `.unknown` if no workflows are enabled.
   private func handleWorkflows(_ response: Workflows) async {
     let discovered = response.workflows.map {
       Repo.WorkflowSelection(workflowID: $0.id, name: $0.name, path: $0.path)
@@ -268,6 +287,7 @@ private actor RepoPoller {
     }
   }
 
+  /// Updates the per-workflow state cache and pushes an aggregate state to the model.
   private func handleWorkflowRuns(target: RepositoryWorkflowTarget, runs: WorkflowRuns) async {
     guard let latestRepo = await MainActor.run(body: { refreshController.model.repo(withIdentifier: repo.id) }) else {
       return
@@ -316,6 +336,7 @@ private actor RepoPoller {
     await refreshController.update(repo: latestRepo, with: aggregate)
   }
 
+  /// Handles error messages from each update source, disabling polling for unavailable endpoints.
   private func handleMessage(source: RepositoryUpdateSource, message: Message) async {
     switch source {
       case .events:

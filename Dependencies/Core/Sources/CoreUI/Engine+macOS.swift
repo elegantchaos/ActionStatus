@@ -9,6 +9,7 @@
   import SwiftUI
 
   public extension Engine {
+    /// Applies the dock/menubar visibility policy stored in `UserDefaults`.
     func applyWindowSettings() {
       let showInDock = UserDefaults.standard.value(forKey: .showInDock)
       let activation: NSApplication.ActivationPolicy = showInDock ? .regular : .accessory

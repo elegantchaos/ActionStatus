@@ -7,6 +7,7 @@ import Core
 import LoggerUI
 import SwiftUI
 
+/// Displays debug build information and the logger channel control panel.
 struct DebugPrefsView: View {
   @Environment(MetadataService.self) var metadataService
   @Environment(RefreshService.self) var refreshService

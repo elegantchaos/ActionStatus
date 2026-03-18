@@ -107,14 +107,17 @@ public final class GithubAuthService: AuthService {
 
   // MARK: - Private: Keychain
 
+  /// JSON-encodable snapshot persisted to the Keychain password field.
   private struct StoredCredentials: Codable {
     let login: String
     let server: String
     let token: String
   }
 
+  /// Fixed account name used for all Keychain lookups for this service.
   private var keychainAccount: String { "github" }
 
+  /// Reads and decodes `StoredCredentials` from the Keychain; returns `nil` on any error.
   private func loadCredentials() -> GithubCredentials? {
     do {
       let json = try Keychain.default.password(for: keychainAccount, on: keychainID)
@@ -126,6 +129,7 @@ public final class GithubAuthService: AuthService {
     }
   }
 
+  /// Encodes and writes `credentials` to the Keychain, updating an existing entry if present.
   private func persistCredentials(_ credentials: GithubCredentials) {
     let stored = StoredCredentials(login: credentials.login, server: credentials.server, token: credentials.token)
     guard
@@ -143,6 +147,7 @@ public final class GithubAuthService: AuthService {
     }
   }
 
+  /// Removes the stored credential entry from the Keychain.
   private func deleteCredentials() {
     try? Keychain.default.delete(passwordFor: keychainAccount, on: keychainID)
   }

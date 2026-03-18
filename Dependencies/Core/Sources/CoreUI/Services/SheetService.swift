@@ -9,7 +9,7 @@ import SwiftUI
 
 /// Service that controls which sheet is currently presented.
 @Observable
-public class SheetService {
+public final class SheetService {
   /// Currently displayed sheet, if any.
   public var showing: Sheet?
 
@@ -17,6 +17,7 @@ public class SheetService {
   public init() {
   }
 
+  /// Builds the view for the supplied sheet type.
   @ViewBuilder
   func sheetView(for sheet: Sheet) -> some View {
     switch sheet {
@@ -34,13 +35,16 @@ public class SheetService {
     }
   }
 
+  /// Clears the currently shown sheet.
   func dismiss() {
     showing = nil
   }
 
   /// Sheets presented by ActionStatus.
   public enum Sheet: Identifiable {
+    /// Edit an existing repo, or present the add-new-repo form when `nil`.
     case editRepo(Repo?)
+    /// The app preferences form.
     case preferences
 
     /// Stable identifier for the sheet content.
@@ -58,6 +62,7 @@ public class SheetService {
   }
 }
 
+/// View modifier that presents ActionStatus sheets using `SheetService`.
 struct SheetHostModifier: ViewModifier {
   @Environment(SheetService.self) var sheetService
 

@@ -40,6 +40,7 @@ public struct ContentView: View {
   }
 }
 
+/// iOS toolbar menu grouping the primary app-level actions.
 struct MobileActionsMenu: ToolbarContent {
   @Environment(ActionStatusCommander.self) var commander
 

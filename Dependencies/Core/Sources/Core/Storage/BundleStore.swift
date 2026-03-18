@@ -5,10 +5,18 @@
 
 import Foundation
 
-public class BundleStore: ModelStore {
+/// A read-only `ModelStore` backed by a JSON file in the app bundle.
+///
+/// Loads all repos at init time and holds them in memory. Mutations are reflected in
+/// `values` only for the lifetime of the instance; they are not written back to disk.
+/// Used for seeding the model from a test JSON fixture.
+public final class BundleStore: ModelStore {
+  /// The in-memory repo dictionary loaded from the bundle resource.
   public var values: Values
+  /// The resource name used to locate the JSON file in the bundle.
   private let key: String
 
+  /// Loads the JSON repo file named `key` from `bundle`, crashing if it is absent or malformed.
   public init(key: String, bundle: Bundle = Bundle.main) {
     self.key = key
 

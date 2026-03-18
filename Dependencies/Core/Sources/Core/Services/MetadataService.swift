@@ -6,7 +6,11 @@
 import Observation
 import Runtime
 
-/// Service that exposes runtime metadata to the app's shared services.
+/// Service that exposes runtime metadata and the appropriate model source to the app.
+///
+/// Wraps the `Runtime` object so that platform-specific decisions (simulator, UI-testing,
+/// model source) are made in one place. Services that need this information receive it
+/// via dependency injection rather than importing `Runtime` directly.
 @Observable
 public final class MetadataService {
   @ObservationIgnored public let runtime = Runtime()

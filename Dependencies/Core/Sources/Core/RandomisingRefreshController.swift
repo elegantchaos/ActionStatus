@@ -5,9 +5,10 @@
 
 import Foundation
 
-/// Randomly changes the state of repos. Useful for testing the UI.
+/// Randomly changes the state of repos. Useful for testing the UI without hitting GitHub.
 @MainActor
 public final class RandomisingRefreshController: RefreshController {
+  /// Timer used to schedule state randomisation ticks.
   internal let timer: OneShotTimer
 
   override public init(model: ModelService) {
@@ -31,6 +32,7 @@ public final class RandomisingRefreshController: RefreshController {
 }
 
 internal extension RandomisingRefreshController {
+  /// Picks a random repo and advances it to a random state, then reschedules itself.
   func doRefresh() {
     switch state {
       case .running(let rate):

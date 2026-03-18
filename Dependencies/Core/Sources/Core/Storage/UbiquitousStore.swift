@@ -11,10 +11,14 @@ let ubiquitousChannel = Channel("Ubiquitous Store")
 
 /// Model store backed by an NSUbiquitousKeyValueStore.
 public struct UbiquitousStore: ModelStore {
+  /// The underlying iCloud key-value store.
   let store: NSUbiquitousKeyValueStore
+  /// Key used to store the ordered list of repo IDs (the index).
   let indexKey: String
+  /// Notification observer that reloads the model when the store changes externally.
   let observer: Observer
 
+  /// Creates the store, optionally using a custom index key; defaults to `"State"` (or `"StateDebug"` in DEBUG builds).
   public init(key: String? = nil) {
     store = NSUbiquitousKeyValueStore.default
     observer = Observer()
@@ -24,16 +28,19 @@ public struct UbiquitousStore: ModelStore {
     ubiquitousChannel.log("Initialized store with index \(index)")
   }
 
+  /// Ordered list of repo IDs used to enumerate the store; backed by the ubiquitous store itself.
   private var index: [String] {
     get { (store.array(forKey: indexKey) as? [String]) ?? [] }
     set { store.set(newValue, forKey: indexKey) }
   }
 
+  /// All repos currently in the store, decoded on demand; writing replaces the full set.
   public var values: [String: Repo] {
     get { readValues() }
     set { writeValues(newValue) }
   }
   
+  /// Reads all repos from the ubiquitous store using the current index.
   private func readValues() -> Values {
     return .init(
       uniqueKeysWithValues:
@@ -43,6 +50,7 @@ public struct UbiquitousStore: ModelStore {
     )
   }
   
+  /// Replaces the full set of repos, removing stale entries from the index.
   private mutating func writeValues(_ newValues: Values) {
     let oldIndex = index
     index = Array(newValues.keys)
@@ -55,6 +63,7 @@ public struct UbiquitousStore: ModelStore {
     }
   }
   
+  /// Returns the repo for `key`, or `nil` if absent or decode fails.
   public func get(forKey key: String) -> Repo? {
     guard let dict = store.dictionary(forKey: key) else {
       return nil
@@ -69,6 +78,7 @@ public struct UbiquitousStore: ModelStore {
     }
   }
 
+  /// Encodes and writes `repo` to the ubiquitous store, adding it to the index if needed.
   public func set(_ repo: Repo, forKey key: String) {
     let encoder = DictionaryEncoder()
     do {
@@ -83,6 +93,7 @@ public struct UbiquitousStore: ModelStore {
     }
   }
 
+  /// Removes the repo for `key` from the ubiquitous store and the index.
   public func remove(forKey key: String) {
     removeFromIndex(key)
     store.removeObject(forKey: key)
@@ -90,6 +101,7 @@ public struct UbiquitousStore: ModelStore {
     ubiquitousChannel.log("Removed repo with id \(key) from store.")
   }
 
+  /// Appends `key` to the index if it is not already present.
   private func insertIntoIndex(_ key: String) {
     var keys = index
     guard !keys.contains(key) else { return }
@@ -97,23 +109,20 @@ public struct UbiquitousStore: ModelStore {
     store.set(keys, forKey: indexKey)
   }
 
+  /// Removes `key` from the index.
   private func removeFromIndex(_ key: String) {
     store.set(index.filter { $0 != key }, forKey: indexKey)
   }
 
   public func onChange(_ callback: @escaping ChangeCallback) async {
-    // remove old observer if there is one
     observer.clear()
-
-    // add an observer
     observer.add {
       await callback(readValues())
     }
-        
-    // make an initial call straight away and wait until it has completed
     await callback(readValues())
   }
 
+  /// The default index key; uses a separate key in DEBUG builds to avoid corrupting release data.
   private static var defaultKey: String {
     #if DEBUG
       "StateDebug"
@@ -122,16 +131,19 @@ public struct UbiquitousStore: ModelStore {
     #endif
   }
   
-  class Observer {
+  /// Manages the `NSUbiquitousKeyValueStore` change notification observer.
+  final class Observer {
     let nc = NotificationCenter.default
     var handle: NSObjectProtocol?
+
+    /// Removes the current observer, if any.
     func clear() {
-      // remove old observer if there is one
       if let handle {
         nc.removeObserver(handle)
       }
     }
-    
+
+    /// Registers a notification handler that fires the given closure on the main actor.
     func add(perform: @escaping @MainActor @Sendable () async -> ()) {
       handle = NotificationCenter.default
         .addObserver(

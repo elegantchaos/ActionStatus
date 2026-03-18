@@ -15,6 +15,7 @@ struct ConnectionPrefsView: View {
   @Environment(\.authService) private var authService
   @Environment(LaunchService.self) private var launchService
 
+  /// Default GitHub API server used when no custom server is entered.
   private let defaultGithubServer = "api.github.com"
 
   @State private var showCustomServerSettings = false
@@ -70,6 +71,7 @@ struct ConnectionPrefsView: View {
 
   // MARK: - Helpers
 
+  /// Uses `customServer` if non-empty, otherwise falls back to `defaultGithubServer`.
   private var resolvedServer: String {
     let trimmed = customServer.trimmingCharacters(in: .whitespacesAndNewlines)
     return trimmed.isEmpty ? defaultGithubServer : trimmed
@@ -189,5 +191,3 @@ private struct AuthStatusBanner: View {
     }
   }
 }
-
-
