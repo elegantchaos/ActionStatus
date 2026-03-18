@@ -92,7 +92,8 @@ public final class Engine {
     let refreshService = RefreshService(
       model: modelService,
       metadata: metadataService,
-      configuration: refreshConfig
+      configuration: refreshConfig,
+      lastEventStore: UserDefaultsLastEventStore()
     )
     let launchService = LaunchService()
 

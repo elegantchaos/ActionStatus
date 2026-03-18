@@ -13,6 +13,7 @@ public final class OctoidRefreshController: RefreshController {
   internal let token: String
   internal let apiServer: String
   internal let fallbackRefreshInterval: TimeInterval
+  internal let lastEventStore: any LastEventStore
 
   private var repoTasks: [String: Task<Void, Never>] = [:]
 
@@ -20,11 +21,13 @@ public final class OctoidRefreshController: RefreshController {
     model: ModelService,
     token: String,
     apiServer: String,
-    refreshInterval: TimeInterval? = nil
+    refreshInterval: TimeInterval? = nil,
+    lastEventStore: any LastEventStore
   ) {
     self.token = token
     self.apiServer = apiServer
     self.fallbackRefreshInterval = refreshInterval ?? RefreshRate.minute.rate
+    self.lastEventStore = lastEventStore
     super.init(model: model)
   }
 
@@ -64,7 +67,8 @@ public final class OctoidRefreshController: RefreshController {
           repo: repo,
           session: session,
           refreshController: self,
-          refreshInterval: interval
+          refreshInterval: interval,
+          lastEventStore: lastEventStore
         )
         await poller.run()
       }
@@ -166,6 +170,7 @@ private actor RepoPoller {
   private let session: JSONSession.Session
   private unowned let refreshController: OctoidRefreshController
   private let refreshInterval: TimeInterval
+  private let lastEventStore: any LastEventStore
 
   private var lastEvent: Date
   private var shouldPollEvents = true
@@ -180,16 +185,19 @@ private actor RepoPoller {
     repo: Repo,
     session: JSONSession.Session,
     refreshController: OctoidRefreshController,
-    refreshInterval: TimeInterval
+    refreshInterval: TimeInterval,
+    lastEventStore: any LastEventStore
   ) {
     self.repo = repo
     self.session = session
     self.refreshController = refreshController
     self.refreshInterval = refreshInterval
-    self.lastEvent = Self.loadLastEvent(forKey: "\(repo.owner)/\(repo.name)-lastEvent")
+    self.lastEventStore = lastEventStore
+    self.lastEvent = Date(timeIntervalSinceReferenceDate: 0)
   }
 
   func run() async {
+    lastEvent = await lastEventStore.lastEvent(forKey: lastEventKey)
     while !Task.isCancelled {
       shouldRestartStream = false
       let stream = session.repositoryUpdates(
@@ -247,7 +255,7 @@ private actor RepoPoller {
     }
 
     lastEvent = latestEvent
-    Self.saveLastEvent(latestEvent, forKey: lastEventKey)
+    await lastEventStore.setLastEvent(latestEvent, forKey: lastEventKey)
   }
 
   private func handleWorkflows(_ response: Workflows) async {
@@ -336,18 +344,5 @@ private actor RepoPoller {
           refreshChannel.log("Workflow runs unavailable for \(fullName) (\(target.name)): \(message.message)")
         }
     }
-  }
-
-  private static func loadLastEvent(forKey key: String) -> Date {
-    let seconds = UserDefaults.standard.double(forKey: key)
-    guard seconds != 0 else {
-      return Date(timeIntervalSinceReferenceDate: 0)
-    }
-
-    return Date(timeIntervalSinceReferenceDate: seconds)
-  }
-
-  private static func saveLastEvent(_ date: Date, forKey key: String) {
-    UserDefaults.standard.set(date.timeIntervalSinceReferenceDate, forKey: key)
   }
 }

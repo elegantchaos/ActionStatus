@@ -31,6 +31,7 @@ public final class RefreshService {
   let type: RefreshType
   let modelService: ModelService
   let configuration: RefreshConfiguration
+  let lastEventStore: any LastEventStore
   var refreshController: RefreshController?
 
 
@@ -39,10 +40,12 @@ public final class RefreshService {
     model: ModelService,
     metadata: MetadataService,
     configuration: RefreshConfiguration,
+    lastEventStore: any LastEventStore,
     forcedType: RefreshType? = nil
   ) {
     self.modelService = model
     self.configuration = configuration
+    self.lastEventStore = lastEventStore
 
     if let forcedType {
       self.type = forcedType
@@ -103,7 +106,8 @@ public final class RefreshService {
       model: modelService,
       token: token,
       apiServer: configuration.githubServer,
-      refreshInterval: configuration.refreshInterval.rate
+      refreshInterval: configuration.refreshInterval.rate,
+      lastEventStore: lastEventStore
     )
 
     return controller
