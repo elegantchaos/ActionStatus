@@ -27,3 +27,10 @@ public protocol AuthService: AnyObject {
   /// Discards persisted credentials and resets state to `.signedOut`.
   func signOut()
 }
+
+public extension AuthService {
+  /// Starts sign-in targeting `api.github.com` with standard read scopes.
+  func startSignIn() {
+    startSignIn(server: "api.github.com", scopes: ["repo", "read:user"])
+  }
+}

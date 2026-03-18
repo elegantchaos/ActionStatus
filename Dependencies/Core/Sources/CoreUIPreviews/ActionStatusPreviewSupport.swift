@@ -69,11 +69,10 @@ public final class ActionStatusPreviewRuntime: EnvironmentInjectingRuntime {
   public init(
     repos: [Repo],
     isEditing: Bool = false,
-    initialSheet: SheetService.Sheet? = nil,
-    sortMode: SortMode = .name
+    initialSheet: SheetService.Sheet? = nil
   ) {
     let settingsService = SettingsService()
-    let statusService = StatusService(settingsService: settingsService)
+    let statusService = StatusService()
     let metadataService = MetadataService()
     let modelService = ModelService(
       repos,
@@ -84,10 +83,12 @@ public final class ActionStatusPreviewRuntime: EnvironmentInjectingRuntime {
     settingsService.isEditing = isEditing
 
     let launchService = PreviewLaunchService()
+    let refreshConfig = StoredRefreshConfiguration()
     let refreshService = RefreshService(
       model: modelService,
-      settingsService: settingsService,
       metadata: metadataService,
+      configuration: refreshConfig,
+      lastEventStore: UserDefaultsLastEventStore(),
       forcedType: RefreshService.RefreshType.none
     )
     let sheetService = SheetService()
@@ -110,7 +111,6 @@ public final class ActionStatusPreviewRuntime: EnvironmentInjectingRuntime {
     )
 
     statusService.connect(to: modelService)
-    statusService.update(sortMode: sortMode)
   }
 
   /// Shared environment injector used by preview content.
@@ -123,6 +123,8 @@ public final class ActionStatusPreviewRuntime: EnvironmentInjectingRuntime {
       launchService: launchService,
       statusService: statusService,
       refreshService: refreshService,
+      refreshConfig: StoredRefreshConfiguration(),
+      authService: StubAuthService(),
       sheetService: sheetService
     )
   }
@@ -133,15 +135,13 @@ public extension PreviewScenario where Runtime == ActionStatusPreviewRuntime, Fi
   init(
     repos: [Repo],
     isEditing: Bool = false,
-    initialSheet: SheetService.Sheet? = nil,
-    sortMode: SortMode = .name
+    initialSheet: SheetService.Sheet? = nil
   ) {
     self.init {
       let runtime = ActionStatusPreviewRuntime(
         repos: repos,
         isEditing: isEditing,
-        initialSheet: initialSheet,
-        sortMode: sortMode
+        initialSheet: initialSheet
       )
       let fixture = ActionStatusPreviewFixture(
         repos: repos,
@@ -190,7 +190,6 @@ public enum ActionStatusPreviews {
       isEditing: isEditing
     )
   }
-
   /// Creates a repository value for previews.
   public static func repo(
     _ name: String,

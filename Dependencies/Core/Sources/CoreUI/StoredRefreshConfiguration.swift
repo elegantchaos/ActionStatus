@@ -15,7 +15,7 @@ public class StoredRefreshConfiguration: RefreshConfiguration {
   @ObservationIgnored @AppStorage(.githubUser) public var githubUser
   @ObservationIgnored @AppStorage(.githubServer) public var githubServer
 
-  init() {
+  public init() {
   }
 
   public var isSignedIn: Bool {

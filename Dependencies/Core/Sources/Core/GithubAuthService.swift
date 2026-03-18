@@ -68,7 +68,7 @@ public final class GithubAuthService: AuthService {
 
   /// Begins the device-code OAuth flow; transitions state asynchronously.
   @MainActor
-  public func startSignIn(server: String = "api.github.com", scopes: [String] = ["repo", "read:user"]) {
+  public func startSignIn(server: String, scopes: [String]) {
     signInTask?.cancel()
     authState = .signingIn
     signInTask = Task { @MainActor in
@@ -92,8 +92,10 @@ public final class GithubAuthService: AuthService {
     let authenticator = GithubDeviceAuthenticator(apiServer: server, clientID: clientID)
     do {
       let authorization = try await authenticator.startAuthorization(scopes: scopes)
+      guard !Task.isCancelled else { return }
       authState = .awaitingApproval(userCode: authorization.userCode, url: authorization.verificationURL)
       let credentials = try await authenticator.pollForUser(authorization: authorization)
+      guard !Task.isCancelled else { return }
       persistCredentials(credentials)
       authState = .signedIn(credentials)
     } catch {

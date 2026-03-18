@@ -39,23 +39,6 @@ public enum GithubDeviceAuthError: Error {
   case failed(String)
 }
 
-/// A set of validated GitHub credentials identifying a user on a specific server.
-public struct GithubCredentials: Equatable, Sendable {
-  /// The user's GitHub login (username).
-  public let login: String
-  /// The GitHub API server this credential is valid for.
-  public let server: String
-  /// The OAuth access token for API requests.
-  public let token: String
-
-  /// Creates credentials with the given login, server, and token.
-  public init(login: String, server: String, token: String) {
-    self.login = login
-    self.server = server
-    self.token = token
-  }
-}
-
 /// Implements the GitHub Device Authorization Grant (RFC 8628) OAuth flow.
 ///
 /// Handles the full lifecycle: requesting a device code, polling for user
