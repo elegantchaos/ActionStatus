@@ -21,6 +21,11 @@ import Settings
   static let refreshInterval = AppSettingKey("RefreshInterval", defaultValue: RefreshRate.automatic)
 }
 
+@MainActor public extension AppSettingKey where Value == SortMode {
+  /// UserDefaults key for the sort mode setting.
+  static let sortMode = AppSettingKey("SortMode", defaultValue: SortMode.state)
+}
+
 
 
 @MainActor public extension AppSettingKey where Value == DisplaySize {
