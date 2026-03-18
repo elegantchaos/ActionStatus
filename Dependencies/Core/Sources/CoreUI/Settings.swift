@@ -32,13 +32,6 @@ import Settings
   static let displaySize = AppSettingKey("DisplaySize", defaultValue: .automatic)
 }
 
-/// String setting keys.
-@MainActor public extension AppSettingKey where Value == String {
-  static let githubUser = AppSettingKey("GithubUser", defaultValue: "")
-  static let githubServer = AppSettingKey("GithubServer", defaultValue: "api.github.com")
-
-}
-
 /// Data setting keys.
 @MainActor public extension AppSettingKey where Value == Data {
   /// UserDefaults key for the hotkey combo data.
