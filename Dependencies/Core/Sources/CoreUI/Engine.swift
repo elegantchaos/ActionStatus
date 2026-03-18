@@ -49,9 +49,6 @@ public final class Engine {
   /// Shared authentication service.
   public let authService: any AuthService
 
-  /// Shared refresh configuration.
-  public let refreshConfig: StoredRefreshConfiguration
-
   /// Shared status service.
   public let statusService: StatusService
 
@@ -79,14 +76,16 @@ public final class Engine {
     // Push initial values
     let currentSortMode: SortMode = UserDefaults.standard.value(forKey: .sortMode)
     statusService.apply(sortMode: currentSortMode)
-    refreshService.apply(interval: refreshConfig.refreshInterval)
+    let currentInterval: RefreshRate = UserDefaults.standard.value(forKey: .refreshInterval)
+    refreshService.apply(interval: currentInterval)
 
     // Observe future UserDefaults changes and push updated values to services
     settingsObserver = UserDefaults.standard.onActionStatusSettingsChanged { [weak self] in
       guard let self else { return }
       let newSortMode: SortMode = UserDefaults.standard.value(forKey: .sortMode)
+      let newInterval: RefreshRate = UserDefaults.standard.value(forKey: .refreshInterval)
       statusService.apply(sortMode: newSortMode)
-      refreshService.apply(interval: refreshConfig.refreshInterval)
+      refreshService.apply(interval: newInterval)
     }
   }
 
@@ -104,7 +103,6 @@ public final class Engine {
       deviceIdentifier: metadataService.deviceIdentifier,
       source: metadataService.modelSource
     )
-    let refreshConfig = StoredRefreshConfiguration()
 
     let authService: any AuthService
     if ProcessInfo.processInfo.environment["TEST_AUTH"] != nil {
@@ -118,7 +116,7 @@ public final class Engine {
       model: modelService,
       metadata: metadataService,
       authService: authService,
-      interval: refreshConfig.refreshInterval,
+      interval: UserDefaults.standard.value(forKey: .refreshInterval),
       lastEventStore: UserDefaultsLastEventStore()
     )
     let launchService = LaunchService()
@@ -130,7 +128,6 @@ public final class Engine {
     self.modelService = modelService
     self.settingsService = settingsService
     self.refreshService = refreshService
-    self.refreshConfig = refreshConfig
     self.launchService = launchService
     self.commander = ActionStatusCommander(
       modelService: modelService,
@@ -157,7 +154,6 @@ extension Engine: AppEngine {
       launchService: launchService,
       statusService: statusService,
       refreshService: refreshService,
-      refreshConfig: refreshConfig,
       authService: authService,
       sheetService: sheetService
     )
@@ -172,7 +168,6 @@ extension Engine: AppEngine {
       launchService: launchService,
       statusService: statusService,
       refreshService: refreshService,
-      refreshConfig: refreshConfig,
       authService: authService,
       sheetService: sheetService
     )

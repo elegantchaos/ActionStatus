@@ -84,12 +84,11 @@ public final class ActionStatusPreviewRuntime: EnvironmentInjectingRuntime {
 
     let launchService = PreviewLaunchService()
     let authService = StubAuthService()
-    let refreshConfig = StoredRefreshConfiguration()
     let refreshService = RefreshService(
       model: modelService,
       metadata: metadataService,
       authService: authService,
-      interval: refreshConfig.refreshInterval,
+      interval: .automatic,
       lastEventStore: UserDefaultsLastEventStore(),
       forcedType: RefreshService.RefreshType.none
     )
@@ -125,7 +124,6 @@ public final class ActionStatusPreviewRuntime: EnvironmentInjectingRuntime {
       launchService: launchService,
       statusService: statusService,
       refreshService: refreshService,
-      refreshConfig: StoredRefreshConfiguration(),
       authService: StubAuthService(),
       sheetService: sheetService
     )
