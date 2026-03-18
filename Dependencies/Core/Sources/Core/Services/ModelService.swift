@@ -22,12 +22,14 @@ public protocol ModelServiceProvider: CommandCentre {
 /// Manages the in-memory repository list and its backing store.
 ///
 /// `ModelService` is the single point of truth for repository data. It owns an
-/// `@Observable` items dictionary that drives all SwiftUI views and the status layer.
-/// All mutations (add, remove, update state) flow through this class so the backing
+/// `@Observable` items dictionary that drives all SwiftUI views. All mutations
+/// (add, remove, update state) flow through this class so the backing
 /// `ModelStore` (iCloud key-value or bundle JSON) stays in sync.
 ///
 /// The class is `@MainActor`-bound and `@Observable` so SwiftUI observation works
-/// without any manual `objectWillChange` calls.
+/// without any manual `objectWillChange` calls. Status projection (sorted lists,
+/// counts) is handled by `StatusService`, which the application layer connects
+/// via `StatusService.connect(to:)` after both services are created.
 @Observable
 @MainActor
 public final class ModelService {
@@ -43,29 +45,24 @@ public final class ModelService {
   }
 
   @ObservationIgnored private var store: ModelStore
-  @ObservationIgnored private let statusService: StatusService
   internal var items: [String: Repo]
   internal let deviceIdentifier: String?
 
   /// Creates a model service pre-seeded with `repos`, using `store` as the backing store.
   public init(
     _ repos: [Repo],
-    statusService: StatusService,
     deviceIdentifier: String?,
     store: ModelStore? = nil
   ) {
     let resolvedStore = store ?? UbiquitousStore()
     self.store = resolvedStore
-    self.statusService = statusService
     self.deviceIdentifier = deviceIdentifier
     self.items = .init(uniqueKeysWithValues: repos.map { ($0.id, $0) })
-
-    statusService.connect(to: self)
     modelChannel.log("Initialised with \(resolvedStore)")
   }
 
   /// Creates a model service with an empty initial list, using a store derived from `source`.
-  public convenience init(statusService: StatusService, deviceIdentifier: String?, source: Source) {
+  public convenience init(deviceIdentifier: String?, source: Source) {
     let store: ModelStore
     switch source {
       case .cloud:
@@ -74,7 +71,7 @@ public final class ModelService {
         store = BundleStore(key: name)
     }
 
-    self.init([], statusService: statusService, deviceIdentifier: deviceIdentifier, store: store)
+    self.init([], deviceIdentifier: deviceIdentifier, store: store)
   }
 
   /// Begins observing the backing store for external changes and loads the initial snapshot.

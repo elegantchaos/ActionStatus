@@ -76,10 +76,10 @@ public final class ActionStatusPreviewRuntime: EnvironmentInjectingRuntime {
     let metadataService = MetadataService()
     let modelService = ModelService(
       repos,
-      statusService: statusService,
       deviceIdentifier: metadataService.deviceIdentifier,
       store: PreviewModelStore(repos: repos)
     )
+    statusService.connect(to: modelService)
     settingsService.isEditing = isEditing
 
     let launchService = PreviewLaunchService()
