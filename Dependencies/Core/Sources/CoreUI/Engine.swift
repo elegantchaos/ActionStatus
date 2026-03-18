@@ -71,7 +71,7 @@ public final class Engine {
   public func startup() async throws {
     await authService.startup()
     await modelService.startup()
-    refreshService.resumeRefresh()
+    refreshService.startup()
   }
 
   /// Creates the live engine and its shared services.
@@ -89,13 +89,6 @@ public final class Engine {
       source: metadataService.modelSource
     )
     let refreshConfig = StoredRefreshConfiguration()
-    let refreshService = RefreshService(
-      model: modelService,
-      metadata: metadataService,
-      configuration: refreshConfig,
-      lastEventStore: UserDefaultsLastEventStore()
-    )
-    let launchService = LaunchService()
 
     let authService: any AuthService
     if ProcessInfo.processInfo.environment["TEST_AUTH"] != nil {
@@ -104,6 +97,15 @@ public final class Engine {
       let clientID = GithubDeviceAuthenticator.clientID(from: .main) ?? ""
       authService = GithubAuthService(clientID: clientID)
     }
+
+    let refreshService = RefreshService(
+      model: modelService,
+      metadata: metadataService,
+      authService: authService,
+      interval: refreshConfig.refreshInterval,
+      lastEventStore: UserDefaultsLastEventStore()
+    )
+    let launchService = LaunchService()
 
     self.authService = authService
     self.statusService = statusService

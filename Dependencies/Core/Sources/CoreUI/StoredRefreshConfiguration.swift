@@ -10,7 +10,7 @@ import SwiftUI
 
 @Observable
 @MainActor
-public class StoredRefreshConfiguration: RefreshConfiguration {
+public class StoredRefreshConfiguration {
   @ObservationIgnored @AppStorage(.refreshInterval) public var refreshInterval
   @ObservationIgnored @AppStorage(.githubUser) public var githubUser
   @ObservationIgnored @AppStorage(.githubServer) public var githubServer
