@@ -5,8 +5,6 @@
 
 import Core
 import Foundation
-import Keychain
-
 import Settings
 
 /// Boolean setting keys.

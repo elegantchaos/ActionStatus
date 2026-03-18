@@ -6,7 +6,6 @@
 import Commands
 import Application
 import Foundation
-import Keychain
 import Logger
 import Observation
 import Settings
