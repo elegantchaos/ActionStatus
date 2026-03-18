@@ -13,6 +13,7 @@ import Runtime
 /// via dependency injection rather than importing `Runtime` directly.
 @Observable
 public final class MetadataService {
+  /// The underlying `Runtime` instance; excluded from observation to avoid spurious change notifications.
   @ObservationIgnored public let runtime = Runtime()
 
   /// Creates a metadata service.

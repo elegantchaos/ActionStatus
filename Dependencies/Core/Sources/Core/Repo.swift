@@ -100,16 +100,21 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
 
   /// Stable UUID string assigned at creation; used as the key in all stores.
   public let id: String
+  /// Repository name on GitHub.
   public var name: String
+  /// Organisation or user that owns the repository on GitHub.
   public var owner: String
   /// All known workflows for this repository; may include disabled entries.
   public var workflows: [WorkflowSelection]
+  /// Branches to monitor; an empty list means the default branch.
   public var branches: [String]
   /// Current aggregated CI state, updated by the refresh layer.
   public var state: State
   /// Per-device local filesystem paths, keyed by device identifier.
   public var paths: LocalPathDictionary
+  /// Timestamp of the most recent failed run, if any.
   public var lastFailed: Date?
+  /// Timestamp of the most recent successful run, if any.
   public var lastSucceeded: Date?
 
   /// Creates a placeholder repo with default name and owner values.
@@ -189,13 +194,15 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
   }
 
 
-  func storeBookmark(for url: URL) {
+  /// Stores a security-scoped bookmark for `url` in `UserDefaults`.
+  private func storeBookmark(for url: URL) {
     if let bookmark = url.secureBookmark() {
       UserDefaults.standard.set(bookmark, forKey: url.bookmarkKey)
     }
   }
 
-  func restoreBookmark(for url: URL) -> URL {
+  /// Resolves a previously stored security-scoped bookmark for `url`; returns `url` unchanged if none is found.
+  private func restoreBookmark(for url: URL) -> URL {
     guard let data = UserDefaults.standard.data(forKey: url.bookmarkKey) else {
       return url
     }

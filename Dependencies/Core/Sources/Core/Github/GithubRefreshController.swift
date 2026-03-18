@@ -10,10 +10,14 @@ import Octoid
 /// Refresh controller that polls GitHub APIs through Octoid resources.
 @MainActor
 public final class GithubRefreshController: RefreshController {
-  internal let token: String
-  internal let apiServer: String
-  internal let fallbackRefreshInterval: TimeInterval
-  internal let lastEventStore: any LastEventStore
+  /// GitHub API authentication token.
+  private let token: String
+  /// API server hostname or URL; normalized before use.
+  private let apiServer: String
+  /// Polling interval used when no runtime rate is available.
+  private let fallbackRefreshInterval: TimeInterval
+  /// Storage for per-repository last-event timestamps.
+  private let lastEventStore: any LastEventStore
 
   private var repoTasks: [String: Task<Void, Never>] = [:]
 

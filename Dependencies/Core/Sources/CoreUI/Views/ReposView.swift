@@ -57,7 +57,3 @@ public struct ReposView: View {
   }
 }
 
-public enum Focus: Hashable, Equatable {
-  case repo(String)
-  case prefs
-}
