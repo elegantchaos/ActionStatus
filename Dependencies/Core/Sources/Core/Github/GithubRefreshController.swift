@@ -9,7 +9,7 @@ import Octoid
 
 /// Refresh controller that polls GitHub APIs through Octoid resources.
 @MainActor
-public final class OctoidRefreshController: RefreshController {
+public final class GithubRefreshController: RefreshController {
   internal let token: String
   internal let apiServer: String
   internal let fallbackRefreshInterval: TimeInterval
@@ -168,7 +168,7 @@ private actor RepoPoller {
 
   private let repo: Repo
   private let session: JSONSession.Session
-  private unowned let refreshController: OctoidRefreshController
+  private unowned let refreshController: GithubRefreshController
   private let refreshInterval: TimeInterval
   private let lastEventStore: any LastEventStore
 
@@ -184,7 +184,7 @@ private actor RepoPoller {
   init(
     repo: Repo,
     session: JSONSession.Session,
-    refreshController: OctoidRefreshController,
+    refreshController: GithubRefreshController,
     refreshInterval: TimeInterval,
     lastEventStore: any LastEventStore
   ) {

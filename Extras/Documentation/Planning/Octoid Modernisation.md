@@ -6,7 +6,7 @@ This plan tracks modernization of Octoid usage and integration, with emphasis on
 
 - ActionStatus now includes a local workspace checkout of `Octoid` (`../Octoid`).
 - ActionStatus currently has custom integration logic in:
-  - `OctoidRefreshController`
+  - `GithubRefreshController`
   - `RepoPollingSession`
   - `WorkflowRunsProcessor`
   - `EventsProcessor`

@@ -137,7 +137,7 @@ public final class RefreshService {
       return nil
     }
 
-    return OctoidRefreshController(
+    return GithubRefreshController(
       model: modelService,
       token: settings.token,
       apiServer: settings.server,

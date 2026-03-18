@@ -7,7 +7,7 @@ import Foundation
 
 /// Persists and retrieves the timestamp of the last observed GitHub event for a repository.
 ///
-/// `OctoidRefreshController` uses this to avoid reprocessing events it has already seen.
+/// `GithubRefreshController` uses this to avoid reprocessing events it has already seen.
 /// The protocol decouples the Core refresh layer from any concrete storage mechanism;
 /// `UserDefaultsLastEventStore` provides the live implementation in CoreUI, while tests
 /// can supply an in-memory stub without touching UserDefaults.

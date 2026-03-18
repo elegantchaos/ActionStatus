@@ -92,7 +92,7 @@ For builds with the `TEST_AUTH` environment variable set, `Engine` injects a pre
 |------|----------|---------|
 | `RefreshSettings` | Core | Value snapshot: `server`, `token`, `interval` — produced when signed in |
 | `RefreshService` | Core | Schedules and manages the active `RefreshController` |
-| `OctoidRefreshController` | Core | GitHub API poller built on the Octoid library |
+| `GithubRefreshController` | Core | GitHub API poller built on the Octoid library |
 | `LastEventStore` | Core | Protocol: async get/set of last-seen event timestamps |
 | `UserDefaultsLastEventStore` | CoreUI | Live `LastEventStore` backed by `UserDefaults` |
 
@@ -102,7 +102,7 @@ For builds with the `TEST_AUTH` environment variable set, `Engine` injects a pre
 
 | Mode | Controller | Used when |
 |------|-----------|-----------|
-| `.normal` | `OctoidRefreshController` | Live builds |
+| `.normal` | `GithubRefreshController` | Live builds |
 | `.random` | `RandomisingRefreshController` | Test builds (`TEST_REFRESH=random`) |
 | `.none` | — | UI testing builds |
 
@@ -116,7 +116,7 @@ For `.random` and `.none` modes, `startup()` creates (or skips) the controller i
 
 ### Last-event deduplication
 
-`OctoidRefreshController` passes each repository's last-seen event timestamp to the GitHub API so it only processes new events. Timestamps are persisted via the injected `LastEventStore`. `UserDefaultsLastEventStore` (CoreUI) is the live implementation; the async protocol interface prevents Core from taking a compile-time dependency on UserDefaults.
+`GithubRefreshController` passes each repository's last-seen event timestamp to the GitHub API so it only processes new events. Timestamps are persisted via the injected `LastEventStore`. `UserDefaultsLastEventStore` (CoreUI) is the live implementation; the async protocol interface prevents Core from taking a compile-time dependency on UserDefaults.
 
 ### App lifecycle pause/resume
 
@@ -149,7 +149,7 @@ Core
 ├── GithubDeviceAuthenticator  (OAuth flow)
 ├── RefreshSettings            (value type)
 ├── RefreshService             (scheduler)
-├── OctoidRefreshController    (GitHub poller)
+├── GithubRefreshController    (GitHub poller)
 └── LastEventStore             (protocol)
 
 CoreUI

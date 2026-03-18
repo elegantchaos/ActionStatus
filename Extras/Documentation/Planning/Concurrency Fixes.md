@@ -6,7 +6,7 @@ Eliminate all current Swift 6 concurrency warnings in `Dependencies/Core` by mak
 
 ## Warning Inventory (current)
 
-1. `Dependencies/Core/Sources/CoreUI/Refreshing/OctoidRefreshController.swift`
+1. `Dependencies/Core/Sources/CoreUI/Refreshing/GithubRefreshController.swift`
 2. `Dependencies/Core/Sources/CoreUI/Engine.swift`
 
 Observed warning classes:
@@ -43,7 +43,7 @@ No functional API behavior changes are expected in `CoreUI`; only concurrency-an
 7. Rebuild and verify warning closure:
 8. Run `swift package clean && swift test` in `Dependencies/Core`.
 9. Confirm no concurrency warnings remain for:
-10. `OctoidRefreshController.swift`
+10. `GithubRefreshController.swift`
 11. `Engine.swift`
 12. If warnings remain, iterate only on annotation/scheduling boundaries, not functional refresh logic.
 
@@ -61,7 +61,7 @@ No functional API behavior changes are expected in `CoreUI`; only concurrency-an
 1. Build/test command:
 2. `cd Dependencies/Core && swift package clean && swift test`
 3. Expected:
-4. Zero Swift 6 concurrency warnings for `Engine.swift` and `OctoidRefreshController.swift`.
+4. Zero Swift 6 concurrency warnings for `Engine.swift` and `GithubRefreshController.swift`.
 5. Existing non-concurrency warnings may remain and should be documented separately.
 
 6. Behavioral smoke checks (manual):
