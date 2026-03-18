@@ -186,7 +186,7 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
   }
 
   /// Returns the local URL for `device`, restoring a security-scoped bookmark if available.
-  public func url(forDevice device: String?) -> URL? {
+  public func localURL(forDevice device: String?) -> URL? {
     guard let device = device, let path = paths[device] else { return nil }
 
     let url = URL(fileURLWithPath: path)

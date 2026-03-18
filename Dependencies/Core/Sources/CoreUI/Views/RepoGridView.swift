@@ -5,6 +5,16 @@
 
 import Core
 import SwiftUI
+import Runtime
+
+public struct RepoContainerContext {
+  let namespace: Namespace.ID
+  
+  /// Runtime metadata. Injectable for testing purposes.
+  let runtime: Runtime
+  
+  let focus: FocusState<Focus?>.Binding
+}
 
 /// Grid presentation of monitored repositories.
 public struct RepoGridView: View {
@@ -12,13 +22,11 @@ public struct RepoGridView: View {
   @Environment(SettingsService.self) var settings
   @AppStorage(.displaySize) var displaySize
 
-  let namespace: Namespace.ID
-  let focus: FocusState<Focus?>.Binding
+  let context: RepoContainerContext
 
   /// Creates a repository grid view.
-  public init(namespace: Namespace.ID, focus: FocusState<Focus?>.Binding) {
-    self.namespace = namespace
-    self.focus = focus
+  public init(context: RepoContainerContext) {
+    self.context = context
   }
 
   public var body: some View {
@@ -27,10 +35,9 @@ public struct RepoGridView: View {
         ForEach(status.sortedRepos) { repo in
           RepoCellView(
             repo: repo,
+            context: context,
             selectable: false,
-            namespace: namespace,
-            isSource: !settings.isEditing,
-            focus: focus
+            isSource: !settings.isEditing
           )
         }
       }

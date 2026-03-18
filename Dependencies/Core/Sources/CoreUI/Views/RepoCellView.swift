@@ -12,29 +12,25 @@ import SwiftUI
 /// Cell view that renders a repository and its primary status affordances.
 public struct RepoCellView: View {
   @Environment(ActionStatusCommander.self) var commander
-  @Environment(MetadataService.self) var metadataService
 
   @AppStorage(.displaySize) var displaySize
 
   let repo: Repo
   let selectable: Bool
-  let namespace: Namespace.ID
   let isSource: Bool
-  let focus: FocusState<Focus?>.Binding
-
+  let context: RepoContainerContext
+  
   /// Creates a repository cell view.
   public init(
     repo: Repo,
+    context: RepoContainerContext,
     selectable: Bool,
-    namespace: Namespace.ID,
     isSource: Bool = true,
-    focus: FocusState<Focus?>.Binding
   ) {
     self.repo = repo
     self.selectable = selectable
-    self.namespace = namespace
+    self.context = context
     self.isSource = isSource
-    self.focus = focus
   }
 
   public var body: some View {
@@ -67,7 +63,7 @@ public struct RepoCellView: View {
     Divider()
 
     commander.button(RemoveReposCommand(ids: [repo.id]))
-    if metadataService.showDebugUI {
+    if context.runtime.showDebugUI {
       Divider()
       commander.button(AdvanceStateCommand(repo: repo))
     }
@@ -85,7 +81,7 @@ public struct RepoCellView: View {
 
       Spacer()
     }
-    .matchedGeometryEffect(id: repo.id, in: namespace, isSource: isSource)
+    .matchedGeometryEffect(id: repo.id, in: context.namespace, isSource: isSource)
   }
 
   var cellPadding: CGFloat {

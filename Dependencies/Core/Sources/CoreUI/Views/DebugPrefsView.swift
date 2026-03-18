@@ -5,16 +5,23 @@
 
 import Core
 import LoggerUI
+import Runtime
 import SwiftUI
 
 /// Displays debug build information and the logger channel control panel.
 struct DebugPrefsView: View {
-  @Environment(MetadataService.self) var metadataService
   @Environment(RefreshService.self) var refreshService
   @Environment(ModelService.self) var modelService
 
+  /// Runtime metadata. Injectable for test purposes.
+  let runtime: Runtime
+
+  init(runtime: Runtime = .shared) {
+    self.runtime = runtime
+  }
+
   var body: some View {
-    let source = metadataService.modelSource
+    let source = runtime.modelSource
     return PreferencesSection(title: "Debug") {
       Text("Source: \(String(describing: source))")
       Text(modelService.debugDescription)

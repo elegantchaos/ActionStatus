@@ -27,13 +27,6 @@ public protocol SheetServiceProvider: CommandCentre {
   var sheetService: SheetService { get }
 }
 
-/// Provider for the shared metadata service used by commands.
-@MainActor
-public protocol MetadataServiceProvider: CommandCentre {
-  /// Service that exposes runtime metadata.
-  var metadataService: MetadataService { get }
-}
-
 /// Provider for the shared refresh service used by commands.
 @MainActor
 public protocol RefreshServiceProvider: CommandCentre {

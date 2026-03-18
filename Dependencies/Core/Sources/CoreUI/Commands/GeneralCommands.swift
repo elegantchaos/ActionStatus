@@ -8,6 +8,7 @@ import CommandsUI
 import Core
 import Foundation
 import Icons
+import Runtime
 
 /// Command that toggles repository editing mode.
 public struct ToggleEditingCommand<C: SettingsServiceProvider>: CommandWithUI {
@@ -58,15 +59,20 @@ struct ShowWorkflowCommand<C: LaunchServiceProvider>: CommandWithUI {
 }
 
 /// Command which reveals the project locally.
-struct RevealLocalCommand<C: LaunchServiceProvider & MetadataServiceProvider>: CommandWithUI {
+struct RevealLocalCommand<C: LaunchServiceProvider>: CommandWithUI {
   let id = "reveal.repo"
   let icon = Icon.revealLocalRepo
   let repo: Repo
+  let deviceID: String?
 
+  init(repo: Repo, runtime: Runtime = .shared) {
+    self.repo = repo
+    self.deviceID = runtime.deviceIdentifier
+  }
+  
   func availability(centre: C) -> CommandAvailability {
     var status = CommandAvailability.disabled
-    let deviceID = centre.metadataService.deviceIdentifier
-    if let url = repo.url(forDevice: deviceID) {
+    if let url = repo.localURL(forDevice: deviceID) {
       url.accessSecurityScopedResource { unlockedURL in
         if FileManager.default.fileExists(atURL: unlockedURL) {
           status = .enabled
@@ -78,8 +84,7 @@ struct RevealLocalCommand<C: LaunchServiceProvider & MetadataServiceProvider>: C
   }
 
   func perform(centre: C) async throws {
-    let deviceID = centre.metadataService.deviceIdentifier
-    if let url = repo.url(forDevice: deviceID) {
+    if let url = repo.localURL(forDevice: deviceID) {
       url.accessSecurityScopedResource { unlockedURL in
         centre.launchService.reveal(url: unlockedURL)
       }

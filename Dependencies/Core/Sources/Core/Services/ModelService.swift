@@ -7,6 +7,7 @@ import Commands
 import Foundation
 import Logger
 import Observation
+import Runtime
 
 /// Logger channel for model-layer events.
 public let modelChannel = Channel("com.elegantchaos.actionstatus.Model")
@@ -45,6 +46,7 @@ public final class ModelService {
   }
 
   @ObservationIgnored private var store: ModelStore
+  
   internal var items: [String: Repo]
   internal let deviceIdentifier: String?
 
@@ -61,17 +63,18 @@ public final class ModelService {
     modelChannel.log("Initialised with \(resolvedStore)")
   }
 
-  /// Creates a model service with an empty initial list, using a store derived from `source`.
-  public convenience init(deviceIdentifier: String?, source: Source) {
+  /// Creates a model service with an empty initial list,
+  /// using the default store and device identifier for the runtime.
+  public convenience init(runtime: Runtime = .shared) {
     let store: ModelStore
-    switch source {
+    switch runtime.modelSource {
       case .cloud:
         store = UbiquitousStore()
       case .resource(let name):
         store = BundleStore(key: name)
     }
 
-    self.init([], deviceIdentifier: deviceIdentifier, store: store)
+    self.init([], deviceIdentifier: runtime.deviceIdentifier, store: store)
   }
 
   /// Begins observing the backing store for external changes and loads the initial snapshot.

@@ -5,32 +5,39 @@
 
 import Core
 import SwiftUI
+import Runtime
 
 /// View containing all monitored repositories in their chosen layout.
 public struct ReposView: View {
-  @Namespace() var namespace
   @Environment(ModelService.self) var modelService
   @Environment(SettingsService.self) var settingsService
 
+  @Namespace() var namespace
   @State var focusState = FadingFocusState()
   @FocusState var focus: Focus?
 
+  /// Runtime metadata. Injectable for testing purposes.
+  let runtime: Runtime
+  
   /// Creates a repositories container view.
-  public init() {
+  public init(runtime: Runtime = .shared) {
+    self.runtime = runtime
   }
 
   public var body: some View {
-    VStack(alignment: .center) {
+    let context = RepoContainerContext(namespace: namespace, runtime: runtime, focus: $focus)
+
+    return VStack(alignment: .center) {
       if modelService.count == 0 {
         NoReposView()
       } else {
         ZStack(alignment: .top) {
-          RepoGridView(namespace: namespace, focus: $focus)
+          RepoGridView(context: context)
             .opacity(settingsService.isEditing ? 0 : 1)
             .allowsHitTesting(!settingsService.isEditing)
             .accessibilityHidden(settingsService.isEditing)
 
-          RepoListView(namespace: namespace, focus: $focus)
+          RepoListView(context: context)
             .opacity(settingsService.isEditing ? 1 : 0)
             .allowsHitTesting(settingsService.isEditing)
             .accessibilityHidden(!settingsService.isEditing)
