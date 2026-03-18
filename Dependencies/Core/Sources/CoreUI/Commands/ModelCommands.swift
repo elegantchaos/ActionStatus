@@ -10,13 +10,22 @@ import Icons
 import SwiftUI
 import UniformTypeIdentifiers
 
-/// Command that adds a new repository to the model.
-struct AddRepoCommand<C: ModelServiceProvider>: CommandWithUI {
+/// Command that adds a new repository to the model,
+/// and opens the edit sheet for it.
+struct AddRepoCommand<C: ModelServiceProvider & SheetServiceProvider>: CommandWithUI {
   let id = "model.add"
   let icon = Icon.addRepo
+  let openSheet: Bool
 
+  init(openSheet: Bool = true) {
+    self.openSheet = openSheet
+  }
+  
   func perform(centre: C) async throws {
-    centre.modelService.addNewRepo()
+    let repo = centre.modelService.addNewRepo()
+    if openSheet {
+      centre.sheetService.showing = .editRepo(repo)
+    }
   }
 }
 

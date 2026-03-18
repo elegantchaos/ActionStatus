@@ -12,7 +12,7 @@ extension Icon {
   static let advanceState = Icon("forward.circle")
   static let actions = Icon("ellipsis.circle")
   static let deleteRepo = Icon("minus.circle")
-  static let link = Icon("arrow.right.circle.fill")
+  static let link = Icon("arrow.right")
   static let preferences = Icon("gearshape")
   static let revealLocalRepo = Icon("finder")
   static let repo = Icon("folder")
