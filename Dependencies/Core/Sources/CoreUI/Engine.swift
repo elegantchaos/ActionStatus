@@ -72,7 +72,10 @@ public final class Engine {
   public func startup() async throws {
     await authService.startup()
     await modelService.startup()
-    refreshService.startup()
+
+    // Connect refresh to auth after both services have completed startup,
+    // ensuring the initial auth state and model data are both available.
+    refreshService.connect(to: authService)
 
     // Push initial values
     let currentSortMode: SortMode = UserDefaults.standard.value(forKey: .sortMode)
@@ -105,18 +108,38 @@ public final class Engine {
     )
     statusService.connect(to: modelService)
 
-    let authService: any AuthService
-    if ProcessInfo.processInfo.environment["TEST_AUTH"] != nil {
-      authService = StubAuthService(initialState: .signedIn(GithubCredentials(login: "test", server: "api.github.com", token: "test-token")))
+    // Determine the refresh type from the runtime environment, then create
+    // the matching auth service. Using an explicit type here keeps the wiring
+    // visible and allows debug builds to pair any auth service with any controller.
+    let refreshType: RefreshService.RefreshType
+    if metadataService.runtime.normalized(.testRefresh) == "random" {
+      refreshType = .random
+    } else if metadataService.isUITestingBuild {
+      refreshType = .none
     } else {
-      let clientID = GithubDeviceAuthenticator.clientID(from: .main) ?? ""
-      authService = GithubAuthService(clientID: clientID)
+      refreshType = .normal
+    }
+
+    let authService: any AuthService
+    switch refreshType {
+    case .normal:
+      if ProcessInfo.processInfo.environment["TEST_AUTH"] != nil {
+        authService = StubAuthService(initialState: .signedIn(GithubCredentials(login: "test", server: "api.github.com", token: "test-token")))
+      } else {
+        let clientID = GithubDeviceAuthenticator.clientID(from: .main) ?? ""
+        authService = GithubAuthService(clientID: clientID)
+      }
+    case .random:
+      // Stub with a signed-in state so the randomising controller starts immediately.
+      // The stub can be driven via debug UI to simulate sign-out or other states.
+      authService = StubAuthService(initialState: .signedIn(GithubCredentials(login: "random-user", server: "api.github.com", token: "random-token")))
+    case .none:
+      authService = StubAuthService(initialState: .signedOut)
     }
 
     let refreshService = RefreshService(
       model: modelService,
-      metadata: metadataService,
-      authService: authService,
+      type: refreshType,
       interval: UserDefaults.standard.value(forKey: .refreshInterval),
       lastEventStore: UserDefaultsLastEventStore()
     )

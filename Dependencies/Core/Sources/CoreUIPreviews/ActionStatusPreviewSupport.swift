@@ -86,12 +86,11 @@ public final class ActionStatusPreviewRuntime: EnvironmentInjectingRuntime {
     let authService = StubAuthService()
     let refreshService = RefreshService(
       model: modelService,
-      metadata: metadataService,
-      authService: authService,
+      type: .none,
       interval: .automatic,
-      lastEventStore: UserDefaultsLastEventStore(),
-      forcedType: RefreshService.RefreshType.none
+      lastEventStore: UserDefaultsLastEventStore()
     )
+    refreshService.connect(to: authService)
     let sheetService = SheetService()
     sheetService.showing = initialSheet
 
@@ -110,8 +109,6 @@ public final class ActionStatusPreviewRuntime: EnvironmentInjectingRuntime {
       refreshService: refreshService,
       sheetService: sheetService
     )
-
-    statusService.connect(to: modelService)
   }
 
   /// Shared environment injector used by preview content.

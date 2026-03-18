@@ -12,10 +12,14 @@ public let refreshServiceChannel = Channel("Refresh Service")
 
 /// Service that manages status refresh scheduling and refresh controller creation.
 ///
-/// For the `.normal` type the service observes `AuthService.authState` via
-/// `onChange(of:)` and creates or tears down the GitHub refresh controller
-/// whenever the user signs in or out. For `.random` and `.none` types (used in tests
-/// and UI testing respectively) the controller is created directly on `startup()`.
+/// The refresh type determines which controller is created; auth state determines
+/// when it is created or destroyed. Call `connect(to:)` after startup to wire
+/// an `AuthService` — the service observes auth-state changes and creates or
+/// tears down the controller accordingly for all refresh types.
+///
+/// This decoupling allows `.random` mode to be paired with a `StubAuthService`
+/// whose state can be changed at runtime to simulate the full auth state machine
+/// in a running application.
 @Observable
 @MainActor
 public final class RefreshService {
@@ -29,15 +33,15 @@ public final class RefreshService {
     case none
   }
 
-  let type: RefreshType
+  /// The configured refresh mode.
+  public let type: RefreshType
   let modelService: ModelService
-  let authService: any AuthService
   let lastEventStore: any LastEventStore
 
   /// The current refresh interval applied to any active controller.
   var interval: RefreshRate
 
-  /// The credential snapshot currently driving the GitHub refresh controller, or `nil` when signed out.
+  /// The credential snapshot currently driving the refresh controller, or `nil` when signed out.
   var currentSettings: RefreshSettings?
 
   /// The currently active refresh controller, if any.
@@ -46,47 +50,33 @@ public final class RefreshService {
   /// Token that owns the auth-state observation loop; cancelled when the service is deallocated.
   @ObservationIgnored private var authObservationToken: ObservationToken?
 
-  /// Creates a refresh service for the supplied model, auth service, and metadata.
+  /// Creates a refresh service for the supplied model and refresh type.
+  ///
+  /// Call `connect(to:)` after startup to wire an auth service and start the
+  /// controller lifecycle.
   public init(
     model: ModelService,
-    metadata: MetadataService,
-    authService: any AuthService,
+    type: RefreshType,
     interval: RefreshRate,
-    lastEventStore: any LastEventStore,
-    forcedType: RefreshType? = nil
+    lastEventStore: any LastEventStore
   ) {
     self.modelService = model
-    self.authService = authService
+    self.type = type
     self.interval = interval
     self.lastEventStore = lastEventStore
-
-    if let forcedType {
-      self.type = forcedType
-    } else if metadata.runtime.normalized(.testRefresh) == "random" {
-      self.type = .random
-    } else if metadata.isUITestingBuild {
-      self.type = .none
-    } else {
-      self.type = .normal
-    }
   }
 
-  /// Starts the refresh service.
+  /// Wires this service to an auth service, applying the current state immediately
+  /// and observing future changes.
   ///
-  /// For `.normal` type, applies the current auth state immediately then observes
-  /// future changes so the GitHub refresh controller is created or destroyed
-  /// as credentials arrive or are removed.
-  /// For `.random` and `.none` types, creates and starts the controller immediately.
-  public func startup() {
-    switch type {
-    case .normal:
-      applyAuthState(authService.authState)
-      authObservationToken = onChange(of: self.authService.authState) { [weak self] newState in
-        self?.applyAuthState(newState)
-      }
-    case .random, .none:
-      refreshController = makeRefreshController()
-      refreshController?.resume(rate: interval.rate)
+  /// Safe to call for all `RefreshType` values: `.normal` creates a GitHub controller
+  /// on sign-in; `.random` creates a randomising controller; `.none` always produces
+  /// no controller. Call this after `authService.startup()` and `modelService.startup()`
+  /// so the initial auth state and model data are both available.
+  public func connect(to authService: any AuthService) {
+    applyAuthState(authService.authState)
+    authObservationToken = onChange(of: authService.authState) { [weak self] newState in
+      self?.applyAuthState(newState)
     }
   }
 
@@ -103,20 +93,9 @@ public final class RefreshService {
     refreshController?.pause()
   }
 
-  /// Resumes refresh activity.
-  ///
-  /// For `.normal` type, auth-state observation manages controller creation; only resumes an existing controller.
-  /// For other types, creates the controller if needed before resuming.
+  /// Resumes refresh activity, starting the controller at the current interval.
   public func resumeRefresh() {
-    switch type {
-    case .normal:
-      refreshController?.resume(rate: interval.rate)
-    case .random, .none:
-      if refreshController == nil {
-        refreshController = makeRefreshController()
-      }
-      refreshController?.resume(rate: interval.rate)
-    }
+    refreshController?.resume(rate: interval.rate)
   }
 
   /// Updates the refresh interval and applies the new rate to any active controller.
@@ -138,7 +117,7 @@ public final class RefreshService {
     }
   }
 
-  /// Creates a GitHub-backed refresh controller when credentials are available.
+  /// Creates a GitHub-backed refresh controller using the current credential settings.
   public func makeGithubRefreshController() -> RefreshController? {
     guard let settings = currentSettings, !settings.token.isEmpty else {
       githubChannel.log("No GitHub token configured.")
@@ -156,7 +135,11 @@ public final class RefreshService {
 
   // MARK: - Private
 
-  /// Reacts to a new auth state by starting or stopping the GitHub refresh controller.
+  /// Reacts to a new auth state by starting or stopping the refresh controller.
+  ///
+  /// On sign-in, creates a controller via `makeRefreshController()` (type-dispatched)
+  /// so all refresh types respond uniformly to auth state. On sign-out or any
+  /// non-signed-in state, tears down the active controller.
   private func applyAuthState(_ state: GithubAuthState) {
     switch state {
     case .signedIn(let credentials):
@@ -164,7 +147,7 @@ public final class RefreshService {
       guard newSettings != currentSettings else { return }
       currentSettings = newSettings
       resetRefresh()
-      refreshController = makeGithubRefreshController()
+      refreshController = makeRefreshController()
       refreshController?.resume(rate: interval.rate)
     default:
       if currentSettings != nil {
@@ -178,12 +161,9 @@ public final class RefreshService {
 extension RefreshService: TypedDebugDescription {
   public var debugLabel: String {
     switch type {
-    case .normal:
-      return "GitHub"
-    case .random:
-      return "Random"
-    case .none:
-      return "None"
+    case .normal: return "GitHub"
+    case .random: return "Random"
+    case .none: return "None"
     }
   }
 }
