@@ -7,6 +7,7 @@ import Application
 import Core
 import Logger
 import Observation
+import Runtime
 import SwiftUI
 
 #if canImport(UIKit)
@@ -37,9 +38,6 @@ public final class Engine {
 
   /// Shared launch service.
   public let launchService: LaunchService
-
-  /// Shared metadata service.
-  public let metadataService: MetadataService
 
   /// Shared sheet service.
   public let sheetService: SheetService
@@ -77,17 +75,20 @@ public final class Engine {
     // ensuring the initial auth state and model data are both available.
     refreshService.connect(to: authService)
 
+    // Read initial settings values
+    let defaults = UserDefaults.standard
+    let currentSortMode = defaults.value(forKey: .sortMode)
+    let currentInterval = defaults.value(forKey: .refreshInterval)
+
     // Push initial values
-    let currentSortMode: SortMode = UserDefaults.standard.value(forKey: .sortMode)
     statusService.apply(sortMode: currentSortMode)
-    let currentInterval: RefreshRate = UserDefaults.standard.value(forKey: .refreshInterval)
     refreshService.apply(interval: currentInterval)
 
     // Observe future UserDefaults changes and push updated values to services
-    settingsObserver = UserDefaults.standard.onChanged { [weak self] in
+    settingsObserver = defaults.onChanged { [weak self] in
       guard let self else { return }
-      let newSortMode: SortMode = UserDefaults.standard.value(forKey: .sortMode)
-      let newInterval: RefreshRate = UserDefaults.standard.value(forKey: .refreshInterval)
+      let newSortMode = defaults.value(forKey: .sortMode)
+      let newInterval = defaults.value(forKey: .refreshInterval)
       statusService.apply(sortMode: newSortMode)
       refreshService.apply(interval: newInterval)
     }
@@ -98,23 +99,20 @@ public final class Engine {
     state = .uninitialised
     startupTask = nil
 
+    let runtime = Runtime.shared
     let settingsService = SettingsService()
-    let metadataService = MetadataService()
     let statusService = StatusService()
     let sheetService = SheetService()
-    let modelService = ModelService(
-      deviceIdentifier: metadataService.deviceIdentifier,
-      source: metadataService.modelSource
-    )
+    let modelService = ModelService(runtime: runtime)
     statusService.connect(to: modelService)
 
     // Determine the refresh type from the runtime environment, then create
     // the matching auth service. Using an explicit type here keeps the wiring
     // visible and allows debug builds to pair any auth service with any controller.
     let refreshType: RefreshService.RefreshType
-    if metadataService.runtime.normalized(.testRefresh) == "random" {
+    if runtime.normalized(.testRefresh) == "random" {
       refreshType = .random
-    } else if metadataService.isUITestingBuild {
+    } else if runtime.isUITestingBuild {
       refreshType = .none
     } else {
       refreshType = .normal
@@ -122,19 +120,19 @@ public final class Engine {
 
     let authService: any AuthService
     switch refreshType {
-    case .normal:
-      if ProcessInfo.processInfo.environment["TEST_AUTH"] != nil {
-        authService = StubAuthService(initialState: .signedIn(GithubCredentials(login: "test", server: "api.github.com", token: "test-token")))
-      } else {
-        let clientID = GithubDeviceAuthenticator.clientID(from: .main) ?? ""
-        authService = GithubAuthService(clientID: clientID)
-      }
-    case .random:
-      // Stub with a signed-in state so the randomising controller starts immediately.
-      // The stub can be driven via debug UI to simulate sign-out or other states.
-      authService = StubAuthService(initialState: .signedIn(GithubCredentials(login: "random-user", server: "api.github.com", token: "random-token")))
-    case .none:
-      authService = StubAuthService(initialState: .signedOut)
+      case .normal:
+        if ProcessInfo.processInfo.environment["TEST_AUTH"] != nil {
+          authService = StubAuthService(initialState: .signedIn(GithubCredentials(login: "test", server: "api.github.com", token: "test-token")))
+        } else {
+          let clientID = GithubDeviceAuthenticator.clientID(from: .main) ?? ""
+          authService = GithubAuthService(clientID: clientID)
+        }
+      case .random:
+        // Stub with a signed-in state so the randomising controller starts immediately.
+        // The stub can be driven via debug UI to simulate sign-out or other states.
+        authService = StubAuthService(initialState: .signedIn(GithubCredentials(login: "random-user", server: "api.github.com", token: "random-token")))
+      case .none:
+        authService = StubAuthService(initialState: .signedOut)
     }
 
     let refreshService = RefreshService(
@@ -147,7 +145,6 @@ public final class Engine {
 
     self.authService = authService
     self.statusService = statusService
-    self.metadataService = metadataService
     self.sheetService = sheetService
     self.modelService = modelService
     self.settingsService = settingsService
@@ -156,7 +153,6 @@ public final class Engine {
     self.commander = ActionStatusCommander(
       modelService: modelService,
       settingsService: settingsService,
-      metadataService: metadataService,
       launchService: launchService,
       refreshService: refreshService,
       sheetService: sheetService
@@ -175,7 +171,6 @@ extension Engine: AppEngine {
     ActionStatusEnvironmentInjector(
       commander: commander,
       modelService: modelService,
-      metadataService: metadataService,
       settingsService: settingsService,
       launchService: launchService,
       statusService: statusService,
@@ -190,7 +185,6 @@ extension Engine: AppEngine {
     ActionStatusEnvironmentInjector(
       commander: commander,
       modelService: modelService,
-      metadataService: metadataService,
       settingsService: settingsService,
       launchService: launchService,
       statusService: statusService,

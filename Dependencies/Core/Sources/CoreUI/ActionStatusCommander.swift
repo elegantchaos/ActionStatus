@@ -20,9 +20,6 @@ public final class ActionStatusCommander {
   /// Settings service used by UI commands.
   public let settingsService: SettingsService
 
-  /// Metadata service used by runtime-sensitive commands.
-  public let metadataService: MetadataService
-
   /// Launch service used by URL and file commands.
   public let launchService: LaunchService
 
@@ -36,14 +33,12 @@ public final class ActionStatusCommander {
   public init(
     modelService: ModelService,
     settingsService: SettingsService,
-    metadataService: MetadataService,
     launchService: LaunchService,
     refreshService: RefreshService,
     sheetService: SheetService
   ) {
     self.modelService = modelService
     self.settingsService = settingsService
-    self.metadataService = metadataService
     self.launchService = launchService
     self.refreshService = refreshService
     self.sheetService = sheetService
@@ -54,9 +49,6 @@ extension ActionStatusCommander: CommandCentre {
 }
 
 extension ActionStatusCommander: LaunchServiceProvider {
-}
-
-extension ActionStatusCommander: MetadataServiceProvider {
 }
 
 extension ActionStatusCommander: ModelServiceProvider {

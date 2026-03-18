@@ -5,6 +5,7 @@
 
 import Core
 import SwiftUI
+import Runtime
 
 /// List presentation of monitored repositories.
 public struct RepoListView: View {
@@ -13,13 +14,11 @@ public struct RepoListView: View {
   @Environment(SettingsService.self) private var settingsService
   @AppStorage(.displaySize) var displaySize
 
-  let namespace: Namespace.ID
-  let focus: FocusState<Focus?>.Binding
+  let context: RepoContainerContext
 
   /// Creates a repository list view.
-  public init(namespace: Namespace.ID, focus: FocusState<Focus?>.Binding) {
-    self.namespace = namespace
-    self.focus = focus
+  public init(context: RepoContainerContext) {
+    self.context = context
   }
 
   public var body: some View {
@@ -27,10 +26,9 @@ public struct RepoListView: View {
       ForEach(status.sortedRepos) { repo in
         RepoCellView(
           repo: repo,
+          context: context,
           selectable: true,
-          namespace: namespace,
           isSource: settingsService.isEditing,
-          focus: focus
         )
       }
       .onDelete(perform: delete)

@@ -11,31 +11,34 @@ import SwiftUI
 
 /// Form used to add and edit monitored repositories.
 public struct EditView: View {
-  /// The repository being edited; `nil` when adding a new repository.
-  let repo: Repo?
-
-  @Environment(MetadataService.self) var metadataService
   @Environment(LaunchService.self) private var launchService
   @Environment(\.dismiss) private var dismissAction
   @Environment(ModelService.self) var modelService
   @Environment(RefreshService.self) var refreshService
   @Environment(ActionStatusCommander.self) var commander
 
-  var title: String { "\(shortTitle) Repository" }
-  var shortTitle: String { repo == nil ? "Add" : "Edit" }
-
   @State var name = ""
   @State var owner = ""
   @State var workflows: [Repo.WorkflowSelection] = []
   @State var branches: String = ""
 
+  /// The repository being edited; `nil` when adding a new repository.
+  let repo: Repo?
+
+  var title: String { "\(shortTitle) Repository" }
+  var shortTitle: String { repo == nil ? "Add" : "Edit" }
+
+  /// Runtime metadata. Injectable for test purposes.
+  let runtime: Runtime
+
   /// Creates an edit view for the supplied repository.
-  public init(repo: Repo? = nil) {
+  public init(repo: Repo? = nil, runtime: Runtime = .shared) {
     self.repo = repo
+    self.runtime = runtime
   }
 
   public var body: some View {
-    let localPath = repo?.url(forDevice: metadataService.deviceIdentifier)?.path ?? ""
+    let localPath = repo?.localURL(forDevice: runtime.deviceIdentifier)?.path ?? ""
 
     return SheetView(title, shortTitle: shortTitle, cancelAction: dismiss, doneAction: done) {
       Form {

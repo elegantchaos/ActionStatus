@@ -27,9 +27,6 @@ public struct ActionStatusEnvironmentInjector: ViewModifier {
   /// Model service injected into SwiftUI views.
   public let modelService: ModelService
 
-  /// Metadata service injected into SwiftUI views.
-  public let metadataService: MetadataService
-
   /// Settings service injected into SwiftUI views.
   public let settingsService: SettingsService
 
@@ -52,7 +49,6 @@ public struct ActionStatusEnvironmentInjector: ViewModifier {
   public init(
     commander: ActionStatusCommander,
     modelService: ModelService,
-    metadataService: MetadataService,
     settingsService: SettingsService,
     launchService: LaunchService,
     statusService: StatusService,
@@ -62,7 +58,6 @@ public struct ActionStatusEnvironmentInjector: ViewModifier {
   ) {
     self.commander = commander
     self.modelService = modelService
-    self.metadataService = metadataService
     self.settingsService = settingsService
     self.launchService = launchService
     self.statusService = statusService
@@ -75,7 +70,6 @@ public struct ActionStatusEnvironmentInjector: ViewModifier {
   public func body(content: Content) -> some View {
     content
       .environment(modelService)
-      .environment(metadataService)
       .environment(settingsService)
       .environment(launchService)
       .environment(statusService)

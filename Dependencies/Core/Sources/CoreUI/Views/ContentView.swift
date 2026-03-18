@@ -7,23 +7,26 @@ import Core
 import Icons
 import Observation
 import SwiftUI
+import Runtime
 
 /// Main content view for the ActionStatus application.
 public struct ContentView: View {
-  @Environment(MetadataService.self) var metadataService
-
   #if os(iOS)
     @Environment(ActionStatusCommander.self) var commander
     @Environment(SettingsService.self) var settingsService
   #endif
 
-  public init() {
+  /// Runtime metadata. Injectable for test purposes.
+  let runtime: Runtime
+
+  public init(runtime: Runtime = .shared) {
+    self.runtime = runtime
   }
 
   public var body: some View {
     NavigationStack {
       ReposView()
-        .navigationTitle(metadataService.appName)
+        .navigationTitle(runtime.appName)
         #if os(iOS)
           .navigationBarTitleDisplayMode(.inline)
           .toolbar {
