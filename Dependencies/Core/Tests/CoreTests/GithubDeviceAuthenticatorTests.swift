@@ -1,27 +1,37 @@
-import XCTest
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+//  Created by Sam Deane on 18/03/2026.
+//  Copyright © 2026 Elegant Chaos Limited. All rights reserved.
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+import Testing
 
 @testable import Core
 
 @MainActor
-final class GithubDeviceAuthenticatorTests: XCTestCase {
-  func testNormalizesGithubAPIHost() throws {
+struct GithubDeviceAuthenticatorTests {
+  /// Standard `api.github.com` is normalized to a plain HTTPS URL.
+  @Test
+  func normalizesGithubAPIHost() throws {
     let api = try GithubDeviceAuthenticator.normalizedAPIBaseURL(for: "api.github.com")
     let oauth = try GithubDeviceAuthenticator.oauthBaseURL(for: "api.github.com")
-
-    XCTAssertEqual(api.absoluteString, "https://api.github.com")
-    XCTAssertEqual(oauth.absoluteString, "https://github.com")
+    #expect(api.absoluteString == "https://api.github.com")
+    #expect(oauth.absoluteString == "https://github.com")
   }
 
-  func testPreservesCustomAPIServerPath() throws {
+  /// A custom server with a path component is preserved verbatim.
+  @Test
+  func preservesCustomAPIServerPath() throws {
     let api = try GithubDeviceAuthenticator.normalizedAPIBaseURL(for: "https://github.example.com/api/v3")
     let oauth = try GithubDeviceAuthenticator.oauthBaseURL(for: "https://github.example.com/api/v3")
-
-    XCTAssertEqual(api.absoluteString, "https://github.example.com/api/v3")
-    XCTAssertEqual(oauth.absoluteString, "https://github.example.com")
+    #expect(api.absoluteString == "https://github.example.com/api/v3")
+    #expect(oauth.absoluteString == "https://github.example.com")
   }
 
-  func testDropsAPIPrefixForOAuthHost() throws {
+  /// An `api.` prefix is stripped when constructing the OAuth host.
+  @Test
+  func dropsAPIPrefixForOAuthHost() throws {
     let oauth = try GithubDeviceAuthenticator.oauthBaseURL(for: "api.github.example.com")
-    XCTAssertEqual(oauth.absoluteString, "https://github.example.com")
+    #expect(oauth.absoluteString == "https://github.example.com")
   }
 }
+
