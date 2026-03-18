@@ -38,4 +38,12 @@ public final class StubAuthService: AuthService {
   public func signOut() {
     authState = .signedOut
   }
+
+  /// Directly sets the auth state to any value, enabling simulation of any auth transition.
+  ///
+  /// Use this from debug UI or tests to drive the auth state machine without running
+  /// the real device-code flow.
+  public func simulate(_ state: GithubAuthState) {
+    authState = state
+  }
 }
