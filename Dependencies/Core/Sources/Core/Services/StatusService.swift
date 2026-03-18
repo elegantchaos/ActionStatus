@@ -11,10 +11,13 @@ import Settings
 
 let repoStateChannel = Channel("RepoState")
 
+/// Service that maintains sorted repo lists and aggregate pass/fail counts.
+///
+/// Receives a pushed `sortMode` from the Engine (CoreUI) rather than reading
+/// `UserDefaults` directly, keeping this target free of UserDefaults coupling.
 @Observable
 @MainActor
 public final class StatusService {
-  @ObservationIgnored private var defaultsObserver: NotificationToken?
   @ObservationIgnored private var modelService: ModelService?
   @ObservationIgnored private var modelObservation: ObservationToken?
 
@@ -26,9 +29,13 @@ public final class StatusService {
   public var dormant = 0
   public var unreachable = 0
 
+  /// The current sort mode applied when building `sortedRepos`.
+  public var sortMode: SortMode = .state
+
   public init() {
   }
 
+  /// Connects the service to a model, observing item changes for automatic updates.
   public func connect(to modelService: ModelService) {
     self.modelService = modelService
 
@@ -37,13 +44,10 @@ public final class StatusService {
       self?.update()
     }
 
-    defaultsObserver = UserDefaults.standard.onActionStatusSettingsChanged { [weak self] in
-      self?.update()
-    }
-
     update()
   }
 
+  /// Updates `sortedRepos` and aggregate counts from the current model.
   public func update() {
     repoStateChannel.log("updated")
 
@@ -61,10 +65,18 @@ public final class StatusService {
     unreachable = set.count(for: Repo.State.unknown)
   }
 
+  /// Applies a new sort mode and immediately re-sorts the current repo list.
+  public func apply(sortMode: SortMode) {
+    self.sortMode = sortMode
+    update()
+  }
+
+  /// Returns the IDs of repos at the specified index offsets in the sorted list.
   public func repoIDs(atOffsets offsets: IndexSet) -> [String] {
     offsets.map { sortedRepos[$0].id }
   }
 
+  /// The combined state set representing the overall health of all watched repos.
   public var combinedState: [Repo.State] {
     var state: [Repo.State] = []
     if running > 0 {
@@ -94,12 +106,4 @@ public final class StatusService {
     }
     return state
   }
-
-  var sortMode: SortMode {
-    UserDefaults.standard.value(forKey: .sortMode)
-  }
-}
-
-@MainActor public extension AppSettingKey where Value == SortMode {
-  static let sortMode = AppSettingKey("SortMode", defaultValue: .state)
 }
