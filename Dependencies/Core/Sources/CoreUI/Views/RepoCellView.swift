@@ -19,7 +19,7 @@ public struct RepoCellView: View {
   let selectable: Bool
   let isSource: Bool
   let context: RepoContainerContext
-  
+
   /// Creates a repository cell view.
   public init(
     repo: Repo,
@@ -42,7 +42,7 @@ public struct RepoCellView: View {
     .padding(cellPadding)
     #if os(tvOS)
       .buttonStyle(FadingFocusButtonStyle())
-      .focused(focus, equals: .repo(repo.id))
+      .focused(context.focus, equals: .repo(repo.id))
     #else
       .buttonStyle(.plain)
     #endif

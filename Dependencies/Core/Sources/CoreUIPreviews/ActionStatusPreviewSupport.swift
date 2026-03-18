@@ -1,6 +1,7 @@
 import Core
 import CoreUI
 import Previews
+import Runtime
 import SwiftUI
 
 /// Fixture data exposed to ActionStatus preview closures.
@@ -50,9 +51,6 @@ public final class ActionStatusPreviewRuntime: EnvironmentInjectingRuntime {
   /// Shared settings service.
   public let settingsService: SettingsService
 
-  /// Shared metadata service.
-  public let metadataService: MetadataService
-
   /// Shared launch service.
   public let launchService: LaunchService
 
@@ -73,10 +71,9 @@ public final class ActionStatusPreviewRuntime: EnvironmentInjectingRuntime {
   ) {
     let settingsService = SettingsService()
     let statusService = StatusService()
-    let metadataService = MetadataService()
     let modelService = ModelService(
       repos,
-      deviceIdentifier: metadataService.deviceIdentifier,
+      deviceIdentifier: Runtime.shared.deviceIdentifier,
       store: PreviewModelStore(repos: repos)
     )
     statusService.connect(to: modelService)
@@ -97,14 +94,12 @@ public final class ActionStatusPreviewRuntime: EnvironmentInjectingRuntime {
     self.modelService = modelService
     self.statusService = statusService
     self.settingsService = settingsService
-    self.metadataService = metadataService
     self.launchService = launchService
     self.refreshService = refreshService
     self.sheetService = sheetService
     self.commander = ActionStatusCommander(
       modelService: modelService,
       settingsService: settingsService,
-      metadataService: metadataService,
       launchService: launchService,
       refreshService: refreshService,
       sheetService: sheetService
@@ -116,7 +111,6 @@ public final class ActionStatusPreviewRuntime: EnvironmentInjectingRuntime {
     ActionStatusEnvironmentInjector(
       commander: commander,
       modelService: modelService,
-      metadataService: metadataService,
       settingsService: settingsService,
       launchService: launchService,
       statusService: statusService,

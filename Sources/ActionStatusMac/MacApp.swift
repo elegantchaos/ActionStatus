@@ -7,6 +7,7 @@
   import Application
   import Core
   import CoreUI
+  import Runtime
   import Settings
   import SwiftUI
 
@@ -23,7 +24,7 @@
     }
 
     var body: some Scene {
-      Window(engine.metadataService.appName, id: "repos") {
+      Window(Runtime.shared.appName, id: "repos") {
         engine.rootView {
           ContentView()
         }
