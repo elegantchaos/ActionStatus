@@ -6,6 +6,7 @@
 import Commands
 import CommandsUI
 import Core
+import Previews
 import Runtime
 import SwiftUI
 
@@ -15,19 +16,19 @@ public struct RepoCellView: View {
 
   /// Size of text and icons in the cell, configured by the user.
   @AppStorage(.displaySize) var displaySize
-  
+
   /// Navigation mode to use when the cell is triggered with the primary command trigger.
   /// This is a plain click or tap.
   @AppStorage(.navigationMode) var navigationMode
-  
+
   /// Navigation mode to use when the cell is triggered with the secondary command trigger.
   /// This is a command-click on macOS.
   @AppStorage(.secondaryNavigationMode) var secondaryNavigationMode
-  
+
   /// Navigation mode to use when the cell is triggered with the tertiary command trigger.
   /// This is an option-click on macOS.
   @AppStorage(.tertiaryNavigationMode) var tertiaryNavigationMode
-  
+
   let repo: Repo
   let selectable: Bool
   let isSource: Bool
@@ -104,7 +105,7 @@ public struct RepoCellView: View {
       return 4
     #endif
   }
-  
+
   /// Returns the configured navigation mode for the supplied trigger.
   private func repoNavigationMode(for trigger: CommandTrigger) -> NavigationMode {
     return switch trigger {
@@ -115,5 +116,31 @@ public struct RepoCellView: View {
       case .tertiary:
         tertiaryNavigationMode
     }
+  }
+}
+
+private struct RepoCellPreviewHost: View {
+  @Namespace private var namespace
+  @FocusState private var focus: Focus?
+
+  let repo: Repo
+
+  var body: some View {
+    let context = RepoContainerContext(namespace: namespace, runtime: .shared, focus: $focus)
+    RepoCellView(repo: repo, context: context, selectable: false)
+      .frame(width: 320)
+      .padding()
+  }
+}
+
+#Preview("Repo Cell Passing") {
+  PreviewRoot(ActionStatusPreviews.repoCellPassing) { fixture in
+    RepoCellPreviewHost(repo: fixture.primaryRepo)
+  }
+}
+
+#Preview("Repo Cell Failing") {
+  PreviewRoot(ActionStatusPreviews.repoCellFailing) { fixture in
+    RepoCellPreviewHost(repo: fixture.primaryRepo)
   }
 }

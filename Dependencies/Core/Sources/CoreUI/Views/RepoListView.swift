@@ -4,6 +4,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Core
+import Previews
 import Runtime
 import SwiftUI
 
@@ -46,5 +47,21 @@ public struct RepoListView: View {
   func delete(at offsets: IndexSet) {
     let ids = status.repoIDs(atOffsets: offsets)
     Task { try? await commander.perform(RemoveReposCommand(ids: ids)) }
+  }
+}
+
+
+private struct RepoListPreviewHost: View {
+  @Namespace private var namespace
+  @FocusState private var focus: Focus?
+
+  var body: some View {
+    RepoListView(context: RepoContainerContext(namespace: namespace, runtime: .shared, focus: $focus))
+  }
+}
+
+#Preview("Repo List") {
+  PreviewRoot(ActionStatusPreviews.editing) { _ in
+    RepoListPreviewHost()
   }
 }

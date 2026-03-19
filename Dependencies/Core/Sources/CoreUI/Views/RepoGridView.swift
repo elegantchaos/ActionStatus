@@ -68,3 +68,21 @@ public struct RepoGridView: View {
     #endif
   }
 }
+
+import Previews
+
+private struct RepoGridPreviewHost: View {
+  @Namespace private var namespace
+  @FocusState private var focus: Focus?
+
+  var body: some View {
+    RepoGridView(context: RepoContainerContext(namespace: namespace, runtime: .shared, focus: $focus))
+      .frame(minWidth: 700, minHeight: 420)
+  }
+}
+
+#Preview("Repo Grid") {
+  PreviewRoot(ActionStatusPreviews.content) { _ in
+    RepoGridPreviewHost()
+  }
+}

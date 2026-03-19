@@ -13,9 +13,6 @@ let package = Package(
       name: "CoreUI",
       targets: ["CoreUI"]),
     .library(
-      name: "CoreUIPreviews",
-      targets: ["CoreUIPreviews"]),
-    .library(
       name: "Core",
       targets: ["Core"]),
   ],
@@ -26,21 +23,21 @@ let package = Package(
     .package(url: "https://github.com/elegantchaos/JSONSession.git", from: "3.0.0"),
     .package(url: "https://github.com/elegantchaos/Octoid.git", from: "3.0.0"),
 
-    .package(url: "https://github.com/elegantchaos/Icons.git", from: "1.0.0"),
-    .package(url: "https://github.com/elegantchaos/Application.git", from: "1.0.0"),
-    .package(url: "https://github.com/elegantchaos/Previews.git", from: "1.0.0"),
-    .package(url: "https://github.com/elegantchaos/Commands.git", from: "1.0.0"),
-    .package(url: "https://github.com/elegantchaos/Runtime.git", from: "1.0.0"),
-    .package(url: "https://github.com/elegantchaos/Settings.git", from: "1.0.0"),
-    .package(url: "https://github.com/elegantchaos/Logger.git", from: "2.0.0"),
+    .package(url: "https://github.com/elegantchaos/Icons.git", from: "1.0.1"),
+    .package(url: "https://github.com/elegantchaos/Application.git", from: "1.0.1"),
+    .package(url: "https://github.com/elegantchaos/Previews.git", from: "1.0.1"),
+    .package(url: "https://github.com/elegantchaos/Commands.git", from: "1.0.1"),
+    .package(url: "https://github.com/elegantchaos/Runtime.git", from: "1.0.1"),
+    .package(url: "https://github.com/elegantchaos/Settings.git", from: "1.0.1"),
+    .package(url: "https://github.com/elegantchaos/Logger.git", from: "2.0.2"),
 
-//    .package(path: "../Application"),
-//    .package(path: "../Previews"),
-//    .package(path: "../Commands"),
-//    .package(path: "../Icons"),
-//    .package(path: "../Runtime"),
-//    .package(path: "../Settings"),
-//    .package(path: "../Logger"),
+    //    .package(path: "../Application"),
+    //    .package(path: "../Previews"),
+    //    .package(path: "../Commands"),
+    //    .package(path: "../Icons"),
+    //    .package(path: "../Runtime"),
+    //    .package(path: "../Settings"),
+    //    .package(path: "../Logger"),
   ],
   targets: [
     .target(
@@ -78,20 +75,8 @@ let package = Package(
         .product(name: "CommandsUI", package: "Commands"),
         .product(name: "Icons", package: "Icons"),
         .product(name: "LoggerUI", package: "Logger"),
-        .product(name: "Settings", package: "Settings"),
-      ],
-      swiftSettings: [
-        .swiftLanguageMode(.v6),
-        .defaultIsolation(MainActor.self),
-        .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
-        .enableUpcomingFeature("InferIsolatedConformances"),
-        .enableExperimentalFeature("SendableProhibitsMainActorInference"),
-      ]),
-    .target(
-      name: "CoreUIPreviews",
-      dependencies: [
-        "CoreUI",
         .product(name: "Previews", package: "Previews"),
+        .product(name: "Settings", package: "Settings"),
       ],
       swiftSettings: [
         .swiftLanguageMode(.v6),
@@ -102,6 +87,6 @@ let package = Package(
       ]),
     .testTarget(
       name: "CoreTests",
-      dependencies: ["Core", "CoreUI", "CoreUIPreviews"]),
+      dependencies: ["Core", "CoreUI"]),
   ],
 )

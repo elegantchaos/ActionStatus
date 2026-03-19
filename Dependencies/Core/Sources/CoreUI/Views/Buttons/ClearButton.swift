@@ -11,18 +11,14 @@ struct ClearButton: ViewModifier {
   @Binding var text: String
 
   public func body(content: Content) -> some View {
-    ZStack(alignment: .trailing) {
-      content
-
-      if !text.isEmpty {
-        Button(action: {
-          text = ""
-        }) {
+    content
+      .overlay(alignment: .trailing) {
+        Button(action: { text = "" }) {
           Image(systemName: "multiply.circle.fill")
             .foregroundColor(.secondary)
         }
         .padding(.trailing, 8)
+        .buttonStyle(.borderless)
       }
-    }
   }
 }

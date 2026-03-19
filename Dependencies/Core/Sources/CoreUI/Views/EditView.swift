@@ -6,6 +6,7 @@
 import Commands
 import CommandsUI
 import Core
+import Previews
 import Runtime
 import SwiftUI
 
@@ -42,32 +43,7 @@ public struct EditView: View {
 
     return SheetView(title, shortTitle: shortTitle, cancelAction: dismiss, doneAction: done) {
       Form {
-        Section {
-          LabeledContent("name", icon: .name) {
-            TextField("", text: $name)
-              .modifier(NameOrgStyle())
-              .modifier(ClearButton(text: $name))
-              .labelsHidden()
-          }
-          LabeledContent("owner", icon: .owner) {
-            TextField("github user or organisation", text: $owner)
-              .modifier(NameOrgStyle())
-              .modifier(ClearButton(text: $owner))
-              .labelsHidden()
-          }
-          LabeledContent("branches", icon: .branches) {
-            TextField("branch1, branch2, …", text: $branches)
-              .modifier(BranchListStyle())
-              .modifier(ClearButton(text: $branches))
-              .labelsHidden()
-          }
-        } header: {
-          Text("Details")
-        } footer: {
-          Text("Enter the name and owner of the repository. Select which workflows to monitor when they have been discovered, and optionally enter specific branches to test.")
-            .font(.footnote)
-            .foregroundStyle(.secondary)
-        }
+        EditDetailsSectionView(name: $name, owner: $owner, branches: $branches)
 
         Section {
           if workflows.isEmpty {
@@ -121,6 +97,7 @@ public struct EditView: View {
             .foregroundStyle(.secondary)
         }
       }
+      .labelStyle(.iconOnly)
     }
     .formStyle(.grouped)
     .textFieldStyle(.plain)
@@ -190,7 +167,7 @@ struct NameOrgStyle: ViewModifier {
     #if os(macOS)
       content
         .textFieldStyle(.roundedBorder)
-        .textInputAutocapitalization(.never)
+        .multilineTextAlignment(.leading)
     #else
       content
         .keyboardType(.namePhonePad)
@@ -210,6 +187,7 @@ struct BranchListStyle: ViewModifier {
   func body(content: Content) -> some View {
     #if os(macOS)
       content
+        .multilineTextAlignment(.leading)
         .textFieldStyle(.roundedBorder)
     #else
       content
@@ -223,4 +201,71 @@ struct BranchListStyle: ViewModifier {
         #endif
     #endif
   }
+}
+
+
+struct EditDetailsSectionView: View {
+  @Binding var name: String
+  @Binding var owner: String
+  @Binding var branches: String
+
+  var body: some View {
+    Section {
+
+      LabeledContent("name", icon: .name) {
+        TextField("name", text: $name, prompt: Text("github repo"))
+          .multilineTextAlignment(.leading)
+          .modifier(ClearButton(text: $name))
+          .labelsHidden()
+      }
+
+      LabeledContent("owner", icon: .owner) {
+        TextField("owner", text: $owner, prompt: Text("github owner"))
+          .multilineTextAlignment(.leading)
+          .modifier(ClearButton(text: $owner))
+          .labelsHidden()
+      }
+      LabeledContent("branches", icon: .branches) {
+        TextField("", text: $branches, prompt: Text("branch1, branch2, …"))
+          .multilineTextAlignment(.leading)
+          .modifier(BranchListStyle())
+          .modifier(ClearButton(text: $branches))
+      }
+    } header: {
+      Text("Details")
+    } footer: {
+      Text("Enter the name and owner of the repository. Select which workflows to monitor when they have been discovered, and optionally enter specific branches to test.")
+        .font(.footnote)
+        .foregroundStyle(.secondary)
+    }
+    .modifier(NameOrgStyle())
+  }
+}
+
+#Preview("Edit Repo") {
+  PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
+    EditView(repo: fixture.primaryRepo)
+      .frame(minWidth: 600, minHeight: 640)
+  }
+}
+
+#Preview("iOS") {
+  PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
+    EditView(repo: fixture.primaryRepo)
+  }
+}
+
+#Preview("Details") {
+  @Previewable @State var name = "name"
+  @Previewable @State var owner = "owner"
+  @Previewable @State var branches: String = "branch1, branch2"
+
+  PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
+    Form {
+      EditDetailsSectionView(name: $name, owner: $owner, branches: $branches)
+    }
+    .labelStyle(.iconOnly)
+    .formStyle(.grouped)
+  }
+
 }

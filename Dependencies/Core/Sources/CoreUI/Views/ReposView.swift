@@ -63,3 +63,19 @@ public struct ReposView: View {
     #endif
   }
 }
+
+import Previews
+
+#Preview("Repos Filled") {
+  PreviewRoot(ActionStatusPreviews.content) { _ in
+    ReposView()
+      .frame(minWidth: 720, minHeight: 460)
+  }
+}
+
+#Preview("Repos Empty") {
+  PreviewRoot(ActionStatusPreviews.empty) { _ in
+    ReposView()
+      .frame(minWidth: 720, minHeight: 460)
+  }
+}

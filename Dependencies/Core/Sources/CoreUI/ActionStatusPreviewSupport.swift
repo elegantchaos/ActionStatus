@@ -1,5 +1,4 @@
 import Core
-import CoreUI
 import Previews
 import Runtime
 import SwiftUI
@@ -181,6 +180,7 @@ public enum ActionStatusPreviews {
       isEditing: isEditing
     )
   }
+
   /// Creates a repository value for previews.
   public static func repo(
     _ name: String,
@@ -227,16 +227,13 @@ private final class PreviewModelStore: ModelStore {
     values.removeValue(forKey: key)
   }
 
-  func onChange(_ callback: @escaping ChangeCallback) async {
-    await callback(values)
+  func onChange(_ perform: @escaping ChangeCallback) async {
+    await perform(values)
   }
 }
 
-/// Launch service used in previews to avoid side effects.
 private final class PreviewLaunchService: LaunchService {
-  override func open(url: URL) {
-  }
+  override func open(url: URL) {}
 
-  override func reveal(url: URL) {
-  }
+  override func reveal(url: URL) {}
 }

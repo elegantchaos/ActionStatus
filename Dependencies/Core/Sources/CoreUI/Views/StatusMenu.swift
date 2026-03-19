@@ -91,4 +91,23 @@
     }
   }
 
+import Previews
+
+#Preview("Status Menu Label") {
+  PreviewRoot(ActionStatusPreviews.statusMenu) { _ in
+    StatusMenuLabel()
+      .padding()
+  }
+}
+
+#Preview("Status Menu Content") {
+  PreviewRoot(ActionStatusPreviews.statusMenu) { _ in
+    VStack(alignment: .leading, spacing: 0) {
+      StatusMenuContent()
+    }
+    .frame(width: 280)
+    .padding()
+  }
+}
+
 #endif
