@@ -20,4 +20,7 @@ extension Icon {
   static let showWorkflow = Icon("arrow.trianglehead.2.clockwise.rotate.90.icloud")
   static let startEditing = Icon("lock.open")
   static let stopEditing = Icon("lock")
+  static let name = Icon("tag")
+  static let owner = Icon("person")
+  static let branches = Icon("arrow.trianglehead.branch")
 }

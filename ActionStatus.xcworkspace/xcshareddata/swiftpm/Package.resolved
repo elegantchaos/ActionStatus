@@ -1,5 +1,5 @@
 {
-  "originHash" : "09163bdba5caafef919cff6a6fb355ab96350c0394c37d90dd6f4f4e740e8173",
+  "originHash" : "6c9dcc9cee0276f2105cbc68eceac38ec020a7e7c8028b7826c89a0b7f3b5f36",
   "pins" : [
     {
       "identity" : "actionbuildercore",
@@ -26,15 +26,6 @@
       "state" : {
         "revision" : "01cc58b8d9a01d67ee6669b67db41b2060ea467b",
         "version" : "1.0.7"
-      }
-    },
-    {
-      "identity" : "collectionextensions",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/elegantchaos/CollectionExtensions.git",
-      "state" : {
-        "revision" : "52b3547475730a2b6bafc17dc1df31ad2ca53200",
-        "version" : "1.1.9"
       }
     },
     {
@@ -69,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/elegantchaos/Keychain.git",
       "state" : {
-        "revision" : "d99aec1183eeca2ece08d1b2974562a9ff8c46b1",
-        "version" : "1.0.0"
+        "revision" : "876589ffe4a684cd61c9d202059ae6f73776f098",
+        "version" : "1.1.1"
       }
     },
     {
@@ -78,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/elegantchaos/Matchable.git",
       "state" : {
-        "revision" : "0f523c77bf4b0dbbdc0838b952262ed45fab17f8",
-        "version" : "1.0.6"
+        "revision" : "d53e807009960aafbd54f6229c2542f906628b38",
+        "version" : "1.0.7"
       }
     },
     {
@@ -141,8 +132,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/elegantchaos/XCTestExtensions.git",
       "state" : {
-        "revision" : "695ac254d74387c8ec1796e2299a7d8bdc33822d",
-        "version" : "1.4.2"
+        "revision" : "40da6a09823c8a9bfa68b6487e92d86b8e8a821e",
+        "version" : "1.5.1"
       }
     }
   ],

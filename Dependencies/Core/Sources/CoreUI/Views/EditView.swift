@@ -43,25 +43,30 @@ public struct EditView: View {
     return SheetView(title, shortTitle: shortTitle, cancelAction: dismiss, doneAction: done) {
       Form {
         Section {
-          LabeledContent("name") {
-            TextField("github repo name", text: $name)
+          LabeledContent("name", icon: .name) {
+            TextField("", text: $name)
               .modifier(NameOrgStyle())
               .modifier(ClearButton(text: $name))
+              .labelsHidden()
           }
-          LabeledContent("owner") {
+          LabeledContent("owner", icon: .owner) {
             TextField("github user or organisation", text: $owner)
               .modifier(NameOrgStyle())
               .modifier(ClearButton(text: $owner))
+              .labelsHidden()
           }
-          LabeledContent("branches") {
+          LabeledContent("branches", icon: .branches) {
             TextField("branch1, branch2, …", text: $branches)
               .modifier(BranchListStyle())
               .modifier(ClearButton(text: $branches))
+              .labelsHidden()
           }
         } header: {
           Text("Details")
         } footer: {
           Text("Enter the name and owner of the repository. Select which workflows to monitor when they have been discovered, and optionally enter specific branches to test.")
+            .font(.footnote)
+            .foregroundStyle(.secondary)
         }
 
         Section {
@@ -84,6 +89,8 @@ public struct EditView: View {
           Text("Workflows")
         } footer: {
           Text("Newly discovered workflows are enabled by default.")
+            .font(.footnote)
+            .foregroundStyle(.secondary)
         }
 
         Section {
@@ -110,9 +117,13 @@ public struct EditView: View {
           Text("Locations")
         } footer: {
           Text("Corresponding locations on Github.")
+            .font(.footnote)
+            .foregroundStyle(.secondary)
         }
       }
     }
+    .formStyle(.grouped)
+    .textFieldStyle(.plain)
     .onAppear {
       refreshService.pauseRefresh()
       load()
@@ -179,6 +190,7 @@ struct NameOrgStyle: ViewModifier {
     #if os(macOS)
       content
         .textFieldStyle(.roundedBorder)
+        .textInputAutocapitalization(.never)
     #else
       content
         .keyboardType(.namePhonePad)
