@@ -3,13 +3,8 @@
 //  Copyright © 2026 Elegant Chaos Limited. All rights reserved.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import Foundation
-
 #if os(tvOS)
 
-extension Engine {
-  
-  // TV-specific code here
-}
+extension Engine {}
 
 #endif

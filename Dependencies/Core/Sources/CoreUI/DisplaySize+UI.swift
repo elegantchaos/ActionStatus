@@ -7,6 +7,7 @@ import Core
 import SwiftUI
 
 extension DisplaySize {
+  /// SwiftUI `Font` appropriate for repository cell labels at this display density.
   var font: Font {
     switch normalised {
       case .small: return .body
@@ -17,5 +18,6 @@ extension DisplaySize {
     }
   }
 
+  /// Minimum list row height for this display density; `0` defers to the system default.
   var rowHeight: CGFloat { return 0 }
 }

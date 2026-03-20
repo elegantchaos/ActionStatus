@@ -3,56 +3,59 @@
 //  All code (c) 2021 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import Combine
+import Application
 import Foundation
 import Logger
 import Observation
 
 let repoStateChannel = Channel("RepoState")
 
+/// Service that maintains sorted repo lists and aggregate pass/fail counts.
+///
+/// Receives a pushed `sortMode` from the Engine (CoreUI) rather than reading
+/// `UserDefaults` directly, keeping this target free of UserDefaults coupling.
 @Observable
 @MainActor
 public final class StatusService {
-  @ObservationIgnored private let settingsService: SettingsService
-  @ObservationIgnored private var defaultsObserver: AnyCancellable?
   @ObservationIgnored private var modelService: ModelService?
   @ObservationIgnored private var modelObservation: ObservationToken?
-  @ObservationIgnored private var sortModeObservation: ObservationToken?
 
+  /// Repositories in the currently configured sort order.
   public var sortedRepos: [Repo] = []
+  /// Count of repos in the `.passing` state.
   public var passing = 0
+  /// Count of repos in the `.failing` or `.partiallyFailing` states.
   public var failing = 0
+  /// Count of repos in the `.running` state.
   public var running = 0
+  /// Count of repos in the `.queued` state.
   public var queued = 0
+  /// Count of repos in the `.dormant` state.
   public var dormant = 0
+  /// Count of repos in the `.unknown` state.
   public var unreachable = 0
 
-  public init(settingsService: SettingsService) {
-    self.settingsService = settingsService
+  /// The current sort mode applied when building `sortedRepos`.
+  public var sortMode: SortMode = .state
+
+  /// Creates an idle status service; call `connect(to:)` before use.
+  public init() {
   }
 
+  /// Connects the service to a model, observing item changes for automatic updates.
   public func connect(to modelService: ModelService) {
     self.modelService = modelService
 
     modelObservation?.cancel()
-    sortModeObservation?.cancel()
-
-    modelObservation = observeChange(of: modelService.items) { [weak self] _ in
-      self?.update(sortMode: self?.settingsService.sortMode ?? .state)
+    modelObservation = onChange(of: modelService.items) { [weak self] _ in
+      self?.update()
     }
 
-    sortModeObservation = observeChange(of: self.settingsService.sortMode) { [weak self] sortMode in
-      self?.update(sortMode: sortMode)
-    }
-
-    defaultsObserver = UserDefaults.standard.onActionStatusSettingsChanged { [weak self] in
-      self?.update(sortMode: self?.settingsService.sortMode ?? .state)
-    }
-
-    update(sortMode: settingsService.sortMode)
+    update()
   }
 
-  public func update(sortMode: SortMode) {
+  /// Updates `sortedRepos` and aggregate counts from the current model.
+  public func update() {
     repoStateChannel.log("updated")
 
     guard let modelService else { return }
@@ -69,10 +72,18 @@ public final class StatusService {
     unreachable = set.count(for: Repo.State.unknown)
   }
 
+  /// Applies a new sort mode and immediately re-sorts the current repo list.
+  public func apply(sortMode: SortMode) {
+    self.sortMode = sortMode
+    update()
+  }
+
+  /// Returns the IDs of repos at the specified index offsets in the sorted list.
   public func repoIDs(atOffsets offsets: IndexSet) -> [String] {
     offsets.map { sortedRepos[$0].id }
   }
 
+  /// The combined state set representing the overall health of all watched repos.
   public var combinedState: [Repo.State] {
     var state: [Repo.State] = []
     if running > 0 {

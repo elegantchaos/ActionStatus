@@ -8,15 +8,19 @@ import CommandsUI
 import Core
 import Foundation
 import Icons
+import Runtime
 
 /// Command that toggles repository editing mode.
 public struct ToggleEditingCommand<C: SettingsServiceProvider>: CommandWithUI {
   public let id = "editing.toggle"
-  public let icon = Icon.editButtonIcon
   public let settingsService: SettingsService
 
   public var shortcut: CommandShortcut? {
     .init("E", modifiers: [.command])
+  }
+
+  public var icon: Icon {
+    settingsService.isEditing ? .startEditing : .stopEditing
   }
 
   public var name: String {
@@ -35,7 +39,7 @@ public struct ToggleEditingCommand<C: SettingsServiceProvider>: CommandWithUI {
 /// Command which opens the project on the web.
 struct ShowRepoCommand<C: LaunchServiceProvider>: CommandWithUI {
   let id = "show.repo"
-  let icon = Icon.showRepoIcon
+  let icon = Icon.showRepo
   let repo: Repo
 
   func perform(centre: C) async throws {
@@ -46,7 +50,7 @@ struct ShowRepoCommand<C: LaunchServiceProvider>: CommandWithUI {
 /// Command which opens the workflow page on the web.
 struct ShowWorkflowCommand<C: LaunchServiceProvider>: CommandWithUI {
   let id = "show.workflow"
-  let icon = Icon.showWorkflowIcon
+  let icon = Icon.showWorkflow
   let repo: Repo
 
   func perform(centre: C) async throws {
@@ -55,15 +59,26 @@ struct ShowWorkflowCommand<C: LaunchServiceProvider>: CommandWithUI {
 }
 
 /// Command which reveals the project locally.
-struct RevealLocalCommand<C: LaunchServiceProvider & MetadataServiceProvider>: CommandWithUI {
+struct RevealLocalCommand<C: LaunchServiceProvider>: CommandWithUI {
   let id = "reveal.repo"
-  let icon = Icon.revealLocalIcon
-  let repo: Repo
+  let icon = Icon.revealLocalRepo
+  
+  /// Security scoped URL to the local repository, if available.
+  let url: URL?
 
+  /// Initialises with the local URL for the supplied repository, if available.
+  init(repo: Repo, runtime: Runtime = .shared) {
+    self.url = repo.localURL(forDevice: runtime.deviceIdentifier)
+  }
+
+  /// Initialises with the supplied URL.
+  init(url: URL) {
+    self.url = url
+  }
+  
   func availability(centre: C) -> CommandAvailability {
     var status = CommandAvailability.disabled
-    let deviceID = centre.metadataService.deviceIdentifier
-    if let url = repo.url(forDevice: deviceID) {
+    if let url {
       url.accessSecurityScopedResource { unlockedURL in
         if FileManager.default.fileExists(atURL: unlockedURL) {
           status = .enabled
@@ -75,8 +90,7 @@ struct RevealLocalCommand<C: LaunchServiceProvider & MetadataServiceProvider>: C
   }
 
   func perform(centre: C) async throws {
-    let deviceID = centre.metadataService.deviceIdentifier
-    if let url = repo.url(forDevice: deviceID) {
+    if let url {
       url.accessSecurityScopedResource { unlockedURL in
         centre.launchService.reveal(url: unlockedURL)
       }
@@ -87,17 +101,16 @@ struct RevealLocalCommand<C: LaunchServiceProvider & MetadataServiceProvider>: C
 /// Command which follows the configured navigation action for a repository.
 struct NavigateRepoCommand<C: LaunchServiceProvider & SheetServiceProvider & SettingsServiceProvider>: CommandWithUI {
   let id = "navigate.repo"
-  let icon = Icon.showRepoIcon
+  let icon = Icon.showRepo
   let repo: Repo
-  let trigger: CommandTrigger
+  let mode: NavigationMode
 
-  public init(repo: Repo, trigger: CommandTrigger = .primary) {
+  public init(repo: Repo, mode: NavigationMode) {
     self.repo = repo
-    self.trigger = trigger
+    self.mode = mode
   }
 
   func perform(centre: C) async throws {
-    let mode = centre.settingsService.repoNavigationMode(for: trigger)
     switch mode {
       case .edit:
         centre.sheetService.showing = .editRepo(repo)
@@ -107,4 +120,8 @@ struct NavigateRepoCommand<C: LaunchServiceProvider & SheetServiceProvider & Set
         centre.launchService.open(url: repo.githubURL(for: .workflow))
     }
   }
+}
+
+extension URL {
+  static let testLocalURL = URL(fileURLWithPath: "/Users/sam/Developer/Projects/ActionStatus")
 }

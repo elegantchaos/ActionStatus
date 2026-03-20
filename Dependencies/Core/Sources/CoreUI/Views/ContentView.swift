@@ -4,35 +4,33 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Core
+import Icons
 import Observation
+import Runtime
 import SwiftUI
 
 /// Main content view for the ActionStatus application.
 public struct ContentView: View {
-  @Environment(MetadataService.self) var metadataService
-
   #if os(iOS)
     @Environment(ActionStatusCommander.self) var commander
     @Environment(SettingsService.self) var settingsService
   #endif
 
-  public init() {
+  /// Runtime metadata. Injectable for test purposes.
+  let runtime: Runtime
+
+  public init(runtime: Runtime = .shared) {
+    self.runtime = runtime
   }
 
   public var body: some View {
     NavigationStack {
       ReposView()
-        .navigationTitle(metadataService.appName)
+        .navigationTitle(runtime.appName)
         #if os(iOS)
           .navigationBarTitleDisplayMode(.inline)
           .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-              if settingsService.isEditing {
-                commander.button(ShowEditSheetCommand())
-              } else {
-                commander.button(ShowPreferencesSheetCommand())
-              }
-            }
+            MobileActionsMenu()
 
             commander.toolbarItem(
               ToggleEditingCommand(settingsService: commander.settingsService),
@@ -42,5 +40,32 @@ public struct ContentView: View {
         #endif
     }
     .sheetHost()
+  }
+}
+
+/// iOS toolbar menu grouping the primary app-level actions.
+struct MobileActionsMenu: ToolbarContent {
+  @Environment(ActionStatusCommander.self) var commander
+
+  var body: some ToolbarContent {
+    ToolbarItemGroup {
+
+      Menu {
+        commander.button(ShowPreferencesSheetCommand())
+        commander.button(AddRepoCommand())
+        commander.importer(AddLocalReposCommand())
+      } label: {
+        Label("Settings", icon: .actions)
+      }
+    }
+  }
+}
+
+import Previews
+
+#Preview("Content View") {
+  PreviewRoot(ActionStatusPreviews.content) { _ in
+    ContentView()
+      .frame(minWidth: 720, minHeight: 460)
   }
 }

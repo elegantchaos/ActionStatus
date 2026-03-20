@@ -9,12 +9,12 @@ import Icons
 
 /// Command that presents the edit sheet.
 public struct ShowEditSheetCommand<C: SheetServiceProvider>: CommandWithUI {
-  public let id = "sheet.add"
-  public let icon = Icon.editButtonIcon
+  public let id = "sheet.edit"
+  public let icon = Icon.actions
 
-  let repo: Repo?
+  let repo: Repo
 
-  public init(repo: Repo? = nil) {
+  public init(repo: Repo) {
     self.repo = repo
   }
 
@@ -26,7 +26,7 @@ public struct ShowEditSheetCommand<C: SheetServiceProvider>: CommandWithUI {
 /// Command that presents the preferences sheet.
 public struct ShowPreferencesSheetCommand<C: SheetServiceProvider>: CommandWithUI {
   public let id = "sheet.preferences"
-  public let icon = Icon.preferencesIcon
+  public let icon = Icon.preferences
 
   public init() {
   }

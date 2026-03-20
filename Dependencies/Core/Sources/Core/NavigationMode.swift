@@ -5,9 +5,12 @@
 
 import Foundation
 
-/// The available navigation actions for a repository cell.
+/// The navigation action performed when a repository cell is tapped.
 public enum NavigationMode: String, CaseIterable {
+  /// Open the edit sheet for the repository.
   case edit
+  /// Open the repository's main page on GitHub.
   case viewRepo
+  /// Open the repository's Actions (workflow) page on GitHub.
   case viewWorkflows
 }

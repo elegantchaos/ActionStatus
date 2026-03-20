@@ -4,6 +4,8 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Core
+import Previews
+import Runtime
 import SwiftUI
 
 /// List presentation of monitored repositories.
@@ -13,13 +15,11 @@ public struct RepoListView: View {
   @Environment(SettingsService.self) private var settingsService
   @AppStorage(.displaySize) var displaySize
 
-  let namespace: Namespace.ID
-  let focus: FocusState<Focus?>.Binding
+  let context: RepoContainerContext
 
   /// Creates a repository list view.
-  public init(namespace: Namespace.ID, focus: FocusState<Focus?>.Binding) {
-    self.namespace = namespace
-    self.focus = focus
+  public init(context: RepoContainerContext) {
+    self.context = context
   }
 
   public var body: some View {
@@ -27,10 +27,9 @@ public struct RepoListView: View {
       ForEach(status.sortedRepos) { repo in
         RepoCellView(
           repo: repo,
+          context: context,
           selectable: true,
-          namespace: namespace,
           isSource: settingsService.isEditing,
-          focus: focus
         )
       }
       .onDelete(perform: delete)
@@ -48,5 +47,21 @@ public struct RepoListView: View {
   func delete(at offsets: IndexSet) {
     let ids = status.repoIDs(atOffsets: offsets)
     Task { try? await commander.perform(RemoveReposCommand(ids: ids)) }
+  }
+}
+
+
+private struct RepoListPreviewHost: View {
+  @Namespace private var namespace
+  @FocusState private var focus: Focus?
+
+  var body: some View {
+    RepoListView(context: RepoContainerContext(namespace: namespace, runtime: .shared, focus: $focus))
+  }
+}
+
+#Preview("Repo List") {
+  PreviewRoot(ActionStatusPreviews.editing) { _ in
+    RepoListPreviewHost()
   }
 }

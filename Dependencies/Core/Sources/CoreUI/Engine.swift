@@ -7,12 +7,14 @@ import Application
 import Core
 import Logger
 import Observation
+import Runtime
 import SwiftUI
 
 #if canImport(UIKit)
   import UIKit
 #endif
 
+/// Logger channel for app monitoring lifecycle events.
 public let monitoringChannel = Channel("Monitoring")
 
 /// Main ActionStatus runtime engine.
@@ -29,36 +31,41 @@ public final class Engine {
   @ObservationIgnored public var startupTask: Task<Void, Never>?
 
   /// Shared model service.
-  public let modelService: ModelService
+  @ObservationIgnored public let modelService: ModelService
 
   /// Shared settings service.
-  public let settingsService: SettingsService
+  @ObservationIgnored public let settingsService: SettingsService
 
   /// Shared launch service.
-  public let launchService: LaunchService
-
-  /// Shared metadata service.
-  public let metadataService: MetadataService
+  @ObservationIgnored public let launchService: LaunchService
 
   /// Shared sheet service.
-  public let sheetService: SheetService
+  @ObservationIgnored public let sheetService: SheetService
 
   /// Shared refresh service.
-  public let refreshService: RefreshService
+  @ObservationIgnored public let refreshService: RefreshService
+
+  /// Shared authentication service.
+  @ObservationIgnored public let authService: any AuthService
 
   /// Shared status service.
-  public let statusService: StatusService
+  @ObservationIgnored public let statusService: StatusService
 
   /// Shared commander used by SwiftUI views and menus.
-  public let commander: ActionStatusCommander
+  @ObservationIgnored public let commander: ActionStatusCommander
 
+  /// Environment injector used while the app is starting up and running.
+  /// All services are safe to use before startup completes,
+  /// and so we can use the same injector for startup and running states.
+  @ObservationIgnored private let injector: ActionStatusEnvironmentInjector
+  
   #if canImport(UIKit)
     /// Root view controller used for presenting UIKit UI.
     public var rootController: UIViewController?
-
-    /// Retained file picker while it is presented.
-    public var filePicker: FilePicker?
   #endif
+
+  /// Observer token for UserDefaults settings changes.
+  @ObservationIgnored private var settingsObserver: NotificationToken?
 
   /// Performs one-time synchronous initialization.
   public func initialise() throws {
@@ -66,8 +73,22 @@ public final class Engine {
 
   /// Performs asynchronous startup after initialization.
   public func startup() async throws {
+    await authService.startup()
     await modelService.startup()
-    refreshService.resumeRefresh()
+
+    // Connect refresh to auth after both services have completed startup,
+    // ensuring the initial auth state and model data are both available.
+    refreshService.connect(to: authService)
+
+    // Observe settings changes and push updated values to services.
+    // This will trigger immediately with the initial values, so services are updated before the UI appears.
+    settingsObserver = UserDefaults.standard.onChange(initial: true) { [weak self] defaults in
+      guard let self else { return }
+      let newSortMode = defaults.value(forKey: .sortMode)
+      let newInterval = defaults.value(forKey: .refreshInterval)
+      statusService.apply(sortMode: newSortMode)
+      refreshService.apply(interval: newInterval)
+    }
   }
 
   /// Creates the live engine and its shared services.
@@ -75,80 +96,100 @@ public final class Engine {
     state = .uninitialised
     startupTask = nil
 
+    let runtime = Runtime.shared
     let settingsService = SettingsService()
-    let metadataService = MetadataService()
-    let statusService = StatusService(settingsService: settingsService)
+    let statusService = StatusService()
     let sheetService = SheetService()
-    let modelService = ModelService(
-      statusService: statusService,
-      deviceIdentifier: metadataService.deviceIdentifier,
-      source: metadataService.modelSource
-    )
+    let modelService = ModelService(runtime: runtime)
+    statusService.connect(to: modelService)
+
+    // Determine the refresh type from the runtime environment, then create
+    // the matching auth service. Using an explicit type here keeps the wiring
+    // visible and allows debug builds to pair any auth service with any controller.
+    let refreshType: RefreshService.RefreshType
+    if runtime.normalized(.testRefresh) == "random" {
+      refreshType = .random
+    } else if runtime.isUITestingBuild {
+      refreshType = .none
+    } else {
+      refreshType = .normal
+    }
+
+    let authService: any AuthService
+    switch refreshType {
+      case .normal:
+        if ProcessInfo.processInfo.environment["TEST_AUTH"] != nil {
+          authService = StubAuthService(initialState: .signedIn(GithubCredentials(login: "test", server: "api.github.com", token: "test-token")))
+        } else {
+          let clientID = GithubDeviceAuthenticator.clientID(from: .main) ?? ""
+          authService = GithubAuthService(clientID: clientID)
+        }
+      case .random:
+        // Stub with a signed-in state so the randomising controller starts immediately.
+        // The stub can be driven via debug UI to simulate sign-out or other states.
+        authService = StubAuthService(initialState: .signedIn(GithubCredentials(login: "random-user", server: "api.github.com", token: "random-token")))
+      case .none:
+        authService = StubAuthService(initialState: .signedOut)
+    }
+
     let refreshService = RefreshService(
       model: modelService,
-      settingsService: settingsService,
-      metadata: metadataService
+      type: refreshType,
+      interval: UserDefaults.standard.value(forKey: .refreshInterval),
+      lastEventStore: UserDefaultsLastEventStore()
     )
+    
     let launchService = LaunchService()
-
+    
+    let commander = ActionStatusCommander(
+      modelService: modelService,
+      settingsService: settingsService,
+      launchService: launchService,
+      refreshService: refreshService,
+      sheetService: sheetService
+    )
+    
+    let injector = ActionStatusEnvironmentInjector(
+      commander: commander,
+      modelService: modelService,
+      settingsService: settingsService,
+      launchService: launchService,
+      statusService: statusService,
+      refreshService: refreshService,
+      authService: authService,
+      sheetService: sheetService
+    )
+    
+    self.authService = authService
     self.statusService = statusService
-    self.metadataService = metadataService
     self.sheetService = sheetService
     self.modelService = modelService
     self.settingsService = settingsService
     self.refreshService = refreshService
     self.launchService = launchService
-    self.commander = ActionStatusCommander(
-      modelService: modelService,
-      settingsService: settingsService,
-      metadataService: metadataService,
-      launchService: launchService,
-      refreshService: refreshService,
-      sheetService: sheetService
-    )
-
-    #if os(iOS) || os(macOS)
-      commander.setAddLocalReposAction { [weak self] in
-        self?.addLocalRepos()
-      }
-    #endif
+    self.commander = commander
+    self.injector = injector
+      
   }
 }
 
 extension CGFloat {
+  /// Standard inset/padding value used throughout ActionStatus UI.
   static let padding: CGFloat = 10
 }
 
 extension Engine: AppEngine {
-  public var startupInjector: some ViewModifier {
-    ActionStatusEnvironmentInjector(
-      commander: commander,
-      modelService: modelService,
-      metadataService: metadataService,
-      settingsService: settingsService,
-      launchService: launchService,
-      statusService: statusService,
-      refreshService: refreshService,
-      sheetService: sheetService
-    )
-  }
+  /// Returns the environment modifier used while the app is starting up.
+  public var startupInjector: some ViewModifier { injector }
 
-  public var runningInjector: some ViewModifier {
-    ActionStatusEnvironmentInjector(
-      commander: commander,
-      modelService: modelService,
-      metadataService: metadataService,
-      settingsService: settingsService,
-      launchService: launchService,
-      statusService: statusService,
-      refreshService: refreshService,
-      sheetService: sheetService
-    )
-  }
+  /// Returns the environment modifier used while the app is running.
+  public var runningInjector: some ViewModifier { injector }
 
+  /// No-op retry hook; ActionStatus has no recoverable startup error path.
   public func retry() async throws {
   }
 
+  /// Returns `false` — all errors are surfaced to the Application framework.
   public func shouldIgnore(error: any Error) -> Bool {
     false
   }

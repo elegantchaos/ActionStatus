@@ -6,6 +6,7 @@
 #if os(macOS)
 
   import Core
+  import Runtime
   import SwiftUI
 
   /// Menu bar status icon for ActionStatus.
@@ -36,10 +37,13 @@
   public struct StatusMenuContent: View {
     @Environment(ActionStatusCommander.self) var commander
     @Environment(LaunchService.self) var launchService
-    @Environment(MetadataService.self) var metadataService
     @Environment(StatusService.self) var status
 
-    public init() {
+    /// Runtime metadata. Injectable for test purposes.
+    let runtime: Runtime
+
+    public init(runtime: Runtime = .shared) {
+      self.runtime = runtime
     }
 
     public var body: some View {
@@ -53,7 +57,7 @@
 
       Divider()
 
-      Button("Show \(appName)") {
+      Button("Show \(runtime.appName)") {
         if let window = NSApp.windows.first {
           window.makeKeyAndOrderFront(nil)
         }
@@ -64,17 +68,12 @@
         Text("Settings…")
       }
 
-      Button("Add Local Repos", action: commander.addLocalRepos)
-        .keyboardShortcut("o", modifiers: .command)
+      commander.importer(AddLocalReposCommand())
 
-      Button("Quit \(appName)") {
+      Button("Quit \(runtime.appName)") {
         NSApp.terminate(nil)
       }
       .keyboardShortcut("q", modifiers: .command)
-    }
-
-    var appName: String {
-      metadataService.appName
     }
   }
 
@@ -91,5 +90,24 @@
       }
     }
   }
+
+import Previews
+
+#Preview("Status Menu Label") {
+  PreviewRoot(ActionStatusPreviews.statusMenu) { _ in
+    StatusMenuLabel()
+      .padding()
+  }
+}
+
+#Preview("Status Menu Content") {
+  PreviewRoot(ActionStatusPreviews.statusMenu) { _ in
+    VStack(alignment: .leading, spacing: 0) {
+      StatusMenuContent()
+    }
+    .frame(width: 280)
+    .padding()
+  }
+}
 
 #endif

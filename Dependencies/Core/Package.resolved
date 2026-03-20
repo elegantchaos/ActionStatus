@@ -1,13 +1,22 @@
 {
-  "originHash" : "f9e547a11d51aa98d4063d3c0fb4522fd271a648c1445ad0c7c5cd4a471890a2",
+  "originHash" : "c65b48fce2868ab5e9643b99a68835af0fe969bc14e8a389569d366c9de2a4e8",
   "pins" : [
     {
-      "identity" : "collectionextensions",
+      "identity" : "application",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/elegantchaos/CollectionExtensions.git",
+      "location" : "https://github.com/elegantchaos/Application.git",
       "state" : {
-        "revision" : "52b3547475730a2b6bafc17dc1df31ad2ca53200",
-        "version" : "1.1.9"
+        "revision" : "879b2c6aeb242c0e5790d5153555d8a986207ddf",
+        "version" : "1.0.1"
+      }
+    },
+    {
+      "identity" : "commands",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/Commands.git",
+      "state" : {
+        "revision" : "fc7c32dd8473fa959810fb17a17f6d6d412e595c",
+        "version" : "1.0.1"
       }
     },
     {
@@ -26,6 +35,15 @@
       "state" : {
         "revision" : "ccb417b5b4f2d473964594a7c906a50a62c8530c",
         "version" : "1.2.2"
+      }
+    },
+    {
+      "identity" : "icons",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/Icons.git",
+      "state" : {
+        "revision" : "068efb572003fca636c99fcb9c8e2dd3bf813272",
+        "version" : "1.0.1"
       }
     },
     {
@@ -51,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/elegantchaos/Logger.git",
       "state" : {
-        "revision" : "6957a21c4e02fc03734a460fb8bfcd36dbe8aba8",
-        "version" : "2.0.1"
+        "revision" : "e0514867a7b2f49f0a0ade1a4a23164b1afa73b8",
+        "version" : "2.0.2"
       }
     },
     {
@@ -71,6 +89,33 @@
       "state" : {
         "revision" : "96e62a871b437b245dff213330b3f3dfce26004d",
         "version" : "3.0.0"
+      }
+    },
+    {
+      "identity" : "previews",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/Previews.git",
+      "state" : {
+        "revision" : "9aa9350d083aa2506696ad94d284182cac7257b2",
+        "version" : "1.0.1"
+      }
+    },
+    {
+      "identity" : "runtime",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/Runtime.git",
+      "state" : {
+        "revision" : "a8162286108d002d00b5432aafa428e93d122a56",
+        "version" : "1.0.1"
+      }
+    },
+    {
+      "identity" : "settings",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/elegantchaos/Settings.git",
+      "state" : {
+        "revision" : "cb5026c70553ebf26257a362ab3d200225b2c22a",
+        "version" : "1.0.1"
       }
     },
     {

@@ -59,7 +59,7 @@ It also coordinates workflow-run polling targets based on discovered workflows.
 
 ActionStatus is the orchestration and presentation layer.
 
-`OctoidRefreshController` consumes repo update streams and:
+`GithubRefreshController` consumes repo update streams and:
 
 - merges discovered workflows into the model
 - tracks workflow run states for enabled workflows

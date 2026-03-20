@@ -1,3 +1,8 @@
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+//  Created by Sam Deane on 02/03/2026.
+//  Copyright © 2026 Elegant Chaos Limited. All rights reserved.
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 import Commands
 import Core
 
@@ -22,23 +27,9 @@ public protocol SheetServiceProvider: CommandCentre {
   var sheetService: SheetService { get }
 }
 
-/// Provider for the shared metadata service used by commands.
-@MainActor
-public protocol MetadataServiceProvider: CommandCentre {
-  /// Service that exposes runtime metadata.
-  var metadataService: MetadataService { get }
-}
-
 /// Provider for the shared refresh service used by commands.
 @MainActor
 public protocol RefreshServiceProvider: CommandCentre {
   /// Service that controls status refresh behavior.
   var refreshService: RefreshService { get }
-}
-
-/// Provider for importing local repositories into the model.
-@MainActor
-public protocol LocalRepoImportingProvider: CommandCentre {
-  /// Prompts for local repositories and adds them to the model.
-  func addLocalRepos()
 }

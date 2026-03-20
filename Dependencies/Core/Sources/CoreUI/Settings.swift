@@ -5,44 +5,29 @@
 
 import Core
 import Foundation
-import Keychain
-
 import Settings
 
 /// Boolean setting keys.
 @MainActor public extension AppSettingKey where Value == Bool {
   /// UserDefaults key for the setting that controls whether we register a global hotkey.
   static let showInMenu = AppSettingKey("ShowInMenu", defaultValue: true)
+  /// UserDefaults key for whether the app icon appears in the Dock.
   static let showInDock = AppSettingKey("ShowInDock", defaultValue: true)
-
 }
 
 @MainActor public extension AppSettingKey where Value == RefreshRate {
+  /// UserDefaults key for the configured polling interval.
   static let refreshInterval = AppSettingKey("RefreshInterval", defaultValue: RefreshRate.automatic)
 }
 
 @MainActor public extension AppSettingKey where Value == SortMode {
-  static let sortMode = AppSettingKey("SortMode", defaultValue: .state)
-}
-
-@MainActor public extension AppSettingKey where Value == NavigationMode {
-  /// UserDefaults key for the default repository navigation action.
-  static let navigationMode = AppSettingKey("NavigationMode", defaultValue: .edit)
-  /// UserDefaults key for the secondary repository navigation action.
-  static let secondaryNavigationMode = AppSettingKey("SecondaryNavigationMode", defaultValue: .viewRepo)
-  /// UserDefaults key for the tertiary repository navigation action.
-  static let tertiaryNavigationMode = AppSettingKey("TertiaryNavigationMode", defaultValue: .viewWorkflows)
+  /// UserDefaults key for the sort mode setting.
+  static let sortMode = AppSettingKey("SortMode", defaultValue: SortMode.state)
 }
 
 @MainActor public extension AppSettingKey where Value == DisplaySize {
+  /// UserDefaults key for the display density setting.
   static let displaySize = AppSettingKey("DisplaySize", defaultValue: .automatic)
-}
-
-/// String setting keys.
-@MainActor public extension AppSettingKey where Value == String {
-  static let githubUser = AppSettingKey("GithubUser", defaultValue: "")
-  static let githubServer = AppSettingKey("GithubServer", defaultValue: "api.github.com")
-
 }
 
 /// Data setting keys.

@@ -1,5 +1,27 @@
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+//  Created by Sam Deane on 13/02/2020.
+//  All code (c) 2020 - present day, Elegant Chaos Limited.
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 import Core
 import SwiftUI
+
+// MARK: - Environment key
+
+/// Default stub used when no `AuthService` has been explicitly injected (e.g., in vanilla Xcode previews).
+private struct AuthServiceKey: EnvironmentKey {
+  static let defaultValue: any AuthService = StubAuthService()
+}
+
+extension EnvironmentValues {
+  /// The active `AuthService` instance for the current environment.
+  public var authService: any AuthService {
+    get { self[AuthServiceKey.self] }
+    set { self[AuthServiceKey.self] = newValue }
+  }
+}
+
+// MARK: - Injector
 
 /// Shared environment injector used by the live app and preview runtime.
 @MainActor
@@ -9,9 +31,6 @@ public struct ActionStatusEnvironmentInjector: ViewModifier {
 
   /// Model service injected into SwiftUI views.
   public let modelService: ModelService
-
-  /// Metadata service injected into SwiftUI views.
-  public let metadataService: MetadataService
 
   /// Settings service injected into SwiftUI views.
   public let settingsService: SettingsService
@@ -25,6 +44,9 @@ public struct ActionStatusEnvironmentInjector: ViewModifier {
   /// Refresh service injected into SwiftUI views.
   public let refreshService: RefreshService
 
+  /// Authentication service injected into SwiftUI views.
+  public let authService: any AuthService
+
   /// Sheet service injected into SwiftUI views.
   public let sheetService: SheetService
 
@@ -32,20 +54,20 @@ public struct ActionStatusEnvironmentInjector: ViewModifier {
   public init(
     commander: ActionStatusCommander,
     modelService: ModelService,
-    metadataService: MetadataService,
     settingsService: SettingsService,
     launchService: LaunchService,
     statusService: StatusService,
     refreshService: RefreshService,
+    authService: any AuthService,
     sheetService: SheetService
   ) {
     self.commander = commander
     self.modelService = modelService
-    self.metadataService = metadataService
     self.settingsService = settingsService
     self.launchService = launchService
     self.statusService = statusService
     self.refreshService = refreshService
+    self.authService = authService
     self.sheetService = sheetService
   }
 
@@ -53,11 +75,11 @@ public struct ActionStatusEnvironmentInjector: ViewModifier {
   public func body(content: Content) -> some View {
     content
       .environment(modelService)
-      .environment(metadataService)
       .environment(settingsService)
       .environment(launchService)
       .environment(statusService)
       .environment(refreshService)
+      .environment(\.authService, authService)
       .environment(sheetService)
       .environment(commander)
   }

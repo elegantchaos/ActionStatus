@@ -4,7 +4,24 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Core
+import Runtime
 import SwiftUI
+
+public struct RepoContainerContext {
+  let namespace: Namespace.ID
+
+  /// Runtime metadata. Injectable for testing purposes.
+  let runtime: Runtime
+
+  let focus: FocusState<Focus?>.Binding
+
+  /// Creates a context for a repository container view.
+  public init(namespace: Namespace.ID, runtime: Runtime = .shared, focus: FocusState<Focus?>.Binding) {
+    self.namespace = namespace
+    self.runtime = runtime
+    self.focus = focus
+  }
+}
 
 /// Grid presentation of monitored repositories.
 public struct RepoGridView: View {
@@ -12,13 +29,11 @@ public struct RepoGridView: View {
   @Environment(SettingsService.self) var settings
   @AppStorage(.displaySize) var displaySize
 
-  let namespace: Namespace.ID
-  let focus: FocusState<Focus?>.Binding
+  let context: RepoContainerContext
 
   /// Creates a repository grid view.
-  public init(namespace: Namespace.ID, focus: FocusState<Focus?>.Binding) {
-    self.namespace = namespace
-    self.focus = focus
+  public init(context: RepoContainerContext) {
+    self.context = context
   }
 
   public var body: some View {
@@ -27,10 +42,9 @@ public struct RepoGridView: View {
         ForEach(status.sortedRepos) { repo in
           RepoCellView(
             repo: repo,
+            context: context,
             selectable: false,
-            namespace: namespace,
-            isSource: !settings.isEditing,
-            focus: focus
+            isSource: !settings.isEditing
           )
         }
       }
@@ -52,5 +66,23 @@ public struct RepoGridView: View {
       let cols = CGFloat(count)
       return [GridItem(.adaptive(minimum: 640 / cols, maximum: .infinity))]
     #endif
+  }
+}
+
+import Previews
+
+private struct RepoGridPreviewHost: View {
+  @Namespace private var namespace
+  @FocusState private var focus: Focus?
+
+  var body: some View {
+    RepoGridView(context: RepoContainerContext(namespace: namespace, runtime: .shared, focus: $focus))
+      .frame(minWidth: 700, minHeight: 420)
+  }
+}
+
+#Preview("Repo Grid") {
+  PreviewRoot(ActionStatusPreviews.content) { _ in
+    RepoGridPreviewHost()
   }
 }

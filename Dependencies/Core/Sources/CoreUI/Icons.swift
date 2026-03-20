@@ -5,18 +5,23 @@
 
 import Icons
 
-/// Standard icons for ActionStatus
+/// Standard icons for ActionStatus.
 extension Icon {
-  static let addIcon = Icon("plus")
-  static let addLocalIcon = Icon("folder.badge.plus") // TODO: replace this
-  static let advanceStateIcon = Icon("forward.circle") // TODO: replace this
-  static let editButtonIcon = Icon("ellipsis.circle")
-  static let linkIcon = Icon("arrow.right.circle.fill")
-  static let preferencesIcon = Icon("gearshape")
-  static let deleteRepoIcon = Icon("minus.circle")
-  static let showRepoIcon = Icon("icloud")
-  static let showWorkflowIcon = Icon("arrow.trianglehead.2.clockwise.rotate.90.icloud")
-  static let revealLocalIcon = Icon("finder")
-  static let repoIcon = Icon("folder")
+  static let addRepo = Icon("plus")
+  static let addLocalRepo = Icon("folder.badge.plus")
+  static let advanceState = Icon("forward.circle")
+  static let actions = Icon("ellipsis.circle")
+  static let deleteRepo = Icon("minus.circle")
+  static let link = Icon("arrow.right")
+  static let preferences = Icon("gearshape")
+  static let revealLocalRepo = Icon("finder")
+  static let repo = Icon("folder")
+  static let showRepo = Icon("icloud")
+  static let showWorkflow = Icon("arrow.trianglehead.2.clockwise.rotate.90.icloud")
+  static let startEditing = Icon("lock.open")
+  static let stopEditing = Icon("lock")
+  static let name = Icon("tag")
+  static let owner = Icon("person")
+  static let filterBranches = Icon("arrow.trianglehead.branch")
+  static let branches = Icon("magnifyingglass")
 }
-

@@ -5,7 +5,9 @@
 
 import SwiftUI
 
+/// Applies `.title2` font to the status icon and label pair.
 internal struct StatusStyleModifier: ViewModifier {
+  /// Returns the modified content.
   func body(content: Content) -> some View {
     content
       .font(.title2)
@@ -13,6 +15,7 @@ internal struct StatusStyleModifier: ViewModifier {
 }
 
 internal extension View {
+  /// Applies the standard status icon font size.
   func statusStyle() -> some View {
     self
       .modifier(StatusStyleModifier())

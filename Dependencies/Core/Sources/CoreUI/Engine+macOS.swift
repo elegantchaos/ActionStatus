@@ -9,17 +9,7 @@
   import SwiftUI
 
   public extension Engine {
-    func addLocalRepos() {
-      let panel = NSOpenPanel()
-      panel.canChooseFiles = false
-      panel.canChooseDirectories = true
-      panel.allowsMultipleSelection = true
-      panel.canCreateDirectories = false
-
-      guard panel.runModal() == .OK else { return }
-      modelService.add(fromFolders: panel.urls)
-    }
-
+    /// Applies the dock/menubar visibility policy stored in `UserDefaults`.
     func applyWindowSettings() {
       let showInDock = UserDefaults.standard.value(forKey: .showInDock)
       let activation: NSApplication.ActivationPolicy = showInDock ? .regular : .accessory

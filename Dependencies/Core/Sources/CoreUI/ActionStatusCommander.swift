@@ -1,3 +1,8 @@
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+//  Created by Sam Deane on 02/03/2026.
+//  Copyright © 2026 Elegant Chaos Limited. All rights reserved.
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 import Commands
 import Core
 import Observation
@@ -15,9 +20,6 @@ public final class ActionStatusCommander {
   /// Settings service used by UI commands.
   public let settingsService: SettingsService
 
-  /// Metadata service used by runtime-sensitive commands.
-  public let metadataService: MetadataService
-
   /// Launch service used by URL and file commands.
   public let launchService: LaunchService
 
@@ -27,35 +29,19 @@ public final class ActionStatusCommander {
   /// Sheet service used by presentation commands.
   public let sheetService: SheetService
 
-  @ObservationIgnored private var addLocalReposAction: @MainActor () -> Void
-
   /// Creates a commander backed by the supplied services.
   public init(
     modelService: ModelService,
     settingsService: SettingsService,
-    metadataService: MetadataService,
     launchService: LaunchService,
     refreshService: RefreshService,
-    sheetService: SheetService,
-    addLocalReposAction: @escaping @MainActor () -> Void = {}
+    sheetService: SheetService
   ) {
     self.modelService = modelService
     self.settingsService = settingsService
-    self.metadataService = metadataService
     self.launchService = launchService
     self.refreshService = refreshService
     self.sheetService = sheetService
-    self.addLocalReposAction = addLocalReposAction
-  }
-
-  /// Updates the local-repo import action used by menu and button commands.
-  public func setAddLocalReposAction(_ action: @escaping @MainActor () -> Void) {
-    addLocalReposAction = action
-  }
-
-  /// Performs the configured local-repo import action.
-  public func addLocalRepos() {
-    addLocalReposAction()
   }
 }
 
@@ -63,12 +49,6 @@ extension ActionStatusCommander: CommandCentre {
 }
 
 extension ActionStatusCommander: LaunchServiceProvider {
-}
-
-extension ActionStatusCommander: LocalRepoImportingProvider {
-}
-
-extension ActionStatusCommander: MetadataServiceProvider {
 }
 
 extension ActionStatusCommander: ModelServiceProvider {

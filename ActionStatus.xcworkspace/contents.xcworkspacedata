@@ -4,4 +4,32 @@
    <FileRef
       location = "group:ActionStatus.xcodeproj">
    </FileRef>
+   <Group
+      location = "group:Dependencies"
+      name = "Dependencies">
+      <FileRef
+         location = "group:Settings">
+      </FileRef>
+      <FileRef
+         location = "group:Core">
+      </FileRef>
+      <FileRef
+         location = "group:Logger">
+      </FileRef>
+      <FileRef
+         location = "group:Runtime">
+      </FileRef>
+      <FileRef
+         location = "group:Icons">
+      </FileRef>
+      <FileRef
+         location = "group:Commands">
+      </FileRef>
+      <FileRef
+         location = "group:Previews">
+      </FileRef>
+      <FileRef
+         location = "group:Application">
+      </FileRef>
+   </Group>
 </Workspace>

@@ -7,21 +7,20 @@ import SwiftUI
 
 /// Modifier that shows a trailing clear button for non-empty text input.
 struct ClearButton: ViewModifier {
+  /// The text binding cleared when the button is tapped.
   @Binding var text: String
 
   public func body(content: Content) -> some View {
-    ZStack(alignment: .trailing) {
-      content
-
-      if !text.isEmpty {
-        Button(action: {
-          text = ""
-        }) {
-          Image(systemName: "multiply.circle.fill")
-            .foregroundColor(.secondary)
+    content
+      .overlay(alignment: .trailing) {
+        if !text.isEmpty {
+          Button(action: { text = "" }) {
+            Image(systemName: "multiply.circle.fill")
+              .foregroundStyle(.secondary)
+          }
+          .padding(.trailing, 8)
+          .buttonStyle(.borderless)
         }
-        .padding(.trailing, 8)
       }
-    }
   }
 }

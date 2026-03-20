@@ -3,35 +3,41 @@
 //  All code (c) 2021 - present day, Elegant Chaos Limited.
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-import Combine
 import Core
+import Runtime
 import SwiftUI
 
 /// View containing all monitored repositories in their chosen layout.
 public struct ReposView: View {
-  @Namespace() var namespace
   @Environment(ModelService.self) var modelService
   @Environment(SettingsService.self) var settingsService
 
+  @Namespace() var namespace
   @State var focusState = FadingFocusState()
   @FocusState var focus: Focus?
 
+  /// Runtime metadata. Injectable for testing purposes.
+  let runtime: Runtime
+
   /// Creates a repositories container view.
-  public init() {
+  public init(runtime: Runtime = .shared) {
+    self.runtime = runtime
   }
 
   public var body: some View {
-    VStack(alignment: .center) {
+    let context = RepoContainerContext(namespace: namespace, runtime: runtime, focus: $focus)
+
+    return VStack(alignment: .center) {
       if modelService.count == 0 {
         NoReposView()
       } else {
         ZStack(alignment: .top) {
-          RepoGridView(namespace: namespace, focus: $focus)
+          RepoGridView(context: context)
             .opacity(settingsService.isEditing ? 0 : 1)
             .allowsHitTesting(!settingsService.isEditing)
             .accessibilityHidden(settingsService.isEditing)
 
-          RepoListView(namespace: namespace, focus: $focus)
+          RepoListView(context: context)
             .opacity(settingsService.isEditing ? 1 : 0)
             .allowsHitTesting(settingsService.isEditing)
             .accessibilityHidden(!settingsService.isEditing)
@@ -58,7 +64,18 @@ public struct ReposView: View {
   }
 }
 
-public enum Focus: Hashable, Equatable {
-  case repo(String)
-  case prefs
+import Previews
+
+#Preview("Repos Filled") {
+  PreviewRoot(ActionStatusPreviews.content) { _ in
+    ReposView()
+      .frame(minWidth: 720, minHeight: 460)
+  }
+}
+
+#Preview("Repos Empty") {
+  PreviewRoot(ActionStatusPreviews.empty) { _ in
+    ReposView()
+      .frame(minWidth: 720, minHeight: 460)
+  }
 }
