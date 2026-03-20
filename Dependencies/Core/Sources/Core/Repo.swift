@@ -7,9 +7,7 @@ import DictionaryCoding
 import Files
 import Foundation
 
-nonisolated private extension URL {
-  var bookmarkKey: String { "bookmark:\(absoluteURL.path)" }
-}
+nonisolated private extension URL { var bookmarkKey: String { "bookmark:\(absoluteURL.path)" } }
 
 /// A monitored GitHub repository and its runtime state.
 ///
@@ -31,20 +29,11 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
     /// No workflow runs exist or all workflows are disabled.
     case dormant = 6
 
-    public static func < (lhs: State, rhs: State) -> Bool {
-      lhs.sortOrder < rhs.sortOrder
-    }
+    public static func < (lhs: State, rhs: State) -> Bool { lhs.sortOrder < rhs.sortOrder }
 
     /// Numeric priority used by the state-based sort; higher values appear first.
     var sortOrder: Int {
-      switch self {
-        case .unknown: 0
-        case .dormant: 1
-        case .passing: 2
-        case .queued: 3
-        case .running: 4
-        case .partiallyFailing: 5
-        case .failing: 6
+      switch self { case .unknown: 0 case .dormant: 1 case .passing: 2 case .queued: 3 case .running: 4 case .partiallyFailing: 5 case .failing: 6
       }
     }
   }
@@ -72,9 +61,7 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
 
     /// Stable identifier: prefers the numeric workflow ID, falls back to the lowercased path.
     public var id: String {
-      if let workflowID {
-        return "id:\(workflowID)"
-      }
+      if let workflowID { return "id:\(workflowID)" }
       return "path:\(path.lowercased())"
     }
 
@@ -84,36 +71,41 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
     /// Workflow name derived from the YAML filename, stripping the extension.
     public var normalizedWorkflowName: String {
       let fileName = URL(fileURLWithPath: path).deletingPathExtension().lastPathComponent
-      if !fileName.isEmpty {
-        return fileName
-      }
+      if !fileName.isEmpty { return fileName }
       let lowered = name.lowercased()
-      if lowered.hasSuffix(".yml") {
-        return String(name.dropLast(4))
-      }
-      if lowered.hasSuffix(".yaml") {
-        return String(name.dropLast(5))
-      }
+      if lowered.hasSuffix(".yml") { return String(name.dropLast(4)) }
+      if lowered.hasSuffix(".yaml") { return String(name.dropLast(5)) }
       return name
     }
   }
 
   /// Stable UUID string assigned at creation; used as the key in all stores.
   public let id: String
+
   /// Repository name on GitHub.
   public var name: String
+
   /// Organisation or user that owns the repository on GitHub.
   public var owner: String
+
   /// All known workflows for this repository; may include disabled entries.
   public var workflows: [WorkflowSelection]
+
+  /// Whether to filter the repository's workflow runs by the selected branches; if `false`, all branches are included.
+  public var filterBranches: Bool?
+  
   /// Branches to monitor; an empty list means the default branch.
   public var branches: [String]
+
   /// Current aggregated CI state, updated by the refresh layer.
   public var state: State
+
   /// Per-device local filesystem paths, keyed by device identifier.
   public var paths: LocalPathDictionary
+
   /// Timestamp of the most recent failed run, if any.
   public var lastFailed: Date?
+
   /// Timestamp of the most recent successful run, if any.
   public var lastSucceeded: Date?
 
@@ -123,6 +115,7 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
     name = "SomeRepo"
     owner = "SomeOwner"
     workflows = []
+    filterBranches = false
     branches = []
     state = .unknown
     paths = [:]
@@ -130,35 +123,29 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
 
   /// Creates a repo with the supplied attributes.
   /// - Parameter workflow: Accepted for call-site compatibility; not persisted on this struct.
-  public init(_ name: String, owner: String, workflow: String, id: String? = nil, state: State = .unknown, branches: [String] = []) {
+  public init(_ name: String, owner: String, workflow: String, id: String? = nil, state: State = .unknown, filterBranches: Bool = false, branches: [String] = []) {
     self.id = id ?? UUID().uuidString
     self.name = name
     self.owner = owner
     self.workflows = []
+    self.filterBranches = filterBranches
     self.branches = branches
     self.state = state
     self.paths = [:]
   }
 
-  public func hash(into hasher: inout Hasher) {
-    id.hash(into: &hasher)
-  }
+  public func hash(into hasher: inout Hasher) { id.hash(into: &hasher) }
 
   /// A `DictionaryDecoder` configured with sensible defaults for missing optional keys.
   public static var dictionaryDecoder: DictionaryDecoder {
     let decoder = DictionaryDecoder()
-    let defaults: [String: Any] = [
-      String(describing: LocalPathDictionary.self): LocalPathDictionary(),
-      String(describing: [WorkflowSelection].self): [WorkflowSelection](),
-    ]
+    let defaults: [String: Any] = [String(describing: LocalPathDictionary.self): LocalPathDictionary(), String(describing: [WorkflowSelection].self): [WorkflowSelection]()]
     decoder.missingValueDecodingStrategy = .useDefault(defaults: defaults)
     return decoder
   }
 
   /// The subset of `workflows` that are currently enabled; empty when none are selected.
-  public var enabledWorkflows: [WorkflowSelection] {
-    workflows.filter(\.enabled)
-  }
+  public var enabledWorkflows: [WorkflowSelection] { workflows.filter(\.enabled) }
 
   /// Merges a freshly discovered workflow list into the stored list, preserving existing `enabled` flags.
   /// - Returns: `true` if the stored list changed and a model update is needed.
@@ -166,11 +153,7 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
     let existingByKey = Dictionary(uniqueKeysWithValues: workflows.map { ($0.lookupKey, $0) })
     let merged = discovered.map { workflow in
       var updated = workflow
-      if let existing = existingByKey[workflow.lookupKey] {
-        updated.enabled = existing.enabled
-      } else {
-        updated.enabled = true
-      }
+      if let existing = existingByKey[workflow.lookupKey] { updated.enabled = existing.enabled } else { updated.enabled = true }
       return updated
     }
 
@@ -195,46 +178,23 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
 
 
   /// Stores a security-scoped bookmark for `url` in `UserDefaults`.
-  private func storeBookmark(for url: URL) {
-    if let bookmark = url.secureBookmark() {
-      UserDefaults.standard.set(bookmark, forKey: url.bookmarkKey)
-    }
-  }
+  private func storeBookmark(for url: URL) { if let bookmark = url.secureBookmark() { UserDefaults.standard.set(bookmark, forKey: url.bookmarkKey) } }
 
   /// Resolves a previously stored security-scoped bookmark for `url`; returns `url` unchanged if none is found.
   private func restoreBookmark(for url: URL) -> URL {
-    guard let data = UserDefaults.standard.data(forKey: url.bookmarkKey) else {
-      return url
-    }
+    guard let data = UserDefaults.standard.data(forKey: url.bookmarkKey) else { return url }
 
-    guard let resolved = URL.resolveSecureBookmark(data) else {
-      return url
-    }
+    guard let resolved = URL.resolveSecureBookmark(data) else { return url }
     return resolved
   }
 
   /// Infers a `State` from the text content of a GitHub SVG badge.
-  public func state(fromSVG svg: String) -> State {
-    if svg.contains("failing") {
-      return .failing
-    } else if svg.contains("passing") {
-      return .passing
-    } else {
-      return .unknown
-    }
-  }
+  public func state(fromSVG svg: String) -> State { if svg.contains("failing") { return .failing } else if svg.contains("passing") { return .passing } else { return .unknown } }
 
   /// SF Symbol name appropriate for the current state, used in list and menu cells.
   public var badgeName: String {
     let name: String
-    switch state {
-      case .unknown: name = "questionmark.circle"
-      case .dormant: name = "moon.zzz"
-      case .failing: name = "xmark.circle"
-      case .partiallyFailing: name = "xmark.circle"
-      case .passing: name = "checkmark.circle"
-      case .running: name = "arrow.triangle.2.circlepath"
-      case .queued: name = "clock.arrow.circlepath"
+    switch state { case .unknown: name = "questionmark.circle" case .dormant: name = "moon.zzz" case .failing: name = "xmark.circle" case .partiallyFailing: name = "xmark.circle" case .passing: name = "checkmark.circle" case .running: name = "arrow.triangle.2.circlepath" case .queued: name = "clock.arrow.circlepath"
     }
     return name
   }
@@ -250,20 +210,13 @@ nonisolated public struct Repo: Identifiable, Equatable, Hashable, Sendable {
   /// Constructs a `github.com` URL for the given location.
   public func githubURL(for location: GithubLocation = .workflow) -> URL {
     let suffix: String
-    switch location {
-      case .workflow: suffix = "/actions"
-      default: suffix = ""
+    switch location { case .workflow: suffix = "/actions" default: suffix = ""
     }
 
     return URL(string: "https://github.com/\(owner)/\(name)\(suffix)")!
   }
 }
 
-extension Repo: Codable {
-}
+extension Repo: Codable {}
 
-extension Repo: TypedDebugDescription {
-  public var debugLabel: String {
-    "\(owner)/\(name)".lowercased()
-  }
-}
+extension Repo: TypedDebugDescription { public var debugLabel: String { "\(owner)/\(name)".lowercased() } }

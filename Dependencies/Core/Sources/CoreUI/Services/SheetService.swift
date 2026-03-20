@@ -22,9 +22,9 @@ public final class SheetService {
   func sheetView(for sheet: Sheet) -> some View {
     switch sheet {
       case .editRepo(let repo):
-        EditView(repo: repo, adding: false)
+        EditRepoView(repo: repo, adding: false)
       case .addRepo(let repo):
-        EditView(repo: repo, adding: true)
+        EditRepoView(repo: repo, adding: true)
       case .preferences:
         SheetView(
           "ActionStatus Settings",

@@ -12,7 +12,7 @@ import Runtime
 import SwiftUI
 
 /// Form used to add and edit monitored repositories.
-public struct EditView: View {
+public struct EditRepoView: View {
   @Environment(LaunchService.self) private var launchService
   @Environment(\.dismiss) private var dismissAction
   @Environment(ModelService.self) var modelService
@@ -22,7 +22,7 @@ public struct EditView: View {
   @State var name = ""
   @State var owner = ""
   @State var workflows: [Repo.WorkflowSelection] = []
-  @State var showBranches = false
+  @State var filterBranches = false
   @State var branches: String = ""
 
   /// The repository being edited.
@@ -54,7 +54,7 @@ public struct EditView: View {
         EditDetailsSectionView(
           name: $name,
           owner: $owner,
-          showBranches: $showBranches,
+          filterBranches: $filterBranches,
           branches: $branches
         )
 
@@ -112,6 +112,7 @@ public struct EditView: View {
     name = repo.name
     owner = repo.owner
     workflows = repo.workflows.sorted(by: { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending })
+    filterBranches = repo.filterBranches ?? !repo.branches.isEmpty // earlier repos didn't have this setting
     branches = repo.branches.joined(separator: ", ")
   }
 
@@ -136,17 +137,17 @@ public struct EditView: View {
 struct EditDetailsSectionView: View {
   @Binding var name: String
   @Binding var owner: String
-  @Binding var showBranches: Bool
+  @Binding var filterBranches: Bool
   @Binding var branches: String
 
   var body: some View {
     EditSectionView("Details", footer: "Enter the name and owner of the repository.\nOptionally enter specific branches to test.") {
       LabeledField($name, label: "Name", prompt: "github repo", icon: .name)
       LabeledField($owner, label: "Owner", prompt: "github owner", icon: .owner)
-      Toggle(isOn: $showBranches) {
+      Toggle(isOn: $filterBranches) {
         Label("Filter By Branch", icon: .filterBranches)
       }
-      if showBranches {
+      if filterBranches {
         LabeledField($branches, label: "Match branches", prompt: "branch1, branch2, …", icon: .branches)
       }
     }
@@ -199,13 +200,13 @@ struct EditLocationsSectionView: View {
 
 #Preview("Editing") {
   PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
-    EditView(repo: fixture.primaryRepo, adding: false)
+    EditRepoView(repo: fixture.primaryRepo, adding: false)
   }
 }
 
 #Preview("Adding") {
   PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
-    EditView(repo: fixture.primaryRepo, adding: true)
+    EditRepoView(repo: fixture.primaryRepo, adding: true)
   }
 }
 
@@ -217,7 +218,7 @@ struct EditLocationsSectionView: View {
 
   PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
     Form {
-      EditDetailsSectionView(name: $name, owner: $owner, showBranches: $showBranches, branches: $branches)
+      EditDetailsSectionView(name: $name, owner: $owner, filterBranches: $showBranches, branches: $branches)
     }
     .formStyle(.grouped)
   }
