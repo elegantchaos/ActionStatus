@@ -26,9 +26,6 @@
          location = "group:Commands">
       </FileRef>
       <FileRef
-         location = "group:Previews">
-      </FileRef>
-      <FileRef
          location = "group:Application">
       </FileRef>
    </Group>

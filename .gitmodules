@@ -21,10 +21,6 @@
 	path = Dependencies/Settings
 	url = git@github.com:elegantchaos/Settings.git
 	branch = integration/actionstatus
-[submodule "Dependencies/Previews"]
-	path = Dependencies/Previews
-	url = git@github.com:elegantchaos/Previews.git
-	branch = integration/actionstatus
 [submodule "Dependencies/Logger"]
 	path = Dependencies/Logger
 	url = git@github.com:elegantchaos/Logger
