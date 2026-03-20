@@ -27,7 +27,6 @@ struct LabeledField: View {
       .labeledContentStyle(LabeledFieldContentStyle())
       .multilineTextAlignment(.leading)
       #if os(macOS)
-        .multilineTextAlignment(.leading)
         .textFieldStyle(.roundedBorder)
       #else
         .keyboardType(.alphabet)

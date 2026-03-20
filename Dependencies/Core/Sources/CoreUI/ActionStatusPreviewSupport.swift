@@ -121,20 +121,20 @@ public enum ActionStatusPreviews {
   }
 
   public struct Content: ActionStatusPreviewPreset {
-    public static let repos = sampleRepos()
+    public static let repos = seededRepos
 
     public init() {}
   }
 
   public struct Editing: ActionStatusPreviewPreset {
-    public static let repos = sampleRepos()
+    public static let repos = seededRepos
     public static let isEditing = true
 
     public init() {}
   }
 
   public struct StatusMenu: ActionStatusPreviewPreset {
-    public static let repos = sampleRepos()
+    public static let repos = seededRepos
 
     public init() {}
   }
@@ -150,9 +150,8 @@ public enum ActionStatusPreviews {
     Repo(name, owner: owner, workflow: workflow, state: state, branches: branches)
   }
 
-  /// Creates a shared sample repository set for list and grid previews.
-  public static func sampleRepos() -> [Repo] {
-    [
+  /// Shared sample repository set for list and grid previews.
+  public static let seededRepos: [Repo] = [
       repo("ActionStatus", owner: "elegantchaos", state: .passing),
       repo("Commands", owner: "elegantchaos", state: .queued),
       repo("Runtime", owner: "elegantchaos", state: .running),
@@ -160,9 +159,13 @@ public enum ActionStatusPreviews {
       repo("Settings", owner: "elegantchaos", state: .dormant),
       repo("Application", owner: "elegantchaos", state: .partiallyFailing),
     ]
+
+  /// Creates a shared sample repository set for list and grid previews.
+  public static func sampleRepos() -> [Repo] {
+    seededRepos
   }
 
-  public static let editingRepo = sampleRepos().first ?? Repo()
+  public static let editingRepo = repo("ActionStatus", owner: "elegantchaos", state: .passing)
   public static let repoCellPassing = repo("ActionStatus", owner: "elegantchaos", state: .passing)
   public static let repoCellFailing = repo("ActionStatus", owner: "elegantchaos", state: .failing)
 }

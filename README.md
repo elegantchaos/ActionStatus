@@ -1,6 +1,6 @@
 # ActionStatus
 
-Action Status is a small utility for macOS, iOS and tvOS, which displays the status of Github Actions.
+Action Status is a small utility for macOS, iOS and tvOS, which displays the status of GitHub Actions.
 
 A pre-build version is available for free download in the App Store. 
 

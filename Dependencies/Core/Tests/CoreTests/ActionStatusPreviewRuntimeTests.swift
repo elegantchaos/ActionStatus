@@ -14,9 +14,9 @@ struct ActionStatusPreviewRuntimeTests {
     let repo = ActionStatusPreviews.repo("ActionStatus", owner: "elegantchaos", state: .passing)
     let runtime = ActionStatusPreviewRuntime(repos: [repo], isEditing: true)
 
-    #expect(ActionStatusPreviews.editingRepo.name == "ActionStatus")
     #expect(runtime.commander.settingsService.isEditing)
     #expect(runtime.statusService.sortedRepos.count == 1)
+    #expect(runtime.statusService.sortedRepos.first?.name == repo.name)
   }
 
   @Test
@@ -27,6 +27,15 @@ struct ActionStatusPreviewRuntimeTests {
     try await commander.perform(ShowPreferencesSheetCommand<ActionStatusCommander>())
 
     #expect(commander.sheetService.showing?.id == "preferences")
+  }
+
+  @Test
+  func testEditingPresetBuildsExpectedSharedContext() async throws {
+    let runtime = try await ActionStatusPreviews.Editing.makeSharedContext()
+
+    #expect(runtime.settingsService.isEditing)
+    #expect(runtime.statusService.sortedRepos.count == ActionStatusPreviews.Editing.repos.count)
+    #expect(runtime.sheetService.showing == nil)
   }
 
   @Test
