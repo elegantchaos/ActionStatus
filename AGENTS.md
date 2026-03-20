@@ -37,7 +37,7 @@ See <https://actionstatus.elegantchaos.com/> for product context.
 - Avoid unrelated refactors during focused tasks.
 - If unexpected workspace changes appear, pause and confirm direction.
 
-### Skills
+## Skills
 
 - Follow `~/.local/share/agents/references/languages/Swift.md` for Swift file organization, error handling, localization, and platform-aligned modern Swift usage.
 - Follow the SwiftUI guideance in `~/.local/share/skills/SwiftUI-Agent-Skill/swiftui-pro/SKILL.md`
