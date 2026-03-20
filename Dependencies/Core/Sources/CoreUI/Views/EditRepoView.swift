@@ -127,6 +127,7 @@ public struct EditRepoView: View {
     updated.name = trimmedName
     updated.owner = trimmedOwner
     updated.workflows = workflows
+    updated.filterBranches = filterBranches
     updated.branches = trimmedBranches
     updated.state = Repo.State.unknown
     return updated
@@ -181,7 +182,7 @@ struct EditWorkflowsSectionView: View {
 struct EditLocationsSectionView: View {
   @Environment(ActionStatusCommander.self) var commander
 
-  /// The repository being edited; `nil` when adding a new repository.
+  /// The repository being edited.
   let repo: Repo
 
   /// Local path to the repository, if available.
