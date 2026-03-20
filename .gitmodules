@@ -4,21 +4,28 @@
 [submodule "Dependencies/Runtime"]
 	path = Dependencies/Runtime
 	url = git@github.com:elegantchaos/Runtime.git
+	branch = integration/actionstatus
 [submodule "Dependencies/Application"]
 	path = Dependencies/Application
 	url = git@github.com:elegantchaos/Application.git
+	branch = integration/actionstatus
 [submodule "Dependencies/Commands"]
 	path = Dependencies/Commands
 	url = git@github.com:elegantchaos/Commands.git
+	branch = integration/actionstatus
 [submodule "Dependencies/Icons"]
 	path = Dependencies/Icons
 	url = git@github.com:elegantchaos/Icons.git
+	branch = integration/actionstatus
 [submodule "Dependencies/Settings"]
 	path = Dependencies/Settings
 	url = git@github.com:elegantchaos/Settings.git
+	branch = integration/actionstatus
 [submodule "Dependencies/Previews"]
 	path = Dependencies/Previews
 	url = git@github.com:elegantchaos/Previews.git
+	branch = integration/actionstatus
 [submodule "Dependencies/Logger"]
 	path = Dependencies/Logger
 	url = git@github.com:elegantchaos/Logger
+	branch = integration/actionstatus
