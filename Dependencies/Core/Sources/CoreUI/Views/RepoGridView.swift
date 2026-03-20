@@ -79,6 +79,8 @@ private struct RepoGridPreviewHost: View {
   }
 }
 
-#Preview("Repo Grid", traits: .modifier(ActionStatusPreviews.Content())) {
-  RepoGridPreviewHost()
-}
+#if !VALIDATING
+  #Preview("Repo Grid", traits: .modifier(ActionStatusPreviews.Content())) {
+    RepoGridPreviewHost()
+  }
+#endif

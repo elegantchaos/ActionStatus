@@ -35,7 +35,7 @@ struct LabeledLink<C: CommandWithUI>: View where C.Centre == ActionStatusCommand
             .foregroundStyle(.link)
         }
         .buttonStyle(.borderless)
-        
+
         Button(action: { Clipboard.copy(url) }) {
           Image(systemName: "doc.on.doc")
         }
@@ -51,42 +51,42 @@ struct LabeledLink<C: CommandWithUI>: View where C.Centre == ActionStatusCommand
   }
 }
 
-#Preview("LabelledLink", traits: .modifier(ActionStatusPreviews.Editing())) {
-  Form {
-    LabeledLink("Local", icon: .revealLocalRepo, command: RevealLocalCommand(url: .testLocalURL), url: .testLocalURL)
+#if !VALIDATING
+  #Preview("LabelledLink", traits: .modifier(ActionStatusPreviews.Editing())) {
+    Form {
+      LabeledLink("Local", icon: .revealLocalRepo, command: RevealLocalCommand(url: .testLocalURL), url: .testLocalURL)
+    }
+    .formStyle(.grouped)
   }
-  .formStyle(.grouped)
-}
-
-
+#endif
 
 #if canImport(UIKit)
-import UIKit
+  import UIKit
 
-struct Clipboard {
-  static func copy(_ string: String) {
-    UIPasteboard.general.string = string
+  struct Clipboard {
+    static func copy(_ string: String) {
+      UIPasteboard.general.string = string
+    }
+
+    static func copy(_ url: URL) {
+      UIPasteboard.general.url = url
+    }
   }
-  
-  static func copy(_ url: URL) {
-    UIPasteboard.general.url = url
-  }
-}
 #elseif canImport(AppKit)
-import AppKit
+  import AppKit
 
-struct Clipboard {
-  static func copy(_ string: String) {
-    let pb = NSPasteboard.general
-    pb.clearContents()
-    pb.setString(string, forType: .string)
+  struct Clipboard {
+    static func copy(_ string: String) {
+      let pb = NSPasteboard.general
+      pb.clearContents()
+      pb.setString(string, forType: .string)
+    }
+
+    static func copy(_ url: URL) {
+      let pb = NSPasteboard.general
+      pb.clearContents()
+      pb.setString(url.absoluteString, forType: .URL)
+    }
   }
-  
-  static func copy(_ url: URL) {
-    let pb = NSPasteboard.general
-    pb.clearContents()
-    pb.setString(url.absoluteString, forType: .URL)
-  }
-}
 
 #endif

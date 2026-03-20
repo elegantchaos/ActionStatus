@@ -64,12 +64,14 @@ public struct ReposView: View {
   }
 }
 
-#Preview("Repos Filled", traits: .modifier(ActionStatusPreviews.Content())) {
-  ReposView()
-    .frame(minWidth: 720, minHeight: 460)
-}
+#if !VALIDATING
+  #Preview("Repos Filled", traits: .modifier(ActionStatusPreviews.Content())) {
+    ReposView()
+      .frame(minWidth: 720, minHeight: 460)
+  }
 
-#Preview("Repos Empty", traits: .modifier(ActionStatusPreviews.Empty())) {
-  ReposView()
-    .frame(minWidth: 720, minHeight: 460)
-}
+  #Preview("Repos Empty", traits: .modifier(ActionStatusPreviews.Empty())) {
+    ReposView()
+      .frame(minWidth: 720, minHeight: 460)
+  }
+#endif

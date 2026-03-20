@@ -9,13 +9,13 @@ struct EditSectionView<Content: View>: View {
   @ViewBuilder var content: () -> Content
   let header: LocalizedStringResource
   let footer: LocalizedStringResource
-  
+
   init(_ header: LocalizedStringResource, footer: LocalizedStringResource, @ViewBuilder content: @escaping () -> Content) {
     self.content = content
     self.header = header
     self.footer = footer
   }
-  
+
   var body: some View {
     Section {
       content()
@@ -29,11 +29,13 @@ struct EditSectionView<Content: View>: View {
   }
 }
 
-#Preview("Section") {
-  Form {
-    EditSectionView("Header", footer: "Footer") {
-      Text("Some Content Here")
+#if !VALIDATING
+  #Preview("Section") {
+    Form {
+      EditSectionView("Header", footer: "Footer") {
+        Text("Some Content Here")
+      }
     }
+    .formStyle(.grouped)
   }
-  .formStyle(.grouped)
-}
+#endif

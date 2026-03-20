@@ -61,7 +61,9 @@ struct MobileActionsMenu: ToolbarContent {
   }
 }
 
-#Preview("Content View", traits: .modifier(ActionStatusPreviews.Content())) {
-  ContentView()
-    .frame(minWidth: 720, minHeight: 460)
-}
+#if !VALIDATING
+  #Preview("Content View", traits: .modifier(ActionStatusPreviews.Content())) {
+    ContentView()
+      .frame(minWidth: 720, minHeight: 460)
+  }
+#endif

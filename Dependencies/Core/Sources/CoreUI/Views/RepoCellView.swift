@@ -132,10 +132,12 @@ private struct RepoCellPreviewHost: View {
   }
 }
 
-#Preview("Repo Cell Passing", traits: .modifier(ActionStatusPreviews.Content())) {
-  RepoCellPreviewHost(repo: ActionStatusPreviews.repoCellPassing)
-}
+#if !VALIDATING
+  #Preview("Repo Cell Passing", traits: .modifier(ActionStatusPreviews.Content())) {
+    RepoCellPreviewHost(repo: ActionStatusPreviews.repoCellPassing)
+  }
 
-#Preview("Repo Cell Failing", traits: .modifier(ActionStatusPreviews.Editing())) {
-  RepoCellPreviewHost(repo: ActionStatusPreviews.repoCellFailing)
-}
+  #Preview("Repo Cell Failing", traits: .modifier(ActionStatusPreviews.Editing())) {
+    RepoCellPreviewHost(repo: ActionStatusPreviews.repoCellFailing)
+  }
+#endif

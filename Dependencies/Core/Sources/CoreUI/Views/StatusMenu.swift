@@ -91,17 +91,19 @@
     }
   }
 
-#Preview("Status Menu Label", traits: .modifier(ActionStatusPreviews.StatusMenu())) {
-  StatusMenuLabel()
-    .padding()
-}
+  #if !VALIDATING
+    #Preview("Status Menu Label", traits: .modifier(ActionStatusPreviews.StatusMenu())) {
+      StatusMenuLabel()
+        .padding()
+    }
 
-#Preview("Status Menu Content", traits: .modifier(ActionStatusPreviews.StatusMenu())) {
-  VStack(alignment: .leading, spacing: 0) {
-    StatusMenuContent()
-  }
-  .frame(width: 280)
-  .padding()
-}
+    #Preview("Status Menu Content", traits: .modifier(ActionStatusPreviews.StatusMenu())) {
+      VStack(alignment: .leading, spacing: 0) {
+        StatusMenuContent()
+      }
+      .frame(width: 280)
+      .padding()
+    }
+  #endif
 
 #endif

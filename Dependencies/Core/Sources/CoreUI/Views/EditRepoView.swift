@@ -111,7 +111,7 @@ public struct EditRepoView: View {
     name = repo.name
     owner = repo.owner
     workflows = repo.workflows.sorted(by: { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending })
-    filterBranches = repo.filterBranches ?? !repo.branches.isEmpty // earlier repos didn't have this setting
+    filterBranches = repo.filterBranches ?? !repo.branches.isEmpty  // earlier repos didn't have this setting
     branches = repo.branches.joined(separator: ", ")
   }
 
@@ -198,38 +198,40 @@ struct EditLocationsSectionView: View {
   }
 }
 
-#Preview("Editing", traits: .modifier(ActionStatusPreviews.Editing())) {
-  EditRepoView(repo: ActionStatusPreviews.editingRepo, adding: false)
-}
-
-#Preview("Adding", traits: .modifier(ActionStatusPreviews.Editing())) {
-  EditRepoView(repo: ActionStatusPreviews.editingRepo, adding: true)
-}
-
-#Preview("Details", traits: .modifier(ActionStatusPreviews.Editing())) {
-  @Previewable @State var name = "name"
-  @Previewable @State var owner = "owner"
-  @Previewable @State var branches: String = "branch1, branch2"
-  @Previewable @State var showBranches: Bool = false
-
-  Form {
-    EditDetailsSectionView(name: $name, owner: $owner, filterBranches: $showBranches, branches: $branches)
+#if !VALIDATING
+  #Preview("Editing", traits: .modifier(ActionStatusPreviews.Editing())) {
+    EditRepoView(repo: ActionStatusPreviews.editingRepo, adding: false)
   }
-  .formStyle(.grouped)
-}
 
-#Preview("Workflows", traits: .modifier(ActionStatusPreviews.Editing())) {
-  @Previewable @State var workflows: [Repo.WorkflowSelection] = []
-  
-  Form {
-    EditWorkflowsSectionView(workflows: $workflows)
+  #Preview("Adding", traits: .modifier(ActionStatusPreviews.Editing())) {
+    EditRepoView(repo: ActionStatusPreviews.editingRepo, adding: true)
   }
-  .formStyle(.grouped)
-}
 
-#Preview("Locations", traits: .modifier(ActionStatusPreviews.Editing())) {
-  Form {
-    EditLocationsSectionView(repo: ActionStatusPreviews.editingRepo, localPath: .testLocalURL)
+  #Preview("Details", traits: .modifier(ActionStatusPreviews.Editing())) {
+    @Previewable @State var name = "name"
+    @Previewable @State var owner = "owner"
+    @Previewable @State var branches: String = "branch1, branch2"
+    @Previewable @State var showBranches: Bool = false
+
+    Form {
+      EditDetailsSectionView(name: $name, owner: $owner, filterBranches: $showBranches, branches: $branches)
+    }
+    .formStyle(.grouped)
   }
-  .formStyle(.grouped)
-}
+
+  #Preview("Workflows", traits: .modifier(ActionStatusPreviews.Editing())) {
+    @Previewable @State var workflows: [Repo.WorkflowSelection] = []
+
+    Form {
+      EditWorkflowsSectionView(workflows: $workflows)
+    }
+    .formStyle(.grouped)
+  }
+
+  #Preview("Locations", traits: .modifier(ActionStatusPreviews.Editing())) {
+    Form {
+      EditLocationsSectionView(repo: ActionStatusPreviews.editingRepo, localPath: .testLocalURL)
+    }
+    .formStyle(.grouped)
+  }
+#endif

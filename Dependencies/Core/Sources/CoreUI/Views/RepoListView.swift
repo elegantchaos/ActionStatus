@@ -59,6 +59,8 @@ private struct RepoListPreviewHost: View {
   }
 }
 
-#Preview("Repo List", traits: .modifier(ActionStatusPreviews.Editing())) {
-  RepoListPreviewHost()
-}
+#if !VALIDATING
+  #Preview("Repo List", traits: .modifier(ActionStatusPreviews.Editing())) {
+    RepoListPreviewHost()
+  }
+#endif
