@@ -22,5 +22,6 @@ extension Icon {
   static let stopEditing = Icon("lock")
   static let name = Icon("tag")
   static let owner = Icon("person")
-  static let branches = Icon("arrow.trianglehead.branch")
+  static let filterBranches = Icon("arrow.trianglehead.branch")
+  static let branches = Icon("magnifyingglass")
 }

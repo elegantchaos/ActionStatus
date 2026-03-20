@@ -22,6 +22,7 @@ public struct EditView: View {
   @State var name = ""
   @State var owner = ""
   @State var workflows: [Repo.WorkflowSelection] = []
+  @State var showBranches = false
   @State var branches: String = ""
 
   /// The repository being edited; `nil` when adding a new repository.
@@ -44,9 +45,14 @@ public struct EditView: View {
 
     return SheetView(title, shortTitle: shortTitle, cancelAction: dismiss, doneAction: done) {
       Form {
-        EditDetailsSectionView(name: $name, owner: $owner, branches: $branches)
+        EditDetailsSectionView(
+          name: $name,
+          owner: $owner,
+          showBranches: $showBranches,
+          branches: $branches
+        )
 
-        Section {
+        EditSection("Workflows", footer: "Select which workflows to monitor when they have been discovered.\nNewly discovered workflows are enabled by default.") {
           if workflows.isEmpty {
             Text("No workflows have been discovered yet for this repository.")
               .foregroundStyle(.secondary)
@@ -62,46 +68,33 @@ public struct EditView: View {
               }
             }
           }
-        } header: {
-          Text("Workflows")
-        } footer: {
-          Text(" Select which workflows to monitor when they have been discovered, and optionally enter specific branches to test. Newly discovered workflows are enabled by default.")
-            .font(.footnote)
-            .foregroundStyle(.secondary)
         }
 
-        Section {
-          LabeledContent("repo", icon: .showRepo) {
+        EditSection("Locations", footer: "Corresponding locations on Github.") {
+          LabeledContent("Github", icon: .showRepo) {
             commander.button(ShowRepoCommand(repo: updatedRepo)) {
               Text(updatedRepo.githubURL(for: .repo).absoluteString)
             }
           }
-
-          LabeledContent("status", icon: .showWorkflow) {
+          
+          LabeledContent("Action", icon: .showWorkflow) {
             commander.button(ShowWorkflowCommand(repo: updatedRepo)) {
               Text(updatedRepo.githubURL(for: .workflow).absoluteString)
             }
           }
-
+          
           if !localPath.isEmpty {
-            LabeledContent("local", icon: .revealLocalRepo) {
+            LabeledContent("Local", icon: .revealLocalRepo) {
               commander.button(RevealLocalCommand(repo: updatedRepo)) {
                 Text(localPath)
               }
             }
+            .buttonStyle(.borderless)
           }
-        } header: {
-          Text("Locations")
-        } footer: {
-          Text("Corresponding locations on Github.")
-            .font(.footnote)
-            .foregroundStyle(.secondary)
         }
       }
-      .labelStyle(.iconOnly)
     }
     .formStyle(.grouped)
-    .textFieldStyle(.plain)
     .onAppear {
       refreshService.pauseRefresh()
       load()
@@ -162,55 +155,13 @@ public struct EditView: View {
   }
 }
 
-/// Platform-appropriate text-field style for repository name and owner fields.
-struct NameOrgStyle: ViewModifier {
-  func body(content: Content) -> some View {
-    #if os(macOS)
-      content
-        .textFieldStyle(.roundedBorder)
-        .multilineTextAlignment(.leading)
-    #else
-      content
-        .keyboardType(.namePhonePad)
-        .textInputAutocapitalization(.never)
-        .autocorrectionDisabled(true)
-        #if os(tvOS)
-          .textFieldStyle(.automatic)
-        #else
-          .textFieldStyle(.roundedBorder)
-        #endif
-    #endif
-  }
-}
-
-/// Platform-appropriate text-field style for the branch list field.
-struct BranchListStyle: ViewModifier {
-  func body(content: Content) -> some View {
-    #if os(macOS)
-      content
-        .multilineTextAlignment(.leading)
-        .textFieldStyle(.roundedBorder)
-    #else
-      content
-        .keyboardType(.alphabet)
-        .textInputAutocapitalization(.never)
-        .autocorrectionDisabled(true)
-        #if os(tvOS)
-          .textFieldStyle(.automatic)
-        #else
-          .textFieldStyle(.roundedBorder)
-        #endif
-    #endif
-  }
-}
-
 
 struct EditSection<Content: View>: View {
   @ViewBuilder var content: () -> Content
   let header: LocalizedStringResource
   let footer: LocalizedStringResource
 
-  init(header: LocalizedStringResource, footer: LocalizedStringResource, @ViewBuilder content: @escaping () -> Content) {
+  init(_ header: LocalizedStringResource, footer: LocalizedStringResource, @ViewBuilder content: @escaping () -> Content) {
     self.content = content
     self.header = header
     self.footer = footer
@@ -232,13 +183,19 @@ struct EditSection<Content: View>: View {
 struct EditDetailsSectionView: View {
   @Binding var name: String
   @Binding var owner: String
+  @Binding var showBranches: Bool
   @Binding var branches: String
 
   var body: some View {
-    EditSection(header: "Details", footer: "Enter the name and owner of the repository.") {
-      LabeledField($name, label: "name", prompt: "github repo", icon: .name)
-      LabeledField($owner, label: "owner", prompt: "github owner", icon: .owner)
-      LabeledField($branches, label: "branches", prompt: "branch1, branch2, …", icon: .branches)
+    EditSection("Details", footer: "Enter the name and owner of the repository.\nOptionally enter specific branches to test.") {
+      LabeledField($name, label: "Name", prompt: "github repo", icon: .name)
+      LabeledField($owner, label: "Owner", prompt: "github owner", icon: .owner)
+        Toggle(isOn: $showBranches) {
+          Label("Filter By Branch", icon: .filterBranches)
+        }
+        if showBranches {
+          LabeledField($branches, label: "Match branches", prompt: "branch1, branch2, …", icon: .branches)
+        }
     }
   }
 }
@@ -297,9 +254,9 @@ struct LabeledField: View {
             field
           }
         }
-//        Text(label)
-//          .font(.footnote)
-//          .foregroundStyle(.secondary)
+        //        Text(label)
+        //          .font(.footnote)
+        //          .foregroundStyle(.secondary)
       }
     #endif
   }
@@ -325,10 +282,11 @@ struct LabeledFieldContentStyle: LabeledContentStyle {
   @Previewable @State var name = "name"
   @Previewable @State var owner = "owner"
   @Previewable @State var branches: String = "branch1, branch2"
+  @Previewable @State var showBranches: Bool = false
 
   PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
     Form {
-      EditDetailsSectionView(name: $name, owner: $owner, branches: $branches)
+      EditDetailsSectionView(name: $name, owner: $owner, showBranches: $showBranches, branches: $branches)
     }
     .formStyle(.grouped)
   }
@@ -336,7 +294,7 @@ struct LabeledFieldContentStyle: LabeledContentStyle {
 
 #Preview("Section") {
   Form {
-    EditSection(header: "Header", footer: "Footer") {
+    EditSection("Header", footer: "Footer") {
       Text("Some Content Here")
     }
   }
