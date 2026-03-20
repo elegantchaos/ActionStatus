@@ -6,7 +6,6 @@
 import Commands
 import CommandsUI
 import Core
-import Previews
 import Runtime
 import SwiftUI
 
@@ -133,14 +132,10 @@ private struct RepoCellPreviewHost: View {
   }
 }
 
-#Preview("Repo Cell Passing") {
-  PreviewRoot(ActionStatusPreviews.repoCellPassing) { fixture in
-    RepoCellPreviewHost(repo: fixture.primaryRepo)
-  }
+#Preview("Repo Cell Passing", traits: .modifier(ActionStatusPreviews.Content())) {
+  RepoCellPreviewHost(repo: ActionStatusPreviews.repoCellPassing)
 }
 
-#Preview("Repo Cell Failing") {
-  PreviewRoot(ActionStatusPreviews.repoCellFailing) { fixture in
-    RepoCellPreviewHost(repo: fixture.primaryRepo)
-  }
+#Preview("Repo Cell Failing", traits: .modifier(ActionStatusPreviews.Editing())) {
+  RepoCellPreviewHost(repo: ActionStatusPreviews.repoCellFailing)
 }

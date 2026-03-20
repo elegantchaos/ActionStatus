@@ -1,46 +1,13 @@
 import Core
-import Previews
 import Runtime
 import SwiftUI
-
-/// Fixture data exposed to ActionStatus preview closures.
-@MainActor
-public struct ActionStatusPreviewFixture {
-  /// Seeded repositories available to the preview.
-  public let repos: [Repo]
-
-  /// Primary repository for single-entity previews.
-  public let primaryRepo: Repo
-
-  /// Optional selected repository for previews that need one.
-  public let selectedRepo: Repo?
-
-  /// Whether editing mode is enabled.
-  public let isEditing: Bool
-
-  /// Creates a preview fixture from the supplied repositories.
-  public init(
-    repos: [Repo],
-    primaryRepo: Repo? = nil,
-    selectedRepo: Repo? = nil,
-    isEditing: Bool = false
-  ) {
-    self.repos = repos
-    self.primaryRepo = primaryRepo ?? repos.first ?? Repo()
-    self.selectedRepo = selectedRepo
-    self.isEditing = isEditing
-  }
-}
-
-/// Specialized preview scenario used by ActionStatus previews.
-public typealias ActionStatusPreviewScenario = PreviewScenario<ActionStatusPreviewRuntime, ActionStatusPreviewFixture>
 
 /// Preview-safe runtime for ActionStatus views.
 ///
 /// This runtime mirrors the live app's environment graph, but seeds an in-memory
 /// model store and disables side effects such as launching URLs and refresh work.
 @MainActor
-public final class ActionStatusPreviewRuntime: EnvironmentInjectingRuntime {
+public final class ActionStatusPreviewRuntime {
   /// Shared model service.
   public let modelService: ModelService
 
@@ -120,65 +87,56 @@ public final class ActionStatusPreviewRuntime: EnvironmentInjectingRuntime {
   }
 }
 
-public extension PreviewScenario where Runtime == ActionStatusPreviewRuntime, Fixture == ActionStatusPreviewFixture {
-  /// Creates an ActionStatus preview scenario from seeded repositories.
-  init(
-    repos: [Repo],
-    isEditing: Bool = false,
-    initialSheet: SheetService.Sheet? = nil
-  ) {
-    self.init {
-      let runtime = ActionStatusPreviewRuntime(
-        repos: repos,
-        isEditing: isEditing,
-        initialSheet: initialSheet
-      )
-      let fixture = ActionStatusPreviewFixture(
-        repos: repos,
-        primaryRepo: repos.first,
-        selectedRepo: repos.first,
-        isEditing: isEditing
-      )
-      return PreviewBuilt(runtime: runtime, fixture: fixture)
-    }
+@MainActor
+public protocol ActionStatusPreviewPreset: PreviewModifier {
+  static var repos: [Repo] { get }
+  static var isEditing: Bool { get }
+  static var initialSheet: SheetService.Sheet? { get }
+}
+
+public extension ActionStatusPreviewPreset {
+  static var isEditing: Bool { false }
+  static var initialSheet: SheetService.Sheet? { nil }
+
+  static func makeSharedContext() async throws -> ActionStatusPreviewRuntime {
+    ActionStatusPreviewRuntime(
+      repos: repos,
+      isEditing: isEditing,
+      initialSheet: initialSheet
+    )
+  }
+
+  func body(content: Content, context: ActionStatusPreviewRuntime) -> some View {
+    content.modifier(context.environmentInjector)
   }
 }
 
 /// Canned ActionStatus preview scenarios.
 @MainActor
 public enum ActionStatusPreviews {
-  /// Empty-state content preview.
-  public static let empty = ActionStatusPreviewScenario(repos: [])
+  public struct Empty: ActionStatusPreviewPreset {
+    public static let repos: [Repo] = []
 
-  /// Standard content preview with mixed repository states.
-  public static let content = ActionStatusPreviewScenario(repos: sampleRepos())
+    public init() {}
+  }
 
-  /// Editing-mode content preview.
-  public static let editing = ActionStatusPreviewScenario(repos: sampleRepos(), isEditing: true)
+  public struct Content: ActionStatusPreviewPreset {
+    public static let repos = sampleRepos()
 
-  /// Existing-repository edit preview.
-  public static let editExisting = ActionStatusPreviewScenario(repos: sampleRepos(), isEditing: true)
+    public init() {}
+  }
 
-  /// Passing repository cell preview.
-  public static let repoCellPassing = repoCell(state: .passing)
+  public struct Editing: ActionStatusPreviewPreset {
+    public static let repos = sampleRepos()
+    public static let isEditing = true
 
-  /// Failing repository cell preview.
-  public static let repoCellFailing = repoCell(state: .failing, isEditing: true)
+    public init() {}
+  }
 
-  /// Status menu preview with mixed states.
-  public static let statusMenu = ActionStatusPreviewScenario(repos: sampleRepos())
+  public struct StatusMenu: ActionStatusPreviewPreset {
+    public static let repos = sampleRepos()
 
-  /// Creates a repository-cell scenario with the supplied state.
-  public static func repoCell(
-    state: Repo.State,
-    isEditing: Bool = false,
-    name: String = "ActionStatus",
-    owner: String = "elegantchaos"
-  ) -> ActionStatusPreviewScenario {
-    ActionStatusPreviewScenario(
-      repos: [repo(name, owner: owner, state: state)],
-      isEditing: isEditing
-    )
+    public init() {}
   }
 
   /// Creates a repository value for previews.
@@ -203,6 +161,10 @@ public enum ActionStatusPreviews {
       repo("Application", owner: "elegantchaos", state: .partiallyFailing),
     ]
   }
+
+  public static let editingRepo = sampleRepos().first ?? Repo()
+  public static let repoCellPassing = repo("ActionStatus", owner: "elegantchaos", state: .passing)
+  public static let repoCellFailing = repo("ActionStatus", owner: "elegantchaos", state: .failing)
 }
 
 /// In-memory model store used by ActionStatus previews.

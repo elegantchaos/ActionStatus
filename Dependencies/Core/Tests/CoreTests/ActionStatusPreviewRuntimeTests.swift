@@ -10,22 +10,19 @@ struct ActionStatusPreviewRuntimeTests {
   }
 
   @Test
-  func testScenarioBuildSeedsFixtureAndRuntime() async {
+  func testEditingPreviewPresetBuildsExpectedRuntime() async throws {
     let repo = ActionStatusPreviews.repo("ActionStatus", owner: "elegantchaos", state: .passing)
-    let scenario = ActionStatusPreviewScenario(repos: [repo], isEditing: true)
+    let runtime = ActionStatusPreviewRuntime(repos: [repo], isEditing: true)
 
-    let built = scenario.build()
-
-    #expect(built.fixture.repos.count == 1)
-    #expect(built.fixture.primaryRepo.name == "ActionStatus")
-    #expect(built.runtime.commander.settingsService.isEditing)
-    #expect(built.runtime.statusService.sortedRepos.count == 1)
+    #expect(ActionStatusPreviews.editingRepo.name == "ActionStatus")
+    #expect(runtime.commander.settingsService.isEditing)
+    #expect(runtime.statusService.sortedRepos.count == 1)
   }
 
   @Test
   func testPreviewCommanderCanPerformSheetCommand() async throws {
-    let scenario = ActionStatusPreviewScenario(repos: ActionStatusPreviews.sampleRepos())
-    let commander = scenario.build().runtime.commander
+    let runtime = try await ActionStatusPreviews.Content.makeSharedContext()
+    let commander = runtime.commander
 
     try await commander.perform(ShowPreferencesSheetCommand<ActionStatusCommander>())
 

@@ -7,7 +7,6 @@ import Commands
 import CommandsUI
 import Core
 import Icons
-import Previews
 import Runtime
 import SwiftUI
 
@@ -199,48 +198,38 @@ struct EditLocationsSectionView: View {
   }
 }
 
-#Preview("Editing") {
-  PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
-    EditRepoView(repo: fixture.primaryRepo, adding: false)
-  }
+#Preview("Editing", traits: .modifier(ActionStatusPreviews.Editing())) {
+  EditRepoView(repo: ActionStatusPreviews.editingRepo, adding: false)
 }
 
-#Preview("Adding") {
-  PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
-    EditRepoView(repo: fixture.primaryRepo, adding: true)
-  }
+#Preview("Adding", traits: .modifier(ActionStatusPreviews.Editing())) {
+  EditRepoView(repo: ActionStatusPreviews.editingRepo, adding: true)
 }
 
-#Preview("Details") {
+#Preview("Details", traits: .modifier(ActionStatusPreviews.Editing())) {
   @Previewable @State var name = "name"
   @Previewable @State var owner = "owner"
   @Previewable @State var branches: String = "branch1, branch2"
   @Previewable @State var showBranches: Bool = false
 
-  PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
-    Form {
-      EditDetailsSectionView(name: $name, owner: $owner, filterBranches: $showBranches, branches: $branches)
-    }
-    .formStyle(.grouped)
+  Form {
+    EditDetailsSectionView(name: $name, owner: $owner, filterBranches: $showBranches, branches: $branches)
   }
+  .formStyle(.grouped)
 }
 
-#Preview("Workflows") {
+#Preview("Workflows", traits: .modifier(ActionStatusPreviews.Editing())) {
   @Previewable @State var workflows: [Repo.WorkflowSelection] = []
   
-  PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
-    Form {
-      EditWorkflowsSectionView(workflows: $workflows)
-    }
-    .formStyle(.grouped)
+  Form {
+    EditWorkflowsSectionView(workflows: $workflows)
   }
+  .formStyle(.grouped)
 }
 
-#Preview("Locations") {
-  PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
-    Form {
-      EditLocationsSectionView(repo: fixture.primaryRepo, localPath: .testLocalURL)
-    }
-    .formStyle(.grouped)
+#Preview("Locations", traits: .modifier(ActionStatusPreviews.Editing())) {
+  Form {
+    EditLocationsSectionView(repo: ActionStatusPreviews.editingRepo, localPath: .testLocalURL)
   }
+  .formStyle(.grouped)
 }

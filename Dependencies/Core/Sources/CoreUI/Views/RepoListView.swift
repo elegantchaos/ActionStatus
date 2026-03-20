@@ -4,7 +4,6 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 import Core
-import Previews
 import Runtime
 import SwiftUI
 
@@ -60,8 +59,6 @@ private struct RepoListPreviewHost: View {
   }
 }
 
-#Preview("Repo List") {
-  PreviewRoot(ActionStatusPreviews.editing) { _ in
-    RepoListPreviewHost()
-  }
+#Preview("Repo List", traits: .modifier(ActionStatusPreviews.Editing())) {
+  RepoListPreviewHost()
 }

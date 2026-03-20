@@ -69,8 +69,6 @@ public struct RepoGridView: View {
   }
 }
 
-import Previews
-
 private struct RepoGridPreviewHost: View {
   @Namespace private var namespace
   @FocusState private var focus: Focus?
@@ -81,8 +79,6 @@ private struct RepoGridPreviewHost: View {
   }
 }
 
-#Preview("Repo Grid") {
-  PreviewRoot(ActionStatusPreviews.content) { _ in
-    RepoGridPreviewHost()
-  }
+#Preview("Repo Grid", traits: .modifier(ActionStatusPreviews.Content())) {
+  RepoGridPreviewHost()
 }

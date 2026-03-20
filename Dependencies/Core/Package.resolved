@@ -1,5 +1,5 @@
 {
-  "originHash" : "c65b48fce2868ab5e9643b99a68835af0fe969bc14e8a389569d366c9de2a4e8",
+  "originHash" : "12e32e3d2bcf8a8945735e6cf3935c746bb25927ba9abf1ae139cb5e480b1982",
   "pins" : [
     {
       "identity" : "application",
@@ -89,15 +89,6 @@
       "state" : {
         "revision" : "96e62a871b437b245dff213330b3f3dfce26004d",
         "version" : "3.0.0"
-      }
-    },
-    {
-      "identity" : "previews",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/elegantchaos/Previews.git",
-      "state" : {
-        "revision" : "9aa9350d083aa2506696ad94d284182cac7257b2",
-        "version" : "1.0.1"
       }
     },
     {

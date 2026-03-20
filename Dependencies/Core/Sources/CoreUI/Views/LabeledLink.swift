@@ -6,7 +6,6 @@
 import Commands
 import CommandsUI
 import Icons
-import Previews
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -52,13 +51,11 @@ struct LabeledLink<C: CommandWithUI>: View where C.Centre == ActionStatusCommand
   }
 }
 
-#Preview("LabelledLink") {
-  PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
-    Form {
-      LabeledLink("Local", icon: .revealLocalRepo, command: RevealLocalCommand(url: .testLocalURL), url: .testLocalURL)
-    }
-    .formStyle(.grouped)
+#Preview("LabelledLink", traits: .modifier(ActionStatusPreviews.Editing())) {
+  Form {
+    LabeledLink("Local", icon: .revealLocalRepo, command: RevealLocalCommand(url: .testLocalURL), url: .testLocalURL)
   }
+  .formStyle(.grouped)
 }
 
 
