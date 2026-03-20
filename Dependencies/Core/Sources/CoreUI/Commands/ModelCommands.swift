@@ -22,9 +22,11 @@ struct AddRepoCommand<C: ModelServiceProvider & SheetServiceProvider>: CommandWi
   }
 
   func perform(centre: C) async throws {
-    let repo = centre.modelService.addNewRepo()
     if openSheet {
-      centre.sheetService.showing = .editRepo(repo)
+      // Keep the repo transient until the user confirms the add flow.
+      centre.sheetService.showing = .addRepo(Repo())
+    } else {
+      _ = centre.modelService.addNewRepo()
     }
   }
 }
