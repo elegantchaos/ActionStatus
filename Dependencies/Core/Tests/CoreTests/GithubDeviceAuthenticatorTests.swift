@@ -33,5 +33,12 @@ struct GithubDeviceAuthenticatorTests {
     let oauth = try GithubDeviceAuthenticator.oauthBaseURL(for: "api.github.example.com")
     #expect(oauth.absoluteString == "https://github.example.com")
   }
-}
 
+  /// Device-auth errors expose actionable localized descriptions for the UI.
+  @Test
+  func localizedDescriptionsAreActionable() {
+    #expect(GithubDeviceAuthError.invalidServer.localizedDescription == "The GitHub server address is invalid. Please check the server URL and try again.")
+    #expect(GithubDeviceAuthError.accessDenied.localizedDescription == "Access to your GitHub account was denied. Please sign in again and approve the request.")
+    #expect(GithubDeviceAuthError.expiredToken.localizedDescription == "The GitHub sign-in request expired before it was approved. Please start the sign-in process again.")
+  }
+}

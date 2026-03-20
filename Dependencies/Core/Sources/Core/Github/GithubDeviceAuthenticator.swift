@@ -39,6 +39,25 @@ public enum GithubDeviceAuthError: Error {
   case failed(String)
 }
 
+extension GithubDeviceAuthError: LocalizedError {
+  public var errorDescription: String? {
+    switch self {
+      case .missingClientID:
+        return "GitHub sign-in is not configured correctly. Please reinstall the app or contact support."
+      case .invalidServer:
+        return "The GitHub server address is invalid. Please check the server URL and try again."
+      case .invalidResponse:
+        return "GitHub returned an unexpected response. Please try again."
+      case .accessDenied:
+        return "Access to your GitHub account was denied. Please sign in again and approve the request."
+      case .expiredToken:
+        return "The GitHub sign-in request expired before it was approved. Please start the sign-in process again."
+      case .failed(let message):
+        return message
+    }
+  }
+}
+
 /// Implements the GitHub Device Authorization Grant (RFC 8628) OAuth flow.
 ///
 /// Handles the full lifecycle: requesting a device code, polling for user
