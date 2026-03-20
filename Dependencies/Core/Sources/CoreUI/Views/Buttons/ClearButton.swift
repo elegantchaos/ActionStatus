@@ -13,12 +13,14 @@ struct ClearButton: ViewModifier {
   public func body(content: Content) -> some View {
     content
       .overlay(alignment: .trailing) {
-        Button(action: { text = "" }) {
-          Image(systemName: "multiply.circle.fill")
-            .foregroundColor(.secondary)
+        if !text.isEmpty {
+          Button(action: { text = "" }) {
+            Image(systemName: "multiply.circle.fill")
+              .foregroundStyle(.secondary)
+          }
+          .padding(.trailing, 8)
+          .buttonStyle(.borderless)
         }
-        .padding(.trailing, 8)
-        .buttonStyle(.borderless)
       }
   }
 }
