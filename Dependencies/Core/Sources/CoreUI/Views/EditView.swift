@@ -6,6 +6,7 @@
 import Commands
 import CommandsUI
 import Core
+import Icons
 import Previews
 import Runtime
 import SwiftUI
@@ -64,7 +65,7 @@ public struct EditView: View {
         } header: {
           Text("Workflows")
         } footer: {
-          Text("Newly discovered workflows are enabled by default.")
+          Text(" Select which workflows to monitor when they have been discovered, and optionally enter specific branches to test. Newly discovered workflows are enabled by default.")
             .font(.footnote)
             .foregroundStyle(.secondary)
         }
@@ -204,52 +205,117 @@ struct BranchListStyle: ViewModifier {
 }
 
 
+struct EditSection<Content: View>: View {
+  @ViewBuilder var content: () -> Content
+  let header: LocalizedStringResource
+  let footer: LocalizedStringResource
+
+  init(header: LocalizedStringResource, footer: LocalizedStringResource, @ViewBuilder content: @escaping () -> Content) {
+    self.content = content
+    self.header = header
+    self.footer = footer
+  }
+
+  var body: some View {
+    Section {
+      content()
+    } header: {
+      Text(header)
+    } footer: {
+      Text(footer)
+        .font(.footnote)
+        .foregroundStyle(.secondary)
+    }
+  }
+}
+
 struct EditDetailsSectionView: View {
   @Binding var name: String
   @Binding var owner: String
   @Binding var branches: String
 
   var body: some View {
-    Section {
-
-      LabeledContent("name", icon: .name) {
-        TextField("name", text: $name, prompt: Text("github repo"))
-          .multilineTextAlignment(.leading)
-          .modifier(ClearButton(text: $name))
-          .labelsHidden()
-      }
-
-      LabeledContent("owner", icon: .owner) {
-        TextField("owner", text: $owner, prompt: Text("github owner"))
-          .multilineTextAlignment(.leading)
-          .modifier(ClearButton(text: $owner))
-          .labelsHidden()
-      }
-      LabeledContent("branches", icon: .branches) {
-        TextField("", text: $branches, prompt: Text("branch1, branch2, …"))
-          .multilineTextAlignment(.leading)
-          .modifier(BranchListStyle())
-          .modifier(ClearButton(text: $branches))
-      }
-    } header: {
-      Text("Details")
-    } footer: {
-      Text("Enter the name and owner of the repository. Select which workflows to monitor when they have been discovered, and optionally enter specific branches to test.")
-        .font(.footnote)
-        .foregroundStyle(.secondary)
+    EditSection(header: "Details", footer: "Enter the name and owner of the repository.") {
+      LabeledField($name, label: "name", prompt: "github repo", icon: .name)
+      LabeledField($owner, label: "owner", prompt: "github owner", icon: .owner)
+      LabeledField($branches, label: "branches", prompt: "branch1, branch2, …", icon: .branches)
     }
-    .modifier(NameOrgStyle())
   }
 }
 
-#Preview("Edit Repo") {
-  PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
-    EditView(repo: fixture.primaryRepo)
-      .frame(minWidth: 600, minHeight: 640)
+struct LabeledField: View {
+  @Binding var text: String
+  let label: LocalizedStringResource
+  let prompt: LocalizedStringResource
+  let icon: Icon
+  let clearable: Bool
+
+  init(_ text: Binding<String>, label: LocalizedStringResource, prompt: LocalizedStringResource, icon: Icon, clearable: Bool = true) {
+    _text = text
+    self.label = label
+    self.prompt = prompt
+    self.icon = icon
+    self.clearable = clearable
+  }
+
+  var body: some View {
+    let field = TextField(label, text: $text, prompt: Text(prompt))
+      .labelsHidden()
+      .labeledContentStyle(LabeledFieldContentStyle())
+      .multilineTextAlignment(.leading)
+      #if os(macOS)
+        .multilineTextAlignment(.leading)
+        .textFieldStyle(.roundedBorder)
+      #else
+        .keyboardType(.alphabet)
+        .textInputAutocapitalization(.never)
+        .autocorrectionDisabled(true)
+          #if os(tvOS)
+            .textFieldStyle(.automatic)
+          #else
+            .textFieldStyle(.roundedBorder)
+          #endif
+      #endif
+
+    #if os(macOS)
+      return LabeledContent(label, icon: icon) {
+        if clearable {
+          field
+            .modifier(ClearButton(text: $text))
+        } else {
+          field
+        }
+      }
+    #else
+      return VStack(alignment: .leading) {
+        HStack {
+          Image(icon: icon)
+          if clearable {
+            field
+              .modifier(ClearButton(text: $text))
+          } else {
+            field
+          }
+        }
+//        Text(label)
+//          .font(.footnote)
+//          .foregroundStyle(.secondary)
+      }
+    #endif
   }
 }
 
-#Preview("iOS") {
+struct LabeledFieldContentStyle: LabeledContentStyle {
+  func makeBody(configuration: Configuration) -> some View {
+    HStack {
+      configuration.label
+      configuration.content
+    }
+  }
+}
+
+
+#Preview("Form") {
   PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
     EditView(repo: fixture.primaryRepo)
   }
@@ -264,26 +330,25 @@ struct EditDetailsSectionView: View {
     Form {
       EditDetailsSectionView(name: $name, owner: $owner, branches: $branches)
     }
-    .labelStyle(.iconOnly)
     .formStyle(.grouped)
   }
-
 }
 
-#Preview("TextField With Label") {
+#Preview("Section") {
   Form {
-    TextField(text: .constant("test"), prompt: Text("prompt")) {
-      Label("label", icon: .name)
+    EditSection(header: "Header", footer: "Footer") {
+      Text("Some Content Here")
     }
   }
-//  .labelStyle(.iconOnly)
   .formStyle(.grouped)
 }
 
-#Preview("TextField Text Label") {
+#Preview("LabelledField") {
+  @Previewable @State var name = "name"
+
   Form {
-    TextField("label", text: .constant("test"), prompt: Text("prompt"))
+    LabeledField($name, label: "label", prompt: "prompt", icon: .name)
   }
-//  .labelStyle(.iconOnly)
+  //  .labelStyle(.iconOnly)
   .formStyle(.grouped)
 }
