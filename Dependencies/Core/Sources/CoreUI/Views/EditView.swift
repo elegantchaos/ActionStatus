@@ -269,3 +269,21 @@ struct EditDetailsSectionView: View {
   }
 
 }
+
+#Preview("TextField With Label") {
+  Form {
+    TextField(text: .constant("test"), prompt: Text("prompt")) {
+      Label("label", icon: .name)
+    }
+  }
+//  .labelStyle(.iconOnly)
+  .formStyle(.grouped)
+}
+
+#Preview("TextField Text Label") {
+  Form {
+    TextField("label", text: .constant("test"), prompt: Text("prompt"))
+  }
+//  .labelStyle(.iconOnly)
+  .formStyle(.grouped)
+}
