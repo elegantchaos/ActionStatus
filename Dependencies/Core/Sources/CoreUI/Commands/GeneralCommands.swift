@@ -62,17 +62,23 @@ struct ShowWorkflowCommand<C: LaunchServiceProvider>: CommandWithUI {
 struct RevealLocalCommand<C: LaunchServiceProvider>: CommandWithUI {
   let id = "reveal.repo"
   let icon = Icon.revealLocalRepo
-  let repo: Repo
-  let deviceID: String?
+  
+  /// Security scoped URL to the local repository, if available.
+  let url: URL?
 
+  /// Initialises with the local URL for the supplied repository, if available.
   init(repo: Repo, runtime: Runtime = .shared) {
-    self.repo = repo
-    self.deviceID = runtime.deviceIdentifier
+    self.url = repo.localURL(forDevice: runtime.deviceIdentifier)
+  }
+
+  /// Initialises with the supplied URL.
+  init(url: URL) {
+    self.url = url
   }
   
   func availability(centre: C) -> CommandAvailability {
     var status = CommandAvailability.disabled
-    if let url = repo.localURL(forDevice: deviceID) {
+    if let url {
       url.accessSecurityScopedResource { unlockedURL in
         if FileManager.default.fileExists(atURL: unlockedURL) {
           status = .enabled
@@ -84,7 +90,7 @@ struct RevealLocalCommand<C: LaunchServiceProvider>: CommandWithUI {
   }
 
   func perform(centre: C) async throws {
-    if let url = repo.localURL(forDevice: deviceID) {
+    if let url {
       url.accessSecurityScopedResource { unlockedURL in
         centre.launchService.reveal(url: unlockedURL)
       }
@@ -114,4 +120,8 @@ struct NavigateRepoCommand<C: LaunchServiceProvider & SheetServiceProvider & Set
         centre.launchService.open(url: repo.githubURL(for: .workflow))
     }
   }
+}
+
+extension URL {
+  static let testLocalURL = URL(fileURLWithPath: "/Users/sam/Developer/Projects/ActionStatus")
 }

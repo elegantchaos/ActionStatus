@@ -9,12 +9,12 @@ import Icons
 
 /// Command that presents the edit sheet.
 public struct ShowEditSheetCommand<C: SheetServiceProvider>: CommandWithUI {
-  public let id = "sheet.add"
+  public let id = "sheet.edit"
   public let icon = Icon.actions
 
-  let repo: Repo?
+  let repo: Repo
 
-  public init(repo: Repo? = nil) {
+  public init(repo: Repo) {
     self.repo = repo
   }
 

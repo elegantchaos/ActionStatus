@@ -22,7 +22,9 @@ public final class SheetService {
   func sheetView(for sheet: Sheet) -> some View {
     switch sheet {
       case .editRepo(let repo):
-        EditView(repo: repo)
+        EditView(repo: repo, adding: false)
+      case .addRepo(let repo):
+        EditView(repo: repo, adding: true)
       case .preferences:
         SheetView(
           "ActionStatus Settings",
@@ -42,8 +44,12 @@ public final class SheetService {
 
   /// Sheets presented by ActionStatus.
   public enum Sheet: Identifiable {
-    /// Edit an existing repo, or present the add-new-repo form when `nil`.
-    case editRepo(Repo?)
+    /// Edit an existing repo.
+    case editRepo(Repo)
+    
+    /// Adding a new repo.
+    case addRepo(Repo)
+    
     /// The app preferences form.
     case preferences
 
@@ -51,9 +57,8 @@ public final class SheetService {
     public var id: String {
       switch self {
         case .editRepo(let repo):
-          if let repo {
-            return "edit-\(repo.id)"
-          }
+          return "edit-\(repo.id)"
+        case .addRepo:
           return "edit-new"
         case .preferences:
           return "preferences"

@@ -25,23 +25,29 @@ public struct EditView: View {
   @State var showBranches = false
   @State var branches: String = ""
 
-  /// The repository being edited; `nil` when adding a new repository.
-  let repo: Repo?
+  /// The repository being edited.
+  let repo: Repo
 
-  var title: String { "\(shortTitle) Repository" }
-  var shortTitle: String { repo == nil ? "Add" : "Edit" }
+  let adding: Bool
 
   /// Runtime metadata. Injectable for test purposes.
   let runtime: Runtime
 
   /// Creates an edit view for the supplied repository.
-  public init(repo: Repo? = nil, runtime: Runtime = .shared) {
+  public init(repo: Repo, adding: Bool, runtime: Runtime = .shared) {
     self.repo = repo
+    self.adding = adding
     self.runtime = runtime
   }
 
+  /// Title to use for the sheet.
+  var title: String { "\(shortTitle) Repository" }
+
+  /// Short title to use for the sheet.
+  var shortTitle: String { adding ? "Add" : "Edit" }
+
+
   public var body: some View {
-    let localPath = repo?.localURL(forDevice: runtime.deviceIdentifier)?.path ?? ""
 
     return SheetView(title, shortTitle: shortTitle, cancelAction: dismiss, doneAction: done) {
       Form {
@@ -52,46 +58,14 @@ public struct EditView: View {
           branches: $branches
         )
 
-        EditSection("Workflows", footer: "Select which workflows to monitor when they have been discovered.\nNewly discovered workflows are enabled by default.") {
-          if workflows.isEmpty {
-            Text("No workflows have been discovered yet for this repository.")
-              .foregroundStyle(.secondary)
-          } else {
-            ForEach($workflows) { $workflow in
-              Toggle(isOn: $workflow.enabled) {
-                VStack(alignment: .leading, spacing: 2) {
-                  Text(workflow.name)
-                  Text(workflow.path)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                }
-              }
-            }
-          }
-        }
+        EditWorkflowsSectionView(
+          workflows: $workflows
+        )
 
-        EditSection("Locations", footer: "Corresponding locations on Github.") {
-          LabeledContent("Github", icon: .showRepo) {
-            commander.button(ShowRepoCommand(repo: updatedRepo)) {
-              Text(updatedRepo.githubURL(for: .repo).absoluteString)
-            }
-          }
-          
-          LabeledContent("Action", icon: .showWorkflow) {
-            commander.button(ShowWorkflowCommand(repo: updatedRepo)) {
-              Text(updatedRepo.githubURL(for: .workflow).absoluteString)
-            }
-          }
-          
-          if !localPath.isEmpty {
-            LabeledContent("Local", icon: .revealLocalRepo) {
-              commander.button(RevealLocalCommand(repo: updatedRepo)) {
-                Text(localPath)
-              }
-            }
-            .buttonStyle(.borderless)
-          }
-        }
+        EditLocationsSectionView(
+          repo: updatedRepo,
+          localPath: localPath
+        )
       }
     }
     .formStyle(.grouped)
@@ -99,6 +73,11 @@ public struct EditView: View {
       refreshService.pauseRefresh()
       load()
     }
+  }
+
+  /// Local path to the repository, if available.
+  var localPath: URL? {
+    repo.localURL(forDevice: runtime.deviceIdentifier)
   }
 
   /// Name with leading/trailing whitespace removed.
@@ -130,12 +109,10 @@ public struct EditView: View {
 
   /// Populates local state from the stored repo, or leaves defaults for a new repo.
   func load() {
-    if let repo {
-      name = repo.name
-      owner = repo.owner
-      workflows = repo.workflows.sorted(by: { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending })
-      branches = repo.branches.joined(separator: ", ")
-    }
+    name = repo.name
+    owner = repo.owner
+    workflows = repo.workflows.sorted(by: { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending })
+    branches = repo.branches.joined(separator: ", ")
   }
 
   /// Writes the current form values back to the model.
@@ -145,7 +122,7 @@ public struct EditView: View {
 
   /// Constructs a `Repo` value from the current form fields.
   var updatedRepo: Repo {
-    var updated = repo ?? Repo()
+    var updated = repo
     updated.name = trimmedName
     updated.owner = trimmedOwner
     updated.workflows = workflows
@@ -156,30 +133,6 @@ public struct EditView: View {
 }
 
 
-struct EditSection<Content: View>: View {
-  @ViewBuilder var content: () -> Content
-  let header: LocalizedStringResource
-  let footer: LocalizedStringResource
-
-  init(_ header: LocalizedStringResource, footer: LocalizedStringResource, @ViewBuilder content: @escaping () -> Content) {
-    self.content = content
-    self.header = header
-    self.footer = footer
-  }
-
-  var body: some View {
-    Section {
-      content()
-    } header: {
-      Text(header)
-    } footer: {
-      Text(footer)
-        .font(.footnote)
-        .foregroundStyle(.secondary)
-    }
-  }
-}
-
 struct EditDetailsSectionView: View {
   @Binding var name: String
   @Binding var owner: String
@@ -187,94 +140,72 @@ struct EditDetailsSectionView: View {
   @Binding var branches: String
 
   var body: some View {
-    EditSection("Details", footer: "Enter the name and owner of the repository.\nOptionally enter specific branches to test.") {
+    EditSectionView("Details", footer: "Enter the name and owner of the repository.\nOptionally enter specific branches to test.") {
       LabeledField($name, label: "Name", prompt: "github repo", icon: .name)
       LabeledField($owner, label: "Owner", prompt: "github owner", icon: .owner)
-        Toggle(isOn: $showBranches) {
-          Label("Filter By Branch", icon: .filterBranches)
-        }
-        if showBranches {
-          LabeledField($branches, label: "Match branches", prompt: "branch1, branch2, …", icon: .branches)
-        }
+      Toggle(isOn: $showBranches) {
+        Label("Filter By Branch", icon: .filterBranches)
+      }
+      if showBranches {
+        LabeledField($branches, label: "Match branches", prompt: "branch1, branch2, …", icon: .branches)
+      }
     }
   }
 }
 
-struct LabeledField: View {
-  @Binding var text: String
-  let label: LocalizedStringResource
-  let prompt: LocalizedStringResource
-  let icon: Icon
-  let clearable: Bool
-
-  init(_ text: Binding<String>, label: LocalizedStringResource, prompt: LocalizedStringResource, icon: Icon, clearable: Bool = true) {
-    _text = text
-    self.label = label
-    self.prompt = prompt
-    self.icon = icon
-    self.clearable = clearable
-  }
+struct EditWorkflowsSectionView: View {
+  @Binding var workflows: [Repo.WorkflowSelection]
 
   var body: some View {
-    let field = TextField(label, text: $text, prompt: Text(prompt))
-      .labelsHidden()
-      .labeledContentStyle(LabeledFieldContentStyle())
-      .multilineTextAlignment(.leading)
-      #if os(macOS)
-        .multilineTextAlignment(.leading)
-        .textFieldStyle(.roundedBorder)
-      #else
-        .keyboardType(.alphabet)
-        .textInputAutocapitalization(.never)
-        .autocorrectionDisabled(true)
-          #if os(tvOS)
-            .textFieldStyle(.automatic)
-          #else
-            .textFieldStyle(.roundedBorder)
-          #endif
-      #endif
-
-    #if os(macOS)
-      return LabeledContent(label, icon: icon) {
-        if clearable {
-          field
-            .modifier(ClearButton(text: $text))
-        } else {
-          field
-        }
-      }
-    #else
-      return VStack(alignment: .leading) {
-        HStack {
-          Image(icon: icon)
-          if clearable {
-            field
-              .modifier(ClearButton(text: $text))
-          } else {
-            field
+    EditSectionView("Workflows", footer: "Select which workflows to monitor when they have been discovered.\nNewly discovered workflows are enabled by default.") {
+      if workflows.isEmpty {
+        Text("No workflows have been discovered yet for this repository.")
+          .foregroundStyle(.secondary)
+      } else {
+        ForEach($workflows) { $workflow in
+          Toggle(isOn: $workflow.enabled) {
+            VStack(alignment: .leading, spacing: 2) {
+              Text(workflow.name)
+              Text(workflow.path)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            }
           }
         }
-        //        Text(label)
-        //          .font(.footnote)
-        //          .foregroundStyle(.secondary)
       }
-    #endif
-  }
-}
-
-struct LabeledFieldContentStyle: LabeledContentStyle {
-  func makeBody(configuration: Configuration) -> some View {
-    HStack {
-      configuration.label
-      configuration.content
     }
   }
 }
 
+struct EditLocationsSectionView: View {
+  @Environment(ActionStatusCommander.self) var commander
 
-#Preview("Form") {
+  /// The repository being edited; `nil` when adding a new repository.
+  let repo: Repo
+
+  /// Local path to the repository, if available.
+  let localPath: URL?
+
+  var body: some View {
+    EditSectionView("Locations", footer: "Corresponding locations on Github and/or the local device.") {
+      LabeledLink("Github - Main Page", icon: .showRepo, command: ShowRepoCommand(repo: repo), url: repo.githubURL(for: .repo))
+      LabeledLink("Github - Actions", icon: .showWorkflow, command: ShowWorkflowCommand(repo: repo), url: repo.githubURL(for: .workflow))
+      if let localPath {
+        LabeledLink("Local", icon: .revealLocalRepo, command: RevealLocalCommand(url: localPath), url: localPath)
+      }
+    }
+  }
+}
+
+#Preview("Editing") {
   PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
-    EditView(repo: fixture.primaryRepo)
+    EditView(repo: fixture.primaryRepo, adding: false)
+  }
+}
+
+#Preview("Adding") {
+  PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
+    EditView(repo: fixture.primaryRepo, adding: true)
   }
 }
 
@@ -292,21 +223,22 @@ struct LabeledFieldContentStyle: LabeledContentStyle {
   }
 }
 
-#Preview("Section") {
-  Form {
-    EditSection("Header", footer: "Footer") {
-      Text("Some Content Here")
+#Preview("Workflows") {
+  @Previewable @State var workflows: [Repo.WorkflowSelection] = []
+  
+  PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
+    Form {
+      EditWorkflowsSectionView(workflows: $workflows)
     }
+    .formStyle(.grouped)
   }
-  .formStyle(.grouped)
 }
 
-#Preview("LabelledField") {
-  @Previewable @State var name = "name"
-
-  Form {
-    LabeledField($name, label: "label", prompt: "prompt", icon: .name)
+#Preview("Locations") {
+  PreviewRoot(ActionStatusPreviews.editExisting) { fixture in
+    Form {
+      EditLocationsSectionView(repo: fixture.primaryRepo, localPath: .testLocalURL)
+    }
+    .formStyle(.grouped)
   }
-  //  .labelStyle(.iconOnly)
-  .formStyle(.grouped)
 }
