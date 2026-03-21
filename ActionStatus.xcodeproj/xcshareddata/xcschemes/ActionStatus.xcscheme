@@ -110,7 +110,12 @@
          <EnvironmentVariable
             key = "TEST_REFRESH"
             value = "random"
-            isEnabled = "NO">
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "TEST_AUTH"
+            value = "simulated"
+            isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
    </LaunchAction>
