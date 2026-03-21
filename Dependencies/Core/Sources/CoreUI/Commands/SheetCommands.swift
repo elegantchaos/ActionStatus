@@ -35,3 +35,16 @@ public struct ShowPreferencesSheetCommand<C: SheetServiceProvider>: CommandWithU
     centre.sheetService.showing = .preferences
   }
 }
+
+/// Command that presents the auth debug sheet on iOS.
+public struct ShowAuthDebugSheetCommand<C: SheetServiceProvider>: CommandWithUI {
+  public let id = "sheet.auth-debug"
+  public let icon = Icon.actions
+
+  public init() {
+  }
+
+  public func perform(centre: C) async throws {
+    centre.sheetService.showing = .authDebug
+  }
+}

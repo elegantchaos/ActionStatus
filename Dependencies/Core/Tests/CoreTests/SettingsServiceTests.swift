@@ -5,7 +5,7 @@ import Testing
 @testable import Core
 
 // TODO: These tests were written against a SettingsService API that no longer exists.
-// They will be rewritten in Phase 8 when credential storage moves fully to GithubAuthService.
+// They will be rewritten in Phase 8 when credential storage moves fully behind AuthService.
 
 @MainActor
 struct SettingsServiceTests {

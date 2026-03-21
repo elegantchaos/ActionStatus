@@ -10,12 +10,12 @@ import SwiftUI
 
 /// Default stub used when no `AuthService` has been explicitly injected (e.g., in vanilla Xcode previews).
 private struct AuthServiceKey: EnvironmentKey {
-  static let defaultValue: any AuthService = StubAuthService()
+  static let defaultValue = AuthService.stub()
 }
 
 extension EnvironmentValues {
   /// The active `AuthService` instance for the current environment.
-  public var authService: any AuthService {
+  public var authService: AuthService {
     get { self[AuthServiceKey.self] }
     set { self[AuthServiceKey.self] = newValue }
   }
@@ -45,7 +45,7 @@ public struct ActionStatusEnvironmentInjector: ViewModifier {
   public let refreshService: RefreshService
 
   /// Authentication service injected into SwiftUI views.
-  public let authService: any AuthService
+  public let authService: AuthService
 
   /// Sheet service injected into SwiftUI views.
   public let sheetService: SheetService
@@ -58,7 +58,7 @@ public struct ActionStatusEnvironmentInjector: ViewModifier {
     launchService: LaunchService,
     statusService: StatusService,
     refreshService: RefreshService,
-    authService: any AuthService,
+    authService: AuthService,
     sheetService: SheetService
   ) {
     self.commander = commander

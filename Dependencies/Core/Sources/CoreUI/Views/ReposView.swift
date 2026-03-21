@@ -11,6 +11,7 @@ import SwiftUI
 public struct ReposView: View {
   @Environment(ModelService.self) var modelService
   @Environment(SettingsService.self) var settingsService
+  @Environment(\.authService) private var authService
 
   @Namespace() var namespace
   @State var focusState = FadingFocusState()
@@ -28,20 +29,30 @@ public struct ReposView: View {
     let context = RepoContainerContext(namespace: namespace, runtime: runtime, focus: $focus)
 
     return VStack(alignment: .center) {
-      if modelService.count == 0 {
-        NoReposView()
-      } else {
-        ZStack(alignment: .top) {
-          RepoGridView(context: context)
-            .opacity(settingsService.isEditing ? 0 : 1)
-            .allowsHitTesting(!settingsService.isEditing)
-            .accessibilityHidden(settingsService.isEditing)
+      ZStack(alignment: .top) {
+        if modelService.count == 0 {
+          NoReposView()
+        } else {
+          ZStack(alignment: .top) {
+            RepoGridView(context: context)
+              .opacity(settingsService.isEditing ? 0 : 1)
+              .allowsHitTesting(!settingsService.isEditing)
+              .accessibilityHidden(settingsService.isEditing)
 
-          RepoListView(context: context)
-            .opacity(settingsService.isEditing ? 1 : 0)
-            .allowsHitTesting(settingsService.isEditing)
-            .accessibilityHidden(!settingsService.isEditing)
+            RepoListView(context: context)
+              .opacity(settingsService.isEditing ? 1 : 0)
+              .allowsHitTesting(settingsService.isEditing)
+              .accessibilityHidden(!settingsService.isEditing)
+          }
         }
+
+        #if !os(tvOS)
+          if modelService.count > 0, let overlay = AuthMonitoringOverlayModel(state: authService.authState) {
+            AuthMonitoringOverlay(model: overlay)
+              .padding(.horizontal)
+              .padding(.top, 12)
+          }
+        #endif
       }
 
       Spacer()
@@ -66,6 +77,21 @@ public struct ReposView: View {
 
 #if !VALIDATING
   #Preview("Repos Filled", traits: .modifier(ActionStatusPreviews.Content())) {
+    ReposView()
+      .frame(minWidth: 720, minHeight: 460)
+  }
+
+  #Preview("Repos Signed Out", traits: .modifier(ActionStatusPreviews.AuthSignedOut())) {
+    ReposView()
+      .frame(minWidth: 720, minHeight: 460)
+  }
+
+  #Preview("Repos Validating", traits: .modifier(ActionStatusPreviews.AuthValidating())) {
+    ReposView()
+      .frame(minWidth: 720, minHeight: 460)
+  }
+
+  #Preview("Repos Auth Error", traits: .modifier(ActionStatusPreviews.AuthFailed())) {
     ReposView()
       .frame(minWidth: 720, minHeight: 460)
   }

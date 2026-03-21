@@ -20,6 +20,9 @@ public final class ActionStatusPreviewRuntime {
   /// Shared launch service.
   public let launchService: LaunchService
 
+  /// Shared auth service.
+  public let authService: AuthService
+
   /// Shared refresh service.
   public let refreshService: RefreshService
 
@@ -33,7 +36,9 @@ public final class ActionStatusPreviewRuntime {
   public init(
     repos: [Repo],
     isEditing: Bool = false,
-    initialSheet: SheetService.Sheet? = nil
+    initialSheet: SheetService.Sheet? = nil,
+    authState: GithubAuthState = .signedIn(GithubCredentials(login: "preview", server: "api.github.com", token: "preview-token")),
+    authService: AuthService? = nil
   ) {
     let settingsService = SettingsService()
     let statusService = StatusService()
@@ -46,7 +51,7 @@ public final class ActionStatusPreviewRuntime {
     settingsService.isEditing = isEditing
 
     let launchService = PreviewLaunchService()
-    let authService = StubAuthService()
+    let authService = authService ?? AuthService.stub(initialState: authState)
     let refreshService = RefreshService(
       model: modelService,
       type: .none,
@@ -61,6 +66,7 @@ public final class ActionStatusPreviewRuntime {
     self.statusService = statusService
     self.settingsService = settingsService
     self.launchService = launchService
+    self.authService = authService
     self.refreshService = refreshService
     self.sheetService = sheetService
     self.commander = ActionStatusCommander(
@@ -81,7 +87,7 @@ public final class ActionStatusPreviewRuntime {
       launchService: launchService,
       statusService: statusService,
       refreshService: refreshService,
-      authService: StubAuthService(),
+      authService: authService,
       sheetService: sheetService
     )
   }
@@ -92,17 +98,26 @@ public protocol ActionStatusPreviewPreset: PreviewModifier {
   static var repos: [Repo] { get }
   static var isEditing: Bool { get }
   static var initialSheet: SheetService.Sheet? { get }
+  static var authState: GithubAuthState { get }
+  static func makeAuthService() -> AuthService?
 }
 
 public extension ActionStatusPreviewPreset {
   static var isEditing: Bool { false }
   static var initialSheet: SheetService.Sheet? { nil }
+  static var authState: GithubAuthState {
+    .signedIn(GithubCredentials(login: "preview", server: "api.github.com", token: "preview-token"))
+  }
+
+  static func makeAuthService() -> AuthService? { nil }
 
   static func makeSharedContext() async throws -> ActionStatusPreviewRuntime {
     ActionStatusPreviewRuntime(
       repos: repos,
       isEditing: isEditing,
-      initialSheet: initialSheet
+      initialSheet: initialSheet,
+      authState: authState,
+      authService: makeAuthService()
     )
   }
 
@@ -139,6 +154,37 @@ public enum ActionStatusPreviews {
     public init() {}
   }
 
+  public struct AuthSignedOut: ActionStatusPreviewPreset {
+    public static let repos = seededRepos
+    public static let authState = GithubAuthState.signedOut
+
+    public init() {}
+  }
+
+  public struct AuthValidating: ActionStatusPreviewPreset {
+    public static let repos = seededRepos
+    public static let authState = GithubAuthState.validating(GithubCredentials(login: "preview", server: "api.github.com", token: "preview-token"))
+
+    public init() {}
+  }
+
+  public struct AuthFailed: ActionStatusPreviewPreset {
+    public static let repos = seededRepos
+    public static let authState = GithubAuthState.failed("Preview auth failure.")
+
+    public init() {}
+  }
+
+  public struct AuthDebug: ActionStatusPreviewPreset {
+    public static let repos = seededRepos
+
+    public init() {}
+
+    public static func makeAuthService() -> AuthService? {
+      AuthService.simulated(initialScenario: .signedIn)
+    }
+  }
+
   /// Creates a repository value for previews.
   public static func repo(
     _ name: String,
@@ -152,13 +198,13 @@ public enum ActionStatusPreviews {
 
   /// Shared sample repository set for list and grid previews.
   public static let seededRepos: [Repo] = [
-      repo("ActionStatus", owner: "elegantchaos", state: .passing),
-      repo("Commands", owner: "elegantchaos", state: .queued),
-      repo("Runtime", owner: "elegantchaos", state: .running),
-      repo("Website", owner: "elegantchaos", state: .failing),
-      repo("Settings", owner: "elegantchaos", state: .dormant),
-      repo("Application", owner: "elegantchaos", state: .partiallyFailing),
-    ]
+    repo("ActionStatus", owner: "elegantchaos", state: .passing),
+    repo("Commands", owner: "elegantchaos", state: .queued),
+    repo("Runtime", owner: "elegantchaos", state: .running),
+    repo("Website", owner: "elegantchaos", state: .failing),
+    repo("Settings", owner: "elegantchaos", state: .dormant),
+    repo("Application", owner: "elegantchaos", state: .partiallyFailing),
+  ]
 
   /// Creates a shared sample repository set for list and grid previews.
   public static func sampleRepos() -> [Repo] {

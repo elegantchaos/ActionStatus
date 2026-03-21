@@ -46,12 +46,16 @@ public struct ContentView: View {
 /// iOS toolbar menu grouping the primary app-level actions.
 struct MobileActionsMenu: ToolbarContent {
   @Environment(ActionStatusCommander.self) var commander
+  @Environment(\.authService) private var authService
 
   var body: some ToolbarContent {
     ToolbarItemGroup {
 
       Menu {
         commander.button(ShowPreferencesSheetCommand())
+        if Runtime.shared.showDebugUI && authService.supportsDebugScenarios {
+          commander.button(ShowAuthDebugSheetCommand())
+        }
         commander.button(AddRepoCommand())
         commander.importer(AddLocalReposCommand())
       } label: {

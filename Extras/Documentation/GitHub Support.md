@@ -25,9 +25,10 @@ GitHub support spans two Swift package targets:
 |------|----------|---------|
 | `GithubCredentials` | Core | Value type: `login`, `server`, `token` |
 | `GithubAuthState` | Core | 7-case enum; single source of truth for auth state |
-| `AuthService` | Core | Protocol; published `authState`, `startup()`, `startSignIn(server:scopes:)`, `signOut()` |
-| `GithubAuthService` | Core | Live conformer; Keychain-backed, drives the device-code flow |
-| `StubAuthService` | Core | Canned conformer used by previews and `TEST_AUTH` env builds |
+| `AuthService` | Core | Concrete observable service; published `authState`, `startup()`, `startSignIn(server:scopes:)`, `signOut()` |
+| `LiveAuthDriver` | Core | Internal Keychain-backed driver for the GitHub device-code flow |
+| `FixedAuthDriver` | Core | Internal fixed-state driver for previews and UI test injection |
+| `SimulatedAuthDriver` | Core | Internal debug driver for canned authentication scenarios |
 
 ### Auth state machine
 
@@ -50,15 +51,15 @@ signedOut ──startSignIn()──► signingIn
 
 ### Sign-in flow (GitHub Device Authorization)
 
-1. `startSignIn(server:scopes:)` transitions state to `.signingIn` and spawns an internal Task.
+1. `startSignIn(server:scopes:)` transitions state to `.signingIn` and delegates to the live driver, which spawns an internal Task.
 2. `GithubDeviceAuthenticator.startAuthorization(scopes:)` requests a device code from GitHub.
 3. State transitions to `.awaitingApproval(userCode:url:)` — the UI opens the verification URL in a browser and shows the code.
 4. `GithubDeviceAuthenticator.pollForUser(authorization:)` polls until the user approves.
-5. On success, `GithubAuthService` persists the resulting `GithubCredentials` to Keychain and transitions to `.signedIn`.
+5. On success, the live driver persists the resulting `GithubCredentials` to Keychain and transitions to `.signedIn`.
 
 ### Credential persistence
 
-`GithubAuthService` stores a single Keychain entry:
+The live auth driver stores a single Keychain entry:
 
 - **Account:** `"github"` (fixed)
 - **Server:** configurable `keychainID`, defaulting to `"actionstatus.elegantchaos.com"`
@@ -68,7 +69,7 @@ Using a fixed account/server pair means only one credential set is stored at a t
 
 ### Startup validation
 
-At app launch, `GithubAuthService.startup()` reads the Keychain entry and calls `GithubDeviceAuthenticator.validateToken(_:)` to confirm it is still valid. If validation succeeds, state becomes `.signedIn`; if it fails, `.invalidCredentials` is set so the UI can display a warning without discarding the stored login.
+At app launch, `AuthService.startup()` delegates to the active driver. In live mode the driver reads the Keychain entry and calls `GithubDeviceAuthenticator.validateToken(_:)` to confirm it is still valid. If validation succeeds, state becomes `.signedIn`; if it fails, `.invalidCredentials` is set so the UI can display a warning without discarding the stored login.
 
 ### Injecting auth into the SwiftUI environment
 
@@ -78,9 +79,11 @@ At app launch, `GithubAuthService.startup()` reads the Keychain entry and calls 
 @Environment(\.authService) private var authService
 ```
 
-The default value is `StubAuthService()` (signed-out, no-op) so plain Xcode previews work without any setup. The live `Engine` injects `GithubAuthService`; preview hosts and tests inject `StubAuthService(initialState:)`.
+The default value is `AuthService.stub()` (signed-out, no-op) so plain Xcode previews work without any setup. The live `Engine` injects a concrete `AuthService`; preview hosts and tests inject `AuthService.stub(initialState:)`.
 
-For builds with the `TEST_AUTH` environment variable set, `Engine` injects a pre-signed-in `StubAuthService` so UI tests can skip the OAuth flow.
+For builds with `TEST_AUTH=simulated`, `Engine` injects a concrete `AuthService` backed by the simulated driver so debug UI can exercise all auth states. For other non-empty `TEST_AUTH` values, `Engine` keeps the legacy pre-signed-in stub behavior so UI tests can skip the OAuth flow.
+
+Refresh mode is resolved independently, with one safety rule: when `TEST_REFRESH` is unset but `TEST_AUTH` is non-empty, `Engine` forces `.random` refresh so the app does not attempt live GitHub polling while using test auth. If both `TEST_AUTH` and `TEST_REFRESH` are set, the explicit refresh mode wins.
 
 ---
 
@@ -143,9 +146,10 @@ Engine reads initial values on `startup()` and then subscribes to `UserDefaults.
 Core
 ├── GithubCredentials          (value type)
 ├── GithubAuthState            (enum)
-├── AuthService                (protocol)
-├── GithubAuthService          (live conformer)
-├── StubAuthService            (test/preview conformer)
+├── AuthService                (concrete service)
+├── LiveAuthDriver             (live auth behavior)
+├── FixedAuthDriver            (fixed preview/test behavior)
+├── SimulatedAuthDriver        (debug auth behavior)
 ├── GithubDeviceAuthenticator  (OAuth flow)
 ├── RefreshSettings            (value type)
 ├── RefreshService             (scheduler)
@@ -154,7 +158,7 @@ Core
 
 CoreUI
 ├── Engine                     (creates + wires all services)
-├── GithubAuthService          (injects into Engine)
+├── AuthService                (injects into Engine)
 ├── UserDefaultsLastEventStore (live LastEventStore)
 ├── ConnectionPrefsView        (reads authService from environment)
 └── Settings.swift             (AppSettingKey definitions)

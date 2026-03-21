@@ -34,6 +34,15 @@ public final class SheetService {
         ) {
           PreferencesForm()
         }
+      case .authDebug:
+        SheetView(
+          "Authentication Debug",
+          shortTitle: "Auth",
+          cancelAction: dismiss,
+          doneAction: dismiss
+        ) {
+          AuthDebugView()
+        }
     }
   }
 
@@ -46,12 +55,15 @@ public final class SheetService {
   public enum Sheet: Identifiable {
     /// Edit an existing repo.
     case editRepo(Repo)
-    
+
     /// Adding a new repo.
     case addRepo(Repo)
-    
+
     /// The app preferences form.
     case preferences
+
+    /// The auth simulation debug form.
+    case authDebug
 
     /// Stable identifier for the sheet content.
     public var id: String {
@@ -62,6 +74,8 @@ public final class SheetService {
           return "edit-new"
         case .preferences:
           return "preferences"
+        case .authDebug:
+          return "auth-debug"
       }
     }
   }

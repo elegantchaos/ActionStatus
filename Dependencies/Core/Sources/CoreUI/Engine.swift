@@ -46,7 +46,7 @@ public final class Engine {
   @ObservationIgnored public let refreshService: RefreshService
 
   /// Shared authentication service.
-  @ObservationIgnored public let authService: any AuthService
+  @ObservationIgnored public let authService: AuthService
 
   /// Shared status service.
   @ObservationIgnored public let statusService: StatusService
@@ -58,7 +58,7 @@ public final class Engine {
   /// All services are safe to use before startup completes,
   /// and so we can use the same injector for startup and running states.
   @ObservationIgnored private let injector: ActionStatusEnvironmentInjector
-  
+
   #if canImport(UIKit)
     /// Root view controller used for presenting UIKit UI.
     public var rootController: UIViewController?
@@ -66,6 +66,9 @@ public final class Engine {
 
   /// Observer token for UserDefaults settings changes.
   @ObservationIgnored private var settingsObserver: NotificationToken?
+
+  /// Runtime metadata used to configure startup behavior.
+  @ObservationIgnored public let runtime: Runtime
 
   /// Performs one-time synchronous initialization.
   public func initialise() throws {
@@ -92,11 +95,10 @@ public final class Engine {
   }
 
   /// Creates the live engine and its shared services.
-  public init() {
+  public init(runtime: Runtime = .shared) {
     state = .uninitialised
     startupTask = nil
-
-    let runtime = Runtime.shared
+    self.runtime = runtime
     let settingsService = SettingsService()
     let statusService = StatusService()
     let sheetService = SheetService()
@@ -106,31 +108,9 @@ public final class Engine {
     // Determine the refresh type from the runtime environment, then create
     // the matching auth service. Using an explicit type here keeps the wiring
     // visible and allows debug builds to pair any auth service with any controller.
-    let refreshType: RefreshService.RefreshType
-    if runtime.normalized(.testRefresh) == "random" {
-      refreshType = .random
-    } else if runtime.isUITestingBuild {
-      refreshType = .none
-    } else {
-      refreshType = .normal
-    }
+    let refreshType = Self.makeRefreshType(runtime: runtime)
 
-    let authService: any AuthService
-    switch refreshType {
-      case .normal:
-        if ProcessInfo.processInfo.environment["TEST_AUTH"] != nil {
-          authService = StubAuthService(initialState: .signedIn(GithubCredentials(login: "test", server: "api.github.com", token: "test-token")))
-        } else {
-          let clientID = GithubDeviceAuthenticator.clientID(from: .main) ?? ""
-          authService = GithubAuthService(clientID: clientID)
-        }
-      case .random:
-        // Stub with a signed-in state so the randomising controller starts immediately.
-        // The stub can be driven via debug UI to simulate sign-out or other states.
-        authService = StubAuthService(initialState: .signedIn(GithubCredentials(login: "random-user", server: "api.github.com", token: "random-token")))
-      case .none:
-        authService = StubAuthService(initialState: .signedOut)
-    }
+    let authService = Self.makeAuthService(runtime: runtime, refreshType: refreshType)
 
     let refreshService = RefreshService(
       model: modelService,
@@ -138,9 +118,9 @@ public final class Engine {
       interval: UserDefaults.standard.value(forKey: .refreshInterval),
       lastEventStore: UserDefaultsLastEventStore()
     )
-    
+
     let launchService = LaunchService()
-    
+
     let commander = ActionStatusCommander(
       modelService: modelService,
       settingsService: settingsService,
@@ -148,7 +128,7 @@ public final class Engine {
       refreshService: refreshService,
       sheetService: sheetService
     )
-    
+
     let injector = ActionStatusEnvironmentInjector(
       commander: commander,
       modelService: modelService,
@@ -159,7 +139,7 @@ public final class Engine {
       authService: authService,
       sheetService: sheetService
     )
-    
+
     self.authService = authService
     self.statusService = statusService
     self.sheetService = sheetService
@@ -169,7 +149,62 @@ public final class Engine {
     self.launchService = launchService
     self.commander = commander
     self.injector = injector
-      
+
+  }
+}
+
+public extension Engine {
+  /// Resolves the refresh mode configuration for the supplied runtime.
+  static func makeRefreshType(runtime: Runtime = .shared) -> RefreshService.RefreshType {
+    switch runtime.normalized(.testRefresh) {
+      case "random":
+        return .random
+      case "":
+        if normalizedAuthMode(from: runtime).isEmpty == false {
+          return .random
+        } else if runtime.isUITestingBuild {
+          return .none
+        } else {
+          return .normal
+        }
+      default:
+        if runtime.isUITestingBuild {
+          return .none
+        } else {
+          return .normal
+        }
+    }
+  }
+
+  /// Resolves the auth service configuration for the supplied runtime and refresh mode.
+  static func makeAuthService(runtime: Runtime = .shared, refreshType: RefreshService.RefreshType) -> AuthService {
+    let authMode = normalizedAuthMode(from: runtime)
+
+    switch authMode {
+      case "simulated":
+        return AuthService.simulated()
+      case "":
+        switch refreshType {
+          case .normal:
+            let clientID = GithubDeviceAuthenticator.clientID(from: .main) ?? ""
+            return AuthService(clientID: clientID)
+          case .random:
+            return AuthService.stub(initialState: .signedIn(GithubCredentials(login: "random-user", server: "api.github.com", token: "random-token")))
+          case .none:
+            return AuthService.stub(initialState: .signedOut)
+        }
+      default:
+        return AuthService.stub(initialState: .signedIn(GithubCredentials(login: "test", server: "api.github.com", token: "test-token")))
+    }
+  }
+
+  /// Returns the normalized auth mode string used for `TEST_AUTH`.
+  static func normalizedAuthMode(from runtime: Runtime = .shared) -> String {
+    let trimmed =
+      runtime.environment(.testAuth)?
+      .trimmingCharacters(in: .whitespacesAndNewlines)
+      .trimmingCharacters(in: CharacterSet(charactersIn: "\"'")) ?? ""
+    return trimmed.lowercased()
   }
 }
 

@@ -16,9 +16,9 @@ public let refreshServiceChannel = Channel("Refresh Service")
 /// an `AuthService` — the service observes auth-state changes and creates or
 /// tears down the controller accordingly for all refresh types.
 ///
-/// This decoupling allows `.random` mode to be paired with a `StubAuthService`
-/// whose state can be changed at runtime to simulate the full auth state machine
-/// in a running application.
+/// This decoupling allows `.random` mode to be paired with an auth service
+/// configured with a simulated driver so the full auth state machine can be
+/// exercised in a running application.
 @Observable
 @MainActor
 public final class RefreshService {
@@ -72,7 +72,7 @@ public final class RefreshService {
   /// on sign-in; `.random` creates a randomising controller; `.none` always produces
   /// no controller. Call this after `authService.startup()` and `modelService.startup()`
   /// so the initial auth state and model data are both available.
-  public func connect(to authService: any AuthService) {
+  public func connect(to authService: AuthService) {
     applyAuthState(authService.authState)
     authObservationToken = onChange(of: authService.authState) { [weak self] newState in
       self?.applyAuthState(newState)
@@ -106,13 +106,13 @@ public final class RefreshService {
   /// Creates the appropriate refresh controller for the configured mode.
   func makeRefreshController() -> RefreshController? {
     switch type {
-    case .normal:
-      return makeGithubRefreshController()
-    case .random:
-      return RandomisingRefreshController(model: modelService)
-    case .none:
-      refreshChannel.log("Refresh is disabled.")
-      return nil
+      case .normal:
+        return makeGithubRefreshController()
+      case .random:
+        return RandomisingRefreshController(model: modelService)
+      case .none:
+        refreshChannel.log("Refresh is disabled.")
+        return nil
     }
   }
 
@@ -141,18 +141,18 @@ public final class RefreshService {
   /// non-signed-in state, tears down the active controller.
   private func applyAuthState(_ state: GithubAuthState) {
     switch state {
-    case .signedIn(let credentials):
-      let newSettings = RefreshSettings(server: credentials.server, token: credentials.token, interval: interval)
-      guard newSettings != currentSettings else { return }
-      currentSettings = newSettings
-      resetRefresh()
-      refreshController = makeRefreshController()
-      refreshController?.resume(rate: interval.rate)
-    default:
-      if currentSettings != nil {
-        currentSettings = nil
+      case .signedIn(let credentials):
+        let newSettings = RefreshSettings(server: credentials.server, token: credentials.token, interval: interval)
+        guard newSettings != currentSettings else { return }
+        currentSettings = newSettings
         resetRefresh()
-      }
+        refreshController = makeRefreshController()
+        refreshController?.resume(rate: interval.rate)
+      default:
+        if currentSettings != nil {
+          currentSettings = nil
+          resetRefresh()
+        }
     }
   }
 }
@@ -160,9 +160,9 @@ public final class RefreshService {
 extension RefreshService: TypedDebugDescription {
   public var debugLabel: String {
     switch type {
-    case .normal: return "GitHub"
-    case .random: return "Random"
-    case .none: return "None"
+      case .normal: return "GitHub"
+      case .random: return "Random"
+      case .none: return "None"
     }
   }
 }

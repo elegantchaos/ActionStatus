@@ -23,6 +23,10 @@
       engine.standardLoop()
     }
 
+    private var supportsAuthDebug: Bool {
+      Runtime.shared.showDebugUI && engine.authService.supportsDebugScenarios
+    }
+
     var body: some Scene {
       Window(Runtime.shared.appName, id: "repos") {
         engine.rootView {
@@ -33,6 +37,14 @@
       .windowStyle(.hiddenTitleBar)
       .windowManagerRole(.principal)
       .windowResizability(.contentMinSize)
+
+      Window("Authentication Debug", id: "auth-debug") {
+        engine.rootView {
+          AuthDebugView()
+        }
+      }
+      .defaultSize(width: 420, height: 360)
+      .windowResizability(.contentSize)
 
       Settings {
         PreferencesForm()
@@ -47,13 +59,15 @@
         CommandGroup(replacing: .newItem) {
           engine.commander.button(AddRepoCommand())
         }
-        
+
         CommandGroup(after: .newItem) {
           engine.commander.importer(AddLocalReposCommand())
         }
         CommandGroup(after: .textEditing) {
           engine.commander.button(ToggleEditingCommand(settingsService: engine.commander.settingsService))
         }
+
+        AuthDebugCommands(isEnabled: supportsAuthDebug)
       }
 
       MenuBarExtra(isInserted: $showInMenu) {
@@ -62,6 +76,28 @@
       } label: {
         StatusMenuLabel()
           .modifier(engine.startupInjector)
+      }
+    }
+  }
+
+  struct AuthDebugCommands: Commands {
+    let isEnabled: Bool
+
+    var body: some Commands {
+      if isEnabled {
+        CommandMenu("Debug") {
+          AuthDebugMenuButton()
+        }
+      }
+    }
+  }
+
+  private struct AuthDebugMenuButton: View {
+    @Environment(\.openWindow) private var openWindow
+
+    var body: some View {
+      Button("Authentication Debug") {
+        openWindow(id: "auth-debug")
       }
     }
   }

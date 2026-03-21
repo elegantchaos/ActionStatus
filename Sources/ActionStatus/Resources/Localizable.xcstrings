@@ -1,6 +1,12 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Authentication Debug" : {
+
+    },
+    "Debug" : {
+
+    },
     "editing.start" : {
       "extractionState" : "manual",
       "localizations" : {
