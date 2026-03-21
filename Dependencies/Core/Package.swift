@@ -25,14 +25,12 @@ let package = Package(
 
     .package(url: "https://github.com/elegantchaos/Icons.git", from: "1.0.1"),
     .package(url: "https://github.com/elegantchaos/Application.git", from: "1.0.1"),
-    .package(url: "https://github.com/elegantchaos/Previews.git", from: "1.0.1"),
     .package(url: "https://github.com/elegantchaos/Commands.git", from: "1.0.1"),
     .package(url: "https://github.com/elegantchaos/Runtime.git", from: "1.0.1"),
     .package(url: "https://github.com/elegantchaos/Settings.git", from: "1.0.1"),
     .package(url: "https://github.com/elegantchaos/Logger.git", from: "2.0.2"),
 
     //    .package(path: "../Application"),
-    //    .package(path: "../Previews"),
     //    .package(path: "../Commands"),
     //    .package(path: "../Icons"),
     //    .package(path: "../Runtime"),
@@ -75,7 +73,6 @@ let package = Package(
         .product(name: "CommandsUI", package: "Commands"),
         .product(name: "Icons", package: "Icons"),
         .product(name: "LoggerUI", package: "Logger"),
-        .product(name: "Previews", package: "Previews"),
         .product(name: "Settings", package: "Settings"),
       ],
       swiftSettings: [

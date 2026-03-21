@@ -10,26 +10,32 @@ struct ActionStatusPreviewRuntimeTests {
   }
 
   @Test
-  func testScenarioBuildSeedsFixtureAndRuntime() async {
+  func testEditingPreviewPresetBuildsExpectedRuntime() async throws {
     let repo = ActionStatusPreviews.repo("ActionStatus", owner: "elegantchaos", state: .passing)
-    let scenario = ActionStatusPreviewScenario(repos: [repo], isEditing: true)
+    let runtime = ActionStatusPreviewRuntime(repos: [repo], isEditing: true)
 
-    let built = scenario.build()
-
-    #expect(built.fixture.repos.count == 1)
-    #expect(built.fixture.primaryRepo.name == "ActionStatus")
-    #expect(built.runtime.commander.settingsService.isEditing)
-    #expect(built.runtime.statusService.sortedRepos.count == 1)
+    #expect(runtime.commander.settingsService.isEditing)
+    #expect(runtime.statusService.sortedRepos.count == 1)
+    #expect(runtime.statusService.sortedRepos.first?.name == repo.name)
   }
 
   @Test
   func testPreviewCommanderCanPerformSheetCommand() async throws {
-    let scenario = ActionStatusPreviewScenario(repos: ActionStatusPreviews.sampleRepos())
-    let commander = scenario.build().runtime.commander
+    let runtime = try await ActionStatusPreviews.Content.makeSharedContext()
+    let commander = runtime.commander
 
     try await commander.perform(ShowPreferencesSheetCommand<ActionStatusCommander>())
 
     #expect(commander.sheetService.showing?.id == "preferences")
+  }
+
+  @Test
+  func testEditingPresetBuildsExpectedSharedContext() async throws {
+    let runtime = try await ActionStatusPreviews.Editing.makeSharedContext()
+
+    #expect(runtime.settingsService.isEditing)
+    #expect(runtime.statusService.sortedRepos.count == ActionStatusPreviews.Editing.repos.count)
+    #expect(runtime.sheetService.showing == nil)
   }
 
   @Test

@@ -44,6 +44,10 @@
       .defaultSize(width: 720, height: 620)
       .windowResizability(.automatic)
       .commands {
+        CommandGroup(replacing: .newItem) {
+          engine.commander.button(AddRepoCommand())
+        }
+        
         CommandGroup(after: .newItem) {
           engine.commander.importer(AddLocalReposCommand())
         }

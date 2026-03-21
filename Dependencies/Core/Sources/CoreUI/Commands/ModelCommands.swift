@@ -12,16 +12,18 @@ import UniformTypeIdentifiers
 
 /// Command that adds a new repository to the model,
 /// and opens the edit sheet for it.
-struct AddRepoCommand<C: ModelServiceProvider & SheetServiceProvider>: CommandWithUI {
-  let id = "model.add"
-  let icon = Icon.addRepo
+public struct AddRepoCommand<C: ModelServiceProvider & SheetServiceProvider>: CommandWithUI {
+  public let id = "model.add"
+  public let icon = Icon.addRepo
+  public let shortcut: CommandShortcut? = .init("N", modifiers: [.command])
+
   let openSheet: Bool
 
-  init(openSheet: Bool = true) {
+  public init(openSheet: Bool = true) {
     self.openSheet = openSheet
   }
 
-  func perform(centre: C) async throws {
+  public func perform(centre: C) async throws {
     if openSheet {
       // Keep the repo transient until the user confirms the add flow.
       centre.sheetService.showing = .addRepo(Repo())
